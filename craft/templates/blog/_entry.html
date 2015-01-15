@@ -1,0 +1,67 @@
+{% extends "_layout" %}
+
+{% block content %}
+	<article>
+		<h1>{{ entry.title }}</h1>
+		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
+		{{ entry.body }}
+
+
+		{% if entry.imagesWithAttribution | length %}
+
+		    <h3>Images</h3>
+		    {% for block in entry.imagesWithAttribution %}
+			<img src="{{ block.image.first.url('detail') }}"/>
+			<small>{{ block.attribution }}</small>
+		    {% endfor %}
+
+		{% endif %}
+
+		{% set location = entry.primaryLocationFlat.first %}
+		<h3>Primary location</h3>
+		<ul>
+			<li>{{ location }}
+			{% if location.subLocations|length %}
+			<ul>
+				{% for sub in location.subLocations %}
+					<li>{{ sub }}
+				{% endfor %}
+			{% endif %}
+			</ul>
+		</ul>
+		{% set locations = entry.secondaryLocationsFlat %}
+		{% if locations|length %}
+			<h3>Secondary locations</h3>
+			<ul>
+			{% for loc in locations %}
+				<li>
+					{{ loc }}
+					{% if loc.subLocations|length %}
+						<ul>
+						{% for sub in loc.subLocations %}
+							<li>{{ sub }}
+						{% endfor %}
+						</ul>
+					{% endif %}
+			{% endfor %}
+			</ul>
+		{% endif %}
+
+	</article>
+
+<hr>
+<div id="discourse-comments"></div>
+{% endblock %}
+
+{% set js %}
+  var discourseUrl = "http://discourse.marinpost.org/",
+      discourseEmbedUrl = 'http://marinpost.org/blog/{{ entry.slug }}';
+      discourseUserName = '{{ entry.author.username }}';
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+      d.src = discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+{% endset %}
+

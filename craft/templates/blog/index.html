@@ -1,0 +1,59 @@
+{% extends "_layout" %}
+{% set title = "Blog" %}
+
+{% block content %}
+	<h1>Blog</h1>
+
+	<div id="filters">
+	<b>Locations</b>
+	<ul>
+	    {% set locations = craft.categories.group('locations') %}
+	    {% set all_locations = locations|first %}
+		<li>
+		    <input type="checkbox" class="location all" value="{{ all_locations.id }}"/>{{ all_locations.title }}
+	    {% for location in locations|without(all_locations) %}
+		<li>
+		    <input type="checkbox" class="location" value="{{ location.id }}"/>{{ location.title }}
+	    {% endfor %}
+	</ul>
+
+	<b>Topics</b>
+	<ul>
+	    {% set topics = craft.categories.group('topics') %}
+	    {% set all_topics = topics|first %}
+		<li>
+		    <input type="checkbox" class="topic all" value="{{ all_topics.id }}"/>{{ all_topics.title }}
+	    {% for topic in topics|without(all_topics) %}
+		<li>
+		    <input type="checkbox" class="topic" value="{{ topic.id }}"/>{{ topic.title }}
+	    {% endfor %}
+	</ul>
+	</div>
+
+	<div id="filtered-content">
+	{% for entry in craft.entries.section('blog').find() %}
+		<article>
+			<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+			<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
+			{{ entry.body.getPage(1) }}
+			<p><a href="{{ entry.url }}">Continue reading</a></p>
+		</article>
+	{% endfor %}
+	</div>
+{% endblock %}
+
+{% set js %}
+$(function() {
+  var filterSelector = 'input[type=checkbox]';
+  var filters = $(filterSelector);
+  var filteredContent = $('#filtered-content');
+
+  var activeFilters = function(type) {
+	return $(filterSelector+'[class='+type+']:checked').map(function() { return this.value; }).get().join();
+  };
+
+  filters.click(function() {
+	filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+  });
+});
+{% endset %}

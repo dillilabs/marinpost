@@ -1,0 +1,24 @@
+{% set locationIds = craft.request.getParam('locations') | split(',') %}
+<h3>locationIds: {{ locationIds | json_encode }}</h3>
+
+
+{% set relatedTo = ['or'] %}
+
+{% for id in locationIds %}
+    {% set relatedTo = relatedTo|merge([id]) %}
+{% endfor %}
+
+<h3>relatedTo: {{ relatedTo | json_encode }}</h3>
+
+{% set entries = craft.entries.section('blog').relatedTo(relatedTo) %}
+
+<h3>entries: {{ entries | length }}</h3>
+
+{% for entry in entries %}
+	<article>
+		<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
+		{{ entry.body.getPage(1) }}
+		<p><a href="{{ entry.url }}">Continue reading</a></p>
+	</article>
+{% endfor %}
