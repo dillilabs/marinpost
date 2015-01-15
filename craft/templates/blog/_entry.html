@@ -7,10 +7,10 @@
 		{{ entry.body }}
 
 
-		{% if entry.imagesWithAttribution | length %}
+		{% if entry.images | length %}
 
 		    <h3>Images</h3>
-		    {% for block in entry.imagesWithAttribution %}
+		    {% for block in entry.images %}
 			<img src="{{ block.image.first.url('detail') }}"/>
 			<small>{{ block.attribution }}</small>
 		    {% endfor %}
