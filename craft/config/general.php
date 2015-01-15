@@ -8,5 +8,6 @@
  */
 
 return array(
+	'loginPath' => 'members/login',
 	'omitScriptNameInUrls' => true,
 );
