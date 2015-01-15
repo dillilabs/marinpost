@@ -17,32 +17,18 @@
 
 		{% endif %}
 
-		{% set location = entry.primaryLocationFlat.first %}
+		{% set location = entry.primaryLocation.first %}
 		<h3>Primary location</h3>
 		<ul>
 			<li>{{ location }}
-			{% if location.subLocations|length %}
-			<ul>
-				{% for sub in location.subLocations %}
-					<li>{{ sub }}
-				{% endfor %}
-			{% endif %}
-			</ul>
 		</ul>
-		{% set locations = entry.secondaryLocationsFlat %}
+		{% set locations = entry.secondaryLocations %}
 		{% if locations|length %}
 			<h3>Secondary locations</h3>
 			<ul>
 			{% for loc in locations %}
 				<li>
 					{{ loc }}
-					{% if loc.subLocations|length %}
-						<ul>
-						{% for sub in loc.subLocations %}
-							<li>{{ sub }}
-						{% endfor %}
-						</ul>
-					{% endif %}
 			{% endfor %}
 			</ul>
 		{% endif %}
