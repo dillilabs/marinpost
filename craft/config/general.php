@@ -8,6 +8,13 @@
  */
 
 return array(
-	'loginPath' => 'members/login',
-	'omitScriptNameInUrls' => true,
+	'*' => array(
+		'loginPath' => 'members/login',
+		'omitScriptNameInUrls' => true,
+	),
+	'dev.marinpost.org' => array(
+		'devMode' => true,
+	),
+	'marinpost.org' => array(
+	),
 );
