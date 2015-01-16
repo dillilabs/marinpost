@@ -11,6 +11,7 @@ return array(
 	'*' => array(
 		'loginPath' => 'members/login',
 		'omitScriptNameInUrls' => true,
+		'useEmailAsUsername' => true,
 	),
 	'dev.marinpost.org' => array(
 		'devMode' => true,
