@@ -85,6 +85,8 @@
     </script>
 
 	{% includeJsFile "/res/js/jquery-1.11.2.min.js" %}
-	{% includeJs js %}
+	{% if js is defined %}
+		{% includeJs js %}
+	{% endif %}
 </body>
 </html>

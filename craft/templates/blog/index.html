@@ -7,25 +7,23 @@
 	<div id="filters">
 	<b>Locations</b>
 	<ul>
-	    {% set locations = craft.categories.group('locations') %}
-	    {% set all_locations = locations|first %}
 		<li>
-		    <input type="checkbox" class="location all" value="{{ all_locations.id }}"/>{{ all_locations.title }}
-	    {% for location in locations|without(all_locations) %}
+		    <input type="checkbox" class="location all" value="all" checked="checked" />All
+	    {% set locations = craft.categories.group('locations').order('title') %}
+	    {% for location in locations %}
 		<li>
-		    <input type="checkbox" class="location" value="{{ location.id }}"/>{{ location.title }}
+		    <input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}
 	    {% endfor %}
 	</ul>
 
 	<b>Topics</b>
 	<ul>
-	    {% set topics = craft.categories.group('topics') %}
-	    {% set all_topics = topics|first %}
 		<li>
-		    <input type="checkbox" class="topic all" value="{{ all_topics.id }}"/>{{ all_topics.title }}
-	    {% for topic in topics|without(all_topics) %}
+		    <input type="checkbox" class="topic all" value="all" checked="checked" />All
+	    {% set topics = craft.categories.group('topics').order('title') %}
+	    {% for topic in topics %}
 		<li>
-		    <input type="checkbox" class="topic" value="{{ topic.id }}"/>{{ topic.title }}
+		    <input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}
 	    {% endfor %}
 	</ul>
 	</div>
@@ -44,16 +42,42 @@
 
 {% set js %}
 $(function() {
-  var filterSelector = 'input[type=checkbox]';
-  var filters = $(filterSelector);
+  var noFilters = $(':checkbox.all');
+  var filters = $(':checkbox.filter');
   var filteredContent = $('#filtered-content');
 
-  var activeFilters = function(type) {
-	return $(filterSelector+'[class='+type+']:checked').map(function() { return this.value; }).get().join();
+  var activeFilters = function() {
+	return filters.filter(':checked').map(function() { return this.value; }).get().join();
+  };
+
+  var refreshViews = function() {
+	filteredContent.load('/blog/filter?categories='+activeFilters());
   };
 
   filters.click(function() {
-	filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+	var filter = $(this);
+
+	if (filter.is('.location')) {
+		noFilters.filter('.location').attr('checked', false);
+	} else {
+		noFilters.filter('.topic').attr('checked', false);
+	}
+
+	refreshViews();
+  });
+
+  noFilters.click(function() {
+	var noFilter = $(this);
+
+	if (noFilter.is(':checked')) {
+		if (noFilter.is('.location')) {
+			filters.filter('.location').attr('checked', false);
+		} else {
+			filters.filter('.topic').attr('checked', false);
+		}
+	}
+
+	refreshViews();
   });
 });
 {% endset %}

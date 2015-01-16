@@ -1,11 +1,10 @@
-{% set locationIds = craft.request.getParam('locations') | split(',') %}
-<h3>locationIds: {{ locationIds | json_encode }}</h3>
-
+{% set categories = craft.request.getParam('categories') | split(',') %}
+<h3>categories: {{ categories | json_encode }}</h3>
 
 {% set relatedTo = ['or'] %}
 
-{% for id in locationIds %}
-    {% set relatedTo = relatedTo|merge([id]) %}
+{% for catId in categories %}
+    {% set relatedTo = relatedTo|merge([catId]) %}
 {% endfor %}
 
 <h3>relatedTo: {{ relatedTo | json_encode }}</h3>
