@@ -15,7 +15,9 @@ return array(
 	),
 	'dev.marinpost.org' => array(
 		'devMode' => true,
+		'siteUrl' => 'http://dev.marinpost.org',
 	),
 	'marinpost.org' => array(
+		'siteUrl' => 'http://marinpost.org',
 	),
 );
