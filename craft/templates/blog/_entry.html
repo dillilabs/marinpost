@@ -4,50 +4,46 @@
 	<article>
 		<h1>{{ entry.title }}</h1>
 		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
-		{{ entry.body }}
+		{{ entry.mainContent }}
 
-
-		{% if entry.images | length %}
-
-		    <h3>Images</h3>
-		    {% for block in entry.images %}
-			<img src="{{ block.image.first.url('detail') }}"/>
-			<small>{{ block.attribution }}</small>
-		    {% endfor %}
-
-		{% endif %}
-
-		{% set location = entry.primaryLocation.first %}
-		<h3>Primary location</h3>
+		<h3>Locations</h3>
 		<ul>
-			<li>{{ location }}
-		</ul>
+			<li>{{ entry.primaryLocation.first }}*
 		{% set locations = entry.secondaryLocations %}
-		{% if locations|length %}
-			<h3>Secondary locations</h3>
-			<ul>
-			{% for loc in locations %}
+		{% if locations | length %}
+			{% for location in locations %}
 				<li>
-					{{ loc }}
+					{{ location }}
 			{% endfor %}
-			</ul>
+		{% endif %}
+		</ul>
+
+		<h3>Topics</h3>
+		<ul>
+			<li>{{ entry.primaryTopic.first }}*
+		{% set topics = entry.secondaryTopics %}
+		{% if topics | length %}
+			{% for topic in topics %}
+				<li>
+					{{ topic }}
+			{% endfor %}
+		{% endif %}
+		</ul>
+
+		{% if entry.primaryImage | length %}
+		    <h3>Image</h3>
+		    {% for block in entry.primaryImage %}
+			<img src="{{ block.image.first.url('hero') }}"/>
+			<small>{{ block.by }}</small>
+		    {% endfor %}
 		{% endif %}
 
+		{% if entry.secondaryImages | length %}
+		    <h3>Other Images</h3>
+		    {% for block in entry.secondaryImages %}
+			<img src="{{ block.image.first.url('hero') }}"/>
+			<small>{{ block.by }}</small>
+		    {% endfor %}
+		{% endif %}
 	</article>
-
-<hr>
-<div id="discourse-comments"></div>
 {% endblock %}
-
-{% set js %}
-  var discourseUrl = "http://discourse.marinpost.org/",
-      discourseEmbedUrl = 'http://marinpost.org/blog/{{ entry.slug }}';
-      discourseUserName = '{{ entry.author.username }}';
-
-  (function() {
-    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
-      d.src = discourseUrl + 'javascripts/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
-  })();
-{% endset %}
-
