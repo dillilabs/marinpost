@@ -1,5 +1,19 @@
 <?php
 
+// Setup environment-friendly configs ... because Craft's multi-env db config doesn't actually work as advertised
+// https://github.com/BarrelStrength/Craft-Master/blob/master/public/index.php
+switch ($_SERVER['SERVER_NAME']) {
+	case 'marinpost.org' :
+		define('CRAFT_ENVIRONMENT', 'live');
+		break;
+	case 'dev.marinpost.org' :
+		define('CRAFT_ENVIRONMENT', 'dev');
+		break;
+	default :
+		define('CRAFT_ENVIRONMENT', 'local');
+		break;
+}
+
 // Path to your craft/ folder
 $craftPath = '../craft';
 

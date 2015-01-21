@@ -13,9 +13,11 @@ return array(
 		'omitScriptNameInUrls' => true,
 		'useEmailAsUsername' => true,
 	),
-	'dev.marinpost.org' => array(
+	'dev' => array(
 		'devMode' => true,
+		'siteUrl' => 'http://dev.marinpost.org',
 	),
-	'marinpost.org' => array(
+	'live' => array(
+		'siteUrl' => 'http://marinpost.org',
 	),
 );
