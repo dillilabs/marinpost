@@ -29,14 +29,13 @@
 	</div>
 
 	<div id="filtered-content">
-	{% for entry in craft.entries.section('blog').find() %}
-		<article>
-			<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-			<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
-			<p><a href="{{ entry.url }}">Continue reading</a></p>
-		</article>
+	{% import "_list.html" as list %}
+	{% for entry in craft.entries.section('blog').limit(2).find() %}
+		{{ list.entry(entry) }}
 	{% endfor %}
 	</div>
+
+	<a href="#" id="more">Load More Content</a>
 {% endblock %}
 
 {% set js %}
@@ -51,6 +50,10 @@ $(function() {
 
   var refreshViews = function() {
 	filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+  };
+
+  var currentContentLength = function() {
+	return $('article.entry').length;
   };
 
   filters.click(function() {
@@ -77,6 +80,16 @@ $(function() {
 	}
 
 	refreshViews();
+  });
+
+  $('#more').click(function(e) {
+	    e.preventDefault();
+
+	    $.get(
+		'/blog/more?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&offset='+currentContentLength(),
+		function(data) {
+			filteredContent.append(data);
+	    });
   });
 });
 {% endset %}

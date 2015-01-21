@@ -1,0 +1,20 @@
+{% macro entry(entry) %}
+	<article class="entry {{ entry.section.handle }}">
+		<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+		<b>Locations</b>
+		<ul>
+			<li>{{ entry.primaryLocation.first }}
+		{% for location in entry.secondaryLocations %}
+			<li>{{ location }}	
+		{% endfor %}
+		</ul>
+		<b>Topics</b>
+		<ul>
+			<li>{{ entry.primaryTopic.first }}
+		{% for topic in entry.secondaryTopics %}
+			<li>{{ topic }}	
+		{% endfor %}
+		</ul>
+		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
+	</article>
+{% endmacro %}

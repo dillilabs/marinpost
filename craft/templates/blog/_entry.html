@@ -8,26 +8,20 @@
 
 		<h3>Locations</h3>
 		<ul>
-			<li>{{ entry.primaryLocation.first }}*
-		{% set locations = entry.secondaryLocations %}
-		{% if locations | length %}
-			{% for location in locations %}
-				<li>
-					{{ location }}
-			{% endfor %}
-		{% endif %}
+			<li>{{ entry.primaryLocation.first }}
+		{% for location in entry.secondaryLocations %}
+			<li>
+				{{ location }}
+		{% endfor %}
 		</ul>
 
 		<h3>Topics</h3>
 		<ul>
-			<li>{{ entry.primaryTopic.first }}*
-		{% set topics = entry.secondaryTopics %}
-		{% if topics | length %}
-			{% for topic in topics %}
-				<li>
-					{{ topic }}
-			{% endfor %}
-		{% endif %}
+			<li>{{ entry.primaryTopic.first }}
+		{% for topic in entry.secondaryTopics %}
+			<li>
+				{{ topic }}
+		{% endfor %}
 		</ul>
 
 		{% if entry.primaryImage | length %}
