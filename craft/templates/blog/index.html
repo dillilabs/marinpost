@@ -9,7 +9,7 @@
 	<ul>
 		<li>
 		    <input type="checkbox" class="location all" value="all" checked="checked" />All
-	    {% set locations = craft.categories.group('locations').order('title') %}
+	    {% set locations = craft.categories.group('locations') %}
 	    {% for location in locations %}
 		<li>
 		    <input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}
@@ -29,15 +29,13 @@
 	</div>
 
 	<div id="filtered-content">
-	{% for entry in craft.entries.section('blog').find() %}
-		<article>
-			<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-			<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
-			{{ entry.body.getPage(1) }}
-			<p><a href="{{ entry.url }}">Continue reading</a></p>
-		</article>
+	{% import "_list.html" as list %}
+	{% for entry in craft.entries.section('blog').limit(2).find() %}
+		{{ list.entry(entry) }}
 	{% endfor %}
 	</div>
+
+	<a href="#" id="more">Load More Content</a>
 {% endblock %}
 
 {% set js %}
@@ -46,12 +44,16 @@ $(function() {
   var filters = $(':checkbox.filter');
   var filteredContent = $('#filtered-content');
 
-  var activeFilters = function() {
-	return filters.filter(':checked').map(function() { return this.value; }).get().join();
+  var activeFilters = function(type) {
+	return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
   };
 
   var refreshViews = function() {
-	filteredContent.load('/blog/filter?categories='+activeFilters());
+	filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+  };
+
+  var currentContentLength = function() {
+	return $('article.entry').length;
   };
 
   filters.click(function() {
@@ -78,6 +80,16 @@ $(function() {
 	}
 
 	refreshViews();
+  });
+
+  $('#more').click(function(e) {
+	    e.preventDefault();
+
+	    $.get(
+		'/blog/more?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&offset='+currentContentLength(),
+		function(data) {
+			filteredContent.append(data);
+	    });
   });
 });
 {% endset %}

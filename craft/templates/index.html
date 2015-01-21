@@ -20,13 +20,13 @@
 {% extends "_layout" %}
 
 {% block content %}
-	<h1>{{ entry.title }}</h1>
+	<h1>{{ siteUrl }}</h1>
 
-	{{ entry.body }}
+	{{ entry.mainContent }}
 
 	<h2>Recent News</h2>
 	<ul>
-		{% for entry in craft.entries.section('news').limit(5).find() %}
+		{% for entry in craft.entries.limit(5).find() %}
 			<!--li><a href="{{ entry.url }}#disqus_thread" data-disqus-identifier="{{ entry.section }}-{{ entry.id }}">{{ entry.title }}</a></li-->
 			<li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
 		{% endfor %}

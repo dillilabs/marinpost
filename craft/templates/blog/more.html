@@ -1,16 +1,6 @@
-{#
- # Filter blog list by one or more Locations and one or more Topics.
- # Each Location is OR-ed together and each Topic is OR-ed together,
- # then both filters are AND-d. For example:
- #
- #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
- #}
-
 {% set locations = craft.request.getParam('locations') | split(',') %}
-<h3>locations: {{ locations | json_encode }}</h3>
 
 {% set topics = craft.request.getParam('topics') | split(',') %}
-<h3>topics: {{ topics | json_encode }}</h3>
 
 {% if locations|first is empty %}
     {% set locationEntries = craft.entries.section('blog') %}
@@ -21,12 +11,8 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
-	<h3>relatedTo locations: {{ relatedTo | json_encode }}</h3>
-
 	{% set locationEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
 {% endif %}
-
-<h3>location entries: {{ locationEntries | length }}</h3>
 
 {% if topics|first is empty %}
 	{% set topicEntries = craft.entries.section('blog') %}
@@ -37,12 +23,8 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
-	<h3>relatedTo topics: {{ relatedTo | json_encode }}</h3>
-
 	{% set topicEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
 {% endif %}
-
-<h3>topic entries: {{ topicEntries | length }}</h3>
 
 {% set entries = [] %}
 {% set topicEntryIds = topicEntries.ids %}
@@ -53,20 +35,15 @@
     {% endif %}
 {% endfor %}
 
-<h3>unlimited entries: {{ entries | length }}</h3>
-
 {% set offset = craft.request.getParam('offset') | default(0) %}
 
 {% set limit = craft.request.getParam('limit') | default(2) %}
 
-<h3> offset={{ offset }} limit={{ limit }}</h3>
-
 {% set entries = entries[offset:limit] %}
-
-<h3>limited entries: {{ entries | length }}</h3>
 
 {% import "_list.html" as list %}
 
 {% for entry in entries %}
+	{% import "_list.html" as list %}
 	{{ list.entry(entry) }}
 {% endfor %}
