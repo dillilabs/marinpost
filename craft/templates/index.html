@@ -1,34 +1,60 @@
-{#
- # Homepage template
- # ---------------
- #
- # When this template gets loaded, it will be because someone has accessed
- # http://yoursite.com/ (without any URI). Craft checks to see if you have
- # a Single section set to be the Homepage (as you do, by default), and
- # loads the section’s Template (this file). A special ‘entry’ variable
- # will already be set for you, assigned to the Homepage entry.
- #
- # It's worth noting that even if you didn't have a Homepage Single section,
- # as long as this template remains at craft/templates/index.html, it
- # would still be the one to get loaded when accessing http://yoursite.com/,
- # albeit without an ‘entry’ variable already set for you.
- #
- # See this page for more details on how Craft routes requests:
- # http://buildwithcraft.com/docs/routing
- #}
-
 {% extends "_layout" %}
 
 {% block content %}
-	<h1>{{ siteUrl }}</h1>
+  {% set entries = craft.entries.section('blog', 'media', 'news', 'notice').limit(11).find %}
+  {% set featured = entries | first %}
 
-	{{ entry.mainContent }}
+  {% if featured %}
+    {% set image = '/img/default-hero.png' %}
+    {% for block in featured.primaryImage %}
+      {% set image = block.image.first.url('hero') %}
+    {% endfor %}
 
-	<h2>Recent News</h2>
-	<ul>
-		{% for entry in craft.entries.limit(5).find() %}
-			<!--li><a href="{{ entry.url }}#disqus_thread" data-disqus-identifier="{{ entry.section }}-{{ entry.id }}">{{ entry.title }}</a></li-->
-			<li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
-		{% endfor %}
-	</ul>
+    <section id="featured">
+      <img src="{{ image }}">
+      <div class="featured">
+        <ul class="tags">
+          <li><a href="">{{ featured.section.name }}</a></li> | 
+          <li><a href="">{{ featured.primaryLocation.first }}</a></li> | 
+          <li><a href="">{{ featured.primaryTopic.first }}</a></li>
+        </ul>
+        <h3><a href="{{ featured.url }}">{{ featured.title }}</a></h3>
+        <div class="byline">By <a href="/contributor/{{ featured.author.name }}">{{ featured.author.name }}</a> - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
+        <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
+      </div>
+    </section>
+  {% endif %}
+
+  <main>
+    <h2>What's New</h2>
+    <ul class="posts">
+    {% for entry in entries | without(featured) %}
+      {% set image = '/img/default-list.png' %}
+      {% for block in entry.primaryImage %}
+        {% set image = block.image.first.url('hero') %}
+      {% endfor %}
+      <li>
+      <img src="{{ image }}">
+      <div class="post">
+        <ul class="tags">
+          <li><a href="">{{ entry.section.name }}</a></li> | 
+          <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
+          <li><a href="">{{ entry.primaryTopic.first }}</a></li>
+        </ul>
+        <h3><a href="{{ entry.url }}">{{ entry.title}}</a></h3>
+        <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+        {% switch entry.section.handle %}
+          {% case 'media' %}
+            {% set content = entry.linkComments %}
+          {% case 'news' %}
+            {% set content = entry.linkComments %}
+          {% default %}
+            {% set content = entry.mainContent %}
+        {% endswitch %}
+        <p>{% if content %}{{ content | striptags | slice(0, 200) }} &hellip; {% endif %}<a class="more" href="{{ entry.url }}">more »</a></p>
+      </div>          
+      </li>
+    {% endfor %}
+    </ul>
+  </main>
 {% endblock %}
