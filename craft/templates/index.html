@@ -1,10 +1,10 @@
 {% extends "_layout" %}
 
-{% block content %}
-  {% set entries = craft.entries.section('blog', 'media', 'news', 'notice').limit(11).find %}
-  {% set featured = entries | first %}
+{% set entries = craft.entries.section('blog', 'media', 'news', 'notice').limit(11).find %}
+{% set featured = entries | first %}
 
-  {% if featured %}
+{% if featured %}
+  {% block hero %}
     {% set image = '/img/default-hero.png' %}
     {% for block in featured.primaryImage %}
       {% set image = block.image.first.url('hero') %}
@@ -23,8 +23,10 @@
         <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
       </div>
     </section>
-  {% endif %}
+  {% endblock %}
+{% endif %}
 
+{% block main %}
   <main>
     <h2>What's New</h2>
     <ul class="posts">
@@ -57,4 +59,26 @@
     {% endfor %}
     </ul>
   </main>
+{% endblock %}
+
+{% block right %}
+  <aside>
+    <div id="comments">
+      <h2>Comments</h2>
+      <ul>
+        <li>
+        <h4><a href="#">Supervisors Need to Support Larkspur</a></h4>
+        <p>I found Mr. Johnson's statements about our Board of Supervisors&hellip;</p>
+        <a class="user" href="">Brett Millard</a>
+        </li>
+        <li>
+        <h4><a href="#">Kentfield Schools Assist Town</a></h4>
+        <p>We should all be grateful that the Kentfield School Board decided to reuse&hellip;</p>
+        <a class="user" href="">Sally McDowell</a>
+        </li>
+      </ul>
+    </div>
+
+    {% include "_support.html" %}
+  </aside>
 {% endblock %}

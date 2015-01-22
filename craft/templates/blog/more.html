@@ -1,3 +1,10 @@
+{#
+ # Incrementally emit more blog entries
+ # Shares the same filtering logic with filter.html FIXME
+ #}
+
+{% set default_limit = 2 %}
+
 {% set locations = craft.request.getParam('locations') | split(',') %}
 
 {% set topics = craft.request.getParam('topics') | split(',') %}
@@ -37,13 +44,12 @@
 
 {% set offset = craft.request.getParam('offset') | default(0) %}
 
-{% set limit = craft.request.getParam('limit') | default(2) %}
+{% set limit = craft.request.getParam('limit') | default(default_limit) %}
 
 {% set entries = entries[offset:limit] %}
 
 {% import "_list.html" as list %}
 
 {% for entry in entries %}
-	{% import "_list.html" as list %}
 	{{ list.entry(entry) }}
 {% endfor %}

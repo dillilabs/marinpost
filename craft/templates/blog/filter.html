@@ -6,11 +6,14 @@
  #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
  #}
 
+{% set do_debug = false %}
+{% set debug = {} %}
+
 {% set locations = craft.request.getParam('locations') | split(',') %}
-<h3>locations: {{ locations | json_encode }}</h3>
+{% set debug = debug | merge({ 'Locations': locations }) %}
 
 {% set topics = craft.request.getParam('topics') | split(',') %}
-<h3>topics: {{ topics | json_encode }}</h3>
+{% set debug = debug | merge({ 'Topics': topics }) %}
 
 {% if locations|first is empty %}
     {% set locationEntries = craft.entries.section('blog') %}
@@ -21,12 +24,12 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
-	<h3>relatedTo locations: {{ relatedTo | json_encode }}</h3>
+  {% set debug = debug | merge({ 'RelatedTo Locations': relatedTo }) %}
 
 	{% set locationEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
 {% endif %}
 
-<h3>location entries: {{ locationEntries | length }}</h3>
+{% set debug = debug | merge({ 'Number of Locations': locationEntries | length }) %}
 
 {% if topics|first is empty %}
 	{% set topicEntries = craft.entries.section('blog') %}
@@ -37,12 +40,12 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
-	<h3>relatedTo topics: {{ relatedTo | json_encode }}</h3>
+  {% set debug = debug | merge({ 'RelatedTo Topics': relatedTo }) %}
 
 	{% set topicEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
 {% endif %}
 
-<h3>topic entries: {{ topicEntries | length }}</h3>
+{% set debug = debug | merge({ 'Number of Topics': topicEntries | length }) %}
 
 {% set entries = [] %}
 {% set topicEntryIds = topicEntries.ids %}
@@ -53,19 +56,23 @@
     {% endif %}
 {% endfor %}
 
-<h3>unlimited entries: {{ entries | length }}</h3>
+{% set debug = debug | merge({ 'Unlimited entries': entries | length }) %}
 
 {% set offset = craft.request.getParam('offset') | default(0) %}
 
 {% set limit = craft.request.getParam('limit') | default(2) %}
 
-<h3> offset={{ offset }} limit={{ limit }}</h3>
+{% set debug = debug | merge({ 'Offset': offset, 'Limit': limit }) %}
 
 {% set entries = entries[offset:limit] %}
 
-<h3>limited entries: {{ entries | length }}</h3>
+{% set debug = debug | merge({ 'Limited entries': entries | length }) %}
 
 {% import "_list.html" as list %}
+
+{% if craft.config.devMode and do_debug %}
+  <li><small>{{ dump(debug) }}</small></li>
+{% endif %}
 
 {% for entry in entries %}
 	{{ list.entry(entry) }}

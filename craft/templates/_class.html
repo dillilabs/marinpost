@@ -1,0 +1,4 @@
+{% macro active(slug, segment) %}
+  {% set segment = segment | default(1) %}
+  {% if craft.request.segment(segment) == slug %}class="active"{% endif %}
+{% endmacro %}

@@ -1,20 +1,19 @@
 {% macro entry(entry) %}
-	<article class="entry {{ entry.section.handle }}">
-		<h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-		<b>Locations</b>
-		<ul>
-			<li>{{ entry.primaryLocation.first }}
-		{% for location in entry.secondaryLocations %}
-			<li>{{ location }}	
-		{% endfor %}
-		</ul>
-		<b>Topics</b>
-		<ul>
-			<li>{{ entry.primaryTopic.first }}
-		{% for topic in entry.secondaryTopics %}
-			<li>{{ topic }}	
-		{% endfor %}
-		</ul>
-		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
-	</article>
+  {% set image = '/img/default-list.png' %}
+  {% for block in entry.primaryImage %}
+    {% set image = block.image.first.url('hero') %}
+  {% endfor %}
+  <li class="listing">
+    <img src="{{ image }}">
+    <div class="post">
+      <ul class="tags">
+        <li><a href="">{{ entry.section.name }}</a></li> | 
+        <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
+        <li><a href="">{{ entry.primaryTopic.first }}</a></li>
+      </ul>
+      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+      <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+      <p>{{ entry.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+    </div>          
+  </li>
 {% endmacro %}

@@ -1,41 +1,48 @@
 {% extends "_layout" %}
+
 {% set title = "Blog" %}
 
-{% block content %}
+{% set limit = 2 %}{# FIXME #}
+
+{% import "_list.html" as list %}
+
+{% block main %}
 	<h1>Blog</h1>
+  <aside>
+    <div class="filter" id="filters">
+      <h2>Filter</h2>
+      <fieldset>
+        <h5>Locations</h5>
+        <ul>
+		      <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+          {% set locations = craft.categories.group('locations') %}
+          {% for location in locations %}
+            <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
+          {% endfor %}
+        </ul>
+      </fieldset>
+      <fieldset>
+        <h5>Topics</h5>
+        <ul>
+		      <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+          {% set topics = craft.categories.group('topics') %}
+          {% for topic in topics %}
+            <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
+          {% endfor %}
+        </ul>
+      </fieldset>
+    </div>
+  </aside>
 
-	<div id="filters">
-	<b>Locations</b>
-	<ul>
-		<li>
-		    <input type="checkbox" class="location all" value="all" checked="checked" />All
-	    {% set locations = craft.categories.group('locations') %}
-	    {% for location in locations %}
-		<li>
-		    <input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}
-	    {% endfor %}
-	</ul>
-
-	<b>Topics</b>
-	<ul>
-		<li>
-		    <input type="checkbox" class="topic all" value="all" checked="checked" />All
-	    {% set topics = craft.categories.group('topics').order('title') %}
-	    {% for topic in topics %}
-		<li>
-		    <input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}
-	    {% endfor %}
-	</ul>
-	</div>
-
-	<div id="filtered-content">
-	{% import "_list.html" as list %}
-	{% for entry in craft.entries.section('blog').limit(2).find() %}
-		{{ list.entry(entry) }}
-	{% endfor %}
-	</div>
-
-	<a href="#" id="more">Load More Content</a>
+  <main>
+    <h2>Blog</h2>
+    <ul class="posts" id="filtered-content">
+	  {% for entry in craft.entries.section('blog').limit(limit).find %}
+	    {{ list.entry(entry) }}
+	  {% endfor %}
+    </ul>
+	  <a href="#" id="more">Load More Content</a>
+  </main>
 {% endblock %}
 
 {% set js %}
@@ -45,15 +52,15 @@ $(function() {
   var filteredContent = $('#filtered-content');
 
   var activeFilters = function(type) {
-	return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
+    return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
   };
 
   var refreshViews = function() {
-	filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+    filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
   };
 
   var currentContentLength = function() {
-	return $('article.entry').length;
+    return $('.listing').length;
   };
 
   filters.click(function() {

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
-<meta charset="utf-8" />
-<title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
-<link rel="home" href="{{ siteUrl }}" />
-{% includeCssFile "/css/normalize.css" %}
-{% includeCssFile "/css/main.css" %}
-{% includeCssFile "/css/rrssb.css" %}
+  <meta charset="utf-8" />
+  <title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
+  <link rel="home" href="{{ siteUrl }}" />
+  {% includeCssFile "/css/normalize.css" %}
+  {% includeCssFile "/css/main.css" %}
+  {% includeCssFile "/css/rrssb.css" %}
 </head>
-
 <body class="home">
   <header>
     <div id="title">
@@ -25,77 +24,35 @@
       </fieldset>
       <a href="#">Saved search</a>
     </div>
+    {% import "_class" as class %}
     <ul>
-      <li><a {% if craft.request.segments | length == 0 %}class="active"{% endif %} href="/">Home</a></li>
-      <li><a href="{{ url('blog') }}" {% if craft.request.firstSegment == 'blog' %}class="active"{% endif %}>Blog</a></li>
-      <li><a href="{{ url('news') }}" {% if craft.request.firstSegment == 'news' %}class="active"{% endif %}>News</a></li>
-      <li><a  href="/notices">Notices</a></li>
-      <li><a  href="/media.html">Media</a></li>
-      <li><a  href="/surveys">Surveys</a></li>
-      <li><a  href="/letters">Letters</a></li>
-      <li><a  href="/about">About</a></li>
-      <li><a  href="/submit">Submit</a></li>
-      <li><a  href="/contact">Contact</a></li>
-      <li><a  href="/subscribe">Subscribe</a></li>
+      <li><a href="/"{{ class.active('') }}>Home</a></li>
+      <li><a href="{{ url('blog') }}" {{ class.active('blog') }}>Blog</a></li>
+      <li><a href="{{ url('news') }}" {{ class.active('news') }}>News</a></li>
+      <li><a href="{{ url('notices') }}" {{ class.active('notices') }}>Notices</a></li>
+      <li><a href="{{ url('media') }}" {{ class.active('media') }}>Media</a></li>
+      <li><a href="{{ url('surveys') }}" {{ class.active('surveys') }}>Surveys</a></li>
+      <li><a href="{{ url('letters') }}" {{ class.active('letters') }}>Letters</a></li>
+      <li><a href="{{ url('about') }}" {{ class.active('about') }}>About</a></li>
+      <li><a href="{{ url('submit') }}" {{ class.active('submit') }}>Submit</a></li>
+      <li><a href="{{ url('contact') }}" {{ class.active('contact') }}>Contact</a></li>
+      <li><a href="{{ url('subscribe') }}" {{ class.active('subscribe') }}>Subscribe</a></li>
     </ul>
     <ul id="sub-nav">
-      <li class="sign-in"><a href="#">Sign in</a></li>
-      <li class="account"><a href="#">My account</a></li>
+      <li class="sign-in"><a href="/admin">Sign in</a></li>
+      <li class="account"><a href="/admin">My account</a></li>
       <li><a class="show-search">Search</a></li>
     </ul>
   </nav>
 
-  {% block content %}
+  {% block hero %}
   {% endblock %}
 
-  <aside>
-    <div id="comments">
-      <h2>Comments</h2>
-      <ul>
-        <li>
-        <h4><a href="#">Supervisors Need to Support Larkspur</a></h4>
-        <p>I found Mr. Johnson's statements about our Board of Supervisors&hellip;</p>
-        <a class="user" href="">Brett Millard</a>
-        </li>
-        <li>
-        <h4><a href="#">Kentfield Schools Assist Town</a></h4>
-        <p>We should all be grateful that the Kentfield School Board decided to reuse&hellip;</p>
-        <a class="user" href="">Sally McDowell</a>
-        </li>
-      </ul>
-    </div>
+  {% block main %}
+  {% endblock %}
 
-    <div id="support">
-      <h4>Support <span>The Marin Post<span></h4>
-          <button class="donate">Donate</button>
-          <div id="share">
-            <h4>Share</h4>
-            <ul class="rrssb-buttons clearfix">
-              <li></li>
-            </ul>
-          </div>
-        </div>
-    </div>
-  </aside>
-
-  <div class="notices">
-    <h2>Notices</h2>
-    <ul>
-    {% for notice in craft.entries.section('notice').limit(3) %}
-      <li>
-        <strong>{{ notice.title }}<br><a href="{{ notice.url }}">More</a></strong><br>
-        {% for event in notice.event %}
-          {{ event.date | date('F d, Y') }}<br>
-          {{ event.location }}<br>
-          {{ event.date | date('g:i A') }}
-          {% if event.endDate %}
-            &ndash; {{ event.endDate | date('g:i A') }}
-          {% endif %}  
-        {% endfor %}
-      </li>
-    {% endfor %}
-    </ul>
-  </div>
+  {% block right %}
+  {% endblock %}
 
   <footer id="footer">
     Copyright {{ now.year }} {{ craft.request.serverName | ucfirst }}. All rights reserved  •  Built by <a href="http://www.communityventurepartners.org/">Community Venture Partners</a>
@@ -107,15 +64,14 @@
   {% includeJsFile "/js/rrssb.min.js" %}
   
   {% if js is defined %}
-  {% includeJs js %}
+    {% includeJs js %}
   {% endif %}
   
   <script>
-    var disqus_shortname = 'marinpost';
     (function () {
       var s = document.createElement('script'); s.async = true;
       s.type = 'text/javascript';
-      s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+      s.src = '//marinpost.disqus.com/count.js';
       (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
     }());
   </script>
