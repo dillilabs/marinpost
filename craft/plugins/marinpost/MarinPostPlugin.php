@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class BusinessLogicPlugin extends BasePlugin
+class MarinPostPlugin extends BasePlugin
 {
     /* On load
      */
@@ -120,21 +120,21 @@ JS;
 
     public function getName()
     {
-        return 'Business Logic for '.craft()->getSiteName();
+        return 'MarinPost';
     }
 
     public function getVersion()
     {
-        return '¯\_(ツ)_/¯';
+        return '1.0.0';
     }
 
     public function getDeveloper()
     {
-        return craft()->getSiteName();
+        return 'Steve Pedersen';
     }
 
     public function getDeveloperUrl()
     {
-        return 'https://github.com/lindseydiloreto/craft-businesslogic';
+        return 'https://github.com/speder';
     }
 }
