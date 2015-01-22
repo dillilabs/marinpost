@@ -57,7 +57,7 @@ class MarinPostPlugin extends BasePlugin
         if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
             $user->firstName = $user->nameFirst;
             $user->lastName = $user->nameLast;
-            self::log("Synchronizing first and last name of {$user->name} ({$user->email})");
+            self::log("Synchronizing first and last name of {$user->name} ({$user->email})", LogLevel::Warning);
             craft()->users->saveUser($user);
         }
     }
@@ -67,7 +67,7 @@ class MarinPostPlugin extends BasePlugin
     private function _removeUserDashboardWidgets($user) {
         foreach (craft()->dashboard->userWidgets as $widget) {
             if ($widget->type !== 'RecentEntries') {
-                self::log("Deleting {$widget->type} widget from {$user->email} dashboard");
+                self::log("Deleting {$widget->type} widget from {$user->email} dashboard", LogLevel::Warning);
                 craft()->dashboard->deleteUserWidgetById($widget->id);
             }
         }
