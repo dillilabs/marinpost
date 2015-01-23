@@ -3,7 +3,7 @@
   {% endblock %}
 </aside>
 
-<main>
+<main class="{{ mainClass | default('') }}">
   {% block main %}
   {% endblock %}
 </main>

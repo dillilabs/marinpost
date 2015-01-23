@@ -48,8 +48,8 @@
 
 {% set entries = entries[offset:limit] %}
 
-{% import "_list.html" as list %}
+{% import "_macro.html" as macro %}
 
 {% for entry in entries %}
-	{{ list.entry(entry) }}
+	{{ macro.entry(entry) }}
 {% endfor %}

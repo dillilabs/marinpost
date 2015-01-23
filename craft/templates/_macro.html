@@ -1,8 +1,26 @@
+{% macro classActive(slug, segment) %}
+  {% set segment = segment | default(1) %}
+  {% if craft.request.segment(segment) == slug %}class="active"{% endif %}
+{% endmacro %}
+
+{% macro authorLink(entry) %}
+  {% set author = entry.author %}
+  {% if author.can("publish:{{ entry.section.id }}") %}
+    {% set slug = [author.firstName, author.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
+    <a href="/about/contributor/{{ slug }}">{{ author.name }}</a>
+  {% else %}
+    {{ author.name }}
+  {% endif %}
+{% endmacro %}
+
 {% macro entry(entry) %}
+  {% import _self as byline %}
+
   {% set image = '/img/default-list.png' %}
   {% for block in entry.primaryImage %}
     {% set image = block.image.first.url('hero') %}
   {% endfor %}
+
   <li class="listing">
     <img src="{{ image }}">
     <div class="post">
@@ -12,7 +30,7 @@
         <li><a href="">{{ entry.primaryTopic.first }}</a></li>
       </ul>
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+      <div class="byline">By {{ byline.authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
       <p>{{ entry.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
     </div>          
   </li>

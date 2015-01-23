@@ -68,12 +68,12 @@
 
 {% set debug = debug | merge({ 'Limited entries': entries | length }) %}
 
-{% import "_list.html" as list %}
+{% import "_macro.html" as macro %}
 
 {% if craft.config.devMode and do_debug %}
   <li><small>{{ dump(debug) }}</small></li>
 {% endif %}
 
 {% for entry in entries %}
-	{{ list.entry(entry) }}
+	{{ macro.entry(entry) }}
 {% endfor %}

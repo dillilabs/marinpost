@@ -4,15 +4,13 @@
 
 {% set limit = 2 %}{# TODO set higher after testing #}
 
-{% import "_list.html" as list %}
-
 {% block content %}
   {% embed "_filtered_content.html" %}
     {% block main %}
       <h2>Blog</h2>
       <ul class="posts" id="filtered-content">
       {% for entry in craft.entries.section('blog').limit(limit).find %}
-        {{ list.entry(entry) }}
+        {{ macro.entry(entry) }}
       {% endfor %}
       </ul>
       <a href="#" id="load-more-content">Load More Content</a>

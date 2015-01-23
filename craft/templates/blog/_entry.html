@@ -1,43 +1,44 @@
 {% extends "_layout" %}
 
 {% block content %}
-	<article>
-		<h1>{{ entry.title }}</h1>
-		<p>Posted on {{ entry.postDate.format('F d, Y') }}</p>
-		{{ entry.mainContent }}
-
-		<h3>Locations</h3>
-		<ul>
-			<li>{{ entry.primaryLocation.first }}
-		{% for location in entry.secondaryLocations %}
-			<li>
-				{{ location }}
-		{% endfor %}
-		</ul>
-
-		<h3>Topics</h3>
-		<ul>
-			<li>{{ entry.primaryTopic.first }}
-		{% for topic in entry.secondaryTopics %}
-			<li>
-				{{ topic }}
-		{% endfor %}
-		</ul>
-
-		{% if entry.primaryImage | length %}
-		    <h3>Image</h3>
+  {% embed "_filtered_content.html" with { 'mainClass': 'single' } %}
+    {% block main %}
+      <ul class="tags">
+          <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
+          <li><a href="">{{ entry.primaryTopic.first }}</a></li>
+      </ul>
+      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+      <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('F d, Y') }} - 17 Comments</div>
+      
+      
+		  {% if entry.primaryImage | length %}
 		    {% for block in entry.primaryImage %}
-			<img src="{{ block.image.first.url('hero') }}"/>
-			<small>{{ block.by }}</small>
+          {% set image = block.image.first %}
+          <img src="{{ image.url('hero') }}"/>
 		    {% endfor %}
-		{% endif %}
+		  {% endif %}
 
-		{% if entry.secondaryImages | length %}
-		    <h3>Other Images</h3>
-		    {% for block in entry.secondaryImages %}
-			<img src="{{ block.image.first.url('hero') }}"/>
-			<small>{{ block.by }}</small>
+      <p>{{ entry.mainContent }}</p>
+
+		  {% if entry.documents | length %}
+		    {% for block in entry.documents %}
+          {% set file = block.document.first %}
+          <div class="download"><a href="{{ file.url }}">{{ block.documentTitle | default(file.title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
 		    {% endfor %}
-		{% endif %}
-	</article>
+		  {% endif %}
+
+		  {% if entry.secondaryImages | length %}
+        <div class="thumbs">
+		    {% for block in entry.secondaryImages %}
+          {% set image = block.image.first %}
+          <a href="#"><img src="{{ image.url('thumb') }}"/></a>
+		    {% endfor %}
+        </div>
+		  {% endif %}
+    {% endblock %}
+
+    {% block right %}
+      {% include "_support.html" %}
+    {% endblock %}
+  {% endembed %}
 {% endblock %}

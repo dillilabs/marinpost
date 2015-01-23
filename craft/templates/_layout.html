@@ -1,3 +1,4 @@
+{% import "_macro" as macro %}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -24,19 +25,19 @@
       </fieldset>
       <a href="#">Saved search</a>
     </div>
-    {% import "_class" as class %}
+
     <ul>
-      <li><a href="{{ siteUrl }}" {{ class.active('') }}>Home</a></li>
-      <li><a href="{{ url('blog') }}" {{ class.active('blog') }}>Blog</a></li>
-      <li><a href="{{ url('news') }}" {{ class.active('news') }}>News</a></li>
-      <li><a href="{{ url('notices') }}" {{ class.active('notices') }}>Notices</a></li>
-      <li><a href="{{ url('media') }}" {{ class.active('media') }}>Media</a></li>
-      <li><a href="{{ url('surveys') }}" {{ class.active('surveys') }}>Surveys</a></li>
-      <li><a href="{{ url('letters') }}" {{ class.active('letters') }}>Letters</a></li>
-      <li><a href="{{ url('about') }}" {{ class.active('about') }}>About</a></li>
-      <li><a href="{{ url('submit') }}" {{ class.active('submit') }}>Submit</a></li>
-      <li><a href="{{ url('contact') }}" {{ class.active('contact') }}>Contact</a></li>
-      <li><a href="{{ url('subscribe') }}" {{ class.active('subscribe') }}>Subscribe</a></li>
+      <li><a href="{{ siteUrl }}" {{ macro.classActive('') }}>Home</a></li>
+      <li><a href="{{ url('blog') }}" {{ macro.classActive('blog') }}>Blog</a></li>
+      <li><a href="{{ url('news') }}" {{ macro.classActive('news') }}>News</a></li>
+      <li><a href="{{ url('notices') }}" {{ macro.classActive('notices') }}>Notices</a></li>
+      <li><a href="{{ url('media') }}" {{ macro.classActive('media') }}>Media</a></li>
+      <li><a href="{{ url('surveys') }}" {{ macro.classActive('surveys') }}>Surveys</a></li>
+      <li><a href="{{ url('letters') }}" {{ macro.classActive('letters') }}>Letters</a></li>
+      <li><a href="{{ url('about') }}" {{ macro.classActive('about') }}>About</a></li>
+      <li><a href="{{ url('submit') }}" {{ macro.classActive('submit') }}>Submit</a></li>
+      <li><a href="{{ url('contact') }}" {{ macro.classActive('contact') }}>Contact</a></li>
+      <li><a href="{{ url('subscribe') }}" {{ macro.classActive('subscribe') }}>Subscribe</a></li>
     </ul>
     <ul id="sub-nav">
       <li class="sign-in"><a href="/admin">Sign in</a></li>

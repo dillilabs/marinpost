@@ -20,7 +20,7 @@
             <li><a href="">{{ featured.primaryTopic.first }}</a></li>
           </ul>
           <h3><a href="{{ featured.url }}">{{ featured.title }}</a></h3>
-          <div class="byline">By <a href="/contributor/{{ featured.author.name }}">{{ featured.author.name }}</a> - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
+          <div class="byline">By {{ macro.authorLink(featured) }} - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
           <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
         </div>
       {% endblock %}
@@ -43,7 +43,7 @@
             <li><a href="">{{ entry.primaryTopic.first }}</a></li>
           </ul>
           <h3><a href="{{ entry.url }}">{{ entry.title}}</a></h3>
-          <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+          <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
           {% switch entry.section.handle %}
             {% case 'media' %}
               {% set content = entry.linkComments %}
