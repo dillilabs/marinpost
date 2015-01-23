@@ -3,82 +3,83 @@
 {% set entries = craft.entries.section('blog', 'media', 'news', 'notice').limit(11).find %}
 {% set featured = entries | first %}
 
-{% if featured %}
-  {% block hero %}
-    {% set image = '/img/default-hero.png' %}
-    {% for block in featured.primaryImage %}
-      {% set image = block.image.first.url('hero') %}
-    {% endfor %}
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% if featured %}
+      {% block featured %}
+        {% set image = '/img/default-hero.png' %}
+        {% for block in featured.primaryImage %}
+          {% set image = block.image.first.url('hero') %}
+        {% endfor %}
 
-    <section id="featured">
-      <img src="{{ image }}">
-      <div class="featured">
-        <ul class="tags">
-          <li><a href="">{{ featured.section.name }}</a></li> | 
-          <li><a href="">{{ featured.primaryLocation.first }}</a></li> | 
-          <li><a href="">{{ featured.primaryTopic.first }}</a></li>
-        </ul>
-        <h3><a href="{{ featured.url }}">{{ featured.title }}</a></h3>
-        <div class="byline">By <a href="/contributor/{{ featured.author.name }}">{{ featured.author.name }}</a> - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
-        <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
-      </div>
-    </section>
-  {% endblock %}
-{% endif %}
+        <img src="{{ image }}">
+        <div class="featured">
+          <ul class="tags">
+            <li><a href="">{{ featured.section.name }}</a></li> | 
+            <li><a href="">{{ featured.primaryLocation.first }}</a></li> | 
+            <li><a href="">{{ featured.primaryTopic.first }}</a></li>
+          </ul>
+          <h3><a href="{{ featured.url }}">{{ featured.title }}</a></h3>
+          <div class="byline">By <a href="/contributor/{{ featured.author.name }}">{{ featured.author.name }}</a> - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
+          <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
+        </div>
+      {% endblock %}
+    {% endif %}
 
-{% block main %}
-  <main>
-    <h2>What's New</h2>
-    <ul class="posts">
-    {% for entry in entries | without(featured) %}
-      {% set image = '/img/default-list.png' %}
-      {% for block in entry.primaryImage %}
-        {% set image = block.image.first.url('hero') %}
+    {% block main %}
+      <h2>What's New</h2>
+      <ul class="posts">
+      {% for entry in entries | without(featured) %}
+        {% set image = '/img/default-list.png' %}
+        {% for block in entry.primaryImage %}
+          {% set image = block.image.first.url('hero') %}
+        {% endfor %}
+        <li>
+        <img src="{{ image }}">
+        <div class="post">
+          <ul class="tags">
+            <li><a href="">{{ entry.section.name }}</a></li> | 
+            <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
+            <li><a href="">{{ entry.primaryTopic.first }}</a></li>
+          </ul>
+          <h3><a href="{{ entry.url }}">{{ entry.title}}</a></h3>
+          <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+          {% switch entry.section.handle %}
+            {% case 'media' %}
+              {% set content = entry.linkComments %}
+            {% case 'news' %}
+              {% set content = entry.linkComments %}
+            {% default %}
+              {% set content = entry.mainContent %}
+          {% endswitch %}
+          <p>{% if content %}{{ content | striptags | slice(0, 200) }} &hellip; {% endif %}<a class="more" href="{{ entry.url }}">more »</a></p>
+        </div>          
+        </li>
       {% endfor %}
-      <li>
-      <img src="{{ image }}">
-      <div class="post">
-        <ul class="tags">
-          <li><a href="">{{ entry.section.name }}</a></li> | 
-          <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
-          <li><a href="">{{ entry.primaryTopic.first }}</a></li>
-        </ul>
-        <h3><a href="{{ entry.url }}">{{ entry.title}}</a></h3>
-        <div class="byline">By <a href="/contributor/{{ entry.author.name }}">{{ entry.author.name }}</a> - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
-        {% switch entry.section.handle %}
-          {% case 'media' %}
-            {% set content = entry.linkComments %}
-          {% case 'news' %}
-            {% set content = entry.linkComments %}
-          {% default %}
-            {% set content = entry.mainContent %}
-        {% endswitch %}
-        <p>{% if content %}{{ content | striptags | slice(0, 200) }} &hellip; {% endif %}<a class="more" href="{{ entry.url }}">more »</a></p>
-      </div>          
-      </li>
-    {% endfor %}
-    </ul>
-  </main>
-{% endblock %}
-
-{% block right %}
-  <aside>
-    <div id="comments">
-      <h2>Comments</h2>
-      <ul>
-        <li>
-        <h4><a href="#">Supervisors Need to Support Larkspur</a></h4>
-        <p>I found Mr. Johnson's statements about our Board of Supervisors&hellip;</p>
-        <a class="user" href="">Brett Millard</a>
-        </li>
-        <li>
-        <h4><a href="#">Kentfield Schools Assist Town</a></h4>
-        <p>We should all be grateful that the Kentfield School Board decided to reuse&hellip;</p>
-        <a class="user" href="">Sally McDowell</a>
-        </li>
       </ul>
-    </div>
+    {% endblock %}
 
-    {% include "_support.html" %}
-  </aside>
+    {% block aside %}
+      <div id="comments">
+        <h2>Comments</h2>
+        <ul>
+          <li>
+          <h4><a href="#">Supervisors Need to Support Larkspur</a></h4>
+          <p>I found Mr. Johnson's statements about our Board of Supervisors&hellip;</p>
+          <a class="user" href="">Brett Millard</a>
+          </li>
+          <li>
+          <h4><a href="#">Kentfield Schools Assist Town</a></h4>
+          <p>We should all be grateful that the Kentfield School Board decided to reuse&hellip;</p>
+          <a class="user" href="">Sally McDowell</a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+
+    {% block right %}
+      {% include "_support.html" with { 'notices': true } %}
+    {% endblock %}
+  {% endembed %}
 {% endblock %}
+

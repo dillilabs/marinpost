@@ -2,101 +2,50 @@
 
 {% set title = "Blog" %}
 
-{% set limit = 2 %}{# FIXME #}
+{% set limit = 2 %}{# TODO set higher after testing #}
 
 {% import "_list.html" as list %}
 
-{% block main %}
-	<h1>Blog</h1>
-  <aside>
-    <div class="filter" id="filters">
-      <h2>Filter</h2>
-      <fieldset>
-        <h5>Locations</h5>
-        <ul>
-		      <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
-          {% set locations = craft.categories.group('locations') %}
-          {% for location in locations %}
+{% block content %}
+  {% embed "_filtered_content.html" %}
+    {% block main %}
+      <h2>Blog</h2>
+      <ul class="posts" id="filtered-content">
+      {% for entry in craft.entries.section('blog').limit(limit).find %}
+        {{ list.entry(entry) }}
+      {% endfor %}
+      </ul>
+      <a href="#" id="load-more-content">Load More Content</a>
+    {% endblock %}
+
+    {% block aside %}
+      <div class="filter" id="filters">
+        <h2>Filter</h2>
+        <fieldset>
+          <h5>Locations</h5>
+          <ul>
+            <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+            {% set locations = craft.categories.group('locations') %}
+            {% for location in locations %}
             <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
-          {% endfor %}
-        </ul>
-      </fieldset>
-      <fieldset>
-        <h5>Topics</h5>
-        <ul>
-		      <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
-          {% set topics = craft.categories.group('topics') %}
-          {% for topic in topics %}
+            {% endfor %}
+          </ul>
+        </fieldset>
+        <fieldset>
+          <h5>Topics</h5>
+          <ul>
+            <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+            {% set topics = craft.categories.group('topics') %}
+            {% for topic in topics %}
             <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
-          {% endfor %}
-        </ul>
-      </fieldset>
-    </div>
-  </aside>
+            {% endfor %}
+          </ul>
+        </fieldset>
+      </div>
+    {% endblock %}
 
-  <main>
-    <h2>Blog</h2>
-    <ul class="posts" id="filtered-content">
-	  {% for entry in craft.entries.section('blog').limit(limit).find %}
-	    {{ list.entry(entry) }}
-	  {% endfor %}
-    </ul>
-	  <a href="#" id="more">Load More Content</a>
-  </main>
+    {% block right %}
+      {% include "_support.html" %}
+    {% endblock %}
+  {% endembed %}
 {% endblock %}
-
-{% set js %}
-$(function() {
-  var noFilters = $(':checkbox.all');
-  var filters = $(':checkbox.filter');
-  var filteredContent = $('#filtered-content');
-
-  var activeFilters = function(type) {
-    return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
-  };
-
-  var refreshViews = function() {
-    filteredContent.load('/blog/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
-  };
-
-  var currentContentLength = function() {
-    return $('.listing').length;
-  };
-
-  filters.click(function() {
-	var filter = $(this);
-
-	if (filter.is('.location')) {
-		noFilters.filter('.location').attr('checked', false);
-	} else {
-		noFilters.filter('.topic').attr('checked', false);
-	}
-
-	refreshViews();
-  });
-
-  noFilters.click(function() {
-	var noFilter = $(this);
-
-	if (noFilter.is(':checked')) {
-		if (noFilter.is('.location')) {
-			filters.filter('.location').attr('checked', false);
-		} else {
-			filters.filter('.topic').attr('checked', false);
-		}
-	}
-
-	refreshViews();
-  });
-
-  $('#more').click(function(e) {
-	    e.preventDefault();
-
-	    $.get(
-		'/blog/more?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&offset='+currentContentLength(),
-		function(data) {
-			filteredContent.append(data);
-	    });
-  });
-});
-{% endset %}

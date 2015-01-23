@@ -8,7 +8,7 @@
   {% includeCssFile "/css/main.css" %}
   {% includeCssFile "/css/rrssb.css" %}
 </head>
-<body class="home">
+<body class="{{ craft.request.lastSegment | default('home') }}">
   <header>
     <div id="title">
       <h1>The Marin Post</h1>
@@ -26,7 +26,7 @@
     </div>
     {% import "_class" as class %}
     <ul>
-      <li><a href="/"{{ class.active('') }}>Home</a></li>
+      <li><a href="{{ siteUrl }}" {{ class.active('') }}>Home</a></li>
       <li><a href="{{ url('blog') }}" {{ class.active('blog') }}>Blog</a></li>
       <li><a href="{{ url('news') }}" {{ class.active('news') }}>News</a></li>
       <li><a href="{{ url('notices') }}" {{ class.active('notices') }}>Notices</a></li>
@@ -45,13 +45,7 @@
     </ul>
   </nav>
 
-  {% block hero %}
-  {% endblock %}
-
-  {% block main %}
-  {% endblock %}
-
-  {% block right %}
+  {% block content %}
   {% endblock %}
 
   <footer id="footer">
@@ -60,8 +54,9 @@
   
   {% includeJsFile "/js/jquery.min.js" %}
   {% includeJsFile "/js/plugins.js" %}
-  {% includeJsFile "/js/main.js" %}
   {% includeJsFile "/js/rrssb.min.js" %}
+  {% includeJsFile "/js/main.js" %}
+  {% includeJsFile "/js/site.js" %}
   
   {% if js is defined %}
     {% includeJs js %}
