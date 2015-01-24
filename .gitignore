@@ -4,8 +4,8 @@ craft/config/license.key
 craft/storage/*
 !craft/storage/.keep
 
-public/doc/*
-!public/doc/.keep
+public/asset/doc/*
+!public/asset/doc/.keep
 
-public/img/*
-!public/img/.keep
+public/asset/img/*
+!public/asset/img/.keep
