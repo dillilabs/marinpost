@@ -198,9 +198,11 @@ nav li > a.active {
      color: #333;
      font-weight: bold;
 }
+/*
 nav > #sub-nav li.account {
     display: none;
 }
+*/
 #search {
     border-bottom: 1px solid #efefef;
     display: none;

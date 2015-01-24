@@ -1,0 +1,73 @@
+{% requireLogin %}
+
+{% set redirectTo = currentUser.inGroup("contributor") ? "notices/{postDate.year}/{postDate.month}/{postDate.day}/{slug}" : "submit/thank-you" %}
+
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% from "_macro.html" import errorList %}
+
+    {% block main %}
+      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="entries/saveEntry">
+        <input type="hidden" name="redirect" value="{{ redirectTo }}">
+        <input type="hidden" name="sectionId" value="4">
+        <input type="hidden" name="enabled" value="1">
+        {{ errorList(entry.getAllErrors) }}
+
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title" autocomplete="off" {%- if entry is defined %} value="{{ entry.title }}"{% endif -%}>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('title')) }}
+        {% endif %}
+
+        <label for="primaryLocation">Primary Location</label>
+        <select id="primaryLocation" name="fields[primaryLocation]">
+          <option value=""></option>
+        {% for location in craft.categories.group('locations') %}
+          <option value="{{ location.id }}">{{ location.title }}</option>
+        {% endfor %}
+        </select>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('primaryLocation')) }}
+        {% endif %}
+
+        <label for="primaryTopic">Primary Topic</label>
+        <select id="primaryTopic" name="fields[primaryTopic]">
+          <option value=""></option>
+        {% for topic in craft.categories.group('topics') %}
+          <option value="{{ topic.id }}">{{ topic.title }}</option>
+        {% endfor %}
+        </select>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('primaryTopic')) }}
+        {% endif %}
+
+        <label for="mainContent">Main Content</label>
+        <textarea id="mainContent" name="fields[mainContent]" cols="60" rows="8"> {%- if entry is defined %}{{ entry.mainContent }}{% endif -%} </textarea>
+        {% includeJsResource "lib/redactor/redactor.js" %}
+        {% includeCssResource "lib/redactor/redactor.css" %}
+        {% includeJs "$('#mainContent').redactor();" %}
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('mainContent')) }}
+        {% endif %}
+  
+        <label for="primaryImage">Primary Image</label>
+        <input id="primaryImage" type="file" name="fields[primaryImage]">
+        {% if entry is defined %}
+            {{ errorList(entry.getErrors('primaryImage')) }}
+        {% endif %}
+  
+        <label for="secondaryImages">Secondary Images (max: 3)</label>
+        <input id="secondaryImages" type="file" name="fields[secondaryImages][]" multiple>
+        {% if entry is defined %}
+            {{ errorList(entry.getErrors('secondaryImages')) }}
+        {% endif %}
+
+        <input type="submit" value="Submit Notice">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

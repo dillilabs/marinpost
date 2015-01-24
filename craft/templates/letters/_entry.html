@@ -1,0 +1,14 @@
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% from "_macro.html" import authorLink %}
+
+    {% block main %}
+      <h2>{{ entry.title }}</h2>
+      <p>{{ entry.letterBody }}</p>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }}</div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+

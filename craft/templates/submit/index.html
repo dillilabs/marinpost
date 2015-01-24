@@ -1,0 +1,17 @@
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% block main %}
+      <h2>Submit Content</h2>
+      <ul>
+        <li><a href="{{ url('submit/letter') }}">Letter to the Community</a></li>
+        <li><a href="{{ url('submit/notice') }}">Public Notice</a></li>
+        <li><a href="{{ url('submit/news') }}">Link to News Article</a></li>
+        <li><a href="{{ url('submit/media') }}">Link to Media</a></li>
+        <li><a href="{{ url('submit/blog') }}">Blog Post</a></li>
+      </ul>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+

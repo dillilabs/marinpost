@@ -1,0 +1,35 @@
+{% requireLogin %}
+
+{% set redirectTo = currentUser.inGroup("contributor") ? "letters/{postDate.year}/{postDate.month}/{postDate.day}/{slug}" : "submit/thank-you" %}
+
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% from "_macro.html" import errorList %}
+
+    {% block main %}
+      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="entries/saveEntry">
+        <input type="hidden" name="redirect" value="{{ redirectTo }}">
+        <input type="hidden" name="sectionId" value="5">
+        <input type="hidden" name="enabled" value="1">
+
+        <label for="title">Title</label>
+        <input id="title" type="text" name="title" autocomplete="off" {%- if entry is defined %} value="{{ entry.title }}"{% endif -%}>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('title')) }}
+        {% endif %}
+
+        <label for="letterBody">Body</label>
+        <textarea id="letterBody" name="fields[letterBody]" cols="60" rows="8"> {%- if entry is defined %}{{ entry.letterBody }}{% endif -%} </textarea>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('letterBody')) }}
+        {% endif %}
+
+        <input type="submit" value="Submit Letter">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

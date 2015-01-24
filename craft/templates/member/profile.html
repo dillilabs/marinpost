@@ -1,11 +1,16 @@
+{% requireLogin %}
+
+{% if not currentUser.inGroup("contributors") %}
+  {% redirect "404" %}
+{% endif %}
+
 {% extends "_layout" %}
 
 {% block content %}
   {% embed "_unfiltered_content.html" %}
     {% block main %}
-
-thanks
-
+      <h2>{{ currentUser.name }} Profile</h2>
     {% endblock %}
   {% endembed %}
 {% endblock %}
+

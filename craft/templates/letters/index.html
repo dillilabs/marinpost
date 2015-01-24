@@ -3,9 +3,9 @@
 {% block content %}
   {% embed "_unfiltered_content.html" %}
     {% block main %}
-      <h2>News Links</h2>
+      <h2>Letters to the Community</h2>
       <ul>
-      {% for entry in craft.entries.section('news').find %}
+      {% for entry in craft.entries.section('letter').find %}
         <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
       {% endfor %}
       </ul>

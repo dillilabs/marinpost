@@ -1,6 +1,6 @@
 {% set user = craft.users.id(craft.request.segments(3)).first %}
 
-{% if not user or user.inGroup("guest") %}
+{% if not user or not user.inGroup("contributor") %}
   {% redirect "404" %}
 {% endif %}
 

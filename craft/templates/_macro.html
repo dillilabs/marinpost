@@ -1,27 +1,30 @@
 {% macro classActive(slug, segmentNo) %}
   {% set segmentNo = segmentNo | default(1) %}
   {% set segment = craft.request.segment(segmentNo | default(1)) %}
+
   {{ segment == slug ? 'class="active"' : null }}
 {% endmacro %}
 
 {% macro navLink(name, segmentNo) %}
-  {% from _self import classActive as _classActive %}
+  {% from _self import classActive as classActive %}
   {% set slug = name | lower %}
-  <a href="{{ url(slug) }}" {{ _classActive(slug, segmentNo) }}>{{ name }}</a>
+
+  <a href="{{ url(slug) }}" {{ classActive(slug, segmentNo) }}>{{ name }}</a>
 {% endmacro %}
 
 {% macro authorLink(entry) %}
   {% set author = entry.author %}
+
   {% if author.can("publish:{{ entry.section.id }}") %}
     {% set slug = [author.firstName, author.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
-    <a href="/about/contributor/{{ author.id }}/{{ slug }}">{{ author.name }}</a>
+    <a href="/about/contributors/{{ author.id }}/{{ slug }}">{{ author.name }}</a>
   {% else %}
     {{ author.name }}
   {% endif %}
 {% endmacro %}
 
 {% macro entry(entry) %}
-  {% from _self import authorLink as _authorLink %}
+  {% from _self import authorLink as authorLink %}
 
   {% set image = '/img/default-list.png' %}
   {% for block in entry.primaryImage %}
@@ -37,8 +40,18 @@
         <li><a href="">{{ entry.primaryTopic.first }}</a></li>
       </ul>
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By {{ _authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
       <p>{{ entry.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
     </div>          
   </li>
+{% endmacro %}
+
+{% macro errorList(errors) %}
+  {% if errors %}
+    <ul class="errors">
+      {% for error in errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endmacro %}

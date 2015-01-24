@@ -28,11 +28,11 @@ $(document).ready(function() {
 		
 	});
         
-    $('.sign-in a').click(function() {
-       $('.sign-in').toggle();
-       $('.account').toggle();
-        
-    });
+    //$('.sign-in a').click(function() {
+    //   $('.sign-in').toggle();
+    //   $('.account').toggle();
+    //    
+    //});
     
     $('.show-search').click(function() {
         $('#search').slideToggle();
