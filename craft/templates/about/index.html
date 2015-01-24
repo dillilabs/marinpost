@@ -1,0 +1,18 @@
+{% extends "_layout" %}
+
+{% set title = "About" %}
+
+{% block content %}
+  {% embed "_filtered_content.html" %}
+    {% block main %}
+      <h2>About</h2>
+    {% endblock %}
+
+    {% block aside %}
+    {% endblock %}
+
+    {% block right %}
+      {% include "_support.html" %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

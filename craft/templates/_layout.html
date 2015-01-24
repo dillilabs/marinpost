@@ -28,16 +28,16 @@
 
     <ul>
       <li><a href="{{ siteUrl }}" {{ macro.classActive('') }}>Home</a></li>
-      <li><a href="{{ url('blog') }}" {{ macro.classActive('blog') }}>Blog</a></li>
-      <li><a href="{{ url('news') }}" {{ macro.classActive('news') }}>News</a></li>
-      <li><a href="{{ url('notices') }}" {{ macro.classActive('notices') }}>Notices</a></li>
-      <li><a href="{{ url('media') }}" {{ macro.classActive('media') }}>Media</a></li>
-      <li><a href="{{ url('surveys') }}" {{ macro.classActive('surveys') }}>Surveys</a></li>
-      <li><a href="{{ url('letters') }}" {{ macro.classActive('letters') }}>Letters</a></li>
-      <li><a href="{{ url('about') }}" {{ macro.classActive('about') }}>About</a></li>
-      <li><a href="{{ url('submit') }}" {{ macro.classActive('submit') }}>Submit</a></li>
-      <li><a href="{{ url('contact') }}" {{ macro.classActive('contact') }}>Contact</a></li>
-      <li><a href="{{ url('subscribe') }}" {{ macro.classActive('subscribe') }}>Subscribe</a></li>
+      <li>{{ macro.navLink('Blog') }}<li>
+      <li>{{ macro.navLink('News') }}<li>
+      <li>{{ macro.navLink('Notices') }}<li>
+      <li>{{ macro.navLink('Media') }}<li>
+      <li>{{ macro.navLink('Surveys') }}<li>
+      <li>{{ macro.navLink('Letters') }}<li>
+      <li>{{ macro.navLink('About') }}<li>
+      <li>{{ macro.navLink('Submit') }}<li>
+      <li>{{ macro.navLink('Contact') }}<li>
+      <li>{{ macro.navLink('Subscribe') }}<li>
     </ul>
     <ul id="sub-nav">
       <li class="sign-in"><a href="/admin">Sign in</a></li>

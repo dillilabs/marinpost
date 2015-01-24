@@ -1,0 +1,37 @@
+{% set user = craft.users.id(craft.request.segments(3)).first %}
+
+{% if not user or user.inGroup("guest") %}
+  {% redirect "404" %}
+{% endif %}
+
+{% set imageSize = 200 %}
+
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% block main %}
+      {% if user.photoUrl %}
+        <img src="{{ user.photoUrl(imageSize) }}" />
+      {% endif %}
+
+      <h3>{{ user.name }}</h3>
+
+      <p>{{ user.city }}, {{ user.state }}</p>
+
+      {% if user.bio %}
+        <p>{{ user.bio }}</p>
+      {% endif %}
+
+      <ul>
+      {% for entry in craft.entries.authorId(user.id).find %}
+        <li>{{ entry.postDate | date('M d, Y') }} <a href="{{ entry.url }}">{{ entry.title }}</a> ({{ entry.section.name }})</li>
+      {% endfor %}
+      </ul>
+    {% endblock %}
+
+    {% block aside %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
