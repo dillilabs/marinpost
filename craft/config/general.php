@@ -9,13 +9,24 @@
 
 return array(
 	'*' => array(
-		'loginPath' => 'members/login',
+        'activateAccountFailurePath' => 'account/activation-failed',
+        'activateAccountSuccessPath' => 'account/activation-success',
+        'autoLoginAfterAccountActivation' => true,
+        'invalidUserTokenPath' => 'account/invalid-token',
+		'loginPath' => 'account/login',
+        'logoutPath' => 'account/logout',
+        'maxUploadFileSize' => 4194304,
 		'omitScriptNameInUrls' => true,
+        'postLoginRedirect' => 'submit',
+        'setPasswordPath' => 'account/set-password',
+        'setPasswordSuccessPath' => 'account/password-success',
 		'useEmailAsUsername' => true,
+        'useXSendFile' => true,
 	),
 	'dev' => array(
 		'devMode' => true,
 		'siteUrl' => 'http://dev.marinpost.org',
+        'testToEmailAddress' => 'stvpedersen@gmail.com',
 	),
 	'live' => array(
 		'siteUrl' => 'http://marinpost.org',

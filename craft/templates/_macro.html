@@ -12,12 +12,20 @@
   <a href="{{ url(slug) }}" {{ classActive(slug, segmentNo) }}>{{ name }}</a>
 {% endmacro %}
 
+{% macro contributorUrl(user) %}
+{% spaceless %}
+  {% set slug = [user.firstName, user.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
+  {% set base = "about/contributors" %}
+    {{ url([base, user.id, slug] | join('/')) }}
+{% endspaceless %}
+{% endmacro %}
+
 {% macro authorLink(entry) %}
+  {% from _self import contributorUrl as contributorUrl %}
   {% set author = entry.author %}
 
   {% if author.can("publish:{{ entry.section.id }}") %}
-    {% set slug = [author.firstName, author.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
-    <a href="/about/contributors/{{ author.id }}/{{ slug }}">{{ author.name }}</a>
+    <a href="{{ contributorUrl(author) }}">{{ author.name }}</a>
   {% else %}
     {{ author.name }}
   {% endif %}

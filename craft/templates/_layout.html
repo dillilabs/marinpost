@@ -41,7 +41,8 @@
     </ul>
     <ul id="sub-nav">
     {% if currentUser %}
-      <li class="account"><a href="{{ url('member/profile') }}">My account</a></li>
+      <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
+      <li class="log-out"><a href="{{ logoutUrl }}">Log out</a></li>
     {% else %}
       <li class="sign-in"><a href="{{ loginUrl }}">Sign in</a></li>
     {% endif %}

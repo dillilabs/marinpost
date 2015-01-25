@@ -1,0 +1,110 @@
+{% requireLogin %}
+
+{% if not (currentUser.inGroup("contributor") or currentUser.inGroup("guest")) %}
+  {% redirect "404" %}
+{% endif %}
+
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% from "_macro.html" import contributorUrl, errorList %}
+
+    {% block main %}
+      <h2>Profile</h2>
+
+      <form method="post" accept-charset="UTF-8">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="users/saveUser">
+          <input type="hidden" name="redirect" value="{{ contributorUrl(currentUser) }}">
+          <input type="hidden" name="userId" value="{{ currentUser.id }}">
+
+          {% if account is defined %}
+            {{ errorList(account.allErrors) }}
+          {% endif %}
+
+          <label for="nameFirst">First Name</label>
+          <input type="text" id="nameFirst" name="fields[nameFirst]" value="{{ currentUser.nameFirst }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('nameFirst')) }}
+          {% endif %}
+          <br>
+
+          <label for="nameLast">Last Name</label>
+          <input type="text" id="nameLast" name="fields[nameLast]" value="{{ currentUser.nameLast }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('nameLast')) }}
+          {% endif %}
+          <br>
+
+          <label for="organization">Organization</label>
+          <input type="text" id="organization" name="fields[organization]" value="{{ currentUser.organization }}">
+          <br>
+
+          <label for="organization">Street Address</label>
+          <input type="text" id="streetAddress" name="fields[streetAddress]" value="{{ currentUser.streetAddress }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('streetAddress')) }}
+          {% endif %}
+          <br>
+
+          <label for="city">City</label>
+          <input type="text" id="city" name="fields[city]" value="{{ currentUser.city }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('city')) }}
+          {% endif %}
+          <br>
+
+          <label for="state">State</label>
+          <select id="state" name="fields[state]">
+          {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+            <option value="{{ option.value }}" {% if option.value == currentUser.state.value %}selected{% endif %}>{{ option.label }}</option>
+          {% endfor %}
+          </select>
+          {% if account is defined %}
+            {{ errorList(account.getErrors('state')) }}
+          {% endif %}
+          <br>
+
+          <label for="zipCode">Zip Code</label>
+          <input type="text" id="zipCode" name="fields[zipCode]" value="{{ currentUser.zipCode }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('zipCode')) }}
+          {% endif %}
+          <br>
+
+          <label for="phoneNumber">Phone Number</label>
+          <input type="text" id="phoneNumber" name="fields[phoneNumber]" value="{{ currentUser.phoneNumber }}">
+          {% if account is defined %}
+            {{ errorList(account.getErrors('phoneNumber')) }}
+          {% endif %}
+          <br>
+
+        {% if currentUser.inGroup("contributor") %}
+          <label for="photoUrl">Photo</label>
+          <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" />
+          <br>
+          <input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
+          <br>
+
+          <label for="bio">Bio</label>
+          <textarea id="bio" name="fields[bio]">{{ currentUser.bio }}</textarea>
+          <br>
+        {% endif %}
+
+          <label for="termsOfUse">Terms of Use</label>
+          <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
+        {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
+          <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}" {% if option.value == currentUser.termsOfUse.value %}checked{% endif %}>
+        {% endfor %}
+          {% if account is defined %}
+            {{ errorList(account.getErrors('termsOfUse')) }}
+          {% endif %}
+          <br>
+
+          <input type="submit" value="Save Profile">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
