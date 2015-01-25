@@ -112,7 +112,7 @@ JS;
      */
     public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
     {
-        if ($attribute == 'author')
+        if (defined($attribute) && $attribute == 'author')
         {
             return $entry->author->name;
         }

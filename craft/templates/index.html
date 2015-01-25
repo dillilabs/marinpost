@@ -5,8 +5,8 @@
 
 {% block content %}
   {% embed "_unfiltered_content.html" %}
-    {% if featured %}
-      {% block featured %}
+    {% block featured %}
+      {% if featured %}
         {% set image = '/img/default-hero.png' %}
         {% for block in featured.primaryImage %}
           {% set image = block.image.first.url('hero') %}
@@ -23,8 +23,8 @@
           <div class="byline">By {{ macro.authorLink(featured) }} - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
           <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
         </div>
-      {% endblock %}
-    {% endif %}
+      {% endif %}
+    {% endblock %}
 
     {% block main %}
       <h2>What's New</h2>
