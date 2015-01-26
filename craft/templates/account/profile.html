@@ -95,7 +95,7 @@
           <label for="termsOfUse">Terms of Use</label>
           <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
         {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
-          <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}" {% if option.value == currentUser.termsOfUse.value %}checked{% endif %}>
+          <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}" {% if option.value == currentUser.termsOfUse[0].value %}checked{% endif %}>
         {% endfor %}
           {% if account is defined %}
             {{ errorList(account.getErrors('termsOfUse')) }}
