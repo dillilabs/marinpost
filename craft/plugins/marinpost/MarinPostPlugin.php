@@ -44,7 +44,7 @@ class MarinPostPlugin extends BasePlugin
             $this->_syncUserName($user);
 
             if (! $user->admin) {
-                $this->_removeUserDashboardWidgets($user);
+                // $this->_removeUserDashboardWidgets($user);
             }
         });
     }
