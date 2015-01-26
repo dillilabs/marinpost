@@ -9,17 +9,18 @@
 
 return array(
     '*' => array(
-        'activateAccountFailurePath' => 'account/activation-failed',
-        'activateAccountSuccessPath' => 'account/activation-success',
+        'activateAccountFailurePath' => 'account/activate/error',
+        'activateAccountSuccessPath' => 'account/activate/welcome',
         'autoLoginAfterAccountActivation' => true,
-        'invalidUserTokenPath' => 'account/invalid-token',
+        'invalidUserTokenPath' => 'account/token/invalid',
         'loginPath' => 'account/login',
         'logoutPath' => 'account/logout',
         'maxUploadFileSize' => 4194304,
         'omitScriptNameInUrls' => true,
         'postLoginRedirect' => 'submit',
-        'setPasswordPath' => 'account/set-password',
-        'setPasswordSuccessPath' => 'account/password-success',
+        'setPasswordPath' => 'account/password/set',
+        'setPasswordSuccessPath' => 'account/password/updated',
+        'siteName' => 'The Marin Post',
         'useEmailAsUsername' => true,
     ),
     'dev' => array(

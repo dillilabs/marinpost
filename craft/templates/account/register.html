@@ -3,15 +3,15 @@
 {% block content %}
   {% embed "_unfiltered_content.html" %}
     {% from "_macro.html" import errorList %}
-
     {% block main %}
+
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
-          <input type="hidden" name="redirect" value="account/thank-you">
+          <input type="hidden" name="redirect" value="account/activate/email">
 
           {% if account is defined %}
-            {{ errorList(account.allErrors) }}
+            {# errorList(account.allErrors) #}
           {% endif %}
 
           <label for="nameFirst">First Name</label>
@@ -99,6 +99,7 @@
       </form>
 
       <p><a href="{{ loginUrl }}">Already registered?</a></p>
+
     {% endblock %}
   {% endembed %}
 {% endblock %}

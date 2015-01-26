@@ -1,0 +1,12 @@
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% block main %}
+
+    <h2>Sorry, something went wrong with the activation of your account</h2>
+    <p>Would you like to <a href="{{ url('contact') }}">Contact support?</a></p>
+
+    {% endblock %}
+  {% endembed%}
+{% endblock %}

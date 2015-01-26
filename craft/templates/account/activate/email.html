@@ -1,0 +1,12 @@
+{% extends "_layout" %}
+
+{% block content %}
+  {% embed "_unfiltered_content.html" %}
+    {% block main %}
+
+    <h2>Thank you for registering!</h3>
+    <p>Please check your email for account activation instructions.</p>
+
+    {% endblock %}
+  {% endembed%}
+{% endblock %}

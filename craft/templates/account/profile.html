@@ -9,8 +9,8 @@
 {% block content %}
   {% embed "_unfiltered_content.html" %}
     {% from "_macro.html" import contributorUrl, errorList %}
-
     {% block main %}
+
       <h2>Profile</h2>
 
       <form method="post" accept-charset="UTF-8">
@@ -104,6 +104,7 @@
 
           <input type="submit" value="Save Profile">
       </form>
+
     {% endblock %}
   {% endembed %}
 {% endblock %}
