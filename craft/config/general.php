@@ -21,7 +21,6 @@ return array(
         'setPasswordPath' => 'account/set-password',
         'setPasswordSuccessPath' => 'account/password-success',
         'useEmailAsUsername' => true,
-        'useXSendFile' => true,
     ),
     'dev' => array(
         'devMode' => true,
