@@ -174,7 +174,11 @@ class GuestEntriesController extends BaseController
 		if ($settings->allowGuestSubmissions && isset($settings->defaultAuthors[$this->_section->handle]) && $settings->defaultAuthors[$this->_section->handle] !== 'none')
 		{
 			// We found a defaultAuthor
-			$authorId = $settings->defaultAuthors[$this->_section->handle];
+			// $authorId = $settings->defaultAuthors[$this->_section->handle];
+
+			// HACK 2015-01-26 sp
+			// Our guest entries are in fact created by logged-in users, and not the configured "default author".
+			$authorId = craft()->userSession->getUser()->id;
 		}
 		else
 		{
