@@ -1,0 +1,15 @@
+{% from "_submit.html" import categoryId %}
+{% from "_macro.html" import errorList %}
+
+<label for="primaryLocation">Primary Location</label>
+{% set primaryLocationId = entry is defined ? categoryId(entry, "primaryLocation") : 0 %}
+<select id="primaryLocation" name="fields[primaryLocation][]" class="required">
+  <option value=""></option>
+{% for option in craft.categories.group('locations') %}
+  <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
+{% endfor %}
+</select>
+{% if entry is defined %}
+  {{ errorList(entry.getErrors('primaryLocation')) }}
+{% endif %}
+<br>

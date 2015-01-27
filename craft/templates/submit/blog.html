@@ -11,8 +11,8 @@
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ redirectTo('notices') }}">
-        <input type="hidden" name="sectionId" value="4">
+        <input type="hidden" name="redirect" value="{{ redirectTo('blog') }}">
+        <input type="hidden" name="sectionId" value="3">
         <input type="hidden" name="enabled" value="1">
 
         {% if entry is defined %}
@@ -48,7 +48,7 @@
         {% endif %}
         <br>
 
-        <input type="submit" value="Submit Notice">
+        <input type="submit" value="Submit Blog Post">
       </form>
     {% endblock %}
   {% endembed %}

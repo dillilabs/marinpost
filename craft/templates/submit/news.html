@@ -11,8 +11,8 @@
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ redirectTo('notices') }}">
-        <input type="hidden" name="sectionId" value="4">
+        <input type="hidden" name="redirect" value="{{ redirectTo('news') }}">
+        <input type="hidden" name="sectionId" value="2">
         <input type="hidden" name="enabled" value="1">
 
         {% if entry is defined %}
@@ -24,13 +24,17 @@
         {% include "submit/_location.html" %}
         {% include "submit/_topic.html" %}
 
-        <label for="mainContent">Main Content</label>
-        <textarea id="mainContent" name="fields[mainContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.mainContent }}{% endif -%} </textarea>
-        {# includeJsResource "lib/redactor/redactor.js" #}
-        {# includeCssResource "lib/redactor/redactor.css" #}
-        {# includeJs "$('#mainContent').redactor();" #}
+        <label for="newsLink">News Link</label>
+        <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
         {% if entry is defined %}
-          {{ errorList(entry.getErrors('mainContent')) }}
+          {{ errorList(entry.getErrors('newsLink')) }}
+        {% endif %}
+        <br>
+
+        <label for="linkComments">Link Comments</label>
+        <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="8"> {%- if entry is defined %}{{ entry.linkComments }}{% endif -%} </textarea>
+        {% if entry is defined %}
+          {{ errorList(entry.getErrors('linkComments')) }}
         {% endif %}
         <br>
   
@@ -48,7 +52,7 @@
         {% endif %}
         <br>
 
-        <input type="submit" value="Submit Notice">
+        <input type="submit" value="Submit News Link">
       </form>
     {% endblock %}
   {% endembed %}

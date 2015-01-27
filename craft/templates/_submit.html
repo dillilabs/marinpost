@@ -17,3 +17,16 @@
   {% endif %}
 {% endspaceless %}
 {% endmacro %}
+
+{% macro categoryId(entry, fieldName, defaultId, limit) %}
+{% spaceless %}
+  {% set selected = defaultId | default(0) %}
+  {% set criteria = attribute(entry, fieldName) %}
+  {% if criteria is defined %}
+    {% for cat in criteria.limit(limit | default(1))  %}
+      {% set selected = cat.id %}
+    {% endfor %}
+  {% endif %}
+  {{ selected }}
+{% endspaceless %}
+{% endmacro %}
