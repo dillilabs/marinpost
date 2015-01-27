@@ -46,28 +46,28 @@ $(document).ready(function() {
         $(this).toggleClass('active');
         $(this).siblings('ul').slideToggle();
     });
-    $('.all-topics').change(function () {
-        $('.topics').prop('checked', this.checked);
-    });
-    
-    $(".topics").change(function () {
-        if ($(".topics:checked").length == $(".topics").length) {
-            $('.all-topics').prop('checked', 'checked');
-        } else {
-            $('.all-topics').prop('checked', false);
-        }
-    });
-    $('.all-locations').change(function () {
-        $('.locations').prop('checked', this.checked);
-    });
-    
-    $(".locations").change(function () {
-        if ($(".locations:checked").length == $(".locations").length) {
-            $('.all-locations').prop('checked', 'checked');
-        } else {
-            $('.all-locations').prop('checked', false);
-        }
-    });
+    //$('.all-topics').change(function () {
+    //    $('.topics').prop('checked', this.checked);
+    //});
+    //
+    //$(".topics").change(function () {
+    //    if ($(".topics:checked").length == $(".topics").length) {
+    //        $('.all-topics').prop('checked', 'checked');
+    //    } else {
+    //        $('.all-topics').prop('checked', false);
+    //    }
+    //});
+    //$('.all-locations').change(function () {
+    //    $('.locations').prop('checked', this.checked);
+    //});
+    //
+    //$(".locations").change(function () {
+    //    if ($(".locations:checked").length == $(".locations").length) {
+    //        $('.all-locations').prop('checked', 'checked');
+    //    } else {
+    //        $('.all-locations').prop('checked', false);
+    //    }
+    //});
 
 });
 
