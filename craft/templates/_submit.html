@@ -30,3 +30,37 @@
   {{ selected }}
 {% endspaceless %}
 {% endmacro %}
+
+{% macro imageBy(entry, fieldName) %}
+{% spaceless %}
+  {% set fieldName = fieldName | default('primaryImage') %}
+  {% set imageBy = null %}
+
+  {% if entry is defined %}
+    {# FIXME for image in attribute(entry, fieldName).type('image') #}
+    {% for image in attribute(entry, fieldName) %}
+      {% set imageBy = image.by %}
+    {% endfor %}
+  {% endif %}
+  {{ imageBy }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro imageDisclaimer(entry, fieldName) %}
+{% spaceless %}
+  {% set fieldName = fieldName | default('primaryImage') %}
+  {% set imageDisclaimer = null %}
+
+  {% if entry is defined %}
+    {# FIXME for image in attribute(entry, fieldName).type('image') #}
+    {% for image in attribute(entry, fieldName) %}
+      {% if image.disclaimer %}
+        {% for option in image.disclaimer.getOptions  %}
+          {% set imageDisclaimer = option.selected %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {{ imageDisclaimer }}
+{% endspaceless %}
+{% endmacro %}

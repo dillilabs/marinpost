@@ -8,6 +8,8 @@
     {% from "_macro.html" import errorList %}
 
     {% block main %}
+      <h2>Submit a Link to Media</h2>
+
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">
@@ -38,12 +40,7 @@
         {% endif %}
         <br>
   
-        <label for="primaryImage">Primary Image</label>
-        <input id="primaryImage" type="file" name="fields[primaryImage]">
-        {% if entry is defined %}
-            {{ errorList(entry.getErrors('primaryImage')) }}
-        {% endif %}
-        <br>
+        {% include "submit/_image.html" %}
   
         <label for="secondaryImages">Secondary Images (max: 3)</label>
         <input id="secondaryImages" type="file" name="fields[secondaryImages][]" multiple>

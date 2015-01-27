@@ -8,6 +8,8 @@
     {% from "_macro.html" import errorList %}
 
     {% block main %}
+      <h2>Submit a Notice</h2>
+
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">
@@ -23,23 +25,8 @@
         {% include "submit/_title.html" %}
         {% include "submit/_location.html" %}
         {% include "submit/_topic.html" %}
-
-        <label for="mainContent">Main Content</label>
-        <textarea id="mainContent" name="fields[mainContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.mainContent }}{% endif -%} </textarea>
-        {# includeJsResource "lib/redactor/redactor.js" #}
-        {# includeCssResource "lib/redactor/redactor.css" #}
-        {# includeJs "$('#mainContent').redactor();" #}
-        {% if entry is defined %}
-          {{ errorList(entry.getErrors('mainContent')) }}
-        {% endif %}
-        <br>
-  
-        <label for="primaryImage">Primary Image</label>
-        <input id="primaryImage" type="file" name="fields[primaryImage]">
-        {% if entry is defined %}
-            {{ errorList(entry.getErrors('primaryImage')) }}
-        {% endif %}
-        <br>
+        {% include "submit/_wysiwyg.html" %}
+        {% include "submit/_image.html" %}
   
         <label for="secondaryImages">Secondary Images (max: 3)</label>
         <input id="secondaryImages" type="file" name="fields[secondaryImages][]" multiple>

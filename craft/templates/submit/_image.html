@@ -1,0 +1,20 @@
+{% from "_macro.html" import errorList %}
+{% from "_submit.html" import imageBy, imageDisclaimer %}
+
+<label for="primaryImage">Primary Image</label>
+<input type="hidden" name="fields[primaryImage]">
+<input type="hidden" name="fields[primaryImage][new1][type]" value="image">
+<input type="hidden" name="fields[primaryImage][new1][fields][image]" value="">
+<input type="file" name="fields[primaryImage][new1][fields][image][]" id="primaryImage" class="optional">
+<br>
+<label for="primaryImage-by">Image By</label>
+<input type="hidden" name="fields[primaryImage][new1][fields][disclaimer]" value="">
+<input type="text" name="fields[primaryImage][new1][fields][by]" id="primaryImage-by" {%- if entry is defined %}value="{{ imageBy(entry) }}"{% endif %}>
+<br>
+<label for="primaryImage-disclaimer">Legal</label>
+<input type="checkbox" name="fields[primaryImage][new1][fields][disclaimer][]" id="primaryImage-disclaimer" value="Yes I have the right to use this image" {%- if entry is defined and imageDisclaimer(entry) %}checked{% endif %}>
+<span>Yes I have the right to use this image</span>
+{% if entry is defined %}
+  {{ errorList(entry.getErrors('primaryImage')) }}
+{% endif %}
+<br>

@@ -8,6 +8,8 @@
     {% from "_macro.html" import errorList %}
 
     {% block main %}
+      <h2>Submit a Letter to the Community</h2>
+
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">
