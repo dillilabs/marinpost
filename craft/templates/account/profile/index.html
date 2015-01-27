@@ -1,14 +1,10 @@
 {% requireLogin %}
 
-{% if not (currentUser.inGroup("contributor") or currentUser.inGroup("guest")) %}
-  {% redirect "404" %}
-{% endif %}
-
 {% extends "_layout" %}
 
 {% block content %}
   {% embed "_unfiltered_content.html" %}
-    {% from "_macro.html" import contributorUrl, errorList %}
+    {% from "_macro.html" import errorList %}
     {% block main %}
 
       <h2>Profile</h2>
@@ -16,7 +12,7 @@
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
-          <input type="hidden" name="redirect" value="{{ contributorUrl(currentUser) }}">
+          <input type="hidden" name="redirect" value="account/profile/updated">
           <input type="hidden" name="userId" value="{{ currentUser.id }}">
 
           {% if account is defined %}
@@ -56,9 +52,13 @@
           <br>
 
           <label for="state">State</label>
+          {% set selectedState = currentUser.state %}
+          {% if account is defined %}
+            {% set selectedState = account.state %}
+          {% endif %}
           <select id="state" name="fields[state]">
           {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-            <option value="{{ option.value }}" {% if option.value == currentUser.state.value %}selected{% endif %}>{{ option.label }}</option>
+            <option value="{{ option.value }}" {%- if option.value == selectedState.value %}selected{% endif %}>{{ option.label }}</option>
           {% endfor %}
           </select>
           {% if account is defined %}
@@ -108,4 +108,3 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
-

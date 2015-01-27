@@ -8,7 +8,7 @@
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
-          <input type="hidden" name="redirect" value="account/activate/email">
+          <input type="hidden" name="redirect" value="account/register/email">
 
           {% if account is defined %}
             {# errorList(account.allErrors) #}
