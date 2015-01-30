@@ -259,6 +259,7 @@ Craft.MatrixInput = Garnish.Base.extend(
 
 		$(bodyHtml).appendTo($fieldsContainer);
 
+		// Animate the block into position
 		$block.css(this.getHiddenBlockCss($block)).velocity({
 			opacity: 1,
 			'margin-bottom': 10
@@ -271,6 +272,12 @@ Craft.MatrixInput = Garnish.Base.extend(
 			this.blockSort.addItems($block);
 			this.blockSelect.addItems($block);
 			this.updateAddBlockBtn();
+
+			Garnish.requestAnimationFrame(function()
+			{
+				// Scroll to the block
+				Garnish.scrollContainerToElement($block);
+			});
 		}, this));
 	},
 
