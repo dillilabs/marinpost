@@ -26,11 +26,9 @@ return array(
     'dev' => array(
         'devMode' => true,
         'siteUrl' => 'http://dev.marinpost.org',
-        'testToEmailAddress' => 'stvpedersen@gmail.com',
+//      'testToEmailAddress' => 'stvpedersen@gmail.com',
     ),
     'live' => array(
-        'devMode' => true,
         'siteUrl' => 'http://marinpost.org',
-        'testToEmailAddress' => 'stvpedersen@gmail.com',
     ),
 );
