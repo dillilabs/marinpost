@@ -101,14 +101,7 @@ JS;
         craft()->templates->includeJs($js);
     }
 
-    /* Hook to display entry.author in entry list
-     */
-    public function modifyEntryTableAttributes(&$attributes, $source)
-    {
-        $attributes['author'] = Craft::t('Author');
-    }
-
-    /* Hook to display entry.author.name in entry list
+    /* Hook to display entry.author.name in CP entry list
      */
     public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
     {
@@ -118,6 +111,20 @@ JS;
         }
     }
 
+    /* Hook to display entry.author in CP entry list
+     */
+    public function modifyEntryTableAttributes(&$attributes, $source)
+    {
+        $attributes['author'] = Craft::t('Author');
+    }
+
+    /* Hook to sort by entry.author in CP entry list
+     */
+    public function modifyEntrySortableAttributes(&$attributes)
+    {
+        // $attributes['author'] = Craft::t('Author');
+    }
+
     public function getName()
     {
         return 'MarinPost';
@@ -125,7 +132,7 @@ JS;
 
     public function getVersion()
     {
-        return '1.0.0';
+        return '0.0.8';
     }
 
     public function getDeveloper()
