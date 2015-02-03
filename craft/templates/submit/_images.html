@@ -1,0 +1,50 @@
+{% from "_macro.html" import errorList %}
+{% from "_submit.html" import imageBy, imageDisclaimer %}
+
+{% set maxImages = 3 %}
+
+<input type="hidden" name="fields[secondaryImages]">
+
+{% for i in 1..maxImages %}
+  {% set key = 'new'~i %}
+  {% set image = false %}
+  {% set by = false %}
+  {% set disclaimer = false %}
+
+  {% if entry is defined %}
+    {% if entry.secondaryImages | length >= i %}
+      {% set image = entry.secondaryImages.nth(i-1) %}
+
+      {% set by = image.by %}
+
+      {% for option in image.disclaimer.getOptions  %}
+        {% set disclaimer = option.selected %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+
+  <input type="checkbox" class="image-upload toggle" data-key="{{ key }}" {%- if image %}checked="checked"{% endif %}>Upload additional image
+
+  <div class="image-upload inputs" data-key="{{ key }}" {%- if not image %}style="display: none;"{% endif %}>
+    <label for="secondaryImages">Image file</label>
+    <input type="hidden" name="fields[secondaryImages][{{ key }}][type]" value="image">
+    <input type="hidden" name="fields[secondaryImages][{{ key }}][fields][image]" value="">
+    <input type="file" name="fields[secondaryImages][{{ key }}][fields][image][]">
+    <br>
+
+    <label for="secondaryImage-by">Image by</label>
+    <input type="text" name="fields[secondaryImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+    <br>
+
+    <label for="secondaryImage-disclaimer">Legal</label>
+    <input type="hidden" name="fields[secondaryImages][{{ key }}][fields][disclaimer]" value="">
+    <input type="checkbox" name="fields[secondaryImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
+    <span>Yes I have the right to use this image</span>
+
+    {% if image %}
+      {{ errorList(image.allErrors) }}
+    {% endif %}
+  </div>
+
+  <br>
+{% endfor %}

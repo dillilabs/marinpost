@@ -27,13 +27,7 @@
         {% include "submit/_topic.html" %}
         {% include "submit/_wysiwyg.html" %}
         {% include "submit/_image.html" %}
-  
-        <label for="secondaryImages">Secondary Images (max: 3)</label>
-        <input id="secondaryImages" type="file" name="fields[secondaryImages][]" multiple>
-        {% if entry is defined %}
-            {{ errorList(entry.getErrors('secondaryImages')) }}
-        {% endif %}
-        <br>
+        {% include "submit/_images.html" %}
 
         <input type="submit" value="Submit Blog Post">
       </form>
