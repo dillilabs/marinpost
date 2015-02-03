@@ -3,14 +3,14 @@ $(function() {
 
   forms.each(function() {
     var form = $(this);
-    var imageUploadToggles = form.find('.image-upload.toggle');
+    var fileUploadToggles = form.find('.file-upload.toggle');
     var requiredSelects = form.find('select.required');
 
-    // show/hide image upload inputs
-    imageUploadToggles.change(function() {
+    // show/hide file upload inputs
+    fileUploadToggles.change(function() {
       var toggle = $(this);
 
-      toggle.next('.image-upload.inputs').toggle();
+      toggle.next('.file-upload.inputs').toggle();
     });
 
     form.submit(function() {
@@ -27,12 +27,12 @@ $(function() {
         }
       });
 
-      // Remove image upload inputs if hidden
-      imageUploadToggles.each(function() {
+      // Remove file upload inputs if hidden
+      fileUploadToggles.each(function() {
         var toggle = $(this);
 
         if (! toggle.is(':checked')) {
-          toggle.next('.image-upload.inputs').remove();
+          toggle.next('.file-upload.inputs').remove();
         }
       });
     });

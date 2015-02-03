@@ -16,9 +16,9 @@
   {% endif %}
 {% endif %}
 
-<input type="checkbox" class="image-upload toggle" {%- if image %}checked="checked"{% endif %}>Upload an image
+<input type="checkbox" class="file-upload toggle" {%- if image %}checked="checked"{% endif %}>Upload an image
 
-<div class="image-upload inputs" {%- if not image %}style="display: none;"{% endif %}>
+<div class="file-upload inputs" {%- if not image %}style="display: none;"{% endif %}>
   <label for="primaryImage">Primary Image</label>
   <input type="hidden" name="fields[primaryImage]">
   <input type="hidden" name="fields[primaryImage][new1][type]" value="image">
