@@ -17,9 +17,9 @@
     {% endif %}
   {% endif %}
 
-  <input type="checkbox" class="file-upload toggle" data-key="{{ key }}" {%- if document %}checked="checked"{% endif %}>Upload document
+  <input type="checkbox" class="optional-field toggle" {%- if document %}checked="checked"{% endif %}>Upload document
 
-  <div class="file-upload inputs" data-key="{{ key }}" {%- if not document %}style="display: none;"{% endif %}>
+  <div class="optional-field inputs" {%- if not document %}style="display: none;"{% endif %}>
     <label for="documents">document file</label>
     <input type="hidden" name="fields[documents][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[documents][{{ key }}][fields][document]" value="">

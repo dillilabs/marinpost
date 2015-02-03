@@ -1,0 +1,48 @@
+{% from "_submit.html" import categoryId %}
+{% from "_macro.html" import errorList %}
+
+{% set maxLocations = 5 %}
+
+<input type="hidden" name="fields[secondaryLocations]">
+
+{% for i in 1..maxLocations %}
+  {% set location = false %}
+  {% set locationId = false %}
+
+  {% if entry is defined %}
+    {% if entry.secondaryLocations | length >= i %}
+      {% set location = entry.secondaryLocations.nth(i-1) %}
+      {% if location %}
+        {% set locationId = location.id %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  <input type="checkbox" class="optional-field toggle" {%- if locationId %}checked="checked"{% endif %}>Additional location
+
+  <div class="optional-field inputs" {%- if not locationId %}style="display: none;"{% endif %}>
+    <label for="secondaryLocations">Secondary Location</label>
+
+    <select name="fields[secondaryLocations][]" class="array">
+      <option value=""></option>
+    {% set geographicGroup = false %}
+
+    {% for option in craft.categories.group('locations') %}
+      {% if not (option.geographicGroup.label == geographicGroup) %}
+        {% set geographicGroup = option.geographicGroup.label %}
+        <option value="" disabled="disabled"></option>
+        <option value="" disabled="disabled">{{ geographicGroup }}</option>
+        <option value="" disabled="disabled"></option>
+      {% endif %}
+
+      <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
+    {% endfor %}
+    </select>
+
+    {% if location %}
+      {{ errorList(location.allErrors) }}
+    {% endif %}
+  </div>
+
+  <br>
+{% endfor %}

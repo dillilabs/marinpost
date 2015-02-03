@@ -1,14 +1,28 @@
 {% from "_submit.html" import categoryId %}
 {% from "_macro.html" import errorList %}
 
-<label for="primaryLocation">Primary Location</label>
 {% set primaryLocationId = entry is defined ? categoryId(entry, "primaryLocation") : 0 %}
-<select id="primaryLocation" name="fields[primaryLocation][]" class="required">
+
+<label for="primaryLocation">Primary Location</label>
+
+<select id="primaryLocation" name="fields[primaryLocation][]" class="array">
   <option value=""></option>
+
+{% set geographicGroup = false %}
+
 {% for option in craft.categories.group('locations') %}
+  {% if not (option.geographicGroup.label == geographicGroup) %}
+    {% set geographicGroup = option.geographicGroup.label %}
+    <option value="" disabled="disabled"></option>
+    <option value="" disabled="disabled">{{ geographicGroup }}</option>
+    <option value="" disabled="disabled"></option>
+  {% endif %}
+
   <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
 {% endfor %}
+
 </select>
+
 {% if entry is defined %}
   {{ errorList(entry.getErrors('primaryLocation')) }}
 {% endif %}

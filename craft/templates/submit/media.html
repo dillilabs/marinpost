@@ -24,7 +24,9 @@
 
         {% include "submit/_title.html" %}
         {% include "submit/_location.html" %}
+        {% include "submit/_locations.html" %}
         {% include "submit/_topic.html" %}
+        {% include "submit/_topics.html" %}
 
         <label for="mediaLink">Media Link</label>
         <input id="mediaLink" type="text" name="fields[mediaLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.mediaLink }}"{% endif -%} class="required">
@@ -41,13 +43,7 @@
         <br>
   
         {% include "submit/_image.html" %}
-  
-        <label for="secondaryImages">Secondary Images (max: 3)</label>
-        <input id="secondaryImages" type="file" name="fields[secondaryImages][]" multiple>
-        {% if entry is defined %}
-            {{ errorList(entry.getErrors('secondaryImages')) }}
-        {% endif %}
-        <br>
+        {% include "submit/_images.html" %}
 
         <input type="submit" value="Submit Media Link">
       </form>

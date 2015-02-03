@@ -3,23 +3,23 @@ $(function() {
 
   forms.each(function() {
     var form = $(this);
-    var fileUploadToggles = form.find('.file-upload.toggle');
-    var requiredSelects = form.find('select.required');
+    var arraySelects = form.find('select.array');
+    var optionalFieldToggles = form.find('.optional-field.toggle');
 
-    // show/hide file upload inputs
-    fileUploadToggles.change(function() {
+    // show/hide optional field inputs
+    optionalFieldToggles.change(function() {
       var toggle = $(this);
 
-      toggle.next('.file-upload.inputs').toggle();
+      toggle.next('.optional-field.inputs').toggle();
     });
 
     form.submit(function() {
 
-      // Required fields of Craft Category field type
-      // with empty values are not correctly validated for presence
-      // unless they are explicitly omitted from the HTTP POST
-      // via removing the name attribute of input/select field.
-      requiredSelects.each(function() {
+      // Array type input fields (eg fields[foo][]) with empty values
+      // are not correctly validated for presence by Craft.
+      // Rather, they must be explicitly omitted from the request
+      // by removing the field's name attr.
+      arraySelects.each(function() {
         var select = $(this);
 
         if (select.val().length == 0) {
@@ -27,12 +27,12 @@ $(function() {
         }
       });
 
-      // Remove file upload inputs if hidden
-      fileUploadToggles.each(function() {
+      // Remove optional field inputs if hidden
+      optionalFieldToggles.each(function() {
         var toggle = $(this);
 
         if (! toggle.is(':checked')) {
-          toggle.next('.file-upload.inputs').remove();
+          toggle.next('.optional-field.inputs').remove();
         }
       });
     });

@@ -22,9 +22,9 @@
     {% endif %}
   {% endif %}
 
-  <input type="checkbox" class="file-upload toggle" data-key="{{ key }}" {%- if image %}checked="checked"{% endif %}>Upload additional image
+  <input type="checkbox" class="optional-field toggle" {%- if image %}checked="checked"{% endif %}>Upload additional image
 
-  <div class="file-upload inputs" data-key="{{ key }}" {%- if not image %}style="display: none;"{% endif %}>
+  <div class="optional-field inputs" {%- if not image %}style="display: none;"{% endif %}>
     <label for="secondaryImages">Image file</label>
     <input type="hidden" name="fields[secondaryImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[secondaryImages][{{ key }}][fields][image]" value="">
