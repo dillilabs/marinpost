@@ -3,7 +3,11 @@ namespace Craft;
 
 class MarinPostPlugin extends BasePlugin
 {
-    /* On load
+    /* Plugin initialization:
+     *
+     *  if saveUser event
+     *      if ControlPanel
+     *          include Javascript
      */
     public function init()
     {
@@ -15,6 +19,48 @@ class MarinPostPlugin extends BasePlugin
             $this->_includeJs();
         }
     }
+
+    /* Hook to modify columns included in Control Panel entry list:
+     *
+     *  entry.dateCreated
+     *
+     *  entry.author
+     *
+     */
+    public function modifyEntryTableAttributes(&$attributes, $source)
+    {
+        $attributes['dateCreated'] = Craft::t('Created Date');
+        $attributes['author'] = Craft::t('Author');
+    }
+
+    /* Hook to display of columns in Control Panel entry list:
+     *
+     *  entry.author
+     *
+     */
+    public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
+    {
+        if (defined($attribute) && $attribute == 'author')
+        {
+            return $entry->author->name;
+        }
+    }
+
+    /* Hook to modify sort by columns in Control Panel entry list:
+     *
+     *  entry.dateCreated
+     *
+     *  entry.author
+     *
+     */
+    public function modifyEntrySortableAttributes(&$attributes)
+    {
+        $attributes['dateCreated'] = Craft::t('Created Date');
+        // $attributes['author'] = Craft::t('Author');
+    }
+
+    /* Private functions
+     */
 
     /* Return true if control panel
      */
@@ -50,8 +96,18 @@ class MarinPostPlugin extends BasePlugin
     }
 
     /* Keep {first,last}Name fields synchronized with name{First,Last} fields.
-     * The former fields are: "special", not required, hidden in Account tab by JS
-     * The latter fields are: custom, required, editable in Profile tab
+     *
+     *  The former fields are:
+     *
+     *      "special"
+     *      not required
+     *      hidden in Account tab by JS
+     *
+     *  The latter fields are:
+     *
+     *      custom
+     *      required
+     *      editable in Profile tab
      */
     private function _syncUserName($user) {
         if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
@@ -73,17 +129,17 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /* Add Javascript to the CP
+    /* Add Javascript to the Control Panel:
      *
-     * For all Users:
+     *  For all Users:
      *
-     *   Remove First Name, Last Name and Week Start Day fields on user My Account Account tab
+     *      Remove First Name, Last Name and Week Start Day fields on user My Account Account tab
      *
-     * For non-admin Users:
+     *  For non-admin Users:
      *
-     *   Remove Photo and Bio fields on My Account Profile tab
+     *      Remove Photo and Bio fields on My Account Profile tab
      *
-     *   Remove Dashboard settings link
+     *      Remove Dashboard settings link
      */
     private function _includeJs() {
         $js = <<<'JS'
@@ -101,29 +157,8 @@ JS;
         craft()->templates->includeJs($js);
     }
 
-    /* Hook to display entry.author.name in CP entry list
+    /* Boilerplate functions
      */
-    public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
-    {
-        if (defined($attribute) && $attribute == 'author')
-        {
-            return $entry->author->name;
-        }
-    }
-
-    /* Hook to display entry.author in CP entry list
-     */
-    public function modifyEntryTableAttributes(&$attributes, $source)
-    {
-        $attributes['author'] = Craft::t('Author');
-    }
-
-    /* Hook to sort by entry.author in CP entry list
-     */
-    public function modifyEntrySortableAttributes(&$attributes)
-    {
-        // $attributes['author'] = Craft::t('Author');
-    }
 
     public function getName()
     {
@@ -132,7 +167,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.8';
+        return '0.0.9';
     }
 
     public function getDeveloper()
