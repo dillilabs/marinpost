@@ -18,11 +18,9 @@
     {% endif %}
   {% endif %}
 
-  <input type="checkbox" class="optional-field toggle" {%- if locationId %}checked="checked"{% endif %}>Additional location
+  <input type="checkbox" class="optional-field toggle" {%- if locationId %}checked="checked"{% endif %}>more
 
   <div class="optional-field inputs" {%- if not locationId %}style="display: none;"{% endif %}>
-    <label for="secondaryLocations">Secondary Location</label>
-
     <select name="fields[secondaryLocations][]" class="array">
       <option value=""></option>
     {% set geographicGroup = false %}

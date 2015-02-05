@@ -18,10 +18,10 @@
 
         {% include "submit/_title.html" %}
 
-        <label for="letterBody">Body</label>
-        <textarea id="letterBody" name="fields[letterBody]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.letterBody }}{% endif -%} </textarea>
+        <label for="letterContent">Letter</label>
+        <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.letterContent }}{% endif -%} </textarea>
         {% if entry is defined %}
-          {{ errorList(entry.getErrors('letterBody')) }}
+          {{ errorList(entry.getErrors('letterContent')) }}
         {% endif %}
 
         <input type="submit" value="Submit Letter">

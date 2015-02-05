@@ -1,15 +1,23 @@
 {% extends "_layout" %}
 
+{% set title = "Media Links" %}
+
+{% set limit = 2 %}{# TODO set higher after testing #}
+
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
+  {% embed "_filtered_content.html" %}
     {% block main %}
       <h2>Media Links</h2>
-      <ul>
-      {% for entry in craft.entries.section('media').find %}
-        <li><a href="{{ entry.url }}">{{ entry.title }}</a></li>
+      <ul class="posts" id="filtered-content">
+      {% for entry in craft.entries.section('media').limit(limit).find %}
+        {{ macro.entry(entry) }}
       {% endfor %}
       </ul>
+      <a href="#" id="load-more-content">Load More Content</a>
+    {% endblock %}
+
+    {% block right %}
+      {% include "_support.html" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
-

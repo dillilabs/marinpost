@@ -8,33 +8,30 @@
           <li><a href="">{{ entry.primaryTopic.first }}</a></li>
       </ul>
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('F d, Y') }} - 17 Comments</div>
+      <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('F d, Y') }} - {{ random(10) }} Comments</div>
       
       
-		  {% if entry.primaryImage | length %}
-		    {% for block in entry.primaryImage %}
-          {% set image = block.image.first %}
-          <img src="{{ image.url('hero') }}"/>
-		    {% endfor %}
-		  {% endif %}
+      <img src="{{ macro.primaryImage(entry, 'hero') }}"/>
 
-      <p>{{ entry.mainContent }}</p>
+      <p>{{ entry.blogContent }}</p>
 
-		  {% if entry.documents | length %}
-		    {% for block in entry.documents %}
+      {% if entry.blogDocuments | length > 0 %}
+        {% for block in entry.blogDocuments %}
           {% set file = block.document.first %}
           <div class="download"><a href="{{ file.url }}">{{ block.documentTitle | default(file.title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
-		    {% endfor %}
-		  {% endif %}
+        {% endfor %}
+      {% endif %}
 
-		  {% if entry.secondaryImages | length %}
+      {% if entry.blogImages | length %}
         <div class="thumbs">
-		    {% for block in entry.secondaryImages %}
+        {% for block in entry.blogImages.order('sortOrder asc').offset(1) %}
           {% set image = block.image.first %}
           <a href="#"><img src="{{ image.url('thumb') }}"/></a>
-		    {% endfor %}
+        {% endfor %}
         </div>
-		  {% endif %}
+      {% endif %}
+
+      {% include "_disqus.html" %}
     {% endblock %}
 
     {% block right %}

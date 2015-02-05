@@ -1,0 +1,38 @@
+{% from "_macro.html" import errorList %}
+
+{% set maxDocuments = 3 %}
+
+<input type="hidden" name="fields[blogDocuments]">
+
+{% for i in 1..maxDocuments %}
+  {% set key = 'new'~i %}
+  {% set document = false %}
+  {% set documentTitle = false %}
+
+  {% if entry is defined %}
+    {% if entry.blogDocuments | length >= i %}
+      {% set document = entry.blogDocuments.nth(i-1) %}
+
+      {% set documentTitle = document.documentTitle %}
+    {% endif %}
+  {% endif %}
+
+  <input type="checkbox" class="optional-field toggle" {%- if document %}checked="checked"{% endif %}>{% if loop.first %}Upload a document{% else %}more{% endif %}
+
+  <div class="optional-field inputs" {%- if not document %}style="display: none;"{% endif %}>
+    <label for="blogDocuments">document file</label>
+    <input type="hidden" name="fields[blogDocuments][{{ key }}][type]" value="document">
+    <input type="hidden" name="fields[blogDocuments][{{ key }}][fields][document]" value="">
+    <input type="file" name="fields[blogDocuments][{{ key }}][fields][document][]">
+    <br>
+
+    <label for="document-title">Document title</label>
+    <input type="text" name="fields[blogDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
+
+    {% if document %}
+      {{ errorList(document.allErrors) }}
+    {% endif %}
+  </div>
+
+  <br>
+{% endfor %}

@@ -1,5 +1,28 @@
 <aside>
   {% block aside %}
+    <div class="filter" id="filters">
+      <h2>Filter</h2>
+      <fieldset>
+        <h5>Locations</h5>
+        <ul>
+          <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+          {% set locations = craft.categories.group('locations') %}
+          {% for location in locations %}
+          <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
+          {% endfor %}
+        </ul>
+      </fieldset>
+      <fieldset>
+        <h5>Topics</h5>
+        <ul>
+          <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+          {% set topics = craft.categories.group('topics') %}
+          {% for topic in topics %}
+          <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
+          {% endfor %}
+        </ul>
+      </fieldset>
+    </div>
   {% endblock %}
 </aside>
 

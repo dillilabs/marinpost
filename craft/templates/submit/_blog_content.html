@@ -1,0 +1,18 @@
+{% from "_macro.html" import errorList %}
+
+<label for="blogContent">Blog Content</label>
+<textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="required">{%- if entry is defined %}{{ entry.blogContent }}{% endif -%}</textarea>
+
+{% if entry is defined %}
+  {{ errorList(entry.getErrors('blogContent')) }}
+{% endif %}
+
+<br>
+
+{# includeJsResource "lib/redactor/redactor.js" #}
+{# Uncaught ReferenceError: Craft is not defined
+ #   from line 2836 within /* BEGIN HACK! */
+ #}
+{% includeJsFile "/js/redactor.js" %}
+{% includeCssResource "lib/redactor/redactor.css" %}
+{% includeJs "$('#blogContent').redactor();" %}

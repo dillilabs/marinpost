@@ -7,12 +7,7 @@
   {% embed "_unfiltered_content.html" %}
     {% block featured %}
       {% if featured %}
-        {% set image = '/img/default-hero.png' %}
-        {% for block in featured.primaryImage %}
-          {% set image = block.image.first.url('hero') %}
-        {% endfor %}
-
-        <img src="{{ image }}">
+        <a href="{{ featured.url }}"><img src="{{ macro.primaryImage(featured, 'hero') }}"></a>
         <div class="featured">
           <ul class="tags">
             <li><a href="">{{ featured.section.name }}</a></li> | 
@@ -20,8 +15,8 @@
             <li><a href="">{{ featured.primaryTopic.first }}</a></li>
           </ul>
           <h3><a href="{{ featured.url }}">{{ featured.title }}</a></h3>
-          <div class="byline">By {{ macro.authorLink(featured) }} - {{ featured.postDate | date('M d, Y') }} - No Comments</div>
-          <p>{{ featured.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
+          <div class="byline">By {{ macro.authorLink(featured) }} - {{ featured.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+          <p>{{ macro.mainContent(featured) | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ featured.url }}">more »</a></p>
         </div>
       {% endif %}
     {% endblock %}
@@ -30,12 +25,8 @@
       <h2>What's New</h2>
       <ul class="posts">
       {% for entry in entries | without(featured) %}
-        {% set image = '/img/default-list.png' %}
-        {% for block in entry.primaryImage %}
-          {% set image = block.image.first.url('hero') %}
-        {% endfor %}
         <li>
-        <img src="{{ image }}">
+        <a href="{{ entry.url }}"><img src="{{ macro.primaryImage(entry, 'list') }}"></a>
         <div class="post">
           <ul class="tags">
             <li><a href="">{{ entry.section.name }}</a></li> | 
@@ -43,15 +34,8 @@
             <li><a href="">{{ entry.primaryTopic.first }}</a></li>
           </ul>
           <h3><a href="{{ entry.url }}">{{ entry.title}}</a></h3>
-          <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
-          {% switch entry.section.handle %}
-            {% case 'media' %}
-              {% set content = entry.linkComments %}
-            {% case 'news' %}
-              {% set content = entry.linkComments %}
-            {% default %}
-              {% set content = entry.mainContent %}
-          {% endswitch %}
+          <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+          {% set content = macro.mainContent(entry) %}
           <p>{% if content %}{{ content | striptags | slice(0, 200) }} &hellip; {% endif %}<a class="more" href="{{ entry.url }}">more »</a></p>
         </div>          
         </li>

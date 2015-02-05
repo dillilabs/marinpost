@@ -9,7 +9,9 @@
   {% includeCssFile "/css/main.css" %}
   {% includeCssFile "/css/rrssb.css" %}
 </head>
-<body class="{{ craft.request.lastSegment | default('home') }}">
+<!-- /notices page breaks inside responsive js -->
+<!--body class="{{ craft.request.lastSegment | default('home') }}"-->
+<body class="home">
   <header>
     <div id="title">
       <h1>The Marin Post</h1>

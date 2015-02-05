@@ -1,7 +1,7 @@
 {% from "_submit.html" import categoryId %}
 {% from "_macro.html" import errorList %}
 
-<label for="primaryTopic">Primary Topic</label>
+<label for="primaryTopic">Topic</label>
 {% set primaryTopicId = entry is defined ? categoryId(entry, "primaryTopic") : 0 %}
 <select id="primaryTopic" name="fields[primaryTopic][]" class="array">
   <option value=""></option>

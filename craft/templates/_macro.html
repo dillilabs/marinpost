@@ -12,12 +12,46 @@
   <a href="{{ url(slug) }}" {{ classActive(slug, segmentNo) }}>{{ name }}</a>
 {% endmacro %}
 
-{% macro contributorUrl(user) %}
+{% macro primaryImage(entry, transform) %}
 {% spaceless %}
+  {% set image = null %}
+  {% set transform = transform | default('list') %}
+
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      {% set fieldName = 'blogImages' %}
+    {% case 'media' %}
+      {% set fieldName = 'mediaImages' %}
+    {% case 'notice' %}
+      {% set fieldName = 'noticeImages' %}
+    {% default %}
+      {% set fieldName = null %}
+  {% endswitch %}
+
+  {% if fieldName is not null %}
+    {% set images = attribute(entry, fieldName) %}
+    {% if images is defined %}
+      {% for block in images.order('sortOrder asc').limit(1) %}
+        {% set image = block.image.first %}
+      {% endfor %}
+    {% endif %}
+
+    {% if image is not null %}
+      {{ image.url(transform) }}
+    {% else %}  
+      /img/default-{{ transform }}.png
+    {% endif %}
+  {% else %}  
+    /img/default-{{ transform }}.png
+  {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro contributorUrl(user) %}
   {% set slug = [user.firstName, user.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
   {% set base = "about/contributors" %}
-    {{ url([base, user.id, slug] | join('/')) }}
-{% endspaceless %}
+
+  {{- url([base, user.id, slug] | join('/')) -}}
 {% endmacro %}
 
 {% macro authorLink(entry) %}
@@ -31,25 +65,54 @@
   {% endif %}
 {% endmacro %}
 
+{% macro mainContent(entry) %}
+  {% set mainContent = null %}
+
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      {% set mainContent = entry.blogContent %}
+    {% case 'letter' %}
+      {% set mainContent = entry.letterContent %}
+    {% case 'media' %}
+      {% set mainContent = entry.linkComments %}
+    {% case 'news' %}
+      {% set mainContent = entry.linkComments %}
+    {% case 'notice' %}
+      {% set mainContent = entry.noticeContent %}
+  {% endswitch %}
+
+  {{- mainContent -}}
+{% endmacro %}
+
 {% macro entry(entry) %}
   {% from _self import authorLink as authorLink %}
+  {% from _self import primaryImage as primaryImage %}
+  {% from _self import mainContent as mainContent %}
 
-  {% set image = '/img/default-list.png' %}
-  {% for block in entry.primaryImage %}
-    {% set image = block.image.first.url('hero') %}
-  {% endfor %}
+  {% set image = primaryImage(entry, 'list') %}
+  {% set content = mainContent(entry) %}
 
   <li class="listing">
-    <img src="{{ image }}">
+    {% if entry.section.handle == 'news' %}
+      <img src="{{ image }}">
+    {% else %}
+      <a href="{{ entry.url }}"><img src="{{ image }}"></a>
+    {% endif %}
     <div class="post">
       <ul class="tags">
         <li><a href="">{{ entry.section.name }}</a></li> | 
         <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
         <li><a href="">{{ entry.primaryTopic.first }}</a></li>
       </ul>
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - 17 Comments</div>
-      <p>{{ entry.mainContent | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+      {% if entry.section.handle == 'news' %}
+        <h3>{{ entry.title }}</h3>
+        <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+        <p>{{ content }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a></p>
+      {% else %}
+        <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+        <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+        <p>{{ content | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+      {% endif %}
     </div>          
   </li>
 {% endmacro %}

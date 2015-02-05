@@ -1,0 +1,49 @@
+{% from "_macro.html" import errorList %}
+
+{% set maxImages = 4 %}
+
+<input type="hidden" name="fields[blogImages]">
+
+{% for i in 1..maxImages %}
+  {% set key = 'new'~i %}
+  {% set image = false %}
+  {% set by = false %}
+  {% set disclaimer = false %}
+
+  {% if entry is defined %}
+    {% if entry.blogImages | length >= i %}
+      {% set image = entry.blogImages.nth(i-1) %}
+
+      {% set by = image.by %}
+
+      {% for option in image.disclaimer.getOptions  %}
+        {% set disclaimer = option.selected %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+
+  <input type="checkbox" class="optional-field toggle" {%- if image %}checked="checked"{% endif %}>more
+
+  <div class="optional-field inputs" {%- if not image %}style="display: none;"{% endif %}>
+    <label for="blogImages">Image file</label>
+    <input type="hidden" name="fields[blogImages][{{ key }}][type]" value="image">
+    <input type="hidden" name="fields[blogImages][{{ key }}][fields][image]" value="">
+    <input type="file" name="fields[blogImages][{{ key }}][fields][image][]">
+    <br>
+
+    <label for="secondaryImage-by">Image by</label>
+    <input type="text" name="fields[blogImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+    <br>
+
+    <label for="secondaryImage-disclaimer">Legal</label>
+    <input type="hidden" name="fields[blogImages][{{ key }}][fields][disclaimer]" value="">
+    <input type="checkbox" name="fields[blogImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
+    <span>Yes I have the right to use this image</span>
+
+    {% if image %}
+      {{ errorList(image.allErrors) }}
+    {% endif %}
+  </div>
+
+  <br>
+{% endfor %}

@@ -5,8 +5,8 @@
 {% set disclaimer = false %}
 
 {% if entry is defined %}
-  {% if entry.primaryImage | length > 0 %}
-    {% set image = entry.primaryImage.first() %}
+  {% if entry.image | length > 0 %}
+    {% set image = entry.image.first() %}
 
     {% set by = image.by %}
 
@@ -19,20 +19,20 @@
 <input type="checkbox" class="optional-field toggle" {%- if image %}checked="checked"{% endif %}>Upload an image
 
 <div class="optional-field inputs" {%- if not image %}style="display: none;"{% endif %}>
-  <label for="primaryImage">Primary Image</label>
-  <input type="hidden" name="fields[primaryImage]">
-  <input type="hidden" name="fields[primaryImage][new1][type]" value="image">
-  <input type="hidden" name="fields[primaryImage][new1][fields][image]" value="">
-  <input type="file" name="fields[primaryImage][new1][fields][image][]">
+  <label for="image">Primary Image</label>
+  <input type="hidden" name="fields[image]">
+  <input type="hidden" name="fields[image][new1][type]" value="image">
+  <input type="hidden" name="fields[image][new1][fields][image]" value="">
+  <input type="file" name="fields[image][new1][fields][image][]">
   <br>
 
-  <label for="primaryImage-by">Image By</label>
-  <input type="text" name="fields[primaryImage][new1][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+  <label for="image-by">Image By</label>
+  <input type="text" name="fields[image][new1][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
   <br>
 
-  <label for="primaryImage-disclaimer">Legal</label>
-  <input type="hidden" name="fields[primaryImage][new1][fields][disclaimer]" value="">
-  <input type="checkbox" name="fields[primaryImage][new1][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
+  <label for="image-disclaimer">Legal</label>
+  <input type="hidden" name="fields[image][new1][fields][disclaimer]" value="">
+  <input type="checkbox" name="fields[image][new1][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
   <span>Yes I have the right to use this image</span>
 
   {% if image %}

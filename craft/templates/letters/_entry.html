@@ -6,7 +6,7 @@
 
     {% block main %}
       <h2>{{ entry.title }}</h2>
-      <p>{{ entry.letterBody }}</p>
+      <p>{{ entry.letterContent }}</p>
       <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }}</div>
     {% endblock %}
   {% endembed %}

@@ -33,7 +33,7 @@
 
 {% macro imageBy(entry, fieldName) %}
 {% spaceless %}
-  {% set fieldName = fieldName | default('primaryImage') %}
+  {% set fieldName = fieldName | default('image') %}
   {% set imageBy = null %}
 
   {% if entry is defined %}
@@ -48,7 +48,7 @@
 
 {% macro imageDisclaimer(entry, fieldName) %}
 {% spaceless %}
-  {% set fieldName = fieldName | default('primaryImage') %}
+  {% set fieldName = fieldName | default('image') %}
   {% set imageDisclaimer = null %}
 
   {% if entry is defined %}
