@@ -1,8 +1,8 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
-    {% from "_macro.html" import errorList %}
+  {% embed "_common/unfiltered_content" %}
+    {% from "_macro/form" import errorList %}
     {% block main %}
 
       <form method="post" accept-charset="UTF-8">

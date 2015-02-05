@@ -7,7 +7,7 @@
   {% embed "_common/unfiltered_content" %}
     {% block featured %}
       {% if featured %}
-        {{ macro.entry(featured, true, true) }}
+        {{ m.post(featured, true, true) }}
       {% endif %}
     {% endblock %}
 
@@ -15,7 +15,7 @@
       <h2>What's New</h2>
       <ul class="posts">
       {% for entry in entries | without(featured) %}
-        {{ macro.entry(entry, true) }}
+        {{ m.post(entry, true) }}
       {% endfor %}
       </ul>
     {% endblock %}

@@ -50,8 +50,8 @@
 
 {% set entries = entries[offset:limit] %}
 
-{% import "_macro.html" as macro %}
+{% from "_macro/post" import post %}
 
 {% for entry in entries %}
-	{{ macro.entry(entry) }}
+	{{ post(entry) }}
 {% endfor %}

@@ -3,16 +3,16 @@
 {% block content %}
   {% embed "_common/unfiltered_content" with { 'mainClass': 'single' } %}
     {% block main %}
-      {{ macro.postTags(entry) }}
-      {{ macro.postTitle(entry) }}
-      {{ macro.postBy(entry) }}
+      {{ m.postTags(entry) }}
+      {{ m.postTitle(entry) }}
+      {{ m.postBy(entry) }}
       
-      <img src="{{ macro.primaryImage(entry, 'hero') }}"/>
+      <img src="{{ m.primaryImage(entry, 'hero') }}"/>
 
       <p>{{ entry.blogContent }}</p>
 
-      {{ macro.otherImages(entry.blogImages) }}
-      {{ macro.documents(entry.blogDocuments) }}
+      {{ m.otherImages(entry.blogImages) }}
+      {{ m.documents(entry.blogDocuments) }}
 
       {% include "_common/disqus" %}
     {% endblock %}

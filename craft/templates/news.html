@@ -10,7 +10,7 @@
       <h2>Notices</h2>
       <ul class="posts" id="filtered-content">
       {% for entry in craft.entries.section('news').limit(limit).find %}
-        {{ macro.entry(entry) }}
+        {{ m.post(entry) }}
       {% endfor %}
       </ul>
       <a href="#" id="load-more-content">Load More Content</a>
