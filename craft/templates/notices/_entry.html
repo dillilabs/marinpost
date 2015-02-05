@@ -11,21 +11,8 @@
 
       <p>{{ entry.noticeContent }}</p>
 
-      {% if entry.noticeDocuments | length > 0 %}
-        {% for block in entry.noticeDocuments %}
-          {% set file = block.document.first %}
-          <div class="download"><a href="{{ file.url }}">{{ block.documentTitle | default(file.title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
-        {% endfor %}
-      {% endif %}
-
-      {% if entry.noticeImages | length %}
-        <div class="thumbs">
-        {% for block in entry.noticeImages.order('sortOrder asc').offset(1) %}
-          {% set image = block.image.first %}
-          <a href="#"><img src="{{ image.url('thumb') }}"/></a>
-        {% endfor %}
-        </div>
-      {% endif %}
+      {{ macro.otherImages(entry.noticeImages) }}
+      {{ macro.documents(entry.noticeDocuments) }}
 
       {% include "_disqus.html" %}
     {% endblock %}

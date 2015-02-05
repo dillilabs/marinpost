@@ -190,6 +190,32 @@
   {% endif %}
 {% endmacro %}
 
+{% macro documentDownload(file, title) %}
+  <div class="download"><a href="{{ file.url }}">{{ title | default(file.title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
+{% endmacro %}
+
+{% macro documents(documents) %}
+  {% from _self import documentDownload as documentDownload %}
+
+  {% if documents | length > 0 %}
+    {% for block in documents %}
+      {% set file = block.document.first %}
+      {{ documentDownload(file, block.documentTitle) }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro otherImages(images) %}
+  {% if images | length %}
+    <div class="thumbs">
+    {% for block in images.order('sortOrder asc').offset(1) %}
+      {% set image = block.image.first %}
+      <a href="#"><img src="{{ image.url('thumb') }}"/></a>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
 {% macro errorList(errors) %}
   {% if errors %}
     <ul class="errors">
