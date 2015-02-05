@@ -1,4 +1,5 @@
-{% import "_macro" as macro %}
+{% import "_macro" as macro %}{# TODO remove #}
+{% from "_macro/nav.twig" import classActive, navLink %}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
@@ -29,17 +30,17 @@
     </div>
 
     <ul>
-      <li><a href="{{ siteUrl }}" {{ macro.classActive('') }}>Home</a></li>
-      <li>{{ macro.navLink('Blog') }}<li>
-      <li>{{ macro.navLink('News') }}<li>
-      <li>{{ macro.navLink('Notices') }}<li>
-      <li>{{ macro.navLink('Media') }}<li>
-      <li>{{ macro.navLink('Surveys') }}<li>
-      <li>{{ macro.navLink('Letters') }}<li>
-      <li>{{ macro.navLink('About') }}<li>
-      <li>{{ macro.navLink('Submit') }}<li>
-      <li>{{ macro.navLink('Contact') }}<li>
-      <li>{{ macro.navLink('Subscribe') }}<li>
+      <li><a href="{{ siteUrl }}" {{ classActive('') }}>Home</a></li>
+      <li>{{ navLink('Blog') }}<li>
+      <li>{{ navLink('News') }}<li>
+      <li>{{ navLink('Notices') }}<li>
+      <li>{{ navLink('Media') }}<li>
+      <li>{{ navLink('Surveys') }}<li>
+      <li>{{ navLink('Letters') }}<li>
+      <li>{{ navLink('About') }}<li>
+      <li>{{ navLink('Submit') }}<li>
+      <li>{{ navLink('Contact') }}<li>
+      <li>{{ navLink('Subscribe') }}<li>
     </ul>
     <ul id="sub-nav">
     {% if currentUser %}
@@ -70,6 +71,6 @@
     {% includeJs js %}
   {% endif %}
   
-  {% include "_analytics.html" %}
+  {% include "_common/analytics.js" %}
 </body>
 </html>

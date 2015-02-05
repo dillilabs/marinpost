@@ -1,11 +1,11 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% set title = "Media Links" %}
 
 {% set limit = 2 %}{# TODO set higher after testing #}
 
 {% block content %}
-  {% embed "_filtered_content.html" %}
+  {% embed "_common/filtered_content" %}
     {% block main %}
       <h2>Media Links</h2>
       <ul class="posts" id="filtered-content">
@@ -17,7 +17,7 @@
     {% endblock %}
 
     {% block right %}
-      {% include "_support.html" %}
+      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

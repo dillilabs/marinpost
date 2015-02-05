@@ -1,7 +1,7 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_filtered_content.html" with { 'mainClass': 'single' } %}
+  {% embed "_common/unfiltered_content" with { 'mainClass': 'single' } %}
     {% block main %}
       {{ macro.postTags(entry) }}
       {{ macro.postTitle(entry) }}
@@ -14,11 +14,11 @@
       {{ macro.otherImages(entry.blogImages) }}
       {{ macro.documents(entry.blogDocuments) }}
 
-      {% include "_disqus.html" %}
+      {% include "_common/disqus" %}
     {% endblock %}
 
     {% block right %}
-      {% include "_support.html" %}
+      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

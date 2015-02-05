@@ -1,10 +1,10 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
+  {% embed "_common/unfiltered_content" %}
+
     {% block main %}
       <h2>Contact</h2>
     {% endblock %}
   {% endembed %}
 {% endblock %}
-

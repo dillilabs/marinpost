@@ -1,4 +1,4 @@
-{% from "_macro.html" import errorList %}
+{% from "_macro/form.twig" import errorList %}
 
 <label for="blogContent">Blog Content</label>
 <textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="required">{%- if entry is defined %}{{ entry.blogContent }}{% endif -%}</textarea>

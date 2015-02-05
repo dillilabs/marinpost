@@ -1,11 +1,10 @@
 {% requireLogin %}
 
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
-    {% from "_submit.html" import actionUrl, redirectTo %}
-    {% from "_macro.html" import errorList %}
+  {% embed "_common/unfiltered_content" %}
+    {% from "_macro/form.twig" import actionUrl, errorList, redirectTo %}
 
     {% block main %}
       <h2>Submit a Blog Post</h2>
@@ -22,14 +21,14 @@
         {% endif %}
         <br>
 
-        {% include "submit/_title.html" %}
-        {% include "submit/_location.html" %}
-        {% include "submit/_locations.html" %}
-        {% include "submit/_topic.html" %}
-        {% include "submit/_topics.html" %}
-        {% include "submit/_blog_content.html" %}
-        {% include "submit/_blog_images.html" %}
-        {% include "submit/_blog_documents.html" %}
+        {% include "submit/_title" %}
+        {% include "submit/_location" %}
+        {% include "submit/_locations" %}
+        {% include "submit/_topic" %}
+        {% include "submit/_topics" %}
+        {% include "submit/_blog_content" %}
+        {% include "submit/_blog_images" %}
+        {% include "submit/_blog_documents" %}
 
         <input type="submit" value="Submit Blog Post">
       </form>

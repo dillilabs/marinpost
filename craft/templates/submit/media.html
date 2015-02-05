@@ -1,11 +1,10 @@
 {% requireLogin %}
 
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
-    {% from "_submit.html" import actionUrl, redirectTo %}
-    {% from "_macro.html" import errorList %}
+  {% embed "_common/unfiltered_content" %}
+    {% from "_macro/form.twig" import actionUrl, errorList, redirectTo %}
 
     {% block main %}
       <h2>Submit a Link to Media</h2>
@@ -22,11 +21,11 @@
         {% endif %}
         <br>
 
-        {% include "submit/_title.html" %}
-        {% include "submit/_location.html" %}
-        {% include "submit/_locations.html" %}
-        {% include "submit/_topic.html" %}
-        {% include "submit/_topics.html" %}
+        {% include "submit/_title" %}
+        {% include "submit/_location" %}
+        {% include "submit/_locations" %}
+        {% include "submit/_topic" %}
+        {% include "submit/_topics" %}
 
         <label for="mediaLink">Media Link</label>
         {% set mediaType = 'video' %}
@@ -80,7 +79,7 @@
         {% endif %}
         <br>
   
-        {% include "submit/_media_images.html" %}
+        {% include "submit/_media_images" %}
 
         <input type="submit" value="Submit Media Link">
       </form>

@@ -1,0 +1,11 @@
+<div class="notices">
+  <h2>Notices</h2>
+
+  <ul>
+  {% for notice in craft.entries.section('notices').limit(3) %}
+    <li>
+      <strong>{{ notice.title }}<br><a href="{{ notice.url }}">More</a></strong><br>
+    </li>
+  {% endfor %}
+  </ul>
+</div>

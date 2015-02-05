@@ -1,11 +1,11 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% set title = "Letters" %}
 
 {% set limit = 3 %}{# TODO set higher after testing #}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
+  {% embed "_common/unfiltered_content" %}
     {% block main %}
       <h2>Notices</h2>
       <ul class="posts" id="filtered-content">
@@ -17,7 +17,7 @@
     {% endblock %}
 
     {% block right %}
-      {% include "_support.html" %}
+      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

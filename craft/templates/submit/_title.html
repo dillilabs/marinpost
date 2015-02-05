@@ -1,8 +1,11 @@
-{% from "_macro.html" import errorList %}
+{% from "_macro/form.twig" import errorList %}
 
 <label for="title">Title</label>
+
 <input type="text" name="title" autocomplete="off" {%- if entry is defined %} value="{{ entry.title }}"{% endif -%} class="required">
+
 {% if entry is defined %}
   {{ errorList(entry.getErrors('title')) }}
 {% endif %}
+
 <br>

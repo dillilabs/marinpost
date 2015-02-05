@@ -1,9 +1,9 @@
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% set title = "About" %}
 
 {% block content %}
-  {% embed "_filtered_content.html" %}
+  {% embed "_common/filtered_content" %}
     {% block main %}
       <h2>About</h2>
     {% endblock %}
@@ -12,7 +12,7 @@
     {% endblock %}
 
     {% block right %}
-      {% include "_support.html" %}
+      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

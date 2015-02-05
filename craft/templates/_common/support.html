@@ -1,8 +1,11 @@
 <div id="support">
   <h4>Support <span>The Marin Post<span></h4>
+
   <button class="donate">Donate</button>
-  {% include "_share.html" %}
+
+  {% include "_common/share" %}
+
   {% if notices is defined %}
-    {% include "_notices.html" %}
+    {% include "_common/notices" %}
   {% endif %}
 </div>

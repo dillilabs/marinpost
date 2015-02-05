@@ -6,10 +6,10 @@
 
 {% set imageSize = 200 %}
 
-{% extends "_layout" %}
+{% extends "_common/layout" %}
 
 {% block content %}
-  {% embed "_unfiltered_content.html" %}
+  {% embed "_common/unfiltered_content" %}
     {% block main %}
       {% if user.photoUrl %}
         <img src="{{ user.photoUrl(imageSize) }}" />
