@@ -7,7 +7,7 @@
   {% embed "_common/unfiltered_content" %}
     {% block featured %}
       {% if featured %}
-        {{ m.post(featured, true, true) }}
+        {{ m.featuredPost(featured) }}
       {% endif %}
     {% endblock %}
 

@@ -24,10 +24,10 @@
 
     {% if image is not null %}
       {{ image.url(transform) }}
-    {% else %}  
+    {% else %}
       /img/default-{{ transform }}.png
     {% endif %}
-  {% else %}  
+  {% else %}
     /img/default-{{ transform }}.png
   {% endif %}
 {% endspaceless %}
@@ -41,7 +41,8 @@
 {% endmacro %}
 
 {% macro authorLink(entry) %}
-  {% from _self import contributorUrl as contributorUrl %}
+  {% from _self import contributorUrl %}
+
   {% set author = entry.author %}
 
   {% if author.can("publish:{{ entry.section.id }}") %}
@@ -94,8 +95,7 @@
 {% endmacro %}
 
 {% macro postImage(entry, transform) %}
-  {% from _self import primaryImage as primaryImage %}
-  {% from _self import mediaUrl as mediaUrl %}
+  {% from _self import mediaUrl, primaryImage %}
 
   {% set transform = transform | default('list') %}
 
@@ -116,15 +116,15 @@
 
   <ul class="tags">
   {% if unfiltered %}
-    <li><a href="{{ url(entry.section.handle) }}">{{ entry.section.name }}</a></li> | 
+    <li><a href="{{ url(entry.section.handle) }}">{{ entry.section.name }}</a></li> |
   {% endif %}
-    <li><a href="TODO">{{ entry.primaryLocation.first }}</a></li> | 
+    <li><a href="TODO">{{ entry.primaryLocation.first }}</a></li> |
     <li><a href="TODO">{{ entry.primaryTopic.first }}</a></li>
   </ul>
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import authorLink as authorLink %}
+  {% from _self import authorLink %}
 
   {% switch entry.section.handle %}
     {% case 'blog' %}
@@ -137,19 +137,20 @@
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import authorLink as authorLink %}
+  {% from _self import authorLink %}
 
-  {% if entry.section.handle == 'letters' %}
-    <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}}</div>
-  {% else %}
-    <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
-  {% endif %}
+  {% switch entry.section.handle %}
+    {% case 'letters' %}
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}}</div>
+    {% case 'news' %}
+      <div class="byline">{{ entry.postDate | date('M d, Y') }} by {{ authorLink(entry) }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a></div>
+    {% default %}
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+  {% endswitch %}
 {% endmacro %}
 
 {% macro postSummary(entry) %}
-  {% from _self import postTitle as postTitle %}
-  {% from _self import postBy as postBy %}
-  {% from _self import mainContent as mainContent %}
+  {% from _self import mainContent, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
 
@@ -160,8 +161,8 @@
       <p>{{ content }}</p>
     {% case 'news' %}
       {{ postTitle(entry) }}
+      <p>{{ content }}</p>
       {{ postBy(entry) }}
-      <p>{{ content }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a></p>
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
@@ -169,39 +170,55 @@
   {% endswitch %}
 {% endmacro %}
 
-{% macro post(entry, unfiltered, featured) %}
-  {% from _self import postImage as postImage %}
-  {% from _self import postTags as postTags %}
-  {% from _self import postSummary as postSummary %}
-  {% from _self import postBy as postBy %}
-  {% from _self import postTitle as postTitle %}
+{% macro featuredPost(entry) %}
+  {% from _self import postImage, postSummary, postTags %}
+
+  {% switch entry.section.handle %}
+    {% case 'media' %}
+      <div class="featured">
+        {{ postTags(entry, true) }}
+        {{ postSummary(entry) }}
+      </div>
+    {% case 'news' %}
+      <div class="featured">
+        {{ postTags(entry, true) }}
+        {{ postSummary(entry) }}
+      </div>
+    {% default %}
+      {{ postImage(entry, 'hero') }}
+      <div class="featured">
+        {{ postTags(entry, true) }}
+        {{ postSummary(entry) }}
+      </div>
+  {% endswitch %}
+{% endmacro %}
+
+{% macro post(entry, unfiltered) %}
+  {% from _self import postBy, postImage, postSummary, postTags, postTitle %}
 
   {% set unfiltered = unfiltered | default(false) %}
-  {% set featured = featured | default(false) %}
 
-  {% if featured %}
-    {{ postImage(entry, 'hero') }}
-    <div class="featured">
-      {{ postTags(entry, unfiltered) }}
-      {{ postSummary(entry) }}
-    </div>
-  {% else %}
-    <li class="listing">
-    {% if entry.section.handle == 'letters' %}
+  <li class="listing">
+  {% switch entry.section.handle %}
+    {% case 'letters' %}
       <div class="post">
         {{ postTitle(entry) }}
         {{ postBy(entry) }}
         <p>{{ entry.letterContent }}</p>
-      </div>          
-    {% else %}
+      </div>
+    {% case 'news' %}
+      <div class="post">
+        {{ postTags(entry, unfiltered) }}
+        {{ postSummary(entry) }}
+      </div>
+    {% default %}
       {{ postImage(entry) }}
       <div class="post">
         {{ postTags(entry, unfiltered) }}
         {{ postSummary(entry) }}
-      </div>          
-    {% endif %}
-    </li>
-  {% endif %}
+      </div>
+  {% endswitch %}
+  </li>
 {% endmacro %}
 
 {% macro documentDownload(file, title) %}
@@ -209,7 +226,7 @@
 {% endmacro %}
 
 {% macro documents(documents) %}
-  {% from _self import documentDownload as documentDownload %}
+  {% from _self import documentDownload %}
 
   {% if documents | length > 0 %}
     {% for block in documents %}

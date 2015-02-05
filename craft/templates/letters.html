@@ -7,7 +7,7 @@
 {% block content %}
   {% embed "_common/unfiltered_content" %}
     {% block main %}
-      <h2>Notices</h2>
+      <h2>Letters</h2>
       <ul class="posts" id="filtered-content">
       {% for entry in craft.entries.section('letters').limit(limit).find %}
         {{ m.post(entry) }}
