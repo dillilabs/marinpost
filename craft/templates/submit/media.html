@@ -28,7 +28,7 @@
         {% include "submit/_topic.html" %}
         {% include "submit/_topics.html" %}
 
-        <label for="mediaLink">Media Link</label>
+        <label for="mediaLink">FIXME Media Link</label>
         <input id="mediaLink" type="text" name="fields[mediaLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.mediaLink }}"{% endif -%} class="required">
         {% if entry is defined %}
           {{ errorList(entry.getErrors('mediaLink')) }}
@@ -42,8 +42,7 @@
         {% endif %}
         <br>
   
-        {% include "submit/_image.html" %}
-        {% include "submit/_images.html" %}
+        {% include "submit/_media_images.html" %}
 
         <input type="submit" value="Submit Media Link">
       </form>

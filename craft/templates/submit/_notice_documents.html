@@ -1,8 +1,8 @@
 {% from "_macro.html" import errorList %}
 
-{% set maxDocuments = 3 %}
+{% set maxDocuments = 1 %}
 
-<input type="hidden" name="fields[blogDocuments]">
+<input type="hidden" name="fields[noticeDocuments]">
 
 {% for i in 1..maxDocuments %}
   {% set key = 'new'~i %}
@@ -10,8 +10,8 @@
   {% set documentTitle = false %}
 
   {% if entry is defined %}
-    {% if entry.blogDocuments | length >= i %}
-      {% set document = entry.blogDocuments.nth(i-1) %}
+    {% if entry.noticeDocuments | length >= i %}
+      {% set document = entry.noticeDocuments.nth(i-1) %}
 
       {% set documentTitle = document.documentTitle %}
     {% endif %}
@@ -20,14 +20,14 @@
   <input type="checkbox" class="optional-field toggle" {%- if document %}checked="checked"{% endif %}>{% if loop.first %}Add a document{% else %}Add another{% endif %}
 
   <div class="optional-field inputs" {%- if not document %}style="display: none;"{% endif %}>
-    <label for="blogDocuments">document file</label>
-    <input type="hidden" name="fields[blogDocuments][{{ key }}][type]" value="document">
-    <input type="hidden" name="fields[blogDocuments][{{ key }}][fields][document]" value="">
-    <input type="file" name="fields[blogDocuments][{{ key }}][fields][document][]">
+    <label for="noticeDocuments">document file</label>
+    <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
+    <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]" value="">
+    <input type="file" name="fields[noticeDocuments][{{ key }}][fields][document][]">
     <br>
 
     <label for="document-title">Document title</label>
-    <input type="text" name="fields[blogDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
+    <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
 
     {% if document %}
       {{ errorList(document.allErrors) }}
