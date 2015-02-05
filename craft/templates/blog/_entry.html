@@ -3,13 +3,9 @@
 {% block content %}
   {% embed "_filtered_content.html" with { 'mainClass': 'single' } %}
     {% block main %}
-      <ul class="tags">
-          <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
-          <li><a href="">{{ entry.primaryTopic.first }}</a></li>
-      </ul>
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('F d, Y') }} - {{ random(10) }} Comments</div>
-      
+      {{ macro.postTags(entry) }}
+      {{ macro.postTitle(entry) }}
+      {{ macro.postBy(entry) }}
       
       <img src="{{ macro.primaryImage(entry, 'hero') }}"/>
 

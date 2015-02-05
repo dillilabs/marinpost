@@ -3,14 +3,23 @@
 {% block content %}
   {% embed "_filtered_content.html" with { 'mainClass': 'single' } %}
     {% block main %}
-      <ul class="tags">
-        <li><a href="">{{ entry.primaryLocation.first }}</a></li> | 
-        <li><a href="">{{ entry.primaryTopic.first }}</a></li>
-      </ul>
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
-      <div class="byline">By {{ macro.authorLink(entry) }} - {{ entry.postDate | date('F d, Y') }} - {{ random(10) }} Comments</div>
+      {{ macro.postTags(entry) }}
+      {{ macro.postTitle(entry) }}
+      {{ macro.postBy(entry) }}
       
       <img src="{{ macro.primaryImage(entry, 'hero') }}"/>
+
+      {% set media = entry.mediaLink.first %}
+      {% switch media.type %}
+        {% case 'video' %}
+          <a href="{{ media.videoUrl }}" target="_blank">VIDEO</a>
+        {% case 'document' %}
+          <a href="{{ media.documentUrl }}" target="_blank">DOCUMENT</a>
+        {% case 'upload' %}
+          {% set file = media.document.first %}
+          <a href="{{ file.url }}" target="_blank">{{ media.documentTitle | default(file.title) }}</a> <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span>
+      {% endswitch %}
+
       <p>{{ entry.linkComments }}</p>
 
       {% include "_disqus.html" %}
