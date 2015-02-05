@@ -1,15 +1,15 @@
 {% extends "_layout" %}
 
-{% set title = "Notices" %}
+{% set title = "Letters" %}
 
-{% set limit = 2 %}{# TODO set higher after testing #}
+{% set limit = 3 %}{# TODO set higher after testing #}
 
 {% block content %}
-  {% embed "_filtered_content.html" %}
+  {% embed "_unfiltered_content.html" %}
     {% block main %}
       <h2>Notices</h2>
       <ul class="posts" id="filtered-content">
-      {% for entry in craft.entries.section('notices').limit(limit).find %}
+      {% for entry in craft.entries.section('letters').limit(limit).find %}
         {{ macro.entry(entry) }}
       {% endfor %}
       </ul>

@@ -2,14 +2,14 @@ $(function() {
   var noFilters = $(':checkbox.all');
   var filters = $(':checkbox.filter');
   var filteredContent = $('#filtered-content');
-  var section = 'blog'; // TODO
+  var section = document.location.pathname.split('/')[1];
 
   var activeFilters = function(type) {
     return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
   };
 
   var refreshViews = function() {
-    filteredContent.load('/'+section+'/filter?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
+    filteredContent.load('/filter/'+section+'?locations='+activeFilters('location')+'&topics='+activeFilters('topic'));
   };
 
   var currentContentLength = function() {
@@ -18,7 +18,7 @@ $(function() {
 
   var moreContent = function() {
     $.get(
-      '/'+section+'/more?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&offset='+currentContentLength(),
+      '/more/'+section+'?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&offset='+currentContentLength(),
       function(data) {
         filteredContent.append(data);
       }
@@ -27,11 +27,14 @@ $(function() {
 
   filters.click(function() {
     var filter = $(this);
+    var type = filter.is('.location') ? '.location' : '.topic';
+    var typeFilters;
 
-    if (filter.is('.location')) {
-      noFilters.filter('.location').attr('checked', false);
+    if (filter.is(':checked')) {
+      noFilters.filter(type).prop('checked', false);
     } else {
-      noFilters.filter('.topic').attr('checked', false);
+      typeFilters = filters.filter(type);
+      noFilters.filter(type).prop('checked', !typeFilters.is(':checked'));
     }
 
     refreshViews();
@@ -39,13 +42,10 @@ $(function() {
 
   noFilters.click(function() {
     var noFilter = $(this);
+    var type = noFilter.is('.location') ? '.location' : '.topic';
 
     if (noFilter.is(':checked')) {
-      if (noFilter.is('.location')) {
-        filters.filter('.location').attr('checked', false);
-      } else {
-        filters.filter('.topic').attr('checked', false);
-      }
+      filters.filter(type).prop('checked', false);
     }
 
     refreshViews();

@@ -1,12 +1,21 @@
-{#
- # Filter blog list by one or more Locations and one or more Topics.
- # Each Location is OR-ed together and each Topic is OR-ed together,
- # then both filters are AND-d. For example:
+{# Filter list of entries by one or more:
+ #
+ #  Locations
+ #
+ # and one or more:
+ #
+ #  Topics
+ #
+ # Each Location is OR-ed together and each Topic is OR-ed together, then both filters are AND-d.
+ #
+ # For example:
  #
  #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
  #}
 
-{% set do_debug = false %}
+{% set section = craft.request.segments(2) %}
+
+{% set doDebug = false %}
 {% set debug = {} %}
 
 {% set locations = craft.request.getParam('locations') | split(',') %}
@@ -16,7 +25,7 @@
 {% set debug = debug | merge({ 'Topics': topics }) %}
 
 {% if locations|first is empty %}
-    {% set locationEntries = craft.entries.section('blog') %}
+    {% set locationEntries = craft.entries.section(section) %}
 {% else %}
 	{% set relatedTo = ['or'] %}
 
@@ -26,13 +35,13 @@
 
   {% set debug = debug | merge({ 'RelatedTo Locations': relatedTo }) %}
 
-	{% set locationEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
+	{% set locationEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
 
 {% set debug = debug | merge({ 'Number of Locations': locationEntries | length }) %}
 
 {% if topics|first is empty %}
-	{% set topicEntries = craft.entries.section('blog') %}
+	{% set topicEntries = craft.entries.section(section) %}
 {% else %}
 	{% set relatedTo = ['or'] %}
 
@@ -42,7 +51,7 @@
 
   {% set debug = debug | merge({ 'RelatedTo Topics': relatedTo }) %}
 
-	{% set topicEntries = craft.entries.section('blog').relatedTo(relatedTo) %}
+	{% set topicEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
 
 {% set debug = debug | merge({ 'Number of Topics': topicEntries | length }) %}
@@ -70,7 +79,7 @@
 
 {% import "_macro.html" as macro %}
 
-{% if craft.config.devMode and do_debug %}
+{% if craft.config.devMode and doDebug %}
   <li><small>{{ dump(debug) }}</small></li>
 {% endif %}
 

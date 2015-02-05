@@ -1,0 +1,57 @@
+{# Incrementally emit more entries
+ #
+ # Shares the same filtering logic with _filter.html FIXME
+ #}
+
+{% set section = craft.request.segments(2) %}
+
+{% set default_limit = 1 %}{# TODO for testing only #}
+
+{% set locations = craft.request.getParam('locations') | split(',') %}
+
+{% set topics = craft.request.getParam('topics') | split(',') %}
+
+{% if locations|first is empty %}
+    {% set locationEntries = craft.entries.section(section) %}
+{% else %}
+	{% set relatedTo = ['or'] %}
+
+	{% for categoryId in locations %}
+	    {% set relatedTo = relatedTo | merge([categoryId]) %}
+	{% endfor %}
+
+	{% set locationEntries = craft.entries.section(section).relatedTo(relatedTo) %}
+{% endif %}
+
+{% if topics|first is empty %}
+	{% set topicEntries = craft.entries.section(section) %}
+{% else %}
+	{% set relatedTo = ['or'] %}
+
+	{% for categoryId in topics %}
+	    {% set relatedTo = relatedTo | merge([categoryId]) %}
+	{% endfor %}
+
+	{% set topicEntries = craft.entries.section(section).relatedTo(relatedTo) %}
+{% endif %}
+
+{% set entries = [] %}
+{% set topicEntryIds = topicEntries.ids %}
+
+{% for entry in locationEntries %}
+    {% if entry.id in topicEntryIds %}
+        {% set entries = entries | merge([entry]) %}
+    {% endif %}
+{% endfor %}
+
+{% set offset = craft.request.getParam('offset') | default(0) %}
+
+{% set limit = craft.request.getParam('limit') | default(default_limit) %}
+
+{% set entries = entries[offset:limit] %}
+
+{% import "_macro.html" as macro %}
+
+{% for entry in entries %}
+	{{ macro.entry(entry) }}
+{% endfor %}
