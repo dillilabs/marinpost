@@ -1,30 +1,39 @@
 {% from "_macro/form" import errorList %}
 
 {% set maxImages = 1 %}
+{% set imagesAdded = 0 %}
+{% set hideAddLink = false %}
+
+{% if entry is defined %}
+  {% set imagesAdded =  entry.mediaImages | length %}
+{% endif %}
 
 <input type="hidden" name="fields[mediaImages]">
 
 {% for i in 1..maxImages %}
   {% set key = 'new'~i %}
+
   {% set image = false %}
   {% set by = false %}
   {% set disclaimer = false %}
 
-  {% if entry is defined %}
-    {% if entry.mediaImages | length >= i %}
-      {% set image = entry.mediaImages.nth(i-1) %}
+  {% if imagesAdded >= i %}
+    {% set image = entry.mediaImages.nth(i-1) %}
 
-      {% set by = image.by %}
+    {% set by = image.by %}
 
-      {% for option in image.disclaimer.getOptions  %}
-        {% set disclaimer = option.selected %}
-      {% endfor %}
-    {% endif %}
+    {% for option in image.disclaimer.getOptions  %}
+      {% set disclaimer = option.selected %}
+    {% endfor %}
   {% endif %}
 
-  <input type="checkbox" class="optional-field toggle" {%- if image %}checked="checked"{% endif %}>{{ loop.first ? 'Add image' : 'Add another' }}
+  {% if not image %}
+    {% set text = loop.first ? 'Add an image' : 'Add another image' %}
+    <a href="#" class="multiple-field add" id="add-image-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    {% set hideAddLink = true %}
+  {% endif %}
 
-  <div class="optional-field inputs" {%- if not image %}style="display: none;"{% endif %}>
+  <div class="multiple-field inputs" id="input-image-{{ i }}" {%- if not image %}style="display: none;"{% endif %}>
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
@@ -39,10 +48,14 @@
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][disclaimer]" value="">
     <input type="checkbox" name="fields[mediaImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
     <span>Yes I have the right to use this image</span>
+    <br>
 
     {% if image %}
       {{ errorList(image.allErrors) }}
+      <br>
     {% endif %}
+
+    <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
   </div>
 
   <br>

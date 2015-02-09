@@ -1,25 +1,33 @@
 {% from "_macro/form" import errorList %}
 
 {% set maxDocuments = 3 %}
+{% set documentsAdded = 0 %}
+{% set hideAddLink = false %}
+
+{% if entry is defined %}
+  {% set documentsAdded =  entry.blogDocuments | length %}
+{% endif %}
 
 <input type="hidden" name="fields[blogDocuments]">
 
 {% for i in 1..maxDocuments %}
   {% set key = 'new'~i %}
+
   {% set document = false %}
   {% set documentTitle = false %}
 
-  {% if entry is defined %}
-    {% if entry.blogDocuments | length >= i %}
-      {% set document = entry.blogDocuments.nth(i-1) %}
-
-      {% set documentTitle = document.documentTitle %}
-    {% endif %}
+  {% if documentsAdded >= i %}
+    {% set document = entry.blogDocuments.nth(i-1) %}
+    {% set documentTitle = document.documentTitle %}
   {% endif %}
 
-  <input type="checkbox" class="optional-field toggle" {%- if document %}checked="checked"{% endif %}>{% if loop.first %}Add a document{% else %}Add another{% endif %}
+  {% if not document %}
+    {% set text = loop.first ? 'Add document' : 'Add another document' %}
+    <a href="#" class="multiple-field add" id="add-document-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    {% set hideAddLink = true %}
+  {% endif %}
 
-  <div class="optional-field inputs" {%- if not document %}style="display: none;"{% endif %}>
+  <div class="multiple-field inputs"  id="input-document-{{ i }}"{%- if not document %}style="display: none;"{% endif %}>
     <label for="blogDocuments">document file</label>
     <input type="hidden" name="fields[blogDocuments][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[blogDocuments][{{ key }}][fields][document]" value="">
@@ -28,10 +36,14 @@
 
     <label for="document-title">Document title</label>
     <input type="text" name="fields[blogDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
+    <br>
 
     {% if document %}
       {{ errorList(document.allErrors) }}
+      <br>
     {% endif %}
+
+    <a href="#" class="multiple-field remove" id="remove-document-{{ i }}">Remove document</a>
   </div>
 
   <br>
