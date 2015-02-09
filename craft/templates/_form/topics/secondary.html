@@ -1,6 +1,12 @@
 {% from "_macro/form" import categoryId, errorList %}
 
 {% set maxTopics = 5 %}
+{% set topicsAdded = 0 %}
+{% set hideAddLink = false %}
+
+{% if entry is defined %}
+  {% set topicsAdded =  entry.secondaryTopics | length %}
+{% endif %}
 
 <input type="hidden" name="fields[secondaryTopics]">
 
@@ -8,30 +14,34 @@
   {% set topic = false %}
   {% set topicId = false %}
 
-  {% if entry is defined %}
-    {% if entry.secondaryTopics | length >= i %}
-      {% set topic = entry.secondaryTopics.nth(i-1) %}
-      {% if topic %}
-        {% set topicId = topic.id %}
-      {% endif %}
+  {% if topicsAdded >= i %}
+    {% set topic = entry.secondaryTopics.nth(i-1) %}
+    {% if topic %}
+      {% set topicId = topic.id %}
     {% endif %}
   {% endif %}
 
-  <input type="checkbox" class="optional-field toggle" {%- if topicId %}checked="checked"{% endif %}>more
+  {% if not topic %}
+    {% set text = loop.first ? 'Add topic' : 'Add another topic' %}
+    <a href="#" class="multiple-field add" id="add-topic-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    {% set hideAddLink = true %}
+  {% endif %}
 
-  <div class="optional-field inputs" {%- if not topicId %}style="display: none;"{% endif %}>
-    <label for="secondaryTopics">Secondary Topic</label>
-
+  <div class="multiple-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryTopics][]" class="array">
       <option value=""></option>
     {% for option in craft.categories.group('topics') %}
       <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
     {% endfor %}
     </select>
+    <br>
 
     {% if topic %}
       {{ errorList(topic.allErrors) }}
+      <br>
     {% endif %}
+
+    <a href="#" class="multiple-field remove" id="remove-topic-{{ i }}">Remove topic</a>
   </div>
 
   <br>

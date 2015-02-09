@@ -11,9 +11,6 @@ $(function() {
     // Link to Media
     var mediaType = form.find('input[type=radio][name=mediaType]');
 
-    // TODO deprecated
-    var optionalFieldToggles = form.find('.optional-field.toggle');
-
     // Secondary Locations / Topics, Images, Documents
     var multipleFieldLinks = form.find('a.multiple-field');
     var addMultipleFieldLink = multipleFieldLinks.filter('.add');
@@ -37,13 +34,6 @@ $(function() {
       var idSuffix = link.attr('id').split('-').splice(1, 2).join('-');
       link.closest('.multiple-field.inputs').hide();
       $('#add-'+idSuffix).show();
-    });
-
-    // TODO deprecated
-    // show/hide optional field inputs
-    optionalFieldToggles.change(function() {
-      var toggle = $(this);
-      toggle.next('.optional-field.inputs').toggle();
     });
 
     // Link to Media
@@ -70,16 +60,6 @@ $(function() {
 
         if (select.val().length == 0) {
           select.removeAttr('name');
-        }
-      });
-
-      // TODO deprecated
-      // Remove optional field inputs if hidden
-      optionalFieldToggles.each(function() {
-        var toggle = $(this);
-
-        if (! toggle.is(':checked')) {
-          toggle.next('.optional-field.inputs').remove();
         }
       });
 

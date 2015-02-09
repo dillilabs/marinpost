@@ -1,6 +1,12 @@
 {% from "_macro/form" import categoryId, errorList %}
 
 {% set maxLocations = 5 %}
+{% set locationsAdded = 0 %}
+{% set hideAddLink = false %}
+
+{% if entry is defined %}
+  {% set locationsAdded =  entry.secondaryLocations | length %}
+{% endif %}
 
 <input type="hidden" name="fields[secondaryLocations]">
 
@@ -8,18 +14,20 @@
   {% set location = false %}
   {% set locationId = false %}
 
-  {% if entry is defined %}
-    {% if entry.secondaryLocations | length >= i %}
-      {% set location = entry.secondaryLocations.nth(i-1) %}
-      {% if location %}
-        {% set locationId = location.id %}
-      {% endif %}
+  {% if locationsAdded >= i %}
+    {% set location = entry.secondaryLocations.nth(i-1) %}
+    {% if location %}
+      {% set locationId = location.id %}
     {% endif %}
   {% endif %}
 
-  <input type="checkbox" class="optional-field toggle" {%- if locationId %}checked="checked"{% endif %}>more
+  {% if not location %}
+    {% set text = loop.first ? 'Add location' : 'Add another location' %}
+    <a href="#" class="multiple-field add" id="add-location-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    {% set hideAddLink = true %}
+  {% endif %}
 
-  <div class="optional-field inputs" {%- if not locationId %}style="display: none;"{% endif %}>
+  <div class="multiple-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryLocations][]" class="array">
       <option value=""></option>
     {% set geographicGroup = false %}
@@ -35,10 +43,14 @@
       <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
     {% endfor %}
     </select>
+    <br>
 
     {% if location %}
       {{ errorList(location.allErrors) }}
+      <br>
     {% endif %}
+
+    <a href="#" class="multiple-field remove" id="remove-location-{{ i }}">Remove location</a>
   </div>
 
   <br>
