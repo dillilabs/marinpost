@@ -1,24 +1,6 @@
 $(document).ready(function() {
 
-	var win = $(this); //this = window
-	
-	if (window.matchMedia("(min-width: 60em)").matches) {
-			$('header').append($('nav'));
-            $('header').after($('.home #support'));
-            $('#support').append($('.notices'));
-
-		} else {
-			$('footer').prepend($('nav'));
-            $('#aside').append($('.home #support'));
-            $('main').append($('.notices'));
-		}
-		
-	if($('body').css('max-width') === '1200px') {
-		$('header').append($('nav'));
-        $('header').after($('.home #support'));
-        $('#support').append($('.notices'));
-
-	};
+	rejigger();
 	
 	$('#menu').click(function()  {
 
@@ -28,63 +10,80 @@ $(document).ready(function() {
 		
 	});
         
-    //$('.sign-in a').click(function() {
-    //   $('.sign-in').toggle();
-    //   $('.account').toggle();
-    //    
-    //});
+    $('.sign-in a, .sign-out a').click(function() {
+       $('.sign-in').toggle();
+       $('.sign-out').toggle();
+       $('.account').toggle();        
+    });
     
     $('.show-search').click(function() {
-        $('#search').slideToggle();
+        $('#search fieldset').slideToggle();
         $('html, body').animate({
-	   		scrollTop: $("#search").offset().top
+	   		scrollTop: $("body").offset().top
 	   	}, 200);
-    })
+    });
+    
+    $('.show-menu').click(function() {
+        $('html, body').animate({
+	   		scrollTop: $("nav").offset().top
+	   	}, 200);
+    });
 
 
     $('fieldset h5').click(function () {
         $(this).toggleClass('active');
         $(this).siblings('ul').slideToggle();
     });
-    //$('.all-topics').change(function () {
-    //    $('.topics').prop('checked', this.checked);
-    //});
-    //
-    //$(".topics").change(function () {
-    //    if ($(".topics:checked").length == $(".topics").length) {
-    //        $('.all-topics').prop('checked', 'checked');
-    //    } else {
-    //        $('.all-topics').prop('checked', false);
-    //    }
-    //});
-    //$('.all-locations').change(function () {
-    //    $('.locations').prop('checked', this.checked);
-    //});
-    //
-    //$(".locations").change(function () {
-    //    if ($(".locations:checked").length == $(".locations").length) {
-    //        $('.all-locations').prop('checked', 'checked');
-    //    } else {
-    //        $('.all-locations').prop('checked', false);
-    //    }
-    //});
+    $('.all-topics').change(function () {
+        $('.topics').prop('checked', this.checked);
+    });
+    
+    $(".topics").change(function () {
+        if ($(".topics:checked").length == $(".topics").length) {
+            $('.all-topics').prop('checked', 'checked');
+        } else {
+            $('.all-topics').prop('checked', false);
+        }
+    });
+    $('.all-locations').change(function () {
+        $('.locations').prop('checked', this.checked);
+    });
+    
+    $(".locations").change(function () {
+        if ($(".locations:checked").length == $(".locations").length) {
+            $('.all-locations').prop('checked', 'checked');
+        } else {
+            $('.all-locations').prop('checked', false);
+        }
+    });
 
 });
 
 $(window).on('resize', function(){
 
-	var win = $(this); //this = window
+	rejigger();
 	
-	if (window.matchMedia("(min-width: 60em)").matches) {
-		$('header').append($('nav'));
-        $('header').after($('.home #support'));
-        $('#support').append($('.notices'));
+});
 
+function rejigger() {
+	
+	if (window.matchMedia("(min-width: 51em)").matches) {
+		$('header').after($('nav'));
+        $('.sidebar').prepend($('#support'));
+        $('#subscribe').append($('#donate'));
 	} else {
 		$('footer').prepend($('nav'));
-        $('#aside').append($('.home #support'));
-        $('aside').after($('.notices'));
-	}
-	
+        $('#mini-menu').after($('#support'));
+        $('#share').before($('#donate'));
+	};
+		
+/*
+	if($('body').css('max-width') === '1200px') {
+		$('header').after($('nav'));
+        $('nav').after($('.home #support'));
+        $('#support').append($('.notices'));
 
-});
+	};
+*/
+
+};

@@ -21,14 +21,14 @@
         {% endif %}
         <br>
 
-        {% include "submit/_title" %}
-        {% include "submit/_location" %}
-        {% include "submit/_locations" %}
-        {% include "submit/_topic" %}
-        {% include "submit/_topics" %}
-        {% include "submit/_notice_content" %}
-        {% include "submit/_notice_images" %}
-        {% include "submit/_notice_documents" %}
+        {% include "_form/title" %}
+        {% include "_form/locations/primary" %}
+        {% include "_form/locations/secondary" %}
+        {% include "_form/topics/primary" %}
+        {% include "_form/topics/secondary" %}
+        {% include "_form/content/notice" %}
+        {% include "_form/images/notice" %}
+        {% include "_form/documents/notice" %}
 
         <input type="submit" value="Submit Notice">
       </form>

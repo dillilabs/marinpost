@@ -12,6 +12,7 @@
  #
  #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
  #}
+{% spaceless %}
 
 {% set section = craft.request.segments(2) %}
 
@@ -78,7 +79,7 @@
 {% set debug = debug | merge({ 'Limited entries': entries | length }) %}
 
 {% if craft.config.devMode and doDebug %}
-  <li><small>{{ dump(debug) }}</small></li>
+  <li><small>{{ debug | json_encode }}</small></li>
 {% endif %}
 
 {% from "_macro/post" import post %}
@@ -86,3 +87,4 @@
 {% for entry in entries %}
 	{{ post(entry) }}
 {% endfor %}
+{% endspaceless %}

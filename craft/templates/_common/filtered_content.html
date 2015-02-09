@@ -1,7 +1,7 @@
-<aside>
+<div class="sub-nav">
   {% block aside %}
     <div class="filter" id="filters">
-      <h2>Filter</h2>
+      <p>Save My Settings</p>
       <fieldset>
         <h5>Locations</h5>
         <ul>
@@ -24,7 +24,7 @@
       </fieldset>
     </div>
   {% endblock %}
-</aside>
+</div>
 
 <main class="{{ mainClass | default('') }}">
   {% block main %}

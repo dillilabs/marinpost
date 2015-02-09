@@ -1,0 +1,11 @@
+{% from "_macro/form" import errorList %}
+
+<label for="linkComments">Link Comments</label>
+
+<textarea id="linkComments" name="fields[linkComments]" cols="60" rows="8"> {%- if entry is defined %}{{ entry.linkComments }}{% endif -%} </textarea>
+
+{% if entry is defined %}
+  {{ errorList(entry.getErrors('linkComments')) }}
+{% endif %}
+
+<br>

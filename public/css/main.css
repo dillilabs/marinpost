@@ -29,6 +29,7 @@ html {
  * Customize the background color to match your design.
  */
 
+/*
 ::-moz-selection {
     background: #b3d4fc;
     text-shadow: none;
@@ -38,6 +39,7 @@ html {
     background: #b3d4fc;
     text-shadow: none;
 }
+*/
 
 /*
  * A better looking default horizontal rule
@@ -100,6 +102,12 @@ textarea {
 /* * * * * * * * * * * * * * * * * * * * * 
         SHARED
 * * * * * * * * * * * * * * * * * * * * * */
+.em-tester {
+	background-color: red;
+	height: 1em;
+	position: absolute;
+	width: 55em;
+}
 body {
     font-family: Georgia, Times, serif;
     margin: 0 auto;
@@ -141,7 +149,7 @@ img {
 nav > ul,
 ul.tags,
 ul.posts,
-.notices > ul,
+.notices-box > ul,
 #comments > ul,
 fieldset > ul {
     list-style: none;
@@ -153,27 +161,88 @@ fieldset > ul {
         HEADER
 * * * * * * * * * * * * * * * * * * * * * */
 header {
-    background: url('../img/masthead.png') 7% 46% no-repeat;
+    border-bottom: 4px solid #CAC8AD;
+    min-height: 100px;
 }
-#title {
+
+.header-wrapper {
+    border-bottom: 1px solid #555;
+    margin-bottom: 4px;
+}
+
+header .logo {
+    border: 8px solid #fe0000;
     display: inline-block;
-    padding: 1em 1em 1em 35%;
-    vertical-align: top;
-    text-align: center;
-    text-shadow:
-        -2px -2px 0 #fff,  
-         2px -2px 0 #fff,
-        -2px  2px 0 #fff,
-         2px  2px 0 #fff;
+    float: left;
+	height: 48px;
+	margin: 20px;
+	width: 48px;
 }
-#title > h1 {
+header .headline-wrapper {
+    display: inline-block;
+    margin-top: 15px;
+}
+header h1 {
+	font-size: 1.5em;
     margin: .5em 0 0;
+    text-align: center;
 }
-#title > h2 {
+header h2 {
     border-bottom: none;
+    font-size: .85em;
     margin-top: 0;
     padding: 0;
-    text-shadow: none;
+    text-align: center;
+    font-style: italic;
+}
+
+#mini-menu {
+	font-size: .85em;
+    padding: 3%;
+}
+.show-menu {
+    cursor: pointer;
+    font-family: sans-serif;
+    position: relative;
+    padding-left: 2em;
+    text-transform: uppercase;
+    top: 4px;
+}
+.show-menu:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 1.5em;
+    height: 0.25em;
+    border-top: 0.75em double #000;
+    border-bottom: 0.25em solid #000;
+}
+.show-search {
+    background: url('../img/search-black.png') 60px 7px no-repeat;
+    cursor: pointer;
+    font-family: sans-serif;
+    left: 40%;
+    margin: 0 auto;
+    padding-top: 5px;
+    padding-right: 1.5em;
+    position: absolute;
+    text-transform: uppercase;
+}
+
+#mini-menu > ul {
+    font-family: sans-serif;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#mini-menu li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#mini-menu div {
+    float: right;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * 
@@ -181,12 +250,12 @@ header {
 * * * * * * * * * * * * * * * * * * * * * */
 nav {
     background: #fff;
-    border-top: 1px solid #C8D4E9;
     margin: 1em 0;
     padding: 1em 0;
 }
 nav li {
     padding: 2%;
+    position: relative;
     text-align: center;
     text-transform: uppercase;
 }
@@ -198,25 +267,44 @@ nav li > a.active {
      color: #333;
      font-weight: bold;
 }
-/*
-nav > #sub-nav li.account {
+
+nav ul ul {
+	display: none;
+}
+
+nav li:hover ul {
+	display: inline;
+	left: -20px;
+	position: absolute;
+	top: 10px;
+}
+
+#mini-menu li.account, #mini-menu li.sign-in, #mini-menu li.sign-out, #mini-menu li.sign-up {
+    float: right;
+}
+
+#mini-menu li.account, #mini-menu li.sign-out, .account, .sign-out {
     display: none;
 }
-*/
-#search {
-    border-bottom: 1px solid #efefef;
-    display: none;
-    margin-bottom: 1em;
-    text-align: right;
+
+#mini-menu li.sign-in, #mini-menu li.sign-out {
+    margin-right: .5em;
 }
-#search input {
+#mini-menu #search fieldset {
+    display: none;
+}
+#mini-menu #search {
+    margin-top: 1em;
+    width: 100%;
+}
+#mini-menu #search input {
     display: inline-block;
 }
-#search input[type="search"] {
+#mini-menu #search input[type="search"] {
     padding: .5em 0;
-    width: 85%;
+    width: 100%;
 }
-#search input[type="submit"] {
+#mini-menu #search input[type="submit"] {
     background: #555;
     border: 1px solid #555;
     border-radius: 2px;
@@ -224,20 +312,20 @@ nav > #sub-nav li.account {
     margin-right: 2%;
     padding: .5em;
     text-transform: uppercase;
-    width: 10%;
-}
-#search > a {
-    display: block;
-    padding: .5em;
+    width: 20%;
 }
 
-
+.sub-nav{
+	float: left;
+	min-height: 100px;
+	width: 25%;
+}
 
 /* * * * * * * * * * * * * * * * * * * * * 
         CONTENT
 * * * * * * * * * * * * * * * * * * * * * */
 #featured {
-    background: #eff2fb;
+    background: #fffcbf;
 }
 .featured {
     padding: 3%;
@@ -273,10 +361,21 @@ main.single {
     text-transform: uppercase;
 }
 
+.video-link {
+    background: url('../img/video.png') 0 2px scroll no-repeat;
+    cursor: pointer;
+    font-family: sans-serif;
+    margin-bottom: .5em;
+    padding-left: 1em;
+}
+
+.whats-new {
+	padding: 0 3%;
+}
 
 #comments {
     background: #f9f9f9;
-    padding: 1em;
+    padding: 5%;
 }
 #comments > h2 {
     border-bottom: none;
@@ -297,7 +396,7 @@ ul.tags > li {
     font-size: .8em;
     text-transform: uppercase;
 }
-main, #support, .notices, .filter {
+#support, .notices-box, .filter {
     padding: 0 3%;
 }
 .filter fieldset > ul {
@@ -307,34 +406,99 @@ main, #support, .notices, .filter {
     cursor: pointer;
 }
 
-.notices {
+.date-divider {
+    background-color: #e5e5cd;
+    border-bottom: 0px solid #cac9ad;
+    border-top: 0px solid #cac9ad;
+    padding: .25em 3%;
+}
+
+.date-divider span {
+    float: right;
+}
+
+.comment-box {
+    padding: .25em 3%;
     text-align: center;
 }
-.notices > h2 {
+
+.notices-box {
+	margin-bottom: 1em;
+    text-align: center;
+}
+.notices-box > h2 {
     text-align: left;
 }
-#support {
-    min-width: 300px;
+
+.revenue-opportunity {
+	background-color: #aca6ff;
+	height: 200px;
+	padding-top: 100px;
+	text-align: center;
+	width: 300px;
 }
+
 input[type="checkbox"] {
     margin-right: .5em;
 }
 
  
 /* * * * * * * * * * * * * * * * * * * * * 
-        SIDEBARS/ASIDES
+        SUPPORT
 * * * * * * * * * * * * * * * * * * * * * */
-button.donate {
-    background: #4AB59D;
-    border: none;
-    padding: 4%;
-    width: 100%;
-    color: #f9f9f9;
-    border-radius: 2px;
-    font-size: 1.1em;
-    text-transform: uppercase;
+#support {
+	text-align: center;
 }
 
+#support h4 {
+    display: none;
+}
+
+#donate, #subscribe {
+    min-width: 30%;
+}
+
+#donate {
+    float: left;
+}
+
+#subscribe {
+    float: right;
+}
+
+button.donate, button.subscribe {
+    background: #ff9669;
+    border: none;
+    border-radius: 25px;
+    color: #000;
+    font-size: .85em;
+    font-weight: bold;
+    padding: 5px 10px 3px 10px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+button.donate {
+    background: #ff9669;
+}
+
+button.subscribe {
+    background: #00BFB0;
+}
+
+#share {
+	display: inline-block;
+	margin: 0 auto 1em auto;
+	text-align: center;
+   	width: 30%;
+}
+
+.rrssb-buttons {
+	margin: 0 auto;
+}
+.rrssb-buttons li {
+    
+}
 
 /* ==========================================================================
    Helper classes
@@ -442,18 +606,60 @@ button.donate {
    These examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
-@media only screen and (min-width: 40em) {
-    header {
-        background: url('../img/masthead.png') 0 0 no-repeat;
-        position: relative;
+/* Style until now are shared or for Mobile Two <27 ems */
+
+@media only screen and (min-width: 27em) { /* Mobile One 27–39 ems */
+
+    header .logo {
+        border: 10px solid #fe0000;
+    	height: 68px;
+    	margin: 30px;
+    	width: 68px;
     }
-    #title {
-        padding: 2em 1em 1em 30%;
+
+    header .headline-wrapper {
+        margin-top: 15px;
     }
-    #sub-nav {
-        position: absolute;
+
+	header h1 {
+		font-size: 2.25em;
+	}
+
+	header h2 {
+		font-size: 1em;
+	}
+
+	#mini-menu {
+		font-size: 1em;
+	}
+
+	.show-search {
+	    background: url('../img/search-black.png') 71px 7px no-repeat;
+	}
+}
+
+@media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
+
+    header .headline-wrapper {
+        margin-top: 10px;
+    }
+
+	header h1 {
+		font-size: 2.75em;
+	}
+
+	header h2 {
+		font-size: 1.25em;
+	}
+
+    .bottom-only {
+        display: none;
         top: .5em;
         right: .5em;
+    }
+    
+    #mini-menu #search {
+        width: 78%;
     }
     #search input[type="submit"] {
         padding: .5em;
@@ -471,15 +677,29 @@ button.donate {
     .filter {
         padding: 0;
     }
-    main, aside, #aside2, .notices {
+    main, .notices-box {
         padding: 0 2%;
     }
 
+	.blog main > h2, .news main > h2, .notices main > h2,  .media main > h2,  .letters main > h2,  .about main > h2 {
+		margin-left: 25%;
+	}
+	
     ul.posts li img {
         display:inline-block;
         width: 29%;
     }
     
+    ul.posts  {
+	    float: left;
+	    margin-right: 3%;
+        width: 67%;
+    }
+    
+	.whats-new {
+		padding-right: 0;
+	}
+
     .post {
         display: inline-block;
         padding-left: 1%;
@@ -499,98 +719,135 @@ button.donate {
         -webkit-flex-flow: row wrap;
         justify-content: flex-start;
     }
-    .thumbs > img {
-    }
     
     #comments {
         display: inline-block;
         margin-right: 1%;
         vertical-align: top;
-        width: 40%;
     }
     #support {
         display: inline-block;
-        padding: 0;
-        width: 48%;
+        padding: 0 3%;
     }
 }
 
 
-@media only screen and (min-width: 60em) {
+@media only screen and (min-width: 51em) { /* Laptop View >51 ems */
     body {
         padding: 0 1em;
         max-width: 1200px;
     }
-
-    #title {
-        padding: 2em 1em 0 20%;
+    nav {
+	    margin: 0;
+	    padding: .75em 0;
     }
     nav li {
         display: inline-block;
-        padding: 0 .5em;
+        font-size: .9em;
+        padding: 0 .35em 0 0;
     }
     nav li:last-of-type {
-        float: right;
+        padding-right: 0;
     }
-    nav #sub-nav li {
+
+    nav .bottom-only li {
             display: block;
             text-align: right;
     }
-    .home #support {
+    #mini-menu {
+        float: right;
+        padding: 1%;
+    }
+
+    #mini-menu div {
+        float: none;
+    }
+
+    #mini-menu .show-menu, #mini-menu .show-search {
+        display: none;
+    }
+    
+    #mini-menu li.sign-in, #mini-menu li.sign-up {
+        display: inline-block;
+        text-align: right;
+    }
+    
+   #mini-menu li#search, #mini-menu li#search fieldset {
+        display: inline-block;
+        float: none;
+        text-align: right;
+    }
+    
+    #mini-menu #search {
+        margin: 1em 0 0 0;
+        width: 100%
+    }
+    
+    .sidebar {
         display: inline-block;
         float: right;
-        margin-left: .5em;
+        margin: 0 0 1em .5em;
+        padding: 0;
         text-align: left;
         vertical-align: top;
-        width: 29%;
+        width: 300px;
     } 
+    
+    #support div {
+        width: 100%;
+    } 
+    
+    #support #donate {
+        float: right;
+    } 
+    
+    #support h4 {
+        display: block;
+        text-align: center;
+    } 
+    
+    .notices-box {
+        margin-top: 1em;
+    }
+
     #featured {
         display: inline-block;
         margin-top: 1em;
-        width: 66%;
+/*         width: 60%; */
     }
   
-    main, aside, .notices {
+    main, aside, .notices-box {
         padding: 0;
     }
     main {
         display: inline-block;
-        width: 46%;
+        width: 60%;
     }
 
     #comments {
-        margin: 1em 0 0;
-        width: 80%;
+        margin: 0;
     }
-    aside {
-        display: inline-block;
-        padding-right: 1%;
-        vertical-align: top;
-        width: 18.5%;
-    }
-    .home aside {
-        padding-left: .5em;
-        padding-right: 0;
-    }
-    
-    #aside2 {
-        width: 27%;
-        display: inline-block;
-        vertical-align: top;
-        padding-left: 1%;
+
+    .whats-new aside {
+	    display: inline-block;
+        padding: 0;
+        width: 30%;
     }
 
 }
 
+@media only screen and (min-width: 55em) { /* In case anything needs adjusting on the way to big */
 
-@media only screen and (min-width: 66.5em) {
+}
+
+@media only screen and (min-width: 64em) { /* Extras for big size */
     #featured {
         display: inline-block;
         margin-top: 1em;
-        width: 69%;
+/*         width: 69%; */
     }
     main {
-        width: 49%;
+        width: 69%;
     }
     .home aside {
         padding-left: 1em;

@@ -11,9 +11,16 @@
 {% macro redirectTo(section) %}
 {% spaceless %}
   {% if currentUser.inGroup("contributor") %}
-    {{ section }}/{postDate.year}/{postDate.month}/{postDate.day}/{slug}
+    {% switch section %}
+      {% case 'blog' %}
+        {{ section }}/{postDate.year}/{postDate.month}/{postDate.day}/{slug}
+      {% case 'notices' %}
+        {{ section }}/{postDate.year}/{postDate.month}/{postDate.day}/{slug}
+      {% default %}
+        {{ url(section) }}
+    {% endswitch %}
   {% else %}
-    submit/thank-you
+    {{ url('submit/thank-you') }}
   {% endif %}
 {% endspaceless %}
 {% endmacro %}

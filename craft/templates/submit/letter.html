@@ -15,7 +15,7 @@
         <input type="hidden" name="redirect" value="{{ redirectTo('letters') }}">
         <input type="hidden" name="sectionId" value="5">
 
-        {% include "submit/_title" %}
+        {% include "_form/title" %}
 
         <label for="letterContent">Letter</label>
         <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.letterContent }}{% endif -%} </textarea>

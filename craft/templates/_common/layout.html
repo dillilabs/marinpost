@@ -1,34 +1,61 @@
 {% from "_macro/nav" import classActive, navLink %}
 {% import "_macro/post" as m %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
   <link rel="home" href="{{ siteUrl }}" />
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   {% includeCssFile "/css/normalize.css" %}
   {% includeCssFile "/css/main.css" %}
   {% includeCssFile "/css/rrssb.css" %}
+  {% includeCssFile "/css/jquery-ui.min.css" %}
+  {% includeCssFile "/css/jquery-ui.structure.min.css" %}
+  {% includeCssFile "/css/jquery-ui.theme.min.css" %}
 </head>
-<!-- /notices page breaks inside responsive js -->
-<!--body class="{{ craft.request.lastSegment | default('home') }}"-->
-<body class="home">
+<body class="{{ craft.request.lastSegment | default('home') }}">
   <header>
-    <div id="title">
-      <h1>The Marin Post</h1>
-      <h2>Local Voices: Local Choices</h2>
+    <div class="header-wrapper clearfix">
+      <div class="logo"></div>
+      <div class="headline-wrapper">
+        <h1>The Marin Post</h1>
+        <h2>Local Voices: Local Choices</h2>
+      </div>
     </div>
-  </header> 
+  </header>
   
-  <nav>
-    <div id="search">
+  <section id="mini-menu">
+    <ul>
+      <li class="show-menu">Main Menu</li>
+      <li class="show-search">Search</li>
+    {% if currentUser %}
+      <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
+      <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
+    {% else %}
+      <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+    {% endif %}
+      <li id="search">
       <fieldset>
-        <input type="search">
-        <input type="submit" value="go">
+        <input type="search"><br>
+        <input type="radio" name="search" value="all" checked > All 
+        <input type="radio" name="search" value="all" > Blogs 
+        <input type="radio" name="search" value="all" > News 
+        <input type="radio" name="search" value="all" > Notices 
+        <input type="radio" name="search" value="all" > Media 
+        <input type="radio" name="search" value="all" > LTRs 
       </fieldset>
-      <a href="#">Saved search</a>
-    </div>
+      </li>
+    </ul>
+  </section>
 
+  <nav>
     <ul>
       <li><a href="{{ siteUrl }}" {{ classActive('') }}>Home</a></li>
       <li>{{ navLink('Blog') }}<li>
@@ -62,8 +89,10 @@
   
   {% includeJsFile "/js/jquery.min.js" first %}
   {% includeJsFile "/js/plugins.js" %}
-  {% includeJsFile "/js/rrssb.min.js" %}
   {% includeJsFile "/js/main.js" %}
+  {% includeJsFile "/js/rrssb.min.js" %}
+  {% includeJsFile "/js/modernizr.min.js" %}
+  {% includeJsFile "/js/jquery-ui.min.js" %}
   {% includeJsFile "/js/filter.js" %}
   {% includeJsFile "/js/form.js" %}
   

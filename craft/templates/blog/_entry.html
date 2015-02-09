@@ -11,8 +11,8 @@
 
       <p>{{ entry.blogContent }}</p>
 
-      {{ m.otherImages(entry.blogImages) }}
       {{ m.documents(entry.blogDocuments) }}
+      {{ m.otherImages(entry.blogImages) }}
 
       {% include "_common/disqus" %}
     {% endblock %}

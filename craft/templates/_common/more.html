@@ -2,6 +2,7 @@
  #
  # Shares the same filtering logic with _filter.html FIXME
  #}
+{% spaceless %}
 
 {% set section = craft.request.segments(2) %}
 
@@ -55,3 +56,5 @@
 {% for entry in entries %}
 	{{ post(entry) }}
 {% endfor %}
+
+{% endspaceless %}

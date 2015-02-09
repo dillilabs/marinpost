@@ -1,15 +1,19 @@
 {% macro classActive(slug, segmentNo) %}
+{% spaceless %}
   {% set segmentNo = segmentNo | default(1) %}
 
   {% set segment = craft.request.segment(segmentNo | default(1)) %}
 
   {{ segment == slug ? 'class="active"' : null }}
+{% endspaceless %}
 {% endmacro %}
 
 {% macro navLink(name, segmentNo) %}
+{% spaceless %}
   {% from _self import classActive %}
 
   {% set slug = name | lower %}
 
   <a href="{{ url(slug) }}" {{ classActive(slug, segmentNo) }}>{{ name }}</a>
+{% endspaceless %}
 {% endmacro %}
