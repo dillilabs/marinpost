@@ -28,7 +28,7 @@
   {% endif %}
 
   {% if not image %}
-    {% set text = loop.first ? 'Add image' : 'Add another image' %}
+    {% set text = loop.first ? 'Add an image' : 'Add another image' %}
     <a href="#" class="multiple-field add" id="add-image-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
     {% set hideAddLink = true %}
   {% endif %}

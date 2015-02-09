@@ -14,25 +14,23 @@
 {% endif %}
 </div>
 
-<label>autocomplete</label>
-<input type="text" id="autocomplete-location-tag">
-<br>
-
-<a href="#" id="new-location-tag">add new</a>
+<input type="text" id="find-location-tag">
+<a href="#" id="add-location-tag" style="display: none;">add new</a>
 <br>
 
 {% set addTag %}
 $(function() {
 
-    var tagSelect = $('#autocomplete-location-tag');
-    var form = tagSelect.closest('form');
+    var findTagInput = $('#find-location-tag');
+    var addNewTagLink = $('a#add-location-tag');
+    var form = findTagInput.closest('form');
     var tags = $('#tags');
 
     var tagInput = function(value, label) {
-            return '<label>' + '<input type="checkbox" name="fields[locationTags][]" value="' + value + '" checked="checked"/> ' + label + '</label>';
+        return '<label>' + '<input type="checkbox" name="fields[locationTags][]" value="' + value + '" checked="checked"/> ' + label + '</label>';
     };
 
-    var tagSelected = function(value) {
+    var tagAlreadySelected = function(value) {
         var values = tags.find('input').map(function(i, e) { return e.value; } );
         return $.inArray(value, values) == 0;
     };
@@ -41,73 +39,68 @@ $(function() {
         return true;
     };
 
-    var createTag = function(label) {
+    var addTagToForm = function(value) {
+        var label = findTagInput.val();
+
+        if (value > 0) {
+            tags.append(tagInput(value, label));
+            findTagInput.val('');
+            addNewTagLink.hide();
+        } else {
+            alert('Unable to create "' + label + '"');
+        }
+    };
+
+    var createTagOnServer = function() {
         var data = {
             groupId: {{ tagGroupId }},
-            title: label
+            title: findTagInput.val()
         };
 
         $.post(
             '/actions/tags/createTag',
             data,
             function(data) {
-                return data.success ? data.id : 0;
+                addTagToForm(data.success ? data.id : 0);
             });
     };
 
-    form.submit(function(e) {
-        if (tagSelect.val().length > 0) {
+    findTagInput.keypress(function(e) {
+        if (e.which == 13) {
             e.preventDefault();
         }
     });
 
-    tagSelect.autocomplete({
+    findTagInput.autocomplete({
         minlength: 2,
         source: '/locations',
         focus: function(event, ui) {
-            tagSelect.val(ui.item.label);
+            findTagInput.val(ui.item.label);
             return false;
         },
         select: function(event, ui) {
             var id;
 
-            if (tagSelected(ui.item.value)) {
-                return false;
-                id = createTag(ui.item.label);
-                if (id == 0) {
-                    alert('Cannot create "'+ui.item.label+'" location');
-                }
-            } else {
+            if (! tagAlreadySelected(ui.item.value)) {
                 tags.append(tagInput(ui.item.value, ui.item.label));
             }
+
             this.value = '';
             return false;
+        },
+        close: function(event, ui) {
+            var tagLabel = findTagInput.val();
+
+            if (tagLabel.length > 0) {
+                addNewTagLink.show();
+            }
         }
     });
 
-    $('#new-location-tag').click(function(e) {
-        var label;
-
+    addNewTagLink.click(function(e) {
         e.preventDefault();
-
-        label = prompt('What’s the new tag name?');
-
-        if (!label) return;
-
-        var data = {
-            groupId: {{ tagGroupId }},
-            title: label
-        };
-
-        $.post('/actions/tags/createTag', data, function(response) {
-            if (response.success) {
-                tags.appendTo(response.id, label); 
-            } else {
-                alert('Unable to create that tag.');
-            }
-        });
+        createTagOnServer();
     });
-
 });
 {% endset %}
 

@@ -22,8 +22,7 @@
   {% endif %}
 
   {% if not location %}
-    {% set text = loop.first ? 'Add location' : 'Add another location' %}
-    <a href="#" class="multiple-field add" id="add-location-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    <a href="#" class="multiple-field add" id="add-location-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Location</a>
     {% set hideAddLink = true %}
   {% endif %}
 

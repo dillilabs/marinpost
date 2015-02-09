@@ -1,0 +1,107 @@
+{% set tagGroupId = 2 %}
+
+<label>Topic tags</label>
+
+<input type="hidden" name="fields[topicTags]" value="">
+
+<div id="tags">
+{% if entry is defined %}
+  {% for tag in entry.topicTags %}
+    <label>
+      <input type="checkbox" name="fields[topicTags][]" value="{{ tag.id }}" checked="checked">{{ tag.title }}
+    </label>
+  {% endfor %}
+{% endif %}
+</div>
+
+<input type="text" id="find-topic-tag">
+<a href="#" id="add-topic-tag" style="display: none;">add new</a>
+<br>
+
+{% set addTag %}
+$(function() {
+
+    var findTagInput = $('#find-topic-tag');
+    var addNewTagLink = $('a#add-topic-tag');
+    var form = findTagInput.closest('form');
+    var tags = $('#tags');
+
+    var tagInput = function(value, label) {
+        return '<label>' + '<input type="checkbox" name="fields[topicTags][]" value="' + value + '" checked="checked"/> ' + label + '</label>';
+    };
+
+    var tagAlreadySelected = function(value) {
+        var values = tags.find('input').map(function(i, e) { return e.value; } );
+        return $.inArray(value, values) == 0;
+    };
+
+    var tagExists = function(value) {
+        return true;
+    };
+
+    var addTagToForm = function(value) {
+        var label = findTagInput.val();
+
+        if (value > 0) {
+            tags.append(tagInput(value, label));
+            findTagInput.val('');
+            addNewTagLink.hide();
+        } else {
+            alert('Unable to create "' + label + '"');
+        }
+    };
+
+    var createTagOnServer = function() {
+        var data = {
+            groupId: {{ tagGroupId }},
+            title: findTagInput.val()
+        };
+
+        $.post(
+            '/actions/tags/createTag',
+            data,
+            function(data) {
+                addTagToForm(data.success ? data.id : 0);
+            });
+    };
+
+    findTagInput.keypress(function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+        }
+    });
+
+    findTagInput.autocomplete({
+        minlength: 2,
+        source: '/topics',
+        focus: function(event, ui) {
+            findTagInput.val(ui.item.label);
+            return false;
+        },
+        select: function(event, ui) {
+            var id;
+
+            if (! tagAlreadySelected(ui.item.value)) {
+                tags.append(tagInput(ui.item.value, ui.item.label));
+            }
+
+            this.value = '';
+            return false;
+        },
+        close: function(event, ui) {
+            var tagLabel = findTagInput.val();
+
+            if (tagLabel.length > 0) {
+                addNewTagLink.show();
+            }
+        }
+    });
+
+    addNewTagLink.click(function(e) {
+        e.preventDefault();
+        createTagOnServer();
+    });
+});
+{% endset %}
+
+{% includeJs addTag %}

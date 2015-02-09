@@ -24,8 +24,10 @@
         {% include "_form/title" %}
         {% include "_form/locations/primary" %}
         {% include "_form/locations/secondary" %}
+        {% include "_form/locations/tags" %}
         {% include "_form/topics/primary" %}
         {% include "_form/topics/secondary" %}
+        {% include "_form/topics/tags" %}
 
         <label for="newsLink">News Link</label>
         <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">

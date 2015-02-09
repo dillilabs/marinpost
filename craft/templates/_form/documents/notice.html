@@ -23,7 +23,7 @@
   {% endif %}
 
   {% if not document %}
-    {% set text = loop.first ? 'Add document' : 'Add another document' %}
+    {% set text = loop.first ? 'Add a document' : 'Add another document' %}
     <a href="#" class="multiple-field add" id="add-document-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
     {% set hideAddLink = true %}
   {% endif %}

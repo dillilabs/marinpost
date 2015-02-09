@@ -22,8 +22,7 @@
   {% endif %}
 
   {% if not topic %}
-    {% set text = loop.first ? 'Add topic' : 'Add another topic' %}
-    <a href="#" class="multiple-field add" id="add-topic-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
+    <a href="#" class="multiple-field add" id="add-topic-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Topic</a>
     {% set hideAddLink = true %}
   {% endif %}
 
