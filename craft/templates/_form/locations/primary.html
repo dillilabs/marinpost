@@ -2,6 +2,7 @@
 
 {% set primaryLocationId = entry is defined ? categoryId(entry, "primaryLocation") : 0 %}
 
+<br>
 <label for="primaryLocation">Location</label>
 
 <select id="primaryLocation" name="fields[primaryLocation][]" class="array">
@@ -25,4 +26,3 @@
 {% if entry is defined %}
   {{ errorList(entry.getErrors('primaryLocation')) }}
 {% endif %}
-<br>

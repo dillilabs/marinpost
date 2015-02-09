@@ -1,10 +1,14 @@
 {% set tagGroupId = 2 %}
 
+<br>
 <label>Topic tags</label>
 
 <input type="hidden" name="fields[topicTags]" value="">
 
-<div id="tags">
+<input type="text" id="find-topic-tag">
+<a href="#" id="add-topic-tag" style="display: none;">add new</a>
+
+<div id="topic-tags">
 {% if entry is defined %}
   {% for tag in entry.topicTags %}
     <label>
@@ -14,17 +18,13 @@
 {% endif %}
 </div>
 
-<input type="text" id="find-topic-tag">
-<a href="#" id="add-topic-tag" style="display: none;">add new</a>
-<br>
-
 {% set addTag %}
 $(function() {
 
     var findTagInput = $('#find-topic-tag');
     var addNewTagLink = $('a#add-topic-tag');
     var form = findTagInput.closest('form');
-    var tags = $('#tags');
+    var tags = $('#topic-tags');
 
     var tagInput = function(value, label) {
         return '<label>' + '<input type="checkbox" name="fields[topicTags][]" value="' + value + '" checked="checked"/> ' + label + '</label>';
@@ -73,7 +73,27 @@ $(function() {
 
     findTagInput.autocomplete({
         minlength: 2,
-        source: '/topics',
+        search: function(event, ui) {
+            var term = findTagInput.val();
+            term = term.replace(/^\s+/, '');
+            findTagInput.val(term);
+            return term.length > 0;
+        },
+        source: function(req, resp) {
+            var term = findTagInput.val();
+
+            $.getJSON(
+                '/topics/?term='+term,
+                function(data) {
+                    resp(data);
+                    if (data.length == 0) {
+                        addNewTagLink.show();
+                    } else {
+                        addNewTagLink.hide();
+                    }
+                }
+            );
+        },
         focus: function(event, ui) {
             findTagInput.val(ui.item.label);
             return false;
@@ -89,9 +109,7 @@ $(function() {
             return false;
         },
         close: function(event, ui) {
-            var tagLabel = findTagInput.val();
-
-            if (tagLabel.length > 0) {
+            if (findTagInput.val().length > 0) {
                 addNewTagLink.show();
             }
         }

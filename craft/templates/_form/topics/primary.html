@@ -1,5 +1,6 @@
 {% from "_macro/form" import categoryId, errorList %}
 
+<br>
 <label for="primaryTopic">Topic</label>
 {% set primaryTopicId = entry is defined ? categoryId(entry, "primaryTopic") : 0 %}
 <select id="primaryTopic" name="fields[primaryTopic][]" class="array">
@@ -11,4 +12,3 @@
 {% if entry is defined %}
   {{ errorList(entry.getErrors('primaryTopic')) }}
 {% endif %}
-<br>

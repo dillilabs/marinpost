@@ -8,6 +8,7 @@
   {% set topicsAdded =  entry.secondaryTopics | length %}
 {% endif %}
 
+<br>
 <input type="hidden" name="fields[secondaryTopics]">
 
 {% for i in 1..maxTopics %}
@@ -42,6 +43,4 @@
 
     <a href="#" class="multiple-field remove" id="remove-topic-{{ i }}">Remove topic</a>
   </div>
-
-  <br>
 {% endfor %}

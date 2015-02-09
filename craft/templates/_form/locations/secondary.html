@@ -8,6 +8,7 @@
   {% set locationsAdded =  entry.secondaryLocations | length %}
 {% endif %}
 
+<br>
 <input type="hidden" name="fields[secondaryLocations]">
 
 {% for i in 1..maxLocations %}
@@ -51,6 +52,4 @@
 
     <a href="#" class="multiple-field remove" id="remove-location-{{ i }}">Remove location</a>
   </div>
-
-  <br>
 {% endfor %}

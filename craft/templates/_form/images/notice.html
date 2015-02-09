@@ -8,6 +8,7 @@
   {% set imagesAdded =  entry.noticeImages | length %}
 {% endif %}
 
+<br>
 <input type="hidden" name="fields[noticeImages]">
 
 {% for i in 1..maxImages %}
@@ -57,6 +58,4 @@
 
     <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
   </div>
-
-  <br>
 {% endfor %}

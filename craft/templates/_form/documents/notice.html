@@ -8,6 +8,7 @@
   {% set documentsAdded =  entry.noticeDocuments | length %}
 {% endif %}
 
+<br>
 <input type="hidden" name="fields[noticeDocuments]">
 
 
@@ -46,6 +47,4 @@
 
     <a href="#" class="multiple-field remove" id="remove-document-{{ i }}">Remove document</a>
   </div>
-
-  <br>
 {% endfor %}
