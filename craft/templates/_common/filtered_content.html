@@ -26,6 +26,14 @@
   {% endblock %}
 </div>
 
+{% set filterJs %}
+  $(function() {
+      $('#filtered-content').filters();
+  });
+{% endset %}
+
+{% includeJs filterJs %}
+
 <main class="{{ mainClass | default('') }}">
   {% block main %}
   {% endblock %}
