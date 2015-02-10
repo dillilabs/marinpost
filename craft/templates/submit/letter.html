@@ -28,3 +28,11 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set formJs %}
+  $(function() {
+      $('form.content-submission').forms();
+  });
+{% endset %}
+
+{% includeJs formJs %}
