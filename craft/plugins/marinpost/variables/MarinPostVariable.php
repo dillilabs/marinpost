@@ -1,29 +1,23 @@
 <?php
 namespace Craft;
 
-require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
+require CRAFT_PLUGINS_PATH.'/marinpost/config.php';
 
-use Aws\S3\S3Client;
+require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
 
 class MarinPostVariable
 {
 
-    private $awsAccessKey;
-    private $s3Bucket;
     private $postObject;
     private $form;
 
     function __construct()
     {
-        $this->awsAccessKey = 'AKIAIKOBD2MRLLDVMXJQ';
-        $AWSSECRET = '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';
-        $AWSREGION = 'us-east-1';
-
-        $s3 = S3Client::factory(
+        $s3 = \Aws\S3\S3Client::factory(
             array(
-                'key' => $this->awsAccessKey,
-                'secret' => $AWSSECRET,
-                'region' => $AWSREGION
+                'key' => AWS_ACCESS_KEY_ID,
+                'secret' => AWS_SECRET_ACCESS_KEY,
+                'region' => S3_REGION
             )
         );
 
@@ -31,7 +25,7 @@ class MarinPostVariable
 
         $this->postObject = new \Aws\S3\Model\PostObject(
             $s3,
-            $this->s3Bucket,
+            S3_BUCKET,
             array(
                 'acl' => 'public-read'
             )
@@ -42,12 +36,12 @@ class MarinPostVariable
 
     public function awsAccessKey($optional = null)
     {
-        return $this->awsAccessKey;
+        return AWS_ACCESS_KEY_ID;
     }
 
     public function s3Bucket($optional = null)
     {
-        return $this->s3Bucket;
+        return S3_BUCKET;
     }
 
     public function s3Policy($optional = null)

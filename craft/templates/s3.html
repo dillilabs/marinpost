@@ -27,6 +27,22 @@
 
 <h3>(debug) policy</h3>
 {{ craft.marinpost.jsonS3Policy }}
+<p>
+<h3>assets</h3>
+{% set sourceId = 3 %}
+<ul>
+{% for asset in craft.assets.sourceId(sourceId) %}
+<li>
+  <ul>
+    <li>{{ asset.filename }}</li>
+    <li>{{ asset.kind }}</li>
+    <li>{{ asset.size | filesize }}</li>
+    <li>{{ asset.url }}</li>
+    <li>{{ asset.source.name }}{{ asset.folder.path }}</li>
+  </ul>
+</li>
+{% endfor %}
+</ul>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
 <script src="/js/jquery.ui.widget.js"></script>  
