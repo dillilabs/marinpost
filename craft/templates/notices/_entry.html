@@ -1,8 +1,8 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" with { 'mainClass': 'single' } %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
       {{ m.postTags(entry) }}
       {{ m.postTitle(entry) }}
       {{ m.postBy(entry) }}
@@ -15,10 +15,6 @@
       {{ m.documents(entry.noticeDocuments) }}
 
       {% include "_common/disqus" %}
-    {% endblock %}
-
-    {% block right %}
-      {# include "_common/support" #}
     {% endblock %}
   {% endembed %}
 {% endblock %}

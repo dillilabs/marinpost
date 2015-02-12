@@ -1,11 +1,11 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
 
-    <h2>Sorry, something went wrong with the activation of your account</h2>
-    <p>Would you like to <a href="{{ url('contact') }}">Contact support?</a></p>
+      <h2>Sorry, something went wrong with the activation of your account</h2>
+      <p>Would you like to <a href="{{ url('contact') }}">Contact support?</a></p>
 
     {% endblock %}
   {% endembed%}

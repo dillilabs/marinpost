@@ -1,9 +1,10 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
+{% block main %}
+  {% embed "_common/single" %}
     {% from "_macro/form" import errorList %}
-    {% block main %}
+
+    {% block post %}
 
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}

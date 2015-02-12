@@ -1,18 +1,12 @@
 {% extends "_common/layout" %}
 
-{% set title = "About" %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block subNav %}
+    {% endblock %}
 
-{% block content %}
-  {% embed "_common/filtered_content" %}
-    {% block main %}
+    {% block post %}
       <h2>About</h2>
-    {% endblock %}
-
-    {% block aside %}
-    {% endblock %}
-
-    {% block right %}
-      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

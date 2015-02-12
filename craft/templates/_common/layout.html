@@ -35,12 +35,15 @@
     <ul>
       <li class="show-menu">Main Menu</li>
       <li class="show-search">Search</li>
-    {% if currentUser %}
-      <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
-      <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
-    {% else %}
-      <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
-    {% endif %}
+      <div class="clearfix">
+      {% if currentUser %}
+        <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
+        <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
+      {% else %}
+        <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+        <li class="sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
+      {% endif %}
+      </div>
       <li id="search">
       <fieldset>
         <input type="search"><br>
@@ -68,20 +71,29 @@
       <li>{{ navLink('Submit') }}<li>
       <li>{{ navLink('Contact') }}<li>
       <li>{{ navLink('Subscribe') }}<li>
-    </ul>
-    <ul id="sub-nav">
-    {% if currentUser %}
-      <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
-      <li class="log-out"><a href="{{ logoutUrl }}">Log out</a></li>
-    {% else %}
-      <li class="sign-in"><a href="{{ loginUrl }}">Sign in</a></li>
-    {% endif %}
-      <li><a class="show-search">Search</a></li>
+      <div class="bottom-only">
+      {% if currentUser %}
+        <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
+        <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
+      {% else %}
+        <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+        <li class="sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
+      {% endif %}
+        <li class=""><a href="#" class="show-search">Search</a></li>
+      </div>
     </ul>
   </nav>
 
-  {% block content %}
+  {% block main %}
   {% endblock %}
+
+  <div class="sidebar">
+    {% block sidebar %}
+      {% include "_common/support" %}
+      {% include "_common/notices" %}
+      {% include "_common/revenue" %}
+    {% endblock %}
+  </div>
 
   <footer id="footer">
     Copyright {{ now.year }} {{ craft.request.serverName | ucfirst }}. All rights reserved  •  Built by <a href="http://www.communityventurepartners.org/">Community Venture Partners</a>
@@ -96,10 +108,6 @@
   {% includeJsFile "/js/filters.js" %}
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
-  
-  {% if js is defined %}
-    {% includeJs js %}
-  {% endif %}
   
   {% include "_common/analytics.js" %}
 </body>

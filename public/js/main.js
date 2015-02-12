@@ -9,13 +9,11 @@ $(document).ready(function() {
 	   	}, 200);
 		
 	});
-        
-    $('.sign-in a, .sign-out a').click(function() {
-       $('.sign-in').toggle();
-       $('.sign-out').toggle();
-       $('.account').toggle();        
+/*        
+    $('.sign-in, .sign-out').click(function() {
+       $('.sign-in,.sign-up, .sign-out, .account').toggle();
     });
-    
+*/    
     $('.show-search').click(function() {
         $('#search fieldset').slideToggle();
         $('html, body').animate({
@@ -34,10 +32,11 @@ $(document).ready(function() {
         $(this).toggleClass('active');
         $(this).siblings('ul').slideToggle();
     });
+/*
     $('.all-topics').change(function () {
         $('.topics').prop('checked', this.checked);
     });
-    
+
     $(".topics").change(function () {
         if ($(".topics:checked").length == $(".topics").length) {
             $('.all-topics').prop('checked', 'checked');
@@ -56,7 +55,7 @@ $(document).ready(function() {
             $('.all-locations').prop('checked', false);
         }
     });
-
+*/
 });
 
 $(window).on('resize', function(){
@@ -69,21 +68,14 @@ function rejigger() {
 	
 	if (window.matchMedia("(min-width: 51em)").matches) {
 		$('header').after($('nav'));
+        $('.header-wrapper').append($('#mini-menu'));
         $('.sidebar').prepend($('#support'));
         $('#subscribe').append($('#donate'));
 	} else {
 		$('footer').prepend($('nav'));
+        $('header').after($('#mini-menu'));
         $('#mini-menu').after($('#support'));
         $('#share').before($('#donate'));
 	};
 		
-/*
-	if($('body').css('max-width') === '1200px') {
-		$('header').after($('nav'));
-        $('nav').after($('.home #support'));
-        $('#support').append($('.notices'));
-
-	};
-*/
-
 };

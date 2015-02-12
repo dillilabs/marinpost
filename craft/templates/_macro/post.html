@@ -45,7 +45,7 @@
 
   {% set author = entry.author %}
 
-  {% if author.can("publish:{{ entry.section.id }}") %}
+  {% if author.isInGroup('contributor') %}
     <a href="{{ contributorUrl(author) }}">{{ author.name }}</a>
   {% else %}
     {{ author.name }}

@@ -1,10 +1,10 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
 
-    <h2>Password updated</h2>
+      <h2>Password updated</h2>
 
     {% endblock %}
   {% endembed%}

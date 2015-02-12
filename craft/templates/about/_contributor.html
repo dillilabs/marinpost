@@ -8,9 +8,10 @@
 
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
+
       {% if user.photoUrl %}
         <img src="{{ user.photoUrl(imageSize) }}" />
       {% endif %}
@@ -30,8 +31,6 @@
       </ul>
     {% endblock %}
 
-    {% block aside %}
-    {% endblock %}
   {% endembed %}
 {% endblock %}
 

@@ -2,13 +2,15 @@
 
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
+{% block main %}
+  {% embed "_common/form" %}
     {% from "_macro/form" import actionUrl, errorList, redirectTo %}
 
-    {% block main %}
-      <h2>Submit a Blog Post</h2>
+    {% block h2  %}
+      Submit a Blog Post
+    {% endblock %}
 
+    {% block form %}
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ actionUrl() }}">

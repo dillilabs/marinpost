@@ -283,9 +283,11 @@ nav li:hover ul {
     float: right;
 }
 
-#mini-menu li.account, #mini-menu li.sign-out, .account, .sign-out {
+/*
+#mini-menu li.account, #mini-menu li.sign-out, {
     display: none;
 }
+*/
 
 #mini-menu li.sign-in, #mini-menu li.sign-out {
     margin-right: .5em;
@@ -315,9 +317,8 @@ nav li:hover ul {
     width: 20%;
 }
 
-.sub-nav{
+.sub-nav {
 	float: left;
-	min-height: 100px;
 	width: 25%;
 }
 
@@ -331,6 +332,9 @@ nav li:hover ul {
     padding: 3%;
 }
 
+main {
+    padding: 0 1em;
+}
 .posts > li {
     border-bottom: 1px solid #efefef;
     margin-bottom: 1em;
@@ -442,6 +446,40 @@ input[type="checkbox"] {
     margin-right: .5em;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * 
+        FORM STYLES
+* * * * * * * * * * * * * * * * * * * * * */
+form input[type="text"], form input[type="password"],
+form select {
+    display: block;
+    padding: .25em;
+    width: 95%;
+}
+form textarea {
+    max-width: 100%;
+}
+form > label {
+    font-weight: bold;
+}
+form > label[for="rememberMe"],
+form > label[for="termsOfUse"] {
+    font-weight: normal;
+}
+form > button {
+/*
+    background: #CAC8AD;
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+*/
+    margin: 1em 0 0;
+    padding: .5em;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    margin: 0 .25em;
+}
+
  
 /* * * * * * * * * * * * * * * * * * * * * 
         SUPPORT
@@ -498,6 +536,10 @@ button.subscribe {
 }
 .rrssb-buttons li {
     
+}
+
+footer {
+    padding: 1em;
 }
 
 /* ==========================================================================
@@ -636,6 +678,16 @@ button.subscribe {
 	.show-search {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
+	.sub-nav {
+    	float: left;
+        min-height: 100px;
+    	width: 25%;
+    }
+    
+    footer {
+        padding: 1em;
+    }
+
 }
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
@@ -690,7 +742,7 @@ button.subscribe {
         width: 29%;
     }
     
-    ul.posts  {
+    ul.posts, .post, main > form  {
 	    float: left;
 	    margin-right: 3%;
         width: 67%;
@@ -700,11 +752,6 @@ button.subscribe {
 		padding-right: 0;
 	}
 
-    .post {
-        display: inline-block;
-        padding-left: 1%;
-        width: 69%;
-    }
     .single > img {
         float: left;
         padding: .5em;
@@ -847,6 +894,7 @@ button.subscribe {
 /*         width: 69%; */
     }
     main {
+        padding-bottom: 2em;
         width: 69%;
     }
     .home aside {

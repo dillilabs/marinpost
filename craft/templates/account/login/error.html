@@ -1,10 +1,10 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
 
-      invalid token
+      <h3>Invalid token</h3>
 
     {% endblock %}
   {% endembed%}

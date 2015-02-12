@@ -1,12 +1,10 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
-
-    <h2>Thank you!</h2>
-    <p>Your submission will be published once it has been approved.</p>
-
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
+      <h2>Thank you!</h2>
+      <p>Your submission will be published once it has been approved.</p>
     {% endblock %}
   {% endembed %}
 {% endblock %}

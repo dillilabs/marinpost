@@ -4,20 +4,16 @@
 
 {% set limit = 2 %}{# TODO set higher after testing #}
 
-{% block content %}
-  {% embed "_common/filtered_content" %}
-    {% block main %}
-      <h2>Blog</h2>
-      <ul class="posts" id="filtered-content">
+{% block main %}
+  {% embed "_common/list" %}
+    {% block h2 %}
+      Blog
+    {% endblock %}
+
+    {% block posts %}
       {% for entry in craft.entries.section('blog').limit(limit).find %}
         {{ m.post(entry) }}
       {% endfor %}
-      </ul>
-      <a href="#" id="load-more-content">Load More Content</a>
-    {% endblock %}
-
-    {% block right %}
-      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

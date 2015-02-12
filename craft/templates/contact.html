@@ -1,9 +1,13 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
+{% set title = "Contact" %}
 
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block subNav %}
+    {% endblock %}
+
+    {% block post %}
       <h2>Contact</h2>
     {% endblock %}
   {% endembed %}

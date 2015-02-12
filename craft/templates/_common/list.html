@@ -1,0 +1,59 @@
+<main>
+  <div class="sub-nav">
+    {% block subNav %}
+      <div class="filter" id="filters">
+        <p>Save My Settings</p>
+        <fieldset>
+          <h5>Locations</h5>
+          <ul>
+            <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+            {% for location in craft.categories.group('locations') %}
+              <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <h5>Topics</h5>
+          <ul>
+            <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+            {% for topic in craft.categories.group('topics') %}
+              <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+
+        <fieldset>
+          <h5>Bloggers</h5>
+          <ul>
+            <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+            {% for author in craft.users.group('contributor') %}
+              <li><input type="checkbox" class="author filter" value="{{ author.id }}"/>{{ author.name }}</li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+      </div>
+    {% endblock %}
+  </div>
+
+  <h2>
+    {% block h2 %}
+    {% endblock %}
+  </h2>
+
+  <ul class="posts">
+    {% block posts %}
+    {% endblock %}
+  </ul>
+
+  <a href="#" id="load-more-content">simulate scrolling content</a>
+</div>
+</main>
+
+{% set filterJs %}
+  $(function() {
+      $('ul.posts').filters();
+  });
+{% endset %}
+
+{% includeJs filterJs %}

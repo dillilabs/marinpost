@@ -1,11 +1,11 @@
 {% extends "_common/layout" %}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
 
-    <h2>Thank you for registering!</h3>
-    <p>Please check your email for account activation instructions.</p>
+      <h2>Thank you for registering!</h3>
+      <p>Please check your email for account activation instructions.</p>
 
     {% endblock %}
   {% endembed%}

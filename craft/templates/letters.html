@@ -4,20 +4,19 @@
 
 {% set limit = 3 %}{# TODO set higher after testing #}
 
-{% block content %}
-  {% embed "_common/unfiltered_content" %}
-    {% block main %}
-      <h2>Letters</h2>
-      <ul class="posts" id="filtered-content">
+{% block main %}
+  {% embed "_common/list" %}
+    {% block subNav %}
+    {% endblock %}
+
+    {% block h2 %}
+      Letters
+    {% endblock %}
+
+    {% block posts %}
       {% for entry in craft.entries.section('letters').limit(limit).find %}
         {{ m.post(entry) }}
       {% endfor %}
-      </ul>
-      <a href="#" id="load-more-content">Load More Content</a>
-    {% endblock %}
-
-    {% block right %}
-      {% include "_common/support" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
