@@ -4,8 +4,6 @@
 
 {% block main %}
   {% embed "_common/form" %}
-    {% from "_macro/form" import actionUrl, errorList, redirectTo %}
-
     {% block h2  %}
       Submit a Media Link
     {% endblock %}
@@ -13,13 +11,13 @@
     {% block form %}
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ redirectTo('media') }}">
+        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
+        <input type="hidden" name="redirect" value="{{ f.redirectTo('media') }}">
         <input type="hidden" name="sectionId" value="6">
         <input type="hidden" name="enabled" value="1">
 
         {% if entry is defined %}
-          {{ errorList(entry.getAllErrors) }}
+          {{ f.errorList(entry.getAllErrors) }}
         {% endif %}
         <br>
 
@@ -68,7 +66,7 @@
         <input type="text" name="fields[mediaLink][new1][fields][documentTitle]" class="media upload" value="{{ documentTitle }}" autocomplete="off" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
 
         {% if entry is defined %}
-          {{ errorList(errors) }}
+          {{ f.errorList(errors) }}
         {% endif %}
         <br>
 

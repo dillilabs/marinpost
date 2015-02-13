@@ -1,5 +1,3 @@
-{% from "_macro/form" import errorList %}
-
 {% set maxDocuments = 1 %}
 {% set documentsAdded = 0 %}
 {% set hideAddLink = false %}
@@ -41,7 +39,7 @@
     <br>
 
     {% if document %}
-      {{ errorList(document.allErrors) }}
+      {{ f.errorList(document.allErrors) }}
       <br>
     {% endif %}
 

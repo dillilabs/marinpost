@@ -3,16 +3,16 @@
 {% block main %}
   {% embed "_common/single" %}
     {% block post %}
-      {{ m.postTags(entry) }}
-      {{ m.postTitle(entry) }}
-      {{ m.postBy(entry) }}
+      {{ p.postTags(entry) }}
+      {{ p.postTitle(entry) }}
+      {{ p.postBy(entry) }}
       
-      <img src="{{ m.primaryImage(entry, 'hero') }}"/>
+      <img src="{{ p.primaryImage(entry, 'hero') }}"/>
 
       <p>{{ entry.blogContent }}</p>
 
-      {{ m.documents(entry.blogDocuments) }}
-      {{ m.otherImages(entry.blogImages) }}
+      {{ p.documents(entry.blogDocuments) }}
+      {{ p.otherImages(entry.blogImages) }}
 
       {% include "_common/disqus" %}
     {% endblock %}

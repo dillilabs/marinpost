@@ -4,8 +4,6 @@
 
 {% block main %}
   {% embed "_common/form" %}
-    {% from "_macro/form" import actionUrl, errorList, redirectTo %}
-
     {% block h2  %}
       Submit a News Link
     {% endblock %}
@@ -13,13 +11,13 @@
     {% block form %}
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ redirectTo('news') }}">
+        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
+        <input type="hidden" name="redirect" value="{{ f.redirectTo('news') }}">
         <input type="hidden" name="sectionId" value="2">
         <input type="hidden" name="enabled" value="1">
 
         {% if entry is defined %}
-          {{ errorList(entry.getAllErrors) }}
+          {{ f.errorList(entry.getAllErrors) }}
         {% endif %}
         <br>
 
@@ -30,7 +28,7 @@
         <label for="newsLink">News Link</label>
         <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
         {% if entry is defined %}
-          {{ errorList(entry.getErrors('newsLink')) }}
+          {{ f.errorList(entry.getErrors('newsLink')) }}
         {% endif %}
         <br>
 

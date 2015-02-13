@@ -1,6 +1,4 @@
-{% from "_macro/form" import categoryId, errorList %}
-
-{% set primaryLocationId = entry is defined ? categoryId(entry, "primaryLocation") : 0 %}
+{% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
 
 <br>
 <label for="primaryLocation">Location</label>
@@ -24,5 +22,5 @@
 </select>
 
 {% if entry is defined %}
-  {{ errorList(entry.getErrors('primaryLocation')) }}
+  {{ f.errorList(entry.getErrors('primaryLocation')) }}
 {% endif %}

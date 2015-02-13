@@ -2,8 +2,6 @@
 
 {% set title = "News Links" %}
 
-{% set limit = 2 %}{# TODO set higher after testing #}
-
 {% block main %}
   {% embed "_common/list" %}
     {% block h2 %}
@@ -11,8 +9,8 @@
     {% endblock %}
 
     {% block posts %}
-      {% for entry in craft.entries.section('news').limit(limit).find %}
-        {{ m.post(entry) }}
+      {% for entry in craft.entries.section('news').limit(perPage).find %}
+        {{ p.post(entry) }}
       {% endfor %}
     {% endblock %}
   {% endembed %}

@@ -2,8 +2,6 @@
 
 {% set title = "Letters" %}
 
-{% set limit = 3 %}{# TODO set higher after testing #}
-
 {% block main %}
   {% embed "_common/list" %}
     {% block subNav %}
@@ -14,8 +12,8 @@
     {% endblock %}
 
     {% block posts %}
-      {% for entry in craft.entries.section('letters').limit(limit).find %}
-        {{ m.post(entry) }}
+      {% for entry in craft.entries.section('letters').limit(perPage).find %}
+        {{ p.post(entry) }}
       {% endfor %}
     {% endblock %}
   {% endembed %}

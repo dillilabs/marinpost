@@ -1,8 +1,6 @@
-{% from "_macro/form" import categoryId, errorList %}
-
 <br>
 <label for="primaryTopic">Topic</label>
-{% set primaryTopicId = entry is defined ? categoryId(entry, "primaryTopic") : 0 %}
+{% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
 <select id="primaryTopic" name="fields[primaryTopic][]" class="array">
   <option value=""></option>
 {% for option in craft.categories.group('topics') %}
@@ -10,5 +8,5 @@
 {% endfor %}
 </select>
 {% if entry is defined %}
-  {{ errorList(entry.getErrors('primaryTopic')) }}
+  {{ f.errorList(entry.getErrors('primaryTopic')) }}
 {% endif %}

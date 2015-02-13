@@ -1,5 +1,3 @@
-{% from "_macro/form" import categoryId, errorList %}
-
 {% set maxTopics = 5 %}
 {% set topicsAdded = 0 %}
 {% set hideAddLink = false %}
@@ -37,7 +35,7 @@
     <br>
 
     {% if topic %}
-      {{ errorList(topic.allErrors) }}
+      {{ f.errorList(topic.allErrors) }}
       <br>
     {% endif %}
 

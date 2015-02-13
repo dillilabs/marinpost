@@ -1,5 +1,3 @@
-{% from "_macro/form" import categoryId, errorList %}
-
 {% set maxLocations = 5 %}
 {% set locationsAdded = 0 %}
 {% set hideAddLink = false %}
@@ -46,7 +44,7 @@
     <br>
 
     {% if location %}
-      {{ errorList(location.allErrors) }}
+      {{ f.errorList(location.allErrors) }}
       <br>
     {% endif %}
 

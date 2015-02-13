@@ -1,13 +1,13 @@
 {% extends "_common/layout" %}
 
-{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(11).find %}
+{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(10).find %}
 {% set featured = entries | first %}
 
 {% block main %}
   {% embed "_common/home" %}
     {% block featured %}
       {% if featured %}
-        {{ m.featuredPost(featured) }}
+        {{ p.featuredPost(featured) }}
       {% endif %}
     {% endblock %}
 
@@ -16,7 +16,7 @@
 
       <ul class="posts">
       {% for entry in entries | without(featured) %}
-        {{ m.post(entry, true) }}
+        {{ p.post(entry, true) }}
       {% endfor %}
       </ul>
 

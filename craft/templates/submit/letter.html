@@ -4,8 +4,6 @@
 
 {% block main %}
   {% embed "_common/form" %}
-    {% from "_macro/form" import actionUrl, errorList, redirectTo %}
-
     {% block h2  %}
       Submit a Letter
     {% endblock %}
@@ -13,8 +11,8 @@
     {% block form %}
       <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
         {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ redirectTo('letters') }}">
+        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
+        <input type="hidden" name="redirect" value="{{ f.redirectTo('letters') }}">
         <input type="hidden" name="sectionId" value="5">
 
         {% include "_form/title" %}
@@ -22,7 +20,7 @@
         <label for="letterContent">Letter</label>
         <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.letterContent }}{% endif -%} </textarea>
         {% if entry is defined %}
-          {{ errorList(entry.getErrors('letterContent')) }}
+          {{ f.errorList(entry.getErrors('letterContent')) }}
         {% endif %}
 
         <input type="submit" value="Submit Letter">
