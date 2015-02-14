@@ -25,24 +25,24 @@
     <div id="files" class="files"></div>
 </div>  
 
-<h3>(debug) policy</h3>
-{{ craft.marinpost.jsonS3Policy }}
-<p>
-<h3>assets</h3>
 {% set sourceId = 3 %}
+{% set updated = craft.marinpost.updateAssetIndex(sourceId) %}
+{{ updated | json_encode }}
+
+<h3>My Assets</h3>
+{% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
 <ul>
-{% for asset in craft.assets.sourceId(sourceId) %}
-<li>
-  <ul>
-    <li>{{ asset.filename }}</li>
-    <li>{{ asset.kind }}</li>
-    <li>{{ asset.size | filesize }}</li>
-    <li>{{ asset.url }}</li>
-    <li>{{ asset.source.name }}{{ asset.folder.path }}</li>
-  </ul>
-</li>
+{% for asset in craft.assets.folderId(folder.id) %}
+  <li>
+    <ul>
+      <li><a href="{{ asset.url }}" target="_blank">{{ asset.filename }}</a> {{ asset.size | filesize }} {{ asset.kind }}</li>
+    </ul>
+  </li>
 {% endfor %}
 </ul>
+
+<h3>(debug) policy</h3>
+{{ craft.marinpost.jsonS3Policy }}
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
 <script src="/js/jquery.ui.widget.js"></script>  
@@ -53,10 +53,10 @@
 $(function () {
     var $progress = $('#progress').find('.progress-bar');
     var url = 'https://{{ craft.marinpost.s3Bucket }}.s3.amazonaws.com/';
-    var userId = '{{ currentUser.id }}';
+    var s3Folder = '{{ craft.marinpost.s3FolderNameForCurrentUser }}';
 
     var s3Key = function(fileName) {
-        return userId + '/' + fileName;
+        return s3Folder + '/' + fileName;
     };
 
     var fileUploadAdd = function (e, data) { // debug
