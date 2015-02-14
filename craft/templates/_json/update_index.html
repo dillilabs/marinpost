@@ -1,0 +1,18 @@
+{% spaceless %}
+
+{% set sourceId = 3 %}
+
+{% set results = craft.marinpost.updateAssetIndex(sourceId) %}
+
+{% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
+
+{% set files = [] %}
+
+{% for asset in craft.assets.folderId(folder.id) %}
+  {% set files = files | merge([{ url: asset.url, filename: asset.filename, size: asset.size | filesize, kind: asset.kind }]) %}
+{% endfor %}
+
+{% set results = results | merge({ 'files': files }) %}
+
+{% endspaceless %}
+{{- results | json_encode | raw -}}

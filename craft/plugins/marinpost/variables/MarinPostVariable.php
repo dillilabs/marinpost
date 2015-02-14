@@ -107,25 +107,33 @@ class MarinPostVariable
      */
     public function updateAssetIndex($sourceId)
     {
+        $result = array();
+
         if (! craft()->userSession->isLoggedIn()) {
-            return null;
+            return $result;
         }
+
+        $start = new DateTime();
 
         $sessionId = craft()->assetIndexing->getIndexingSessionId();
 
-        $indexList = craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
+        $result['indexList'] = craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
 
-        $processed = array();
+        $result['filesIds'] = array();
 
-        if (empty($indexList['error']))
+        if (empty($result['indexList']['error']))
         {
-            for ($i = 0; $i < $indexList['total']; $i++)
+            for ($i = 0; $i < $result['indexList']['total']; $i++)
             {
-                $result = craft()->assetIndexing->processIndexForSource($sessionId, $i, $sourceId);
-                array_push($processed, $result);
+                $process = craft()->assetIndexing->processIndexForSource($sessionId, $i, $sourceId);
+                if (array_key_exists('result', $process)) {
+                    array_push($result['filesIds'], $process['result']);
+                }
             }
         }
 
-        return array('indexList' => $indexList, 'processed' => $processed);
+        $result['elapsedSeconds'] = (new DateTime())->diff($start)->format('%s');
+
+        return $result;
     }
 }

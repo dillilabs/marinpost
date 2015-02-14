@@ -26,17 +26,13 @@
 </div>  
 
 {% set sourceId = 3 %}
-{% set updated = craft.marinpost.updateAssetIndex(sourceId) %}
-{{ updated | json_encode }}
-
-<h3>My Assets</h3>
 {% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
-<ul>
+
+<h3>My Files <small>[ <a href="#" id="refresh">refresh</a> ]</small></h3>
+<ul id="my-files">
 {% for asset in craft.assets.folderId(folder.id) %}
   <li>
-    <ul>
-      <li><a href="{{ asset.url }}" target="_blank">{{ asset.filename }}</a> {{ asset.size | filesize }} {{ asset.kind }}</li>
-    </ul>
+      <a href="{{ asset.url }}" target="_blank">{{ asset.filename }}</a> {{ asset.size | filesize }} {{ asset.kind }}
   </li>
 {% endfor %}
 </ul>
@@ -92,6 +88,10 @@ $(function () {
         // return true;
     };
 
+    var myFile = function(file) {
+      return '<li><a href="'+file.url+'" target="_blank">'+file.filename+'</a> '+file.size+' '+file.kind+'</li>';
+    };
+
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
@@ -110,6 +110,21 @@ $(function () {
         .bind('fileuploadsubmit', fileUploadSubmit)
         .prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+    $('a#refresh').click(function(e) {
+        e.preventDefault();
+        var myFiles = $('ul#my-files');
+        myFiles.empty();
+
+        $.getJSON(
+            '/update-index',
+            function(data) {
+                $.each(data.files, function(index, file) {
+                  myFiles.append(myFile(file));
+                });
+            } 
+        );
+    });
 });
 </script>  
 </body>  
