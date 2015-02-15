@@ -24,9 +24,8 @@ return array(
         'useEmailAsUsername' => true,
     ),
     'dev' => array(
-//      'devMode' => true,
+        'devMode' => true,
         'siteUrl' => 'http://dev.marinpost.org',
-//      'testToEmailAddress' => 'stvpedersen@gmail.com',
     ),
     'live' => array(
         'siteUrl' => 'http://marinpost.org',

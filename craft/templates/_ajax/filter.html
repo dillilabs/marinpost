@@ -1,16 +1,30 @@
-{# Incrementally emit more entries
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{# Filter list of entries by one or more:
  #
- # Shares the same filtering logic with _filter.html FIXME
+ #  Locations
+ #
+ # and one or more:
+ #
+ #  Topics
+ #
+ # Each Location is OR-ed together and each Topic is OR-ed together, then both filters are AND-d.
+ #
+ # For example:
+ #
+ #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
  #}
 {% spaceless %}
 
 {% set section = craft.request.segments(2) %}
 
-{% set default_limit = 1 %}{# TODO for testing only #}
+{% set doDebug = false %}
+{% set debug = {} %}
 
 {% set locations = craft.request.getParam('locations') | split(',') %}
+{% set debug = debug | merge({ 'Locations': locations }) %}
 
 {% set topics = craft.request.getParam('topics') | split(',') %}
+{% set debug = debug | merge({ 'Topics': topics }) %}
 
 {% if locations|first is empty %}
     {% set locationEntries = craft.entries.section(section) %}
@@ -21,8 +35,12 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
+  {% set debug = debug | merge({ 'RelatedTo Locations': relatedTo }) %}
+
 	{% set locationEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
+
+{% set debug = debug | merge({ 'Number of Locations': locationEntries | length }) %}
 
 {% if topics|first is empty %}
 	{% set topicEntries = craft.entries.section(section) %}
@@ -33,8 +51,12 @@
 	    {% set relatedTo = relatedTo | merge([categoryId]) %}
 	{% endfor %}
 
+  {% set debug = debug | merge({ 'RelatedTo Topics': relatedTo }) %}
+
 	{% set topicEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
+
+{% set debug = debug | merge({ 'Number of Topics': topicEntries | length }) %}
 
 {% set entries = [] %}
 {% set topicEntryIds = topicEntries.ids %}
@@ -45,11 +67,21 @@
     {% endif %}
 {% endfor %}
 
+{% set debug = debug | merge({ 'Unlimited entries': entries | length }) %}
+
 {% set offset = craft.request.getParam('offset') | default(0) %}
 
-{% set limit = craft.request.getParam('limit') | default(default_limit) %}
+{% set limit = craft.request.getParam('limit') | default(2) %}
+
+{% set debug = debug | merge({ 'Offset': offset, 'Limit': limit }) %}
 
 {% set entries = entries[offset:limit] %}
+
+{% set debug = debug | merge({ 'Limited entries': entries | length }) %}
+
+{% if craft.config.devMode and doDebug %}
+  <li><small>{{ debug | json_encode }}</small></li>
+{% endif %}
 
 {% from "_macro/post" import post %}
 

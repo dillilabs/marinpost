@@ -173,24 +173,12 @@
 {% macro featuredPost(entry) %}
   {% from _self import postImage, postSummary, postTags %}
 
-  {% switch entry.section.handle %}
-    {% case 'media' %}
-      <div class="featured">
-        {{ postTags(entry, true) }}
-        {{ postSummary(entry) }}
-      </div>
-    {% case 'news' %}
-      <div class="featured">
-        {{ postTags(entry, true) }}
-        {{ postSummary(entry) }}
-      </div>
-    {% default %}
-      {{ postImage(entry, 'hero') }}
-      <div class="featured">
-        {{ postTags(entry, true) }}
-        {{ postSummary(entry) }}
-      </div>
-  {% endswitch %}
+  {{ postImage(entry, 'hero') }}
+
+  <div class="featured">
+    {{ postTags(entry, true) }}
+    {{ postSummary(entry) }}
+  </div>
 {% endmacro %}
 
 {% macro post(entry, unfiltered) %}

@@ -1,3 +1,4 @@
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
 {% spaceless %}
 
 {% set sourceId = 3 %}
@@ -14,5 +15,6 @@
 
 {% set results = results | merge({ 'files': files }) %}
 
+{{ results | json_encode | raw }}
+
 {% endspaceless %}
-{{- results | json_encode | raw -}}

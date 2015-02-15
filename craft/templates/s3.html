@@ -1,16 +1,12 @@
 {% requireLogin %}
 
-<!DOCTYPE HTML>  
-<html lang="en">  
-<head>  
-<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->  
-<meta charset="utf-8">  
-<title>jQuery File Upload Demo - Basic version</title>  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">  
-<link rel="stylesheet" href="/css/jquery.fileupload.css">  
-</head>  
-<body>  
+{% extends "_common/layout" %}
+
+{% includeCssFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" %}
+{% includeCssFile "/css/jquery.fileupload.css" %}
+
+{% block main %}
+
 <div class="container">  
     <h1>jQuery File Upload Demo</h1>
     <span class="btn btn-success fileinput-button">
@@ -37,15 +33,123 @@
 {% endfor %}
 </ul>
 
-<h3>(debug) policy</h3>
-{{ craft.marinpost.jsonS3Policy }}
+{% set entry = craft.entries.section('media').id(295).first %}
+{% set imageBlock = entry.mediaImages.nth(0) %}
+{% set imageId = imageBlock.id %}
+{% set image = imageBlock.image.first %}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>  
-<script src="/js/jquery.ui.widget.js"></script>  
-<script src="/js/jquery.iframe-transport.js"></script>  
-<script src="/js/jquery.fileupload.js"></script>  
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>  
-<script>  
+<h3>change image in media link: {{ entry.title }}</h3>
+<img src="{{ image.url('hero') }}">
+
+        {% if entry is defined %}
+          {{ f.errorList(entry.getAllErrors) }}
+        {% endif %}
+        <br>
+
+<form method="post" accept-charset="UTF-8">
+  {{ getCsrfInput() }}
+  <input type="hidden" name="action" value="entries/saveEntry">
+  <input type="hidden" name="redirect" value="{{ craft.request.url }}">
+  <input type="hidden" name="sectionId" value="6">
+  <input type="hidden" name="entryId" value="295">
+  <input type="hidden" name="enabled" value="1">
+  <input type="hidden" name="fields[mediaImages]">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][enabled]" value="1">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][type]" value="image">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][fields][by]" value="divine right">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][fields][disclaimer]">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][fields][disclaimer][]" value="Yes I have the right to use this image">
+  <input type="hidden" name="fields[mediaImages][{{ imageId }}][fields][image]">
+  <select id="entry-image" name="fields[mediaImages][{{ imageId }}][fields][image][]">
+    <option value=""></option>
+  {% for asset in craft.assets.folderId(folder.id) %}
+    <option value="{{ asset.id }}" {% if image.id == asset.id %}selected{% endif %}>{{ asset.filename }}</option>
+  {% endfor %}
+  </select>
+
+        {% include "_form/title" %}
+        <br>
+
+{% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
+<label for="primaryLocation">Location</label>
+<select id="primaryLocation" name="fields[primaryLocation][]" class="array">
+  <option value=""></option>
+{% set geographicGroup = false %}
+{% for option in craft.categories.group('locations') %}
+  {% if not (option.geographicGroup.label == geographicGroup) %}
+    {% set geographicGroup = option.geographicGroup.label %}
+    <option value="" disabled="disabled"></option>
+    <option value="" disabled="disabled">{{ geographicGroup }}</option>
+    <option value="" disabled="disabled"></option>
+  {% endif %}
+  <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
+{% endfor %}
+</select>
+<br>
+
+<label for="primaryTopic">Topic</label>
+{% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
+<select id="primaryTopic" name="fields[primaryTopic][]" class="array">
+  <option value=""></option>
+{% for option in craft.categories.group('topics') %}
+  <option value="{{ option.id }}" {%- if option.id == primaryTopicId %}selected{% endif %}>{{ option.title }}</option>
+{% endfor %}
+</select>
+
+<br>
+<label for="mediaLink">Media Link</label>
+
+  {% set media = entry.mediaLink.first %}
+  {% set mediaType = media.type %}
+  {% set mediaId = media.id %}
+  {% set documentUrl = null %}
+  {% set documentTitle = null %}
+
+  {% switch media.type %}
+    {% case 'video' %}
+      {% set videoUrl = media.videoUrl %}
+    {% case 'document' %}
+      {% set documentUrl = media.documentUrl %}
+    {% case 'upload' %}
+      {% set documentTitle = media.documentTitle %}
+  {% endswitch %}
+
+<input type="hidden" name="fields[mediaLink]">
+<input type="hidden" name="fields[mediaLink][{{ mediaId }}]">
+<input type="hidden" name="fields[mediaLink][{{ mediaId }}][type]" id="mediaType" value="{{ mediaType }}">
+
+<input type="radio" name="mediaType" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link to a video
+<input type="radio" name="mediaType" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
+<input type="radio" name="mediaType" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
+
+<input type="text" name="fields[mediaLink][{{ mediaId }}][fields][videoUrl]" class="media video" autocomplete="off" value="{{ videoUrl }}" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
+<br>
+
+<label for="linkComments">Link Comments</label>
+
+<textarea id="linkComments" name="fields[linkComments]" cols="60" rows="8"> {%- if entry is defined %}{{ entry.linkComments }}{% endif -%} </textarea>
+
+<br>
+  <input type="submit">
+</form>
+
+<h3>errors</h3>
+{{ f.errorList(entry.allErrors) }}
+{{ f.errorList(entry.primaryLocation) }}
+{{ f.errorList(entry.primaryTopic) }}
+{{ f.errorList(entry.mediaLink) }}
+{{ f.errorList(entry.allErrors) }}
+{{ f.errorList(entry.mediaImages.allErrors) }}
+{{ f.errorList(imageBlock.allErrors) }}
+
+{% endblock %}
+
+{% includeJsFile "/js/jquery.ui.widget.js" %}
+{% includeJsFile "/js/jquery.iframe-transport.js" %}
+{% includeJsFile "/js/jquery.fileupload.js" %}
+{% includeJsFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" %}
+
+{% set js %}
 $(function () {
     var $progress = $('#progress').find('.progress-bar');
     var url = 'https://{{ craft.marinpost.s3Bucket }}.s3.amazonaws.com/';
@@ -126,6 +230,6 @@ $(function () {
         );
     });
 });
-</script>  
-</body>  
-</html>
+{% endset %}
+
+{% includeJs js %}

@@ -1,0 +1,8 @@
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set tagGroup = 'location' %}
+
+{% include '_ajax/tags' %}
+
+{% endspaceless %}
