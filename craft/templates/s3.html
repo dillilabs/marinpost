@@ -223,6 +223,7 @@ $(function () {
         $.getJSON(
             '/update-index',
             function(data) {
+                console.log(data);
                 $.each(data.files, function(index, file) {
                   myFiles.append(myFile(file));
                 });

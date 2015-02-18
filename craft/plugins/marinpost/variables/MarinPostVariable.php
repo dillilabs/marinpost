@@ -136,4 +136,51 @@ class MarinPostVariable
 
         return $result;
     }
+
+    public function getIndexListForSource($sourceId)
+    {
+        $sessionId = craft()->assetIndexing->getIndexingSessionId();
+
+        craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
+
+        return $sessionId;
+    }
+
+    public function getAssetIndexRecordByUri($sourceId, $sessionId, $uri)
+    {
+        $record = AssetIndexDataRecord::model()->findByAttributes(
+            array(
+                'sourceId' => $sourceId,
+                'sessionId' => $sessionId,
+                'uri' => $uri
+            )
+        );
+
+        if ($record)
+        {
+            return AssetIndexDataModel::populateModel($record);
+        }
+
+        return false;
+    }
+
+    public function processIndexForSource($sessionId, $offset, $sourceId)
+    {
+        craft()->assetIndexing->processIndexForSource($sessionId, $offset, $sourceId);
+    }
+
+    public function updateIndexForUri($sourceId, $uri)
+    {
+        $sessionId = $this->getIndexListForSource($sourceId);
+
+        $record = $this->getAssetIndexRecordByUri($sourceId, $sessionId, $uri);
+
+        if ($record)
+        {
+            $this->processIndexForSource($sessionId, $record->offset, $sourceId);
+            return true;
+        }
+
+        return false;
+    }
 }
