@@ -3,13 +3,11 @@
 
 {% set sourceId = 3 %}
 
-{% set filename = craft.request.param('filename') %}
+{% set filenames = craft.request.param('filenames') %}
 
-{% set uri = currentUser.id ~ '/' ~ filename %}
+{% set updated = craft.marinpost.updateAssetIndexForFilenames(sourceId, filenames) %}
 
-{% set updated = craft.marinpost.updateIndexForUri(sourceId, uri) %}
-
-{% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
+{% set folder = craft.marinpost.s3FolderId(sourceId) %}
 
 {% set files = [] %}
 
@@ -17,7 +15,7 @@
   {% set files = files | merge([{ id: asset.id, url: asset.url, filename: asset.filename, size: asset.size | filesize, kind: asset.kind }]) %}
 {% endfor %}
 
-{% set results = { 'uri': uri, 'updated': updated, 'files': files } %}
+{% set results = { 'filenames': filenames, 'updated': updated, 'files': files } %}
 
 {{ results | json_encode | raw }}
 

@@ -8,8 +8,8 @@ require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
 class MarinPostVariable
 {
 
-    private $postObject;
-    private $form;
+    private $s3PostObject;
+    private $s3Form;
 
     function __construct()
     {
@@ -21,9 +21,7 @@ class MarinPostVariable
             )
         );
 
-        $this->s3Bucket = 'marinpost';
-
-        $this->postObject = new \Aws\S3\Model\PostObject(
+        $this->s3PostObject = new \Aws\S3\Model\PostObject(
             $s3,
             S3_BUCKET,
             array(
@@ -31,7 +29,7 @@ class MarinPostVariable
             )
         );
 
-        $this->form = $this->postObject->prepareData()->getFormInputs();
+        $this->s3Form = $this->s3PostObject->prepareData()->getFormInputs();
     }
 
     /* Return AWS Access Key ID for direct upload to S3
@@ -52,14 +50,14 @@ class MarinPostVariable
      */
     public function s3Policy($optional = null)
     {
-        return $this->form['policy'];
+        return $this->s3Form['policy'];
     }
 
     /* Return AWS signature for direct upload to S3
      */
     public function awsSignature($optional = null)
     {
-        return $this->form['signature'];
+        return $this->s3Form['signature'];
     }
 
     // not currently used
@@ -71,31 +69,59 @@ class MarinPostVariable
     // debug only
     public function jsonS3Policy($optional = null)
     {
-        return $this->postObject->getJsonPolicy();
+        return $this->s3PostObject->getJsonPolicy();
     }
 
-    /* Return virtual sub-directory on S3 for the current user
+    /* Return id of current user
      */
-    public function s3FolderNameForCurrentUser()
+    public function currentUserId()
     {
         return craft()->userSession->isLoggedIn() ? craft()->userSession->id : null;
     }
 
-    /* Return Asset folder for current user's virtual sub-directory on S3
+    /* Return id of asset folder for current user's virtual sub-directory on S3
      */
-    public function s3FolderForCurrentUser($assetSourceId)
+    public function s3FolderId($assetSourceId)
     {
-        $folder = null;
-
-        if (craft()->userSession->isLoggedIn()) {
-            $folder = craft()->assets->findFolder([
+        if ($userId = $this->currentUserId())
+        {
+            return craft()->assets->findFolder([
                 'sourceId' => $assetSourceId,
-                'name' => $userId = craft()->userSession->id
+                'name' => $userId
             ]);
         }
 
-        return $folder;
+        return null;
     }
+
+    /* Update Asset index for given source and array of filenames
+     */
+    public function updateAssetIndexForFilenames($sourceId, $filenames = array())
+    {
+        $userId = $this->currentUserId();
+
+        $sessionId = $this->getIndexListForSource($sourceId);
+
+        $updated = 0;
+
+        foreach ($filenames as $filename) {
+            $uri = $this->s3UriForFilename($filename);
+
+            $model = $this->getAssetIndexDataModelByUri($sourceId, $sessionId, $uri);
+
+            if ($model)
+            {
+                $this->processIndexForSource($sessionId, $model->offset, $sourceId);
+                $updated += 1;
+            }
+        }
+
+        return $updated;
+    }
+
+    /* 
+     * Private functions
+     */
 
     private function getIndexListForSource($sourceId)
     {
@@ -106,7 +132,14 @@ class MarinPostVariable
         return $sessionId;
     }
 
-    private function getAssetIndexRecordByUri($sourceId, $sessionId, $uri)
+    private function s3UriForFilename($filename)
+    {
+        $userId = $this->currentUserId();
+
+        return "$userId/$filename";
+    }
+
+    private function getAssetIndexDataModelByUri($sourceId, $sessionId, $uri)
     {
         $record = AssetIndexDataRecord::model()->findByAttributes(
             array(
@@ -127,20 +160,5 @@ class MarinPostVariable
     private function processIndexForSource($sessionId, $offset, $sourceId)
     {
         craft()->assetIndexing->processIndexForSource($sessionId, $offset, $sourceId);
-    }
-
-    public function updateIndexForUri($sourceId, $uri)
-    {
-        $sessionId = $this->getIndexListForSource($sourceId);
-
-        $record = $this->getAssetIndexRecordByUri($sourceId, $sessionId, $uri);
-
-        if ($record)
-        {
-            $this->processIndexForSource($sessionId, $record->offset, $sourceId);
-            return true;
-        }
-
-        return false;
     }
 }

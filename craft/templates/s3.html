@@ -18,11 +18,13 @@
     <div id="progress" class="progress">
         <div class="progress-bar progress-bar-success"></div>
     </div>
-    <div id="files" class="files"></div>
 </div>  
 
+<h3>policy</h3>
+<pre> {{ craft.marinpost.jsonS3Policy }} </pre>
+
 {% set sourceId = 3 %}
-{% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
+{% set folder = craft.marinpost.s3FolderId(sourceId) %}
 
 {% set entry = craft.entries.section('media').id(295).first %}
 {% set imageBlock = entry.mediaImages.nth(0) %}
@@ -32,9 +34,9 @@
 <h3>change image in media link: {{ entry.title }}</h3>
 <img src="{{ image.url('hero') }}">
 
-        {% if entry is defined %}
-          {{ f.errorList(entry.getAllErrors) }}
-        {% endif %}
+{% if entry is defined %}
+  {{ f.errorList(entry.getAllErrors) }}
+{% endif %}
         <br>
 
 <form method="post" accept-charset="UTF-8">
@@ -58,8 +60,8 @@
   {% endfor %}
   </select>
 
-        {% include "_form/title" %}
-        <br>
+  {% include "_form/title" %}
+  <br>
 
 {% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
 <label for="primaryLocation">Location</label>
@@ -142,9 +144,9 @@
 
 {% set js %}
 $(function () {
-    var $progress = $('#progress').find('.progress-bar');
     var url = 'https://{{ craft.marinpost.s3Bucket }}.s3.amazonaws.com/';
-    var s3Folder = '{{ craft.marinpost.s3FolderNameForCurrentUser }}';
+    var s3Folder = '{{ craft.marinpost.currentUserId }}';
+    var progressBar = $('#progress').find('.progress-bar');
 
     var s3Key = function(fileName) {
         return s3Folder + '/' + fileName;
@@ -179,28 +181,43 @@ $(function () {
         };
 
         console.log('fileUploadSubmit()', data);
-        
         // return true;
     };
 
-    var updateIndexForFile = function(file) {
-        console.log('update index for file', file);
+    var addFileToSelect = function(fileSelect, selectedFileId, file) {
+          var selected = file.id == selectedFileId ? 'selected' : '';
+          fileSelect.append('<option value="'+file.id+'" '+selected+'>'+file.filename+'</option>');
+    };
+
+    var refreshFileSelect = function(files) {
+          console.log('refresh file select', files);
+          var fileSelect = $('select#entry-image');
+          var selectedFileId = fileSelect.children(':selected').val();
+          fileSelect.children().remove();
+          fileSelect.append('<option value=""></option>');
+          $.each(files, function(index, file) {
+              addFileToSelect(fileSelect, selectedFileId, file);
+          });
+    };
+
+    var updateIndexForFiles = function(files) {
+        var data = {};
+
+        $.each(files, function(i, e) {
+            var key = 'filenames['+i+']';
+            data[key] = e.name;
+        });
+
+        console.log('update index for files', files, data);
+
         $.ajax({
             type: 'POST',
             url: '/update-and-return-index',
-            data: { 'filename': file.name },
+            data: data,
             dataType: 'json'
         }).done(function(data) {
               console.log('update and return index: done', data);
-              var fileSelect = $('select#entry-image');
-              var selectedFileId = fileSelect.children(':selected').val();
-              var selected;
-              fileSelect.children().remove();
-              fileSelect.append('<option value=""></option>');
-              $.each(data.files, function(index, file) {
-                  selected = file.id == selectedFileId ? 'selected' : '';
-                  fileSelect.append('<option value="'+file.id+'" '+selected+'>'+file.filename+'</option>');
-              });
+              refreshFileSelect(data.files);
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log('update and return index: fail', textStatus, errorThrown);
         });
@@ -209,22 +226,26 @@ $(function () {
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
-        done: function (e, data) {
-            console.log('done()', data);
-            $.each(data.files, function (index, file) {
-                $('<p/>').text(s3Key(file.name)).appendTo('#files');
-                updateIndexForFile(file);
-            });
-        },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
-            $progress.css('width', progress + '%');
+            progressBar.css('width', progress + '%');
+        },
+        done: function(e, data) {
+            console.log('fileupload done', data);
+            updateIndexForFiles(data.files);
+        },
+        fail: function(e, data) {
+            console.log('fileupload fail', data);
         }
-    })
-        .bind('fileuploadadd', fileUploadAdd)
-        .bind('fileuploadsubmit', fileUploadSubmit)
-        .prop('disabled', !$.support.fileInput)
-        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    }).bind(
+        'fileuploadadd', fileUploadAdd
+    ).bind(
+        'fileuploadsubmit', fileUploadSubmit
+    ).prop(
+        'disabled', !$.support.fileInput
+    ).parent().addClass(
+        $.support.fileInput ? undefined : 'disabled'
+    );
 });
 {% endset %}
 
