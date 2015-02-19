@@ -1,0 +1,24 @@
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set sourceId = 3 %}
+
+{% set filename = craft.request.param('filename') %}
+
+{% set uri = currentUser.id ~ '/' ~ filename %}
+
+{% set updated = craft.marinpost.updateIndexForUri(sourceId, uri) %}
+
+{% set folder = craft.marinpost.s3FolderForCurrentUser(sourceId) %}
+
+{% set files = [] %}
+
+{% for asset in craft.assets.folderId(folder.id) %}
+  {% set files = files | merge([{ id: asset.id, url: asset.url, filename: asset.filename, size: asset.size | filesize, kind: asset.kind }]) %}
+{% endfor %}
+
+{% set results = { 'uri': uri, 'updated': updated, 'files': files } %}
+
+{{ results | json_encode | raw }}
+
+{% endspaceless %}

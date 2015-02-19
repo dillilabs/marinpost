@@ -97,47 +97,7 @@ class MarinPostVariable
         return $folder;
     }
 
-    /* Update index for S3 Asset source
-     *
-     * Need to do this asynchronously after one or more files are uploaded direct to S3.
-     * Somehow...
-     *
-     * Would be good to only process index for new files. But how?
-     * The offset (of the S3 assets) is via alphabetic sort order, rather than upload date.
-     */
-    public function updateAssetIndex($sourceId)
-    {
-        $result = array();
-
-        if (! craft()->userSession->isLoggedIn()) {
-            return $result;
-        }
-
-        $start = new DateTime();
-
-        $sessionId = craft()->assetIndexing->getIndexingSessionId();
-
-        $result['indexList'] = craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
-
-        $result['filesIds'] = array();
-
-        if (empty($result['indexList']['error']))
-        {
-            for ($i = 0; $i < $result['indexList']['total']; $i++)
-            {
-                $process = craft()->assetIndexing->processIndexForSource($sessionId, $i, $sourceId);
-                if (array_key_exists('result', $process)) {
-                    array_push($result['filesIds'], $process['result']);
-                }
-            }
-        }
-
-        $result['elapsedSeconds'] = (new DateTime())->diff($start)->format('%s');
-
-        return $result;
-    }
-
-    public function getIndexListForSource($sourceId)
+    private function getIndexListForSource($sourceId)
     {
         $sessionId = craft()->assetIndexing->getIndexingSessionId();
 
@@ -146,7 +106,7 @@ class MarinPostVariable
         return $sessionId;
     }
 
-    public function getAssetIndexRecordByUri($sourceId, $sessionId, $uri)
+    private function getAssetIndexRecordByUri($sourceId, $sessionId, $uri)
     {
         $record = AssetIndexDataRecord::model()->findByAttributes(
             array(
@@ -164,7 +124,7 @@ class MarinPostVariable
         return false;
     }
 
-    public function processIndexForSource($sessionId, $offset, $sourceId)
+    private function processIndexForSource($sessionId, $offset, $sourceId)
     {
         craft()->assetIndexing->processIndexForSource($sessionId, $offset, $sourceId);
     }
