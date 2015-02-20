@@ -200,15 +200,15 @@ $(function () {
           });
     };
 
-    var updateIndexForFiles = function(files) {
+    var updateIndexForFiles = function(filenames) {
         var data = {};
 
-        $.each(files, function(i, e) {
+        $.each(filenames, function(i, e) {
             var key = 'filenames['+i+']';
-            data[key] = e.name;
+            data[key] = e;
         });
 
-        console.log('update index for files', files, data);
+        console.log('update index for files', filenames, data);
 
         $.ajax({
             type: 'POST',
@@ -223,19 +223,32 @@ $(function () {
         });
     };
 
+    var filenames = [];
+
     $('#fileupload').fileupload({
         url: url,
         dataType: 'json',
+        start: function(e) {
+            filenames = [];
+            console.log('fileupload start', filenames);
+        },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             progressBar.css('width', progress + '%');
         },
         done: function(e, data) {
-            console.log('fileupload done', data);
-            updateIndexForFiles(data.files);
+            $.each(data.files, function(i, e) {
+                filenames.push(e.name);
+            });
+            console.log('fileupload done', data, filenames);
+            // updateIndexForFiles(data.files);
         },
         fail: function(e, data) {
             console.log('fileupload fail', data);
+        },
+        stop: function(e) {
+            console.log('fileupload stop', filenames);
+            updateIndexForFiles(filenames);
         }
     }).bind(
         'fileuploadadd', fileUploadAdd
