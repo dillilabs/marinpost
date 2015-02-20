@@ -171,13 +171,11 @@ $(function () {
 
         data.formData = {
             key: s3Key(file.name),
+            'Content-Type': file.type,
             acl: 'public-read',
-            AWSAccessKeyId: "{{ craft.marinpost.awsAccessKey }}",
             policy: "{{ craft.marinpost.s3Policy }}",
             signature: "{{ craft.marinpost.awsSignature }}",
-            // <Code>AccessDenied</Code>
-            // <Message>Invalid according to Policy: Extra input fields: content-type</Message>
-            // 'Content-Type': file.type,
+            AWSAccessKeyId: "{{ craft.marinpost.awsAccessKey }}",
         };
 
         console.log('fileUploadSubmit()', data);

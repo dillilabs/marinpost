@@ -21,13 +21,20 @@ class MarinPostVariable
             )
         );
 
+        // add Content-Type to default policy of:
+        // {"expiration":"2015-02-20T05:08:34Z","conditions":[{"bucket":"marinpost"},{"acl":"public-read"},["starts-with","$key",""]]}
         $this->s3PostObject = new \Aws\S3\Model\PostObject(
             $s3,
             S3_BUCKET,
             array(
-                'acl' => 'public-read'
+                'acl' => 'public-read',
+                'policy_callback' => function($policy) {
+                        array_push($policy['conditions'], array('starts-with', '$Content-Type', ''));
+                        return $policy;
+                }
             )
         );
+        
 
         $this->s3Form = $this->s3PostObject->prepareData()->getFormInputs();
     }
@@ -43,7 +50,7 @@ class MarinPostVariable
      */
     public function s3Bucket($optional = null)
     {
-        return S3_BUCKET;
+        return $this->s3PostObject->getBucket();
     }
 
     /* Return AWS S3 policy for direct upload to S3
