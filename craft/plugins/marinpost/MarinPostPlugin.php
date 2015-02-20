@@ -3,11 +3,10 @@ namespace Craft;
 
 class MarinPostPlugin extends BasePlugin
 {
-    /* Plugin initialization:
+    /**
      *
-     *  if saveUser event
-     *      if ControlPanel
-     *          include Javascript
+     * Initialization
+     *
      */
     public function init()
     {
@@ -20,11 +19,13 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /* Hook to modify columns included in Control Panel entry list:
+    //
+    // Hooks
+    //
+
+    /**
      *
-     *  entry.dateCreated
-     *
-     *  entry.author
+     * Modify columns included in Control Panel entry list.
      *
      */
     public function modifyEntryTableAttributes(&$attributes, $source)
@@ -33,9 +34,9 @@ class MarinPostPlugin extends BasePlugin
         $attributes['author'] = Craft::t('Author');
     }
 
-    /* Hook to display of columns in Control Panel entry list:
+    /**
      *
-     *  entry.author
+     * Display of columns in Control Panel entry list.
      *
      */
     public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
@@ -46,11 +47,9 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /* Hook to modify sort by columns in Control Panel entry list:
+    /**
      *
-     *  entry.dateCreated
-     *
-     *  entry.author
+     * Modify sort by columns in Control Panel entry list.
      *
      */
     public function modifyEntrySortableAttributes(&$attributes)
@@ -59,28 +58,41 @@ class MarinPostPlugin extends BasePlugin
         // $attributes['author'] = Craft::t('Author');
     }
 
-    /* Private functions
-     */
+    //
+    // Private functions
+    //
 
-    /* Return true if control panel
+    /**
+     *
+     * Return true if control panel
+     *
      */
     private function _isCp() {
         return craft()->request->isCpRequest();
     }
 
-    /* Return true if logged-in.
+    /**
+     *
+     * Return true if logged-in.
+     *
      */
     private function _isLoggedIn() {
         return craft()->userSession->isLoggedIn();
     }
 
-    /* Return true if logged-in admin user.
+    /**
+     *
+     * Return true if logged-in admin user.
+     *
      */
     private function _isAdmin() {
         return $this->_isLoggedIn() && craft()->userSession->user->admin;
     }
 
-    /* Respond to the users.onSaveUser event.
+    /**
+     *
+     * Respond to the users.onSaveUser event.
+     *
      */
     private function _onSaveUserEvent()
     {
@@ -95,7 +107,9 @@ class MarinPostPlugin extends BasePlugin
         });
     }
 
-    /* Keep {first,last}Name fields synchronized with name{First,Last} fields.
+    /**
+     *
+     * Keep {first,last}Name fields synchronized with name{First,Last} fields.
      *
      *  The former fields are:
      *
@@ -108,6 +122,7 @@ class MarinPostPlugin extends BasePlugin
      *      custom
      *      required
      *      editable in Profile tab
+     *
      */
     private function _syncUserName($user) {
         if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
@@ -118,7 +133,10 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /* Clean up dashboard of non-admin User.
+    /**
+     *
+     * Clean up dashboard of non-admin User.
+     *
      */
     private function _removeUserDashboardWidgets($user) {
         foreach (craft()->dashboard->userWidgets as $widget) {
@@ -129,7 +147,9 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /* Add Javascript to the Control Panel:
+    /**
+     *
+     * Add Javascript to the Control Panel:
      *
      *  For all Users:
      *
@@ -140,6 +160,7 @@ class MarinPostPlugin extends BasePlugin
      *      Remove Photo and Bio fields on My Account Profile tab
      *
      *      Remove Dashboard settings link
+     *
      */
     private function _includeJs() {
         $js = <<<'JS'
@@ -157,17 +178,39 @@ JS;
         craft()->templates->includeJs($js);
     }
 
-    /* Boilerplate functions
-     */
+    //
+    // Settings
+    //
+
+    protected function defineSettings()
+    {
+        return array(
+            'awsAccessKeyId' => array(AttributeType::String),
+            'awsSecretAccessKey' => array(AttributeType::String),
+            's3Region' => array(AttributeType::String),
+            's3Bucket' => array(AttributeType::String),
+        );
+    }
+
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('marinpost/_settings', array(
+            'settings' => $this->getSettings(),
+        ));
+    }
+
+    //
+    // Boilerplate
+    //
 
     public function getName()
     {
-        return 'MarinPost';
+        return 'Marin Post';
     }
 
     public function getVersion()
     {
-        return '0.0.10';
+        return '0.0.11';
     }
 
     public function getDeveloper()

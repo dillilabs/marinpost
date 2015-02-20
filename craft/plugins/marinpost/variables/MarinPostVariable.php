@@ -1,171 +1,46 @@
 <?php
 namespace Craft;
 
-require CRAFT_PLUGINS_PATH.'/marinpost/config.php';
-
-require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
-
 class MarinPostVariable
 {
 
-    private $s3PostObject;
-    private $s3Form;
-
-    function __construct()
+    public function awsAccessKeyId()
     {
-        $s3 = \Aws\S3\S3Client::factory(
-            array(
-                'key' => AWS_ACCESS_KEY_ID,
-                'secret' => AWS_SECRET_ACCESS_KEY,
-                'region' => S3_REGION
-            )
-        );
-
-        // add Content-Type to default policy of:
-        // {"expiration":"2015-02-20T05:08:34Z","conditions":[{"bucket":"marinpost"},{"acl":"public-read"},["starts-with","$key",""]]}
-        $this->s3PostObject = new \Aws\S3\Model\PostObject(
-            $s3,
-            S3_BUCKET,
-            array(
-                'acl' => 'public-read',
-                'policy_callback' => function($policy) {
-                        array_push($policy['conditions'], array('starts-with', '$Content-Type', ''));
-                        return $policy;
-                }
-            )
-        );
-        
-
-        $this->s3Form = $this->s3PostObject->prepareData()->getFormInputs();
+        return craft()->marinPost->awsAccessKeyId();
     }
 
-    /* Return AWS Access Key ID for direct upload to S3
-     */
-    public function awsAccessKey($optional = null)
+    public function s3Bucket()
     {
-        return AWS_ACCESS_KEY_ID;
+        return craft()->marinPost->s3Bucket();
     }
 
-    /* Return AWS S3 bucket for direct upload to S3
-     */
-    public function s3Bucket($optional = null)
+    public function s3Policy()
     {
-        return $this->s3PostObject->getBucket();
+        return craft()->marinPost->s3Policy();
     }
 
-    /* Return AWS S3 policy for direct upload to S3
-     */
-    public function s3Policy($optional = null)
+    public function s3Signature()
     {
-        return $this->s3Form['policy'];
+        return craft()->marinPost->s3Signature();
     }
 
-    /* Return AWS signature for direct upload to S3
-     */
-    public function awsSignature($optional = null)
+    public function s3PolicyJson()
     {
-        return $this->s3Form['signature'];
+        return craft()->marinPost->s3PolicyJson();
     }
 
-    // not currently used
-    public function uniqid($optional = null)
+    public function s3FolderId($sourceId)
     {
-        return uniqid();
+        return craft()->marinPost->s3FolderId($sourceId);
     }
 
-    // debug only
-    public function jsonS3Policy($optional = null)
-    {
-        return $this->s3PostObject->getJsonPolicy();
-    }
-
-    /* Return id of current user
-     */
-    public function currentUserId()
-    {
-        return craft()->userSession->isLoggedIn() ? craft()->userSession->id : null;
-    }
-
-    /* Return id of asset folder for current user's virtual sub-directory on S3
-     */
-    public function s3FolderId($assetSourceId)
-    {
-        if ($userId = $this->currentUserId())
-        {
-            return craft()->assets->findFolder([
-                'sourceId' => $assetSourceId,
-                'name' => $userId
-            ]);
-        }
-
-        return null;
-    }
-
-    /* Update Asset index for given source and array of filenames
-     */
     public function updateAssetIndexForFilenames($sourceId, $filenames = array())
     {
-        $userId = $this->currentUserId();
-
-        $sessionId = $this->getIndexListForSource($sourceId);
-
-        $updated = 0;
-
-        foreach ($filenames as $filename) {
-            $uri = $this->s3UriForFilename($filename);
-
-            $model = $this->getAssetIndexDataModelByUri($sourceId, $sessionId, $uri);
-
-            if ($model)
-            {
-                $this->processIndexForSource($sessionId, $model->offset, $sourceId);
-                $updated += 1;
-            }
-        }
-
-        return $updated;
+        return craft()->marinPost->updateAssetIndexForFilenames($sourceId, $filenames);
     }
 
-    /* 
-     * Private functions
-     */
-
-    private function getIndexListForSource($sourceId)
+    public function currentUserId()
     {
-        $sessionId = craft()->assetIndexing->getIndexingSessionId();
-
-        craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
-
-        return $sessionId;
-    }
-
-    private function s3UriForFilename($filename)
-    {
-        $userId = $this->currentUserId();
-
-        return "$userId/$filename";
-    }
-
-    private function getAssetIndexDataModelByUri($sourceId, $sessionId, $uri)
-    {
-        $record = AssetIndexDataRecord::model()->findByAttributes(
-            array(
-                'sourceId' => $sourceId,
-                'sessionId' => $sessionId,
-                'uri' => $uri
-            )
-        );
-
-        if ($record)
-        {
-            return AssetIndexDataModel::populateModel($record);
-        }
-
-        return false;
-    }
-
-    private function processIndexForSource($sessionId, $offset, $sourceId)
-    {
-        craft()->assetIndexing->processIndexForSource($sessionId, $offset, $sourceId);
+        return craft()->marinPost->currentUserId();
     }
 }

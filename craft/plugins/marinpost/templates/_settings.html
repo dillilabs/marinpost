@@ -1,0 +1,35 @@
+{% import '_includes/forms' as forms %}
+
+<p style="font-weight:bold">AWS Settings</p>
+
+{{ forms.textField({
+	label: "AWS Access Key ID"|t,
+	instructions: "Enter your AWS Access Key ID"|t,
+	id: 'awsAccessKeyId',
+	name: 'awsAccessKeyId',
+	value: settings.awsAccessKeyId,
+}) }}
+
+{{ forms.textField({
+	label: "AWS Secret Access Key"|t,
+	instructions: "Enter your AWS Secret Access Key"|t,
+	id: 'awsSecretAccessKey',
+	name: 'awsSecretAccessKey',
+	value: settings.awsSecretAccessKey,
+}) }}
+
+{{ forms.textField({
+	label: "S3 Region"|t,
+	instructions: "Enter your S3 Region"|t,
+	id: 's3Region',
+	name: 's3Region',
+	value: settings.s3Region,
+}) }}
+
+{{ forms.textField({
+	label: "S3 Bucket"|t,
+	instructions: "Enter your S3 Bucket"|t,
+	id: 's3Bucket',
+	name: 's3Bucket',
+	value: settings.s3Bucket,
+}) }}

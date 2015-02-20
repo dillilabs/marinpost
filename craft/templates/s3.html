@@ -21,7 +21,7 @@
 </div>  
 
 <h3>policy</h3>
-<pre> {{ craft.marinpost.jsonS3Policy }} </pre>
+<pre> {{ craft.marinpost.s3PolicyJson }} </pre>
 
 {% set sourceId = 3 %}
 {% set folder = craft.marinpost.s3FolderId(sourceId) %}
@@ -152,20 +152,6 @@ $(function () {
         return s3Folder + '/' + fileName;
     };
 
-    var fileUploadAdd = function (e, data) { // debug
-        // default functionality
-        if (data.autoUpload || (data.autoUpload !== false && $(this).fileupload('option', 'autoUpload'))) {
-            $.each(data.files, function (index, file) {
-                console.log('Added file: ' + file.name);
-            });
-
-            // default functionality
-            data.process().done(function () {
-                data.submit();
-            });
-        }
-    }; 
-
     var fileUploadSubmit = function(e, data) {
         var file = data.files[0];
 
@@ -174,8 +160,8 @@ $(function () {
             'Content-Type': file.type,
             acl: 'public-read',
             policy: "{{ craft.marinpost.s3Policy }}",
-            signature: "{{ craft.marinpost.awsSignature }}",
-            AWSAccessKeyId: "{{ craft.marinpost.awsAccessKey }}",
+            signature: "{{ craft.marinpost.s3Signature }}",
+            AWSAccessKeyId: "{{ craft.marinpost.awsAccessKeyId }}",
         };
 
         console.log('fileUploadSubmit()', data);
@@ -249,8 +235,6 @@ $(function () {
             updateIndexForFiles(filenames);
         }
     }).bind(
-        'fileuploadadd', fileUploadAdd
-    ).bind(
         'fileuploadsubmit', fileUploadSubmit
     ).prop(
         'disabled', !$.support.fileInput

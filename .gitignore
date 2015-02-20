@@ -1,7 +1,6 @@
 craft/config/db.php
 craft/config/license.key
 
-craft/plugins/marinpost/config.php
 craft/plugins/marinpost/vendor
 
 craft/storage/*
