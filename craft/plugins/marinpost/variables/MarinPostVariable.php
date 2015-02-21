@@ -29,9 +29,9 @@ class MarinPostVariable
         return craft()->marinPost->s3PolicyJson();
     }
 
-    public function s3FolderId($sourceId)
+    public function s3Folder($sourceId)
     {
-        return craft()->marinPost->s3FolderId($sourceId);
+        return craft()->marinPost->s3Folder($sourceId);
     }
 
     public function updateAssetIndexForFilenames($sourceId, $filenames = array())

@@ -24,7 +24,7 @@
 <pre> {{ craft.marinpost.s3PolicyJson }} </pre>
 
 {% set sourceId = 3 %}
-{% set folder = craft.marinpost.s3FolderId(sourceId) %}
+{% set folder = craft.marinpost.s3Folder(sourceId) %}
 
 {% set entry = craft.entries.section('media').id(295).first %}
 {% set imageBlock = entry.mediaImages.nth(0) %}
@@ -185,7 +185,7 @@ $(function () {
     };
 
     var updateIndexForFiles = function(filenames) {
-        var data = {};
+        var data = { 'sourceid': 3 };
 
         $.each(filenames, function(i, e) {
             var key = 'filenames['+i+']';
@@ -196,7 +196,7 @@ $(function () {
 
         $.ajax({
             type: 'POST',
-            url: '/update-and-return-index',
+            url: '/actions/marinPost/updatedIndex',
             data: data,
             dataType: 'json'
         }).done(function(data) {

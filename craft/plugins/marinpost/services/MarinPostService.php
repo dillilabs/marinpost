@@ -72,15 +72,19 @@ class MarinPostService extends BaseApplicationComponent
     }
 
     /**
-     * Return id of asset folder for current user's virtual sub-directory on S3
+     *
+     * Return assets folder for current user's virtual sub-directory on S3
+     *
      */
-    public function s3FolderId($sourceId)
+    public function s3Folder($sourceId)
     {
         if ($userId = $this->currentUserId())
         {
+            $name = $userId;
+
             return craft()->assets->findFolder([
                 'sourceId' => $sourceId,
-                'name' => $userId
+                'name' => $name
             ]);
         }
 
@@ -88,7 +92,9 @@ class MarinPostService extends BaseApplicationComponent
     }
 
     /**
+     *
      * Update Asset index for given source and array of filenames
+     *
      */
     public function updateAssetIndexForFilenames($sourceId, $filenames = array())
     {
