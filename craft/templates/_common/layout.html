@@ -21,6 +21,9 @@
   {% includeCssFile "/css/jquery-ui.min.css" %}
   {% includeCssFile "/css/jquery-ui.structure.min.css" %}
   {% includeCssFile "/css/jquery-ui.theme.min.css" %}
+<!--[if lt IE 9]>
+  {% includeJsFile "/js/modernizr-2.6.2-respond-1.1.0.min.js" %}
+<![endif]--> <!-- Modernizr with media queries and HTML5shiv for only IE lt 9 -->
 </head>
 <body class="{{ craft.request.lastSegment | default('home') }}">
   <header>
@@ -60,6 +63,18 @@
     </ul>
   </section>
 
+  {% include "_common/support" %}
+
+  {% block main %}
+  {% endblock %}
+
+  <div class="sidebar">
+    {% block sidebar %}
+      {% include "_common/notices" %}
+      {% include "_common/revenue" %}
+    {% endblock %}
+  </div>
+
   <nav>
     <ul>
       <li><a href="{{ siteUrl }}" {{ n.classActive('') }}>Home</a></li>
@@ -86,26 +101,14 @@
     </ul>
   </nav>
 
-  {% block main %}
-  {% endblock %}
-
-  <div class="sidebar">
-    {% block sidebar %}
-      {% include "_common/support" %}
-      {% include "_common/notices" %}
-      {% include "_common/revenue" %}
-    {% endblock %}
-  </div>
-
   <footer id="footer">
-    Copyright {{ now.year }} {{ craft.request.serverName | ucfirst }}. All rights reserved  •  Built by <a href="http://www.communityventurepartners.org/">Community Venture Partners</a>
+    Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
   </footer>
   
   {% includeJsFile "/js/jquery.min.js" first %}
   {% includeJsFile "/js/plugins.js" %}
   {% includeJsFile "/js/main.js" %}
   {% includeJsFile "/js/rrssb.min.js" %}
-  {% includeJsFile "/js/modernizr.min.js" %}
   {% includeJsFile "/js/jquery-ui.min.js" %}
   {% includeJsFile "/js/filters.js" %}
   {% includeJsFile "/js/forms.js" %}

@@ -19,7 +19,7 @@ textarea {
 }
 
 html {
-    font-size: 1em;
+    font-size: .95em;
     line-height: 1.4;
 }
 
@@ -284,7 +284,7 @@ nav li:hover ul {
 }
 
 /*
-#mini-menu li.account, #mini-menu li.sign-out, {
+#mini-menu li.account, #mini-menu li.sign-out, .account, .sign-out {
     display: none;
 }
 */
@@ -330,6 +330,11 @@ nav li:hover ul {
 }
 .featured {
     padding: 3%;
+}
+
+.byline {
+    font-family: sans-serif;
+    font-size: .9em;
 }
 
 main {
@@ -405,6 +410,13 @@ ul.tags > li {
 }
 .filter fieldset > ul {
     display: none;
+    font-family: sans-serif;
+    font-size: .9em;
+}
+.filter ul > li:first-of-type {
+    border-bottom: 1px solid #ccc;
+    margin: 0 0 .75em;
+    padding: .5em 0;
 }
 .filter fieldset > h5 {
     cursor: pointer;
@@ -421,9 +433,19 @@ ul.tags > li {
     float: right;
 }
 
-.comment-box {
-    padding: .25em 3%;
-    text-align: center;
+a.comment-box {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    color: #333;
+    display: block;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: .5em 0;
+    padding:  .75em .75em .55em;
+}
+a.comment-box:hover {
+    background: #f9f9f9;
 }
 
 .notices-box {
@@ -437,6 +459,7 @@ ul.tags > li {
 .revenue-opportunity {
 	background-color: #aca6ff;
 	height: 200px;
+	margin: 0 auto;
 	padding-top: 100px;
 	text-align: center;
 	width: 300px;
@@ -449,16 +472,26 @@ input[type="checkbox"] {
 /* * * * * * * * * * * * * * * * * * * * * 
         FORM STYLES
 * * * * * * * * * * * * * * * * * * * * * */
+form input, form select {
+    margin-bottom: .5em;
+}
+fieldset {
+    margin: .5em 0;
+}
 form input[type="text"], form input[type="password"],
-form select {
+form select, textarea {
     display: block;
     padding: .25em;
-    width: 95%;
+    width: 98%;
+}
+form input[type="datetime"], form input[type="tel"] {
+    padding: .25em;
+
 }
 form textarea {
     max-width: 100%;
 }
-form > label {
+form > label, fieldset > label {
     font-weight: bold;
 }
 form > label[for="rememberMe"],
@@ -479,7 +512,9 @@ form > button {
 input[type="checkbox"], input[type="radio"] {
     margin: 0 .25em;
 }
-
+fieldset.image, fieldset.document, .add-topic, .add-location {
+    display: none;
+}
  
 /* * * * * * * * * * * * * * * * * * * * * 
         SUPPORT
@@ -679,9 +714,14 @@ footer {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
 	.sub-nav {
-    	float: left;
+    	/*
+        float: left;
         min-height: 100px;
     	width: 25%;
+        */
+        display: inline-block;
+        min-height: 100px;
+        width: 25%;
     }
     
     footer {
@@ -727,7 +767,7 @@ footer {
         width: 48%;
     }
     .filter {
-        padding: 0;
+        padding: 0 10% 0 0;
     }
     main, .notices-box {
         padding: 0 2%;
@@ -739,17 +779,27 @@ footer {
 	
     ul.posts li img {
         display:inline-block;
-        width: 29%;
+        width: 28%;
+        margin-right: 1%;
     }
     
-    ul.posts, .post, main > form  {
-	    float: left;
-	    margin-right: 3%;
-        width: 67%;
+    ul.posts, .single > .post, main > form  {
+	    /*
+        display: inline-block;
+        margin-right: 3%;
+        width: 100%;
+        vertical-align: top;
+        */
+        display: inline-block;
+        width: 75%;
+        vertical-align: top;
     }
-    
+    .post {
+        display: inline-block;
+        width: 70%;
+    }
 	.whats-new {
-		padding-right: 0;
+		padding: 0;
 	}
 
     .single > img {
@@ -768,9 +818,7 @@ footer {
     }
     
     #comments {
-        display: inline-block;
-        margin-right: 1%;
-        vertical-align: top;
+        width: 90%;
     }
     #support {
         display: inline-block;
@@ -791,7 +839,7 @@ footer {
     nav li {
         display: inline-block;
         font-size: .9em;
-        padding: 0 .35em 0 0;
+        padding: 0 2.5% 0 0;
     }
     nav li:last-of-type {
         padding-right: 0;
@@ -819,7 +867,7 @@ footer {
         text-align: right;
     }
     
-   #mini-menu li#search, #mini-menu li#search fieldset {
+    #mini-menu li#search, #mini-menu li#search fieldset {
         display: inline-block;
         float: none;
         text-align: right;
@@ -832,7 +880,6 @@ footer {
     
     .sidebar {
         display: inline-block;
-        float: right;
         margin: 0 0 1em .5em;
         padding: 0;
         text-align: left;
@@ -860,7 +907,6 @@ footer {
     #featured {
         display: inline-block;
         margin-top: 1em;
-/*         width: 60%; */
     }
   
     main, aside, .notices-box {
@@ -870,37 +916,50 @@ footer {
         display: inline-block;
         width: 60%;
     }
+    ul.posts {
+        margin: 0;
+        width: 66%;
+    }
 
     #comments {
-        margin: 0;
+        display: inline-block;
+        padding: 10%;
+        vertical-align: top;
+        width: 100%;
     }
 
     .whats-new aside {
 	    display: inline-block;
         padding: 0;
-        width: 30%;
+        width: 28%;
     }
 
 }
 
 @media only screen and (min-width: 55em) { /* In case anything needs adjusting on the way to big */
-
-}
+    main {
+        width: 63%;
+    }
+    .sidebar {
+        float: right;
+    } 
+ }
 
 @media only screen and (min-width: 64em) { /* Extras for big size */
     #featured {
         display: inline-block;
         margin-top: 1em;
-/*         width: 69%; */
     }
     main {
         padding-bottom: 2em;
         width: 69%;
     }
+    ul.posts {
+        width: 70%;
+    }
+    
     .home aside {
-        padding-left: 1em;
-        padding-right: 0;
-        width: 19%;
+        width: 25%;
     }
     
 }

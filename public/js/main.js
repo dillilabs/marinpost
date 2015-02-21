@@ -9,11 +9,13 @@ $(document).ready(function() {
 	   	}, 200);
 		
 	});
-/*        
+        
+/*
     $('.sign-in, .sign-out').click(function() {
        $('.sign-in,.sign-up, .sign-out, .account').toggle();
     });
-*/    
+*/
+    
     $('.show-search').click(function() {
         $('#search fieldset').slideToggle();
         $('html, body').animate({
@@ -28,15 +30,18 @@ $(document).ready(function() {
     });
 
 
-    $('fieldset h5').click(function () {
+    $('fieldset h5').click(function() {
         $(this).toggleClass('active');
         $(this).siblings('ul').slideToggle();
     });
+    
+    
+    
+
 /*
     $('.all-topics').change(function () {
-        $('.topics').prop('checked', this.checked);
+        $('.topics').prop('checked', false);
     });
-
     $(".topics").change(function () {
         if ($(".topics:checked").length == $(".topics").length) {
             $('.all-topics').prop('checked', 'checked');
@@ -44,10 +49,11 @@ $(document).ready(function() {
             $('.all-topics').prop('checked', false);
         }
     });
-    $('.all-locations').change(function () {
-        $('.locations').prop('checked', this.checked);
-    });
+  
     
+    $('.all-locations').change(function () {
+        $('.locations').prop('checked', false);
+    });
     $(".locations").change(function () {
         if ($(".locations:checked").length == $(".locations").length) {
             $('.all-locations').prop('checked', 'checked');
@@ -55,7 +61,34 @@ $(document).ready(function() {
             $('.all-locations').prop('checked', false);
         }
     });
+    
+    
+    $('.all-bloggers').change(function () {
+        $('.bloggers').prop('checked', false);
+    });
+    $(".bloggers").change(function () {
+        if ($(".bloggers:checked").length == $(".bloggers").length) {
+            $('.all-bloggers').prop('checked', 'checked');
+        } else {
+            $('.all-bloggers').prop('checked', false);
+        }
+    });
 */
+    
+    $('.add-image').click(function() {
+        $(this).siblings('fieldset.image').slideToggle();
+    });
+    $('.add-doc').click(function() {
+        $(this).siblings('fieldset.document').slideToggle();
+    });
+    $('fieldset.topic a').click(function() {
+        $(this).siblings('.add-topic').slideToggle();
+    });
+    $('fieldset.location a').click(function() {
+        $(this).siblings('.add-location').slideToggle();
+    });
+
+
 });
 
 $(window).on('resize', function(){
