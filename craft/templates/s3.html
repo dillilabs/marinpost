@@ -32,7 +32,9 @@
 {% set image = imageBlock.image.first %}
 
 <h3>change image in media link: {{ entry.title }}</h3>
+{% if image %}
 <img src="{{ image.url('hero') }}">
+{% endif %}
 
 {% if entry is defined %}
   {{ f.errorList(entry.getAllErrors) }}
@@ -55,9 +57,11 @@
   <input type="hidden" name="fields[mediaImages][{{ imageId }}][fields][image]">
   <select id="entry-image" name="fields[mediaImages][{{ imageId }}][fields][image][]">
     <option value=""></option>
-  {% for asset in craft.assets.folderId(folder.id) %}
-    <option value="{{ asset.id }}" {% if image.id == asset.id %}selected{% endif %}>{{ asset.filename }}</option>
-  {% endfor %}
+  {% if folder %}
+    {% for asset in craft.assets.folderId(folder.id) %}
+      <option value="{{ asset.id }}" {% if image.id == asset.id %}selected{% endif %}>{{ asset.filename }}</option>
+    {% endfor %}
+  {% endif %}
   </select>
 
   {% include "_form/title" %}
@@ -141,106 +145,20 @@
 {% includeJsFile "/js/jquery.iframe-transport.js" %}
 {% includeJsFile "/js/jquery.fileupload.js" %}
 {% includeJsFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" %}
+{% includeJsFile "/js/s3.js" %}
 
 {% set js %}
-$(function () {
-    var url = 'https://{{ craft.marinpost.s3Bucket }}.s3.amazonaws.com/';
-    var s3Folder = '{{ craft.marinpost.currentUserId }}';
-    var progressBar = $('#progress').find('.progress-bar');
-
-    var s3Key = function(fileName) {
-        return s3Folder + '/' + fileName;
-    };
-
-    var fileUploadSubmit = function(e, data) {
-        var file = data.files[0];
-
-        data.formData = {
-            key: s3Key(file.name),
-            'Content-Type': file.type,
-            acl: 'public-read',
-            policy: "{{ craft.marinpost.s3Policy }}",
-            signature: "{{ craft.marinpost.s3Signature }}",
-            AWSAccessKeyId: "{{ craft.marinpost.awsAccessKeyId }}",
-        };
-
-        console.log('fileUploadSubmit()', data);
-        // return true;
-    };
-
-    var addFileToSelect = function(fileSelect, selectedFileId, file) {
-          var selected = file.id == selectedFileId ? 'selected' : '';
-          fileSelect.append('<option value="'+file.id+'" '+selected+'>'+file.filename+'</option>');
-    };
-
-    var refreshFileSelect = function(files) {
-          console.log('refresh file select', files);
-          var fileSelect = $('select#entry-image');
-          var selectedFileId = fileSelect.children(':selected').val();
-          fileSelect.children().remove();
-          fileSelect.append('<option value=""></option>');
-          $.each(files, function(index, file) {
-              addFileToSelect(fileSelect, selectedFileId, file);
-          });
-    };
-
-    var updateIndexForFiles = function(filenames) {
-        var data = { 'sourceid': 3 };
-
-        $.each(filenames, function(i, e) {
-            var key = 'filenames['+i+']';
-            data[key] = e;
-        });
-
-        console.log('update index for files', filenames, data);
-
-        $.ajax({
-            type: 'POST',
-            url: '/actions/marinPost/updatedIndex',
-            data: data,
-            dataType: 'json'
-        }).done(function(data) {
-              console.log('update and return index: done', data);
-              refreshFileSelect(data.files);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.log('update and return index: fail', textStatus, errorThrown);
-        });
-    };
-
-    var filenames = [];
-
-    $('#fileupload').fileupload({
-        url: url,
-        dataType: 'json',
-        start: function(e) {
-            filenames = [];
-            console.log('fileupload start', filenames);
-        },
-        progressall: function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            progressBar.css('width', progress + '%');
-        },
-        done: function(e, data) {
-            $.each(data.files, function(i, e) {
-                filenames.push(e.name);
-            });
-            console.log('fileupload done', data, filenames);
-            // updateIndexForFiles(data.files);
-        },
-        fail: function(e, data) {
-            console.log('fileupload fail', data);
-        },
-        stop: function(e) {
-            console.log('fileupload stop', filenames);
-            updateIndexForFiles(filenames);
-        }
-    }).bind(
-        'fileuploadsubmit', fileUploadSubmit
-    ).prop(
-        'disabled', !$.support.fileInput
-    ).parent().addClass(
-        $.support.fileInput ? undefined : 'disabled'
-    );
+$(function() {
+  $('body').s3({
+    s3PathPrefix: "{{ craft.marinpost.currentUserId }}",
+    s3Policy: "{{ craft.marinpost.s3Policy }}",
+    s3Signature: "{{ craft.marinpost.s3Signature }}",
+    s3BucketUrl: "https://{{ craft.marinpost.s3Bucket }}.s3.amazonaws.com",
+    awsAccessKeyId: "{{ craft.marinpost.awsAccessKeyId }}",
+    assetsSourceId: 3,
+    selectFilesSelector: 'select#entry-image',
+    debug: true,
+  });
 });
 {% endset %}
 
