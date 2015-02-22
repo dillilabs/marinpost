@@ -22,7 +22,7 @@
   {% includeCssFile "/css/jquery-ui.structure.min.css" %}
   {% includeCssFile "/css/jquery-ui.theme.min.css" %}
 <!--[if lt IE 9]>
-  {% includeJsFile "/js/modernizr-2.6.2-respond-1.1.0.min.js" %}
+  <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <![endif]--> <!-- Modernizr with media queries and HTML5shiv for only IE lt 9 -->
 </head>
 <body class="{{ craft.request.lastSegment | default('home') }}">
@@ -35,7 +35,7 @@
       </div>
     </div>
   </header>
-  
+
   <section id="mini-menu">
     <ul>
       <li class="show-menu">Main Menu</li>
@@ -50,15 +50,15 @@
       {% endif %}
       </div>
       <li id="search">
-      <fieldset>
-        <input type="search"><br>
-        <input type="radio" name="search" value="all" checked > All 
-        <input type="radio" name="search" value="all" > Blogs 
-        <input type="radio" name="search" value="all" > News 
-        <input type="radio" name="search" value="all" > Notices 
-        <input type="radio" name="search" value="all" > Media 
-        <input type="radio" name="search" value="all" > LTRs 
-      </fieldset>
+        <fieldset>
+          <input type="search"><br>
+          <input type="radio" name="search" value="all" checked > All
+          <input type="radio" name="search" value="all" > Blogs
+          <input type="radio" name="search" value="all" > News
+          <input type="radio" name="search" value="all" > Notices
+          <input type="radio" name="search" value="all" > Media
+          <input type="radio" name="search" value="all" > LTRs
+        </fieldset>
       </li>
     </ul>
   </section>
@@ -78,33 +78,48 @@
   <nav>
     <ul>
       <li><a href="{{ siteUrl }}" {{ n.classActive('') }}>Home</a></li>
-      <li>{{ n.navLink('Blog') }}<li>
-      <li>{{ n.navLink('News') }}<li>
-      <li>{{ n.navLink('Notices') }}<li>
-      <li>{{ n.navLink('Media') }}<li>
-      <li>{{ n.navLink('Surveys') }}<li>
-      <li>{{ n.navLink('Letters') }}<li>
-      <li>{{ n.navLink('About') }}<li>
-      <li>{{ n.navLink('Submit') }}<li>
-      <li>{{ n.navLink('Contact') }}<li>
-      <li>{{ n.navLink('Subscribe') }}<li>
-      <div class="bottom-only">
+      <li>{{ n.navLink('Blog') }}</li>
+      <li>{{ n.navLink('News') }}</li>
+      <li>{{ n.navLink('Notices') }}</li>
+      <li>{{ n.navLink('Media') }}</li>
+      <li>{{ n.navLink('Surveys') }}</li>
+      <li>{{ n.navLink('Letters') }}</li>
+      <li>{{ n.navLink('About') }}
+        <ul>
+          <li>{{ n.navLink('About') }}</li>
+          <li><a href="/blogger.html">Bloggers</a></li>
+          <li><a href="/editor.html">Editors</a></li>
+          <li><a href="/staff.html">Staff</a></li>
+          <li><a href="#" onclick="return confirm('Not done yet.');">Terms</a></li>
+          <li><a href="#" onclick="return confirm('Not done yet.');">Privacy</a></li>
+        </ul>
+      </li>
+      <li>{{ n.navLink('Submit') }}
+        <ul>
+          <li>{{ n.navLink('Submit') }}</li>
+          <li><a href="{{ url('submit/blog') }}">Blog Post</a></li>
+          <li><a href="{{ url('submit/news') }}">Link to News</a></li>
+          <li><a href="{{ url('submit/notice') }}">Notice</a></li>
+          <li><a href="{{ url('submit/media') }}">Link to Media</a></li>
+          <li><a href="{{ url('submit/letter') }}">Letter to the Community</a></li>
+        </ul>
+      </li>
+      <li>{{ n.navLink('Contact') }}</li>
       {% if currentUser %}
-        <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
-        <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
+      <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
+      <li class="account"><a href="{{ url('account/profile') }}">My account</a></li>
       {% else %}
-        <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
-        <li class="sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
+      <li class="bottom-only sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+      <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
       {% endif %}
-        <li class=""><a href="#" class="show-search">Search</a></li>
-      </div>
+      <li class="bottom-only"><a href="#" class="show-search">Search</a></li>
     </ul>
   </nav>
 
   <footer id="footer">
     Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
   </footer>
-  
+
   {% includeJsFile "/js/jquery.min.js" first %}
   {% includeJsFile "/js/plugins.js" %}
   {% includeJsFile "/js/main.js" %}

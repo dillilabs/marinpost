@@ -272,13 +272,6 @@ nav ul ul {
 	display: none;
 }
 
-nav li:hover ul {
-	display: inline;
-	left: -20px;
-	position: absolute;
-	top: 10px;
-}
-
 #mini-menu li.account, #mini-menu li.sign-in, #mini-menu li.sign-out, #mini-menu li.sign-up {
     float: right;
 }
@@ -744,12 +737,6 @@ footer {
 		font-size: 1.25em;
 	}
 
-    .bottom-only {
-        display: none;
-        top: .5em;
-        right: .5em;
-    }
-    
     #mini-menu #search {
         width: 78%;
     }
@@ -841,14 +828,33 @@ footer {
         font-size: .9em;
         padding: 0 2.5% 0 0;
     }
+
+	nav li:hover ul {
+		background-color: #fcfeb3;
+		display: inline;
+		left: -20px;
+		padding: 10px;
+		position: absolute;
+		top: 6px;
+		z-index: 100;
+	}
+
+	nav li:hover li {
+		display: block;
+		text-align: left;
+		text-transform: none;
+	}
+
     nav li:last-of-type {
         padding-right: 0;
     }
 
-    nav .bottom-only li {
-            display: block;
-            text-align: right;
+    .bottom-only {
+        display: none;
+        top: .5em;
+        right: .5em;
     }
+    
     #mini-menu {
         float: right;
         padding: 1%;
@@ -885,6 +891,7 @@ footer {
         text-align: left;
         vertical-align: top;
         width: 300px;
+        z-index: 0;
     } 
     
     #support div {
