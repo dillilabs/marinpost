@@ -76,7 +76,7 @@
       var filenames = [];
 
       var fileUpload = $(this).fileupload({
-        url: config.s3BucketUrl,
+        url: 'https://'+config.s3Bucket+'.s3.amazonaws.com',
         dataType: 'json',
         start: function(e) {
           filenames = [];
@@ -112,7 +112,7 @@
     s3Policy: '',
     s3Signature: '',
     awsAccessKeyId: '',
-    s3BucketUrl: '',
+    s3Bucket: '',
     assetsSourceId: '',
     progressBar: $('#progress > .progress-bar'),
     updatedIndexUrl: '/actions/marinPost/updatedIndex',

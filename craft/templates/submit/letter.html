@@ -5,7 +5,7 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      Submit a Letter
+      {{ f.userAction }} Letter
     {% endblock %}
 
     {% block form %}
@@ -14,6 +14,7 @@
         <input type="hidden" name="action" value="{{ f.actionUrl() }}">
         <input type="hidden" name="redirect" value="{{ f.redirectTo('letters') }}">
         <input type="hidden" name="sectionId" value="5">
+        {{ f.entryId(entry) }}
 
         {% include "_form/title" %}
 
@@ -23,7 +24,7 @@
           {{ f.errorList(entry.getErrors('letterContent')) }}
         {% endif %}
 
-        <input type="submit" value="Submit Letter">
+        <input type="submit" value="{{ f.userAction(entry) }} Letter">
       </form>
     {% endblock %}
   {% endembed %}

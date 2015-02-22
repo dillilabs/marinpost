@@ -1,11 +1,15 @@
-{% macro actionUrl() %}
-{% spaceless %}
-  {% if currentUser.inGroup("contributor") %}
-    entries/SaveEntry
-  {% else %}
-    guestEntries/SaveEntry
+{% macro entryId(entry) %}
+  {% if entry and entry.id %}
+    <input type="hidden" name="entryId" value="{{ entry.id }}">
   {% endif %}
-{% endspaceless %}
+{% endmacro %}
+
+{% macro userAction(entry) %}
+  {{- entry and entry.id ? 'Edit' : 'Submit' -}}
+{% endmacro %}
+
+{% macro actionUrl() %}
+  {{- currentUser.inGroup("contributor") ? 'entries/SaveEntry' : 'guestEntries/SaveEntry' -}}
 {% endmacro %}
 
 {% macro redirectTo(section) %}

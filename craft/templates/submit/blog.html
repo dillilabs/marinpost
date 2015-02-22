@@ -5,7 +5,7 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      Submit a Blog Post
+      {{ f.userAction }} Blog Post
     {% endblock %}
 
     {% block form %}
@@ -15,6 +15,7 @@
         <input type="hidden" name="redirect" value="{{ f.redirectTo('blog') }}">
         <input type="hidden" name="sectionId" value="3">
         <input type="hidden" name="enabled" value="1">
+        {{ f.entryId(entry) }}
 
         {% if entry is defined %}
           {{ f.errorList(entry.getAllErrors) }}
@@ -28,7 +29,7 @@
         {% include "_form/images/blog" %}
         {% include "_form/documents/blog" %}
 
-        <input type="submit" value="Submit Blog Post">
+        <input type="submit" value="{{ f.userAction(entry) }} Blog Post">
       </form>
     {% endblock %}
   {% endembed %}

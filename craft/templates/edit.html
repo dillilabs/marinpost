@@ -1,0 +1,21 @@
+{% requireLogin %}
+
+{% set entryId = craft.request.segment(2) %}
+
+{% if not entryId %}
+  {% redirect 404 %}
+{% endif %}
+
+{% set entry = craft.entries.id(entryId).first %}
+
+{% if not entry %}
+  {% redirect 404 %}
+{% endif %}
+
+{% if entry.author.id != currentUser.id %}
+  {% redirect 404 %}
+{% endif %}
+
+{% set section = entry.section.handle == "notices" ? "notice" : entry.section.handle %}
+
+{% extends "submit/" ~ section ~ ".html" %}

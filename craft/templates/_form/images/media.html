@@ -6,37 +6,50 @@
   {% set imagesAdded =  entry.mediaImages | length %}
 {% endif %}
 
+{% set sourceId = 3 %}
+{% set folder = craft.marinpost.s3Folder(sourceId) %}
+
 <br>
 <input type="hidden" name="fields[mediaImages]">
 
 {% for i in 1..maxImages %}
   {% set key = 'new'~i %}
 
+  {% set imageBlock = false %}
   {% set image = false %}
   {% set by = false %}
   {% set disclaimer = false %}
 
   {% if imagesAdded >= i %}
-    {% set image = entry.mediaImages.nth(i-1) %}
+    {% set imageBlock = entry.mediaImages.nth(i-1) %}
 
-    {% set by = image.by %}
+    {% set image = imageBlock.image.first %}
+    {% set by = imageBlock.by %}
 
-    {% for option in image.disclaimer.getOptions  %}
+    {% for option in imageBlock.disclaimer.getOptions  %}
       {% set disclaimer = option.selected %}
     {% endfor %}
   {% endif %}
 
-  {% if not image %}
+  {% if not imageBlock %}
     {% set text = loop.first ? 'Add an image' : 'Add another image' %}
     <a href="#" class="multiple-field add" id="add-image-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
     {% set hideAddLink = true %}
   {% endif %}
 
-  <div class="multiple-field inputs" id="input-image-{{ i }}" {%- if not image %}style="display: none;"{% endif %}>
+  <div class="multiple-field inputs" id="input-image-{{ i }}" {%- if not imageBlock %}style="display: none;"{% endif %}>
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
-    <input type="file" name="fields[mediaImages][{{ key }}][fields][image][]">
+    <!--input type="file" name="fields[mediaImages][{{ key }}][fields][image][]"-->
+    <select class="entry-image" name="fields[mediaImages][{{ key }}][fields][image][]">
+      <option value=""></option>
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <option value="{{ asset.id }}" {% if asset.id == image.id %}selected{% endif %}>{{ asset.filename }}</option>
+      {% endfor %}
+    {% endif %}
+    </select>
     <br>
 
     <label for="image-by">Image by</label>
@@ -49,11 +62,50 @@
     <span>Yes I have the right to use this image</span>
     <br>
 
-    {% if image %}
-      {{ f.errorList(image.allErrors) }}
+    {% if imageBlock %}
+      {{ f.errorList(imageBlock.allErrors) }}
       <br>
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
   </div>
 {% endfor %}
+
+  <div class="container">  
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Upload file</span>
+        <input id="fileupload" type="file" name="file" multiple>
+    </span>
+    <br>
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+  </div>  
+  <br>
+
+{% includeCssFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" first %}
+{% includeCssFile "/css/jquery.fileupload.css" %}
+
+{% includeJsFile "/js/jquery.ui.widget.js" %}
+{% includeJsFile "/js/jquery.iframe-transport.js" %}
+{% includeJsFile "/js/jquery.fileupload.js" %}
+{% includeJsFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" %}
+{% includeJsFile "/js/s3.js" %}
+
+{% set js %}
+$(function() {
+  $('body').s3({
+    s3PathPrefix: "{{ craft.marinpost.currentUserId }}",
+    s3Policy: "{{ craft.marinpost.s3Policy }}",
+    s3Signature: "{{ craft.marinpost.s3Signature }}",
+    s3Bucket: "{{ craft.marinpost.s3Bucket }}",
+    awsAccessKeyId: "{{ craft.marinpost.awsAccessKeyId }}",
+    assetsSourceId: 3,
+    selectFilesSelector: 'select.entry-image',
+    debug: true,
+  });
+});
+{% endset %}
+
+{% includeJs js %}

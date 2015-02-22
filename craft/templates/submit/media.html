@@ -5,7 +5,7 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      Submit a Media Link
+      {{ f.userAction }} Media Link
     {% endblock %}
 
     {% block form %}
@@ -15,6 +15,7 @@
         <input type="hidden" name="redirect" value="{{ f.redirectTo('media') }}">
         <input type="hidden" name="sectionId" value="6">
         <input type="hidden" name="enabled" value="1">
+        {{ f.entryId(entry) }}
 
         {% if entry is defined %}
           {{ f.errorList(entry.getAllErrors) }}
@@ -73,7 +74,7 @@
         {% include "_form/content/link" %}
         {% include "_form/images/media" %}
 
-        <input type="submit" value="Submit Media Link">
+        <input type="submit" value="{{ f.userAction(entry) }} Media Link">
       </form>
     {% endblock %}
   {% endembed %}

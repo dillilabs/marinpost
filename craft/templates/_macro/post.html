@@ -136,16 +136,22 @@
   {% endswitch %}
 {% endmacro %}
 
+{% macro editLink(entry) %}
+  {% if currentUser and currentUser.id == entry.author.id %}
+    <a href="/edit/{{ entry.id }}">edit</a>
+  {% endif %}
+{% endmacro %}
+
 {% macro postBy(entry) %}
-  {% from _self import authorLink %}
+  {% from _self import authorLink, editLink %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}}</div>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}} {{ editLink(entry) }}</div>
     {% case 'news' %}
-      <div class="byline">{{ entry.postDate | date('M d, Y') }} by {{ authorLink(entry) }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a></div>
+      <div class="byline">{{ entry.postDate | date('M d, Y') }} by {{ authorLink(entry) }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a> {{ editLink(entry) }}</div>
     {% default %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments</div>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ random(10) }} Comments {{ editLink(entry) }}</div>
   {% endswitch %}
 {% endmacro %}
 

@@ -5,7 +5,7 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      Submit a Notice
+      {{ f.userAction }} Notice
     {% endblock %}
 
     {% block form %}
@@ -15,6 +15,7 @@
         <input type="hidden" name="redirect" value="{{ f.redirectTo('notices') }}">
         <input type="hidden" name="sectionId" value="4">
         <input type="hidden" name="enabled" value="1">
+        {{ f.entryId(entry) }}
 
         {% if entry is defined %}
           {{ f.errorList(entry.getAllErrors) }}
@@ -28,7 +29,7 @@
         {% include "_form/images/notice" %}
         {% include "_form/documents/notice" %}
 
-        <input type="submit" value="Submit Notice">
+        <input type="submit" value="{{ f.userAction(entry) }} Notice">
       </form>
     {% endblock %}
   {% endembed %}
