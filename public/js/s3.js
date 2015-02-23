@@ -1,7 +1,8 @@
 (function($) {
   $.fn.s3  = function(options) {
     var config = $.extend( {}, $.fn.s3.defaults, options );
-    var progressBar = $(config.progressBarSelector);
+    var uploadProgressBar = $(config.uploadProgressBarSelector);
+    var updateIndexIndicator = $(config.updateIndexIndicatorSelector);
 
     $.each(config, function(k, v) {
       if (config[k].length == 0) {
@@ -60,8 +61,10 @@
 
         if (config.debug) console.log('updateAssetsIndex()', filenames, data);
 
+        updateIndexIndicator.show();
+
         $.ajax({
-          url: config.updatedIndexUrl,
+          url: config.updateAssetsIndexUrl,
           data: data,
           dataType: 'json',
           type: 'POST'
@@ -70,6 +73,8 @@
           updateFormInputs(data.files);
         }).fail(function(jqXHR, textStatus, errorThrown) {
           if (config.debug) console.log('updateAssetsIndex() fail', textStatus, errorThrown);
+        }).always(function() {
+          updateIndexIndicator.hide();
         });
       };
 
@@ -84,7 +89,7 @@
         },
         progressall: function (e, data) {
           var progress = parseInt(data.loaded / data.total * 100, 10);
-          config.progressBar.css('width', progress + '%');
+          uploadProgressBar.css('width', progress + '%');
         },
         done: function(e, data) {
           $.each(data.files, function(i, e) {
@@ -114,8 +119,9 @@
     awsAccessKeyId: '',
     s3Bucket: '',
     assetsSourceId: '',
-    progressBar: $('#progress > .progress-bar'),
-    updatedIndexUrl: '/actions/marinPost/updatedIndex',
+    uploadProgressBarSelector: '#progress > .progress-bar',
+    updateAssetsIndexUrl: '/actions/marinPost/updateAssetsIndex',
+    updateIndexIndicatorSelector: '#update-index-indicator',
     selectFilesSelector: '',
     debug: false,
   };

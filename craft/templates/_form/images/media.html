@@ -41,7 +41,6 @@
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
-    <!--input type="file" name="fields[mediaImages][{{ key }}][fields][image][]"-->
     <select class="entry-image" name="fields[mediaImages][{{ key }}][fields][image][]">
       <option value=""></option>
     {% if folder %}
@@ -76,22 +75,14 @@
         <i class="glyphicon glyphicon-plus"></i>
         <span>Upload file</span>
         <input id="fileupload" type="file" name="file" multiple>
+        <img id="update-index-indicator" src="/img/spinner.gif" style="display: none;"/>
     </span>
     <br>
     <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success"></div>
+        <div class="progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
   </div>  
   <br>
-
-{% includeCssFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" first %}
-{% includeCssFile "/css/jquery.fileupload.css" %}
-
-{% includeJsFile "/js/jquery.ui.widget.js" %}
-{% includeJsFile "/js/jquery.iframe-transport.js" %}
-{% includeJsFile "/js/jquery.fileupload.js" %}
-{% includeJsFile "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js" %}
-{% includeJsFile "/js/s3.js" %}
 
 {% set js %}
 $(function() {

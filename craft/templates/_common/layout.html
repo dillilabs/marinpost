@@ -21,6 +21,7 @@
   {% includeCssFile "/css/jquery-ui.min.css" %}
   {% includeCssFile "/css/jquery-ui.structure.min.css" %}
   {% includeCssFile "/css/jquery-ui.theme.min.css" %}
+  {% includeCssFile "/css/jquery.fileupload.css" %}
 <!--[if lt IE 9]>
   <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <![endif]--> <!-- Modernizr with media queries and HTML5shiv for only IE lt 9 -->
@@ -125,9 +126,13 @@
   {% includeJsFile "/js/main.js" %}
   {% includeJsFile "/js/rrssb.min.js" %}
   {% includeJsFile "/js/jquery-ui.min.js" %}
+  {# includeJsFile "/js/jquery.ui.widget.js" #}
+  {% includeJsFile "/js/jquery.iframe-transport.js" %}
+  {% includeJsFile "/js/jquery.fileupload.js" %}
   {% includeJsFile "/js/filters.js" %}
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
+  {% includeJsFile "/js/s3.js" %}
   
   {% include "_common/analytics.js" %}
 </body>

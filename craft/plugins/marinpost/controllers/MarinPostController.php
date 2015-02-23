@@ -3,7 +3,7 @@ namespace Craft;
 
 class MarinPostController extends BaseController
 {
-    public function actionUpdatedIndex()
+    public function actionUpdateAssetsIndex()
     {
         $this->requirePostRequest();
 
