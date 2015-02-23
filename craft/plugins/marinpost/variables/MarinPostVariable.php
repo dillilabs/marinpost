@@ -3,44 +3,23 @@ namespace Craft;
 
 class MarinPostVariable
 {
-
-    public function awsAccessKeyId()
-    {
-        return craft()->marinPost->awsAccessKeyId();
-    }
-
-    public function s3Bucket()
-    {
-        return craft()->marinPost->s3Bucket();
-    }
-
-    public function s3Policy()
-    {
-        return craft()->marinPost->s3Policy();
-    }
-
-    public function s3Signature()
-    {
-        return craft()->marinPost->s3Signature();
-    }
-
-    public function s3PolicyJson()
-    {
-        return craft()->marinPost->s3PolicyJson();
-    }
-
-    public function s3Folder($sourceId)
-    {
-        return craft()->marinPost->s3Folder($sourceId);
-    }
-
-    public function updateAssetIndexForFilenames($sourceId, $filenames = array())
-    {
-        return craft()->marinPost->updateAssetIndexForFilenames($sourceId, $filenames);
-    }
-
     public function currentUserId()
     {
         return craft()->marinPost->currentUserId();
+    }
+
+    public function s3UploadForm($assetSourceId)
+    {
+        return craft()->marinPost->s3UploadForm($assetSourceId);
+    }
+
+    public function s3Folder($assetSourceId)
+    {
+        return craft()->marinPost->s3Folder($assetSourceId);
+    }
+
+    public function updateAssetIndexForFilenames($assetSourceId, $filenames = array())
+    {
+        return craft()->marinPost->updateAssetIndexForFilenames($assetSourceId, $filenames);
     }
 }

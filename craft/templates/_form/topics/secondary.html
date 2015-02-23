@@ -6,7 +6,6 @@
   {% set topicsAdded =  entry.secondaryTopics | length %}
 {% endif %}
 
-<br>
 <input type="hidden" name="fields[secondaryTopics]">
 
 {% for i in 1..maxTopics %}
@@ -32,11 +31,9 @@
       <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
     {% endfor %}
     </select>
-    <br>
 
     {% if topic %}
       {{ f.errorList(topic.allErrors) }}
-      <br>
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-topic-{{ i }}">Remove topic</a>

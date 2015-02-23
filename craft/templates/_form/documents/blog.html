@@ -7,6 +7,8 @@
 {% endif %}
 
 <br>
+<label>Documents</label>
+
 <input type="hidden" name="fields[blogDocuments]">
 
 {% for i in 1..maxDocuments %}
@@ -27,7 +29,7 @@
   {% endif %}
 
   <div class="multiple-field inputs"  id="input-document-{{ i }}"{%- if not document %}style="display: none;"{% endif %}>
-    <label for="blogDocuments">document file</label>
+    <label for="blogDocuments">Document file</label>
     <input type="hidden" name="fields[blogDocuments][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[blogDocuments][{{ key }}][fields][document]" value="">
     <input type="file" name="fields[blogDocuments][{{ key }}][fields][document][]">
@@ -39,9 +41,9 @@
 
     {% if document %}
       {{ f.errorList(document.allErrors) }}
-      <br>
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-document-{{ i }}">Remove document</a>
   </div>
 {% endfor %}
+      <br>

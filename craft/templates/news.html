@@ -10,7 +10,13 @@
 
     {% block posts %}
       {% for entry in craft.entries.section('news').limit(perPage).find %}
-        {{ p.post(entry) }}
+        <li>
+
+            <h3><a href="/news/{{entry.slug}}">{{entry}}</a></h3>
+            Posted {{postDate|date('M. d, Y')}} by <a href="bloggers/{{ entry.author.id }}">{{ entry.author.fullName }}</a><br>
+            <p>{{ entry.linkComments }}</p>
+            <a href="{{ entry.newsLink }}">Read Article</a>
+        </li>
       {% endfor %}
     {% endblock %}
   {% endembed %}

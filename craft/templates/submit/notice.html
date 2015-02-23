@@ -5,7 +5,7 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      {{ f.userAction }} Notice
+      {{ f.userAction(entry) }} Notice
     {% endblock %}
 
     {% block form %}
@@ -20,14 +20,25 @@
         {% if entry is defined %}
           {{ f.errorList(entry.getAllErrors) }}
         {% endif %}
-        <br>
 
         {% include "_form/title" %}
-        {% include "_form/locations" %}
+        {% include "_form/locations" %}<br>
         {% include "_form/topics" %}
+        <hr>
+        <fieldset class="event">
+            <label for="event-start">Event start date/time</label> <input type="datetime" id="event-start"><br>
+            <label for="event-end">Event end date/time</label> <input type="datetime" id="event-end"><br>
+            <label for="event-venue">Event venue</label><input type="text" id="event-venue">
+            <label for="event-address">Event street address</label><input type="text" id="event-address">
+            <label for="event-city">Event city</label><input type="text" id="event-city">
+            <label for="event-zip">Event zip code</label><input type="text" pattern="[0-9]*" id="event-zip"><br>
+        </fieldset>
+        <label for="notice-contact">Contact phone number</label>
+        <input type="tel" id="notice-contact"><br>
+        <hr>
         {% include "_form/content/notice" %}
         {% include "_form/images/notice" %}
-        {% include "_form/documents/notice" %}
+        {% include "_form/documents/notice" %}<br>
 
         <input type="submit" value="{{ f.userAction(entry) }} Notice">
       </form>

@@ -5,11 +5,11 @@
 {% block main %}
   {% embed "_common/form" %}
     {% block h2  %}
-      {{ f.userAction }} Media Link
+      {{ f.userAction(entry) }} Media Link
     {% endblock %}
 
     {% block form %}
-      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
+      <form method="post" accept-charset="UTF-8" class="content-submission">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="{{ f.actionUrl() }}">
         <input type="hidden" name="redirect" value="{{ f.redirectTo('media') }}">

@@ -3,15 +3,14 @@
 {% block main %}
   {% embed "_common/single" %}
     {% block post %}
-      <h2>Submit Content</h2>
-      <ul>
-          <li><a href="{{ url('submit/blog') }}">Blog Post</a></li>
-          <li><a href="{{ url('submit/news') }}">Link to News</a></li>
-          <li><a href="{{ url('submit/notice') }}">Notice</a></li>
-          <li><a href="{{ url('submit/media') }}">Link to Media</a></li>
-          <li><a href="{{ url('submit/letter') }}">Letter to the Community</a></li>
-      </ul>
+        <h2>Contributing to The Marin Post</h2>
+        <p>Staffy is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process.</p>
+        <h3>Become a Marin Post Contributor</h3>
+        <a class="comment-box" href="{{ url('submit/blog') }}">Submit a Blog Post</a>
+        <a class="comment-box" href="{{ url('submit/news') }}">Post a News Link</a>
+        <a class="comment-box" href="{{ url('submit/notice') }}">Post a Notice</a>
+        <a class="comment-box" href="{{ url('submit/media') }}">Post a Media Link</a>
+        <a class="comment-box" href="{{ url('submit/letter') }}">Write a Letter to the Community</a>
     {% endblock %}
   {% endembed %}
 {% endblock %}
-

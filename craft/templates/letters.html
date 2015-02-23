@@ -8,13 +8,22 @@
     {% endblock %}
 
     {% block h2 %}
-      Letters
+      Letters to the Editor
     {% endblock %}
 
+    
     {% block posts %}
-      {% for entry in craft.entries.section('letters').limit(perPage).find %}
-        {{ p.post(entry) }}
-      {% endfor %}
+    {% set allEntries = craft.entries.section('letters').limit(perPage).find %}
+    {% for date, entries in allEntries | group("postDate|date('F j, Y')") %}
+        <h2 class="date-divider">{{ date }} <span class='comment-count'># Comments</span></h2>
+        {% for entry in entries %}
+            <h3><a href="/letters/{{entry.slug}}">{{ entry }}</a></h3>
+            <a href="">{{ entry.author.fullName }}</a> &mdash; {# need a location field for users #}<br>
+            {{postDate|date('g:i A')}} <br>
+            <p>{{ entry.letterContent }}</p>
+        {% endfor %}
+    {% endfor %}
+    
     {% endblock %}
   {% endembed %}
 {% endblock %}

@@ -6,7 +6,6 @@
   {% set locationsAdded =  entry.secondaryLocations | length %}
 {% endif %}
 
-<br>
 <input type="hidden" name="fields[secondaryLocations]">
 
 {% for i in 1..maxLocations %}
@@ -41,11 +40,9 @@
       <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
     {% endfor %}
     </select>
-    <br>
 
     {% if location %}
       {{ f.errorList(location.allErrors) }}
-      <br>
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-location-{{ i }}">Remove location</a>

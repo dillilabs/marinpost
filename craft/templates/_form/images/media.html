@@ -1,9 +1,14 @@
 {% set maxImages = 1 %}
 {% set imagesAdded = 0 %}
+{% set isEditing = false %}
 {% set hideAddLink = false %}
 
-{% if entry is defined %}
+{% if entry %}
   {% set imagesAdded =  entry.mediaImages | length %}
+
+  {% if entry.id %}
+    {% set isEditing = true %}
+  {% endif %}
 {% endif %}
 
 {% set sourceId = 3 %}
@@ -23,6 +28,10 @@
   {% if imagesAdded >= i %}
     {% set imageBlock = entry.mediaImages.nth(i-1) %}
 
+    {% if isEditing and imageBlock.id %}
+      {% set key = imageBlock.id %}
+    {% endif %}
+
     {% set image = imageBlock.image.first %}
     {% set by = imageBlock.by %}
 
@@ -41,7 +50,7 @@
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
-    <select class="entry-image" name="fields[mediaImages][{{ key }}][fields][image][]">
+    <select class="entry-image array" name="fields[mediaImages][{{ key }}][fields][image][]">
       <option value=""></option>
     {% if folder %}
       {% for asset in craft.assets.folderId(folder.id) %}
@@ -72,9 +81,8 @@
 
   <div class="container">  
     <span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
         <span>Upload file</span>
-        <input id="fileupload" type="file" name="file" multiple>
+        <input id="fileupload" type="file" name="file">
         <img id="update-index-indicator" src="/img/spinner.gif" style="display: none;"/>
     </span>
     <br>
@@ -84,15 +92,17 @@
   </div>  
   <br>
 
+{% set s3 = craft.marinpost.s3UploadForm(sourceId) %}
+
 {% set js %}
 $(function() {
-  $('body').s3({
-    s3PathPrefix: "{{ craft.marinpost.currentUserId }}",
-    s3Policy: "{{ craft.marinpost.s3Policy }}",
-    s3Signature: "{{ craft.marinpost.s3Signature }}",
-    s3Bucket: "{{ craft.marinpost.s3Bucket }}",
-    awsAccessKeyId: "{{ craft.marinpost.awsAccessKeyId }}",
-    assetsSourceId: 3,
+  $('#fileupload').s3({
+    s3Bucket: "{{ s3.bucket }}",
+    s3Subfolder: "{{ s3.subfolder }}",
+    s3Policy: "{{ s3.policy }}",
+    s3Signature: "{{ s3.signature }}",
+    awsAccessKeyId: "{{ s3.keyId }}",
+    assetsSourceId: {{ sourceId }},
     selectFilesSelector: 'select.entry-image',
     debug: true,
   });

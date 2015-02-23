@@ -1,12 +1,12 @@
 {% set tagGroupId = 1 %}
 
 <br>
-<label>Location tags</label>
 
 <input type="hidden" name="fields[locationTags]" value="">
 
+<label>Add location tag</label>
 <input type="text" id="find-location-tag">
-<a href="#" id="add-location-tag" style="display: none;">add new</a>
+<a href="#" id="add-location-tag">Create new</a>
 
 <div id="location-tags">
 {% if entry is defined %}

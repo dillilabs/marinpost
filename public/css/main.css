@@ -336,6 +336,7 @@ main {
 .posts > li {
     border-bottom: 1px solid #efefef;
     margin-bottom: 1em;
+    padding-bottom: 1em;
 }
 main.single {
     border-bottom: 1px solid #efefef;
@@ -415,13 +416,15 @@ ul.tags > li {
     cursor: pointer;
 }
 
+.posts h3 {
+    text-transform: capitalize;
+}
 .date-divider {
     background-color: #e5e5cd;
     border-bottom: 0px solid #cac9ad;
     border-top: 0px solid #cac9ad;
     padding: .25em 3%;
 }
-
 .date-divider span {
     float: right;
 }
@@ -448,6 +451,15 @@ a.comment-box:hover {
 .notices-box > h2 {
     text-align: left;
 }
+.date-divider {
+    background-color: #e5e5cd;
+    border-bottom: 0px solid #cac9ad;
+    border-top: 0px solid #cac9ad;
+    font-family: Georgia, Times, serif;
+    font-weight: bold;
+    margin-bottom: 1em;
+    padding: .5em 3%; 
+}
 
 .revenue-opportunity {
 	background-color: #aca6ff;
@@ -460,6 +472,13 @@ a.comment-box:hover {
 
 input[type="checkbox"] {
     margin-right: .5em;
+}
+.legal {
+    font-family: sans-serif;
+    font-size: .9em;
+}
+.inputs > label {
+    font-weight: bold;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * 

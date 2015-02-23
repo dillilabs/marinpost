@@ -189,6 +189,7 @@ JS;
             'awsSecretAccessKey' => array(AttributeType::String),
             's3Region' => array(AttributeType::String),
             's3Bucket' => array(AttributeType::String),
+            'assetsSourceId' => array(AttributeType::Number),
         );
     }
 

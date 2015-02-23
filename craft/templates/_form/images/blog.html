@@ -5,8 +5,7 @@
 {% if entry is defined %}
   {% set imagesAdded =  entry.blogImages | length %}
 {% endif %}
-
-<br>
+<label>Images</label>
 <input type="hidden" name="fields[blogImages]">
 
 {% for i in 1..maxImages %}
@@ -25,7 +24,6 @@
       {% set disclaimer = option.selected %}
     {% endfor %}
   {% endif %}
-
   {% if not image %}
     {% set text = loop.first ? 'Add an image' : 'Add another image' %}
     <a href="#" class="multiple-field add" id="add-image-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
@@ -46,7 +44,7 @@
     <label for="image-disclaimer">Legal</label>
     <input type="hidden" name="fields[blogImages][{{ key }}][fields][disclaimer]" value="">
     <input type="checkbox" name="fields[blogImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
-    <span>Yes I have the right to use this image</span>
+    <span class="legal">Yes I have the right to use this image</span>
     <br>
 
     {% if image %}
@@ -57,3 +55,4 @@
     <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
   </div>
 {% endfor %}
+      <br>

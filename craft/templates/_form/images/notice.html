@@ -5,8 +5,7 @@
 {% if entry is defined %}
   {% set imagesAdded =  entry.noticeImages | length %}
 {% endif %}
-
-<br>
+<label>Images</label>
 <input type="hidden" name="fields[noticeImages]">
 
 {% for i in 1..maxImages %}
@@ -46,14 +45,14 @@
     <label for="image-disclaimer">Legal</label>
     <input type="hidden" name="fields[noticeImages][{{ key }}][fields][disclaimer]" value="">
     <input type="checkbox" name="fields[noticeImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
-    <span>Yes I have the right to use this image</span>
+    <span class="legal">Yes I have the right to use this image</span>
     <br>
 
     {% if image %}
       {{ f.errorList(image.allErrors) }}
-      <br>
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
   </div>
 {% endfor %}
+<br>

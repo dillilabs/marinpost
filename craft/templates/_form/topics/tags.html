@@ -1,12 +1,11 @@
 {% set tagGroupId = 2 %}
 
-<br>
-<label>Topic tags</label>
-
 <input type="hidden" name="fields[topicTags]" value="">
+<br>
 
+<label>Add topic tag</label>
 <input type="text" id="find-topic-tag">
-<a href="#" id="add-topic-tag" style="display: none;">add new</a>
+<a href="#" id="add-topic-tag">Create new</a>
 
 <div id="topic-tags">
 {% if entry is defined %}

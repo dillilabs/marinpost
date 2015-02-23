@@ -5,19 +5,26 @@ require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
 
 class MarinPostService extends BaseApplicationComponent
 {
-    private $settings;
-    private $s3PostObject;
-    private $s3Form;
 
-    function __construct()
+    /**
+     * Return form inputs required to upload a file direct to AWS S3:
+     *
+     *  - bucket
+     *  - subfolder
+     *  - policy
+     *  - signature
+     *  - access key id
+     */
+    public function s3UploadForm($assetSourceId)
     {
-        $this->settings = craft()->plugins->getPlugin('marinpost')->getSettings();
+        $settings = $this->assetSourceSettings($assetSourceId);
+        MarinPostPlugin::log(print_r($settings, true), LogLevel::Info, true);
 
         $s3 = \Aws\S3\S3Client::factory(
             array(
-                'key' => $this->settings->awsAccessKeyId,
-                'secret' => $this->settings->awsSecretAccessKey,
-                'region' => $this->settings->s3Region
+                'key' => $settings['keyId'],
+                'secret' => $settings['secret'],
+                'region' => $settings['location']
             )
         );
 
@@ -25,9 +32,9 @@ class MarinPostService extends BaseApplicationComponent
         //
         // {"expiration":"2015-02-20T05:08:34Z","conditions":[{"bucket":"marinpost"},{"acl":"public-read"},["starts-with","$key",""]]}
 
-        $this->s3PostObject = new \Aws\S3\Model\PostObject(
+        $postObject = new \Aws\S3\Model\PostObject(
             $s3,
-            $this->settings->s3Bucket,
+            $settings['bucket'],
             array(
                 'acl' => 'public-read',
                 'policy_callback' => function($policy) {
@@ -37,35 +44,22 @@ class MarinPostService extends BaseApplicationComponent
             )
         );
 
-        $this->s3Form = $this->s3PostObject->prepareData()->getFormInputs();
+        $form = $postObject->prepareData()->getFormInputs();
+
+        return array(
+            'bucket' => $settings['bucket'],
+            'subfolder' => $this->s3Subfolder($settings['subfolder']),
+            'policy' => $form['policy'],
+            'signature' => $form['signature'],
+            'keyId' => $settings['keyId'],
+            'jsonPolicy' => $postObject->getJsonPolicy(),
+            'sourceId' => $assetSourceId,
+        );
     }
 
-    public function awsAccessKeyId()
-    {
-        return $this->settings->awsAccessKeyId;
-    }
-
-    public function s3Bucket()
-    {
-        return $this->settings->s3Bucket;
-    }
-
-    public function s3Policy()
-    {
-        return $this->s3Form['policy'];
-    }
-
-    public function s3Signature()
-    {
-        return $this->s3Form['signature'];
-    }
-
-    // debug only
-    public function s3PolicyJson()
-    {
-        return $this->s3PostObject->getJsonPolicy();
-    }
-
+    /*
+     * Return ID of currently logged in user
+     */
     public function currentUserId()
     {
         return craft()->userSession->isLoggedIn() ? craft()->userSession->id : null;
@@ -73,17 +67,17 @@ class MarinPostService extends BaseApplicationComponent
 
     /**
      *
-     * Return assets folder for current user's virtual sub-directory on S3
+     * Return Asset sub folder corresponding to the current user's virtual sub-directory on S3
      *
      */
-    public function s3Folder($sourceId)
+    public function s3Folder($assetSourceId)
     {
         if ($userId = $this->currentUserId())
         {
             $name = $userId;
 
             return craft()->assets->findFolder([
-                'sourceId' => $sourceId,
+                'sourceId' => $assetSourceId,
                 'name' => $name
             ]);
         }
@@ -96,22 +90,24 @@ class MarinPostService extends BaseApplicationComponent
      * Update Asset index for given source and array of filenames
      *
      */
-    public function updateAssetIndexForFilenames($sourceId, $filenames = array())
+    public function updateAssetIndexForFilenames($assetSourceId, $filenames = array())
     {
         $userId = $this->currentUserId();
 
-        $sessionId = $this->getIndexListForSource($sourceId);
+        $sessionId = $this->getIndexListForSource($assetSourceId);
+
+        $settings = $this->assetSourceSettings($assetSourceId);
 
         $updated = 0;
 
         foreach ($filenames as $filename) {
-            $uri = $this->s3UriForFilename($filename);
+            $uri = $this->s3UriForFilename($settings['subfolder'], $filename);
 
-            $model = $this->getAssetIndexDataModelByUri($sourceId, $sessionId, $uri);
+            $model = $this->getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri);
 
             if ($model)
             {
-                $this->processIndexForSource($sessionId, $model->offset, $sourceId);
+                $this->processIndexForSource($sessionId, $model->offset, $assetSourceId);
                 $updated += 1;
             }
         }
@@ -123,27 +119,39 @@ class MarinPostService extends BaseApplicationComponent
     // Private functions
     //
 
-    private function getIndexListForSource($sourceId)
+    private function assetSourceSettings($assetSourceId)
+    {
+        return craft()->assetSources->getSourceById($assetSourceId)->settings;
+    }
+
+    private function getIndexListForSource($assetSourceId)
     {
         $sessionId = craft()->assetIndexing->getIndexingSessionId();
 
-        craft()->assetIndexing->getIndexListForSource($sessionId, $sourceId);
+        craft()->assetIndexing->getIndexListForSource($sessionId, $assetSourceId);
 
         return $sessionId;
     }
 
-    private function s3UriForFilename($filename)
+    private function s3Subfolder($subfolder)
     {
         $userId = $this->currentUserId();
 
-        return "$userId/$filename";
+        return empty($subfolder) ? $userId : "$subfolder/$userId";
     }
 
-    private function getAssetIndexDataModelByUri($sourceId, $sessionId, $uri)
+    private function s3UriForFilename($subfolder, $filename)
+    {
+        $subfolder = $this->s3Subfolder($subfolder);
+
+        return "$subfolder/$filename";
+    }
+
+    private function getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri)
     {
         $record = AssetIndexDataRecord::model()->findByAttributes(
             array(
-                'sourceId' => $sourceId,
+                'sourceId' => $assetSourceId,
                 'sessionId' => $sessionId,
                 'uri' => $uri
             )
@@ -157,9 +165,9 @@ class MarinPostService extends BaseApplicationComponent
         return false;
     }
 
-    private function processIndexForSource($sessionId, $offset, $sourceId)
+    private function processIndexForSource($sessionId, $offset, $assetSourceId)
     {
-        craft()->assetIndexing->processIndexForSource($sessionId, $offset, $sourceId);
+        craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
     }
 
 }

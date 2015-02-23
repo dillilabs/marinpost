@@ -20,15 +20,12 @@
         {% if entry is defined %}
           {{ f.errorList(entry.getAllErrors) }}
         {% endif %}
-        <br>
-
-        {% include "_form/title" %}
-        {% include "_form/locations" %}
-        {% include "_form/topics" %}
+        {% include "_form/title" %}<br>
+        {% include "_form/locations" %}<br>
+        {% include "_form/topics" %}<br>
         {% include "_form/content/blog" %}
         {% include "_form/images/blog" %}
-        {% include "_form/documents/blog" %}
-
+        {% include "_form/documents/blog" %}<br>
         <input type="submit" value="{{ f.userAction(entry) }} Blog Post">
       </form>
     {% endblock %}

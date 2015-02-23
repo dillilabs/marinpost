@@ -12,7 +12,7 @@
 
     return this.each(function() {
       var s3KeyFor = function(fileName) {
-        return config.s3PathPrefix + '/' + fileName;
+        return config.s3Subfolder + '/' + fileName;
       };
 
       var fileUploadSubmit = function(e, data) {
@@ -113,7 +113,7 @@
   };
 
   $.fn.s3.defaults = {
-    s3PathPrefix: '',
+    s3Subfolder: '',
     s3Policy: '',
     s3Signature: '',
     awsAccessKeyId: '',

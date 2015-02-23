@@ -137,7 +137,7 @@
 {% endmacro %}
 
 {% macro editLink(entry) %}
-  {% if currentUser and currentUser.id == entry.author.id %}
+  {% if currentUser and currentUser.id == entry.authorId %}
     <a href="/edit/{{ entry.id }}">edit</a>
   {% endif %}
 {% endmacro %}
@@ -195,16 +195,16 @@
   <li class="listing">
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="post">
+      <div>
         {{ postTitle(entry) }}
         {{ postBy(entry) }}
         <p>{{ entry.letterContent }}</p>
       </div>
     {% case 'news' %}
-      <div class="post">
+      <li>
         {{ postTags(entry, unfiltered) }}
         {{ postSummary(entry) }}
-      </div>
+      </li>
     {% default %}
       {{ postImage(entry) }}
       <div class="post">
