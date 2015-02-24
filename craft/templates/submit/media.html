@@ -80,10 +80,10 @@
   {% endembed %}
 {% endblock %}
 
-{% set formJs %}
+{% set js %}
   $(function() {
       $('form.content-submission').forms();
   });
 {% endset %}
 
-{% includeJs formJs %}
+{% includeJs js %}

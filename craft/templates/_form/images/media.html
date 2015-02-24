@@ -50,7 +50,7 @@
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
-    <select class="s3 array" name="fields[mediaImages][{{ key }}][fields][image][]">
+    <select class="s3direct image array" name="fields[mediaImages][{{ key }}][fields][image][]">
       <option value=""></option>
     {% if folder %}
       {% for asset in craft.assets.folderId(folder.id) %}
@@ -79,24 +79,24 @@
   </div>
 {% endfor %}
 
-  <div class="container">  
-    <span class="btn btn-success fileinput-button">
-        <span>Upload file</span>
-        <input id="fileupload" type="file" name="file">
-        <img id="update-index-indicator" src="/img/spinner.gif" style="display: none;"/>
-    </span>
-    <br>
-    <div>
-        <div class="s3 progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-    </div>
-  </div>  
+<div>
+  <span class="fileinput-button">
+    <span>Upload file <b>.gif, .jpg or .png only</b></span>
+      <input id="fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
+      <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
+  </span>
   <br>
+  <div>
+      <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+  </div>
+</div>
+<br>
 
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set js %}
 $(function() {
-  $('#fileupload').s3direct({
+  $('#image-fileupload').s3direct({
     bucket: "{{ s3.bucket }}",
     subfolder: "{{ s3.subfolder }}",
     currentUserId: "{{ currentUser.id }}",
@@ -105,6 +105,9 @@ $(function() {
     accessKey: "{{ s3.keyId }}",
     assetsSourceId: {{ sourceId }},
     acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
+    uploadProgressBarSelector: '.s3direct.image.progress-bar',
+    updateIndexIndicatorSelector: 'img.s3direct.image',
+    selectFilesSelector: 'select.s3direct.image',
     debug: true,
   });
 });

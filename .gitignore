@@ -5,6 +5,3 @@ craft/plugins/s3direct/vendor
 
 craft/storage/*
 !craft/storage/.keep
-
-public/images/*
-!public/imgages/.keep

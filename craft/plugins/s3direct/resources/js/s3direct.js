@@ -129,9 +129,9 @@
     currentUserId: '',
     assetsSourceId: '',
     updateAssetsIndexUrl: '/actions/s3Direct/updateAssetsIndex',
-    uploadProgressBarSelector: '.s3.progress-bar',
-    updateIndexIndicatorSelector: 'img.s3',
-    selectFilesSelector: 'select.s3',
+    uploadProgressBarSelector: '.progress-bar.s3direct',
+    updateIndexIndicatorSelector: 'img.s3direct',
+    selectFilesSelector: 'select.s3direct',
     acceptFileTypes: undefined,
     debug: false,
   };
