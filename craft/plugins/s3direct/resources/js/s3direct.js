@@ -4,8 +4,8 @@
     console['log'] = function() {};
   }
 
-  $.fn.s3  = function(options) {
-    var config = $.extend( {}, $.fn.s3.defaults, options );
+  $.fn.s3direct  = function(options) {
+    var config = $.extend( {}, $.fn.s3direct.defaults, options );
     var uploadProgressBar = $(config.uploadProgressBarSelector);
     var updateIndexIndicator = $(config.updateIndexIndicatorSelector);
 
@@ -16,19 +16,21 @@
     });
 
     return this.each(function() {
-      var s3KeyFor = function(fileName) {
-        return config.s3Subfolder + '/' + fileName;
+      var keyFor = function(fileName) {
+        var subfolder = config.subfolder.length > 0 ? config.subfolder + '/' : '';
+
+        return subfolder + config.currentUserId + '/' + fileName;
       };
 
       var fileUploadSubmit = function(e, data) {
         var file = data.files[0];
 
         data.formData = {
-          key: s3KeyFor(file.name),
+          key: keyFor(file.name),
            acl: 'public-read',
-           policy: config.s3Policy,
-           signature: config.s3Signature,
-           AWSAccessKeyId: config.awsAccessKeyId,
+           policy: config.policy,
+           signature: config.signature,
+           AWSAccessKeyId: config.accessKey,
            'Content-Type': file.type,
         };
 
@@ -86,7 +88,8 @@
       var filenames = [];
 
       var fileUpload = $(this).fileupload({
-        url: 'https://'+config.s3Bucket+'.s3.amazonaws.com',
+        acceptFileTypes: config.acceptFileTypes,
+        url: 'https://'+config.bucket+'.s3.amazonaws.com',
         dataType: 'json',
         start: function(e) {
           filenames = [];
@@ -117,17 +120,19 @@
     });
   };
 
-  $.fn.s3.defaults = {
-    s3Subfolder: '',
-    s3Policy: '',
-    s3Signature: '',
-    awsAccessKeyId: '',
-    s3Bucket: '',
+  $.fn.s3direct.defaults = {
+    policy: '',
+    signature: '',
+    accessKey: '',
+    bucket: '',
+    subfolder: '',
+    currentUserId: '',
     assetsSourceId: '',
-    uploadProgressBarSelector: '#progress > .progress-bar',
     updateAssetsIndexUrl: '/actions/s3Direct/updateAssetsIndex',
-    updateIndexIndicatorSelector: '#update-index-indicator',
-    selectFilesSelector: '',
+    uploadProgressBarSelector: '.s3.progress-bar',
+    updateIndexIndicatorSelector: 'img.s3',
+    selectFilesSelector: 'select.s3',
+    acceptFileTypes: undefined,
     debug: false,
   };
 

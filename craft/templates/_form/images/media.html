@@ -50,7 +50,7 @@
     <label for="image">Image file</label>
     <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
     <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]" value="">
-    <select class="entry-image array" name="fields[mediaImages][{{ key }}][fields][image][]">
+    <select class="s3 array" name="fields[mediaImages][{{ key }}][fields][image][]">
       <option value=""></option>
     {% if folder %}
       {% for asset in craft.assets.folderId(folder.id) %}
@@ -86,8 +86,8 @@
         <img id="update-index-indicator" src="/img/spinner.gif" style="display: none;"/>
     </span>
     <br>
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    <div>
+        <div class="s3 progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
   </div>  
   <br>
@@ -96,14 +96,15 @@
 
 {% set js %}
 $(function() {
-  $('#fileupload').s3({
-    s3Bucket: "{{ s3.bucket }}",
-    s3Subfolder: "{{ s3.subfolder }}",
-    s3Policy: "{{ s3.policy }}",
-    s3Signature: "{{ s3.signature }}",
-    awsAccessKeyId: "{{ s3.keyId }}",
+  $('#fileupload').s3direct({
+    bucket: "{{ s3.bucket }}",
+    subfolder: "{{ s3.subfolder }}",
+    currentUserId: "{{ currentUser.id }}",
+    policy: "{{ s3.policy }}",
+    signature: "{{ s3.signature }}",
+    accessKey: "{{ s3.keyId }}",
     assetsSourceId: {{ sourceId }},
-    selectFilesSelector: 'select.entry-image',
+    acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
     debug: true,
   });
 });

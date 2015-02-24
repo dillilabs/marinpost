@@ -48,7 +48,7 @@ class S3DirectService extends BaseApplicationComponent
 
         return array(
             'bucket' => $settings['bucket'],
-            'subfolder' => $this->s3Subfolder($settings['subfolder']),
+            'subfolder' => $settings['subfolder'],
             'policy' => $form['policy'],
             'signature' => $form['signature'],
             'keyId' => $settings['keyId'],
@@ -101,7 +101,7 @@ class S3DirectService extends BaseApplicationComponent
         $updated = 0;
 
         foreach ($filenames as $filename) {
-            $uri = $this->s3UriForFilename($settings['subfolder'], $filename);
+            $uri = $this->s3UriForFilename($filename);
 
             $model = $this->getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri);
 
@@ -133,18 +133,11 @@ class S3DirectService extends BaseApplicationComponent
         return $sessionId;
     }
 
-    private function s3Subfolder($subfolder)
+    private function s3UriForFilename($filename)
     {
         $userId = $this->currentUserId();
 
-        return empty($subfolder) ? $userId : "$subfolder/$userId";
-    }
-
-    private function s3UriForFilename($subfolder, $filename)
-    {
-        $subfolder = $this->s3Subfolder($subfolder);
-
-        return "$subfolder/$filename";
+        return "$userId/$filename";
     }
 
     private function getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri)

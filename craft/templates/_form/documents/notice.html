@@ -1,10 +1,19 @@
 {% set maxDocuments = 1 %}
 {% set documentsAdded = 0 %}
+{% set isEditing = false %}
 {% set hideAddLink = false %}
 
-{% if entry is defined %}
+{% if entry %}
   {% set documentsAdded =  entry.noticeDocuments | length %}
+
+  {% if entry.id %}
+    {% set isEditing = true %}
+  {% endif %}
 {% endif %}
+
+{% set sourceId = 2 %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+
 <br>
 <label>Documents</label>
 <input type="hidden" name="fields[noticeDocuments]">
@@ -13,36 +22,83 @@
 {% for i in 1..maxDocuments %}
   {% set key = 'new'~i %}
 
+  {% set documentBlock = false %}
   {% set document = false %}
   {% set documentTitle = false %}
 
   {% if documentsAdded >= i %}
-    {% set document = entry.noticeDocuments.nth(i-1) %}
-    {% set documentTitle = document.documentTitle %}
+    {% set documentBlock = entry.noticeDocuments.nth(i-1) %}
+
+    {% if isEditing and documentBlock.id %}
+      {% set key = documentBlock.id %}
+    {% endif %}
+
+    {% set document = documentBlock.document.first %}
+    {% set documentTitle = documentBlock.documentTitle %}
   {% endif %}
 
-  {% if not document %}
+  {% if not documentBlock %}
     {% set text = loop.first ? 'Add a document' : 'Add another document' %}
     <a href="#" class="multiple-field add" id="add-document-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
     {% set hideAddLink = true %}
   {% endif %}
 
-  <div class="multiple-field inputs"  id="input-document-{{ i }}"{%- if not document %}style="display: none;"{% endif %}>
+  <div class="multiple-field inputs"  id="input-document-{{ i }}"{%- if not documentBlock %}style="display: none;"{% endif %}>
     <label for="noticeDocuments">Document file</label>
     <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]" value="">
-    <input type="file" name="fields[noticeDocuments][{{ key }}][fields][document][]">
+    <select class="s3 array" name="fields[noticeDocuments][{{ key }}][fields][document][]">
+      <option value=""></option>
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+      {% endfor %}
+    {% endif %}
+    </select>
     <br>
 
     <label for="document-title">Document title</label>
     <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
     <br>
 
-    {% if document %}
-      {{ f.errorList(document.allErrors) }}
+    {% if documentBlock %}
+      {{ f.errorList(documentBlock.allErrors) }}
     {% endif %}
 
     <a href="#" class="multiple-field remove" id="remove-document-{{ i }}">Remove document</a>
   </div>
 {% endfor %}
 <br>
+
+  <div class="container">  
+    <span class="btn btn-success fileinput-button">
+        <span>Upload file</span>
+        <input id="fileupload" type="file" name="file">
+        <img id="update-index-indicator" src="/img/spinner.gif" style="display: none;"/>
+    </span>
+    <br>
+    <div>
+        <div class="s3 progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    </div>
+  </div>  
+  <br>
+
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+
+{% set js %}
+$(function() {
+  $('#fileupload').s3direct({
+    bucket: "{{ s3.bucket }}",
+    subfolder: "{{ s3.subfolder }}",
+    currentUserId: "{{ currentUser.id }}",
+    policy: "{{ s3.policy }}",
+    signature: "{{ s3.signature }}",
+    accessKey: "{{ s3.keyId }}",
+    assetsSourceId: {{ sourceId }},
+    acceptFileTypes: /.+\.pdf$/i,
+    debug: true,
+  });
+});
+{% endset %}
+
+{% includeJs js %}
