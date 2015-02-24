@@ -4,9 +4,7 @@ namespace Craft;
 class MarinPostPlugin extends BasePlugin
 {
     /**
-     *
-     * Initialization
-     *
+     * Class init
      */
     public function init()
     {
@@ -19,14 +17,12 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    //
-    // Hooks
-    //
+    //----------------------
+    // Hook functions
+    //----------------------
 
     /**
-     *
      * Modify columns included in Control Panel entry list.
-     *
      */
     public function modifyEntryTableAttributes(&$attributes, $source)
     {
@@ -35,9 +31,7 @@ class MarinPostPlugin extends BasePlugin
     }
 
     /**
-     *
      * Display of columns in Control Panel entry list.
-     *
      */
     public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
     {
@@ -48,9 +42,7 @@ class MarinPostPlugin extends BasePlugin
     }
 
     /**
-     *
      * Modify sort by columns in Control Panel entry list.
-     *
      */
     public function modifyEntrySortableAttributes(&$attributes)
     {
@@ -58,57 +50,22 @@ class MarinPostPlugin extends BasePlugin
         // $attributes['author'] = Craft::t('Author');
     }
 
-    //
-    // Private functions
-    //
+    //----------------------
+    // Event functions
+    //----------------------
 
     /**
-     *
-     * Return true if control panel
-     *
-     */
-    private function _isCp() {
-        return craft()->request->isCpRequest();
-    }
-
-    /**
-     *
-     * Return true if logged-in.
-     *
-     */
-    private function _isLoggedIn() {
-        return craft()->userSession->isLoggedIn();
-    }
-
-    /**
-     *
-     * Return true if logged-in admin user.
-     *
-     */
-    private function _isAdmin() {
-        return $this->_isLoggedIn() && craft()->userSession->user->admin;
-    }
-
-    /**
-     *
      * Respond to the users.onSaveUser event.
-     *
      */
     private function _onSaveUserEvent()
     {
         craft()->on('users.onSaveUser', function(Event $event) {
             $user = $event->params['user'];
-
             $this->_syncUserName($user);
-
-            if (! $user->admin) {
-                // $this->_removeUserDashboardWidgets($user);
-            }
         });
     }
 
     /**
-     *
      * Keep {first,last}Name fields synchronized with name{First,Last} fields.
      *
      *  The former fields are:
@@ -122,7 +79,6 @@ class MarinPostPlugin extends BasePlugin
      *      custom
      *      required
      *      editable in Profile tab
-     *
      */
     private function _syncUserName($user) {
         if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
@@ -133,76 +89,54 @@ class MarinPostPlugin extends BasePlugin
         }
     }
 
-    /**
-     *
-     * Clean up dashboard of non-admin User.
-     *
-     */
-    private function _removeUserDashboardWidgets($user) {
-        foreach (craft()->dashboard->userWidgets as $widget) {
-            if ($widget->type !== 'RecentEntries') {
-                self::log("Deleting {$widget->type} widget from {$user->email} dashboard", LogLevel::Warning);
-                craft()->dashboard->deleteUserWidgetById($widget->id);
-            }
-        }
-    }
+    //----------------------
+    // Universal CP functions
+    //----------------------
 
     /**
-     *
      * Add Javascript to the Control Panel:
      *
      *  For all Users:
      *
      *      Remove First Name, Last Name and Week Start Day fields on user My Account Account tab
-     *
-     *  For non-admin Users:
-     *
-     *      Remove Photo and Bio fields on My Account Profile tab
-     *
-     *      Remove Dashboard settings link
-     *
      */
     private function _includeJs() {
         $js = <<<'JS'
 var userFormFields = $('form#userform .field');
 userFormFields.filter('#firstName-field, #lastName-field, #weekStartDay-field').remove();
 JS;
-        $non_admin_js = <<<'JS'
-userFormFields.has('input#image-upload, textarea#fields-bio').remove();
-$('#page-header #extra-headers').remove();
-JS;
-        if (! $this->_isAdmin()) {
-            $js = $js . $non_admin_js;
-        }
 
         craft()->templates->includeJs($js);
     }
 
-    //
-    // Settings
-    //
+    //----------------------
+    // Helper functions
+    //----------------------
 
-    protected function defineSettings()
-    {
-        return array(
-            'awsAccessKeyId' => array(AttributeType::String),
-            'awsSecretAccessKey' => array(AttributeType::String),
-            's3Region' => array(AttributeType::String),
-            's3Bucket' => array(AttributeType::String),
-            'assetsSourceId' => array(AttributeType::Number),
-        );
+    /**
+     * Return true if control panel
+     */
+    private function _isCp() {
+        return craft()->request->isCpRequest();
     }
 
-    public function getSettingsHtml()
-    {
-        return craft()->templates->render('marinpost/_settings', array(
-            'settings' => $this->getSettings(),
-        ));
+    /**
+     * Return true if logged-in.
+     */
+    private function _isLoggedIn() {
+        return craft()->userSession->isLoggedIn();
     }
 
-    //
-    // Boilerplate
-    //
+    /**
+     * Return true if logged-in admin user.
+     */
+    private function _isAdmin() {
+        return $this->_isLoggedIn() && craft()->userSession->user->admin;
+    }
+
+    //----------------------
+    // Boilerplate functions
+    //----------------------
 
     public function getName()
     {
@@ -211,7 +145,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.11';
+        return '0.0.12';
     }
 
     public function getDeveloper()

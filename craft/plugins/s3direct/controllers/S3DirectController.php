@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class MarinPostController extends BaseController
+class S3DirectController extends BaseController
 {
     public function actionUpdateAssetsIndex()
     {
@@ -15,9 +15,9 @@ class MarinPostController extends BaseController
 
         if ($sourceId && $fileNames)
         {
-            $updated = craft()->marinPost->updateAssetIndexForFilenames($sourceId, $fileNames);
+            $updated = craft()->s3Direct->updateAssetIndexForFilenames($sourceId, $fileNames);
 
-            $folder = craft()->marinPost->s3Folder($sourceId);
+            $folder = craft()->s3Direct->s3Folder($sourceId);
 
             $files = array();
 

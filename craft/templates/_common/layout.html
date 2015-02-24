@@ -14,14 +14,15 @@
   <link rel="home" href="{{ siteUrl }}" />
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
   {% includeCssFile "/css/normalize.css" %}
   {% includeCssFile "/css/main.css" %}
   {% includeCssFile "/css/rrssb.css" %}
   {% includeCssFile "/css/jquery-ui.min.css" %}
   {% includeCssFile "/css/jquery-ui.structure.min.css" %}
   {% includeCssFile "/css/jquery-ui.theme.min.css" %}
-  {% includeCssFile "/css/jquery.fileupload.css" %}
+  {% includeCssResource "/s3direct/css/jquery.fileupload.css" %}
+
 <!--[if lt IE 9]>
   <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <![endif]--> <!-- Modernizr with media queries and HTML5shiv for only IE lt 9 -->
@@ -126,13 +127,12 @@
   {% includeJsFile "/js/main.js" %}
   {% includeJsFile "/js/rrssb.min.js" %}
   {% includeJsFile "/js/jquery-ui.min.js" %}
-  {# includeJsFile "/js/jquery.ui.widget.js" #}
-  {% includeJsFile "/js/jquery.iframe-transport.js" %}
-  {% includeJsFile "/js/jquery.fileupload.js" %}
   {% includeJsFile "/js/filters.js" %}
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
-  {% includeJsResource "marinpost/js/s3.js" %}
+  {% includeJsResource "/s3direct/js/jquery.iframe-transport.js" %}
+  {% includeJsResource "/s3direct/js/jquery.fileupload.js" %}
+  {% includeJsResource "s3direct/js/s3direct.js" %}
   
   {% include "_common/analytics.js" %}
 </body>

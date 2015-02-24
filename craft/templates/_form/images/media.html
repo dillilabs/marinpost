@@ -12,7 +12,7 @@
 {% endif %}
 
 {% set sourceId = 3 %}
-{% set folder = craft.marinpost.s3Folder(sourceId) %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
 
 <br>
 <input type="hidden" name="fields[mediaImages]">
@@ -92,7 +92,7 @@
   </div>  
   <br>
 
-{% set s3 = craft.marinpost.s3UploadForm(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set js %}
 $(function() {

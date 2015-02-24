@@ -1,9 +1,9 @@
 <?php
 namespace Craft;
 
-require CRAFT_PLUGINS_PATH.'/marinpost/vendor/autoload.php';
+require CRAFT_PLUGINS_PATH.'/s3direct/vendor/autoload.php';
 
-class MarinPostService extends BaseApplicationComponent
+class S3DirectService extends BaseApplicationComponent
 {
 
     /**
@@ -18,7 +18,7 @@ class MarinPostService extends BaseApplicationComponent
     public function s3UploadForm($assetSourceId)
     {
         $settings = $this->assetSourceSettings($assetSourceId);
-        MarinPostPlugin::log(print_r($settings, true), LogLevel::Info, true);
+        S3DirectPlugin::log(print_r($settings, true), LogLevel::Info, true);
 
         $s3 = \Aws\S3\S3Client::factory(
             array(

@@ -1,4 +1,9 @@
 (function($) {
+  var console = (window.console = window.console || {});
+  if (!console['log']) {
+    console['log'] = function() {};
+  }
+
   $.fn.s3  = function(options) {
     var config = $.extend( {}, $.fn.s3.defaults, options );
     var uploadProgressBar = $(config.uploadProgressBarSelector);
@@ -120,7 +125,7 @@
     s3Bucket: '',
     assetsSourceId: '',
     uploadProgressBarSelector: '#progress > .progress-bar',
-    updateAssetsIndexUrl: '/actions/marinPost/updateAssetsIndex',
+    updateAssetsIndexUrl: '/actions/s3Direct/updateAssetsIndex',
     updateIndexIndicatorSelector: '#update-index-indicator',
     selectFilesSelector: '',
     debug: false,
