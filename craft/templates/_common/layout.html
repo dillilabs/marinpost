@@ -52,15 +52,17 @@
       {% endif %}
       </div>
       <li id="search">
+        <form action="/search" method="GET">
         <fieldset>
-          <input type="search"><br>
-          <input type="radio" name="search" value="all" checked > All
-          <input type="radio" name="search" value="all" > Blogs
-          <input type="radio" name="search" value="all" > News
-          <input type="radio" name="search" value="all" > Notices
-          <input type="radio" name="search" value="all" > Media
-          <input type="radio" name="search" value="all" > LTRs
+          <input type="search" name="term" autocomplete="off"><br>
+          <input type="radio" name="section" value="" {{ n.searchSection('') }}> All
+          <input type="radio" name="section" value="blog" {{ n.searchSection('blog') }}> Blogs
+          <input type="radio" name="section" value="news" {{ n.searchSection('news') }}> News
+          <input type="radio" name="section" value="notices" {{ n.searchSection('notices') }}> Notices
+          <input type="radio" name="section" value="media" {{ n.searchSection('media') }}> Media
+          <input type="radio" name="section" value="letters" {{ n.searchSection('letters') }}> LTRs
         </fieldset>
+        </form>
       </li>
     </ul>
   </section>

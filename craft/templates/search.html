@@ -1,0 +1,31 @@
+{% set term = craft.request.param('term') %}
+
+{% set entries = craft.entries.search(term).order('score') %}
+
+{% set section = craft.request.param('section') %}
+
+{% set entries = section ? entries.section(section) : entries %}
+
+{% extends "_common/layout" %}
+
+{% set title = "Search" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block subNav %}
+    {% endblock %}
+
+    {% block post %}
+      <h2>Search</h2>
+      {% if entries | length %}
+        <ul class="posts">
+        {% for entry in entries %}
+          {{ p.post(entry, true) }}
+        {% endfor %}
+        </ul>
+      {% else %}
+        Can't find no stinkin' <b>{{ term }}</b>{%- if section %} in {{ section }}{% endif -%}
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
