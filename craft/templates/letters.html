@@ -18,7 +18,7 @@
         {% for groupedDate, groupedEntries in entries | group("postDate") %}
           <h2 class="date-divider">{{ groupedDate | date('F j, Y') }} <span class="comment-count disqus-comment-count" data-disqus-identifier="{{ groupedDate | date('F j, Y') }}"></span></h2>
           <div>
-            {% for entry in groupedEntries %}
+            {% for entry in groupedEntries | sort %}
               <h3>{{ entry.title }}</h3>
               {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}}<br>
               {{ entry.postDate | date('g:i A') }} <br>
