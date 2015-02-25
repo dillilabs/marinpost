@@ -10,20 +10,33 @@
     {% block h2 %}
       Letters to the Editor
     {% endblock %}
-
     
     {% block posts %}
-    {% set allEntries = craft.entries.section('letters').limit(perPage).find %}
-    {% for date, entries in allEntries | group("postDate|date('F j, Y')") %}
-        <h2 class="date-divider">{{ date }} <span class='comment-count'># Comments</span></h2>
-        {% for entry in entries %}
-            <h3><a href="/letters/{{entry.slug}}">{{ entry }}</a></h3>
-            <a href="">{{ entry.author.fullName }}</a> &mdash; {# need a location field for users #}<br>
-            {{postDate|date('g:i A')}} <br>
-            <p>{{ entry.letterContent }}</p>
-        {% endfor %}
-    {% endfor %}
-    
+      {% set allEntries = craft.entries.section('letters').limit(perPage).find %}
+
+      <div id="letters-by-date">
+      {% for date, entries in allEntries | group("postDate|date('F j, Y')") %}
+          <h2 class="date-divider">{{ date }} <span class='comment-count'># Comments</span></h2>
+          <div>
+          {% for entry in entries %}
+              <h3>{{ entry.title }}</h3>
+              {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}}<br>
+              {{postDate|date('g:i A')}} <br>
+              <p>{{ entry.letterContent }}</p>
+          {% endfor %}
+          </div>
+      {% endfor %}
+      </div>
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+$(function() {
+  $("#letters-by-date").accordion({
+    'header': 'h2'
+  });
+});
+{% endset %}
+
+{% includeJs js %}
