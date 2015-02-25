@@ -25,52 +25,7 @@
         {% include "_form/title" %}
         {% include "_form/locations" %}
         {% include "_form/topics" %}
-
-        <label for="mediaLink">Media Link</label>
-        {% set mediaType = 'video' %}
-        {% set videoUrl = null %}
-        {% set documentUrl = null %}
-        {% set documentTitle = null %}
-        {% set errors = null %}
-
-        {% if entry is defined %}
-          {% set media = entry.mediaLink.first %}
-          {% set mediaType = media.type %}
-
-          {% switch media.type %}
-            {% case 'video' %}
-              {% set videoUrl = media.videoUrl %}
-            {% case 'document' %}
-              {% set documentUrl = media.documentUrl %}
-            {% case 'upload' %}
-              {% set documentTitle = media.documentTitle %}
-          {% endswitch %}
-
-          {% set errors = media.allErrors %}
-        {% endif %}
-
-        <input type="hidden" name="fields[mediaLink]">
-        <input type="hidden" name="fields[mediaLink][new1]">
-        <input type="hidden" name="fields[mediaLink][new1][type]" id="mediaType" value="{{ mediaType }}">
-
-        <input type="radio" name="mediaType" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link to a video
-        <input type="radio" name="mediaType" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
-        <input type="radio" name="mediaType" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
-
-        <input type="text" name="fields[mediaLink][new1][fields][videoUrl]" class="media video" autocomplete="off" value="{{ videoUrl }}" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
-        <input type="text" name="fields[mediaLink][new1][fields][documentUrl]" class="media document" autocomplete="off" value="{{ documentUrl }}" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
-
-        <input type="hidden" name="fields[mediaLink][new1][fields][document]" class="media upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-        <input type="file" name="fields[mediaLink][new1][fields][document][]" class="media upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-
-        <label for="documentTitle" class="media upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>Document title</label>
-        <input type="text" name="fields[mediaLink][new1][fields][documentTitle]" class="media upload" value="{{ documentTitle }}" autocomplete="off" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-
-        {% if entry is defined %}
-          {{ f.errorList(errors) }}
-        {% endif %}
-        <br>
-
+        {% include "_form/links/media" %}
         {% include "_form/content/link" %}
         {% include "_form/images/media" %}
 

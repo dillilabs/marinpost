@@ -86,6 +86,7 @@
       };
 
       var filenames = [];
+      var uploadError = false;
 
       var fileUpload = $(this).fileupload({
         acceptFileTypes: config.acceptFileTypes,
@@ -106,11 +107,15 @@
           if (config.debug) console.log('fileupload() done', data, filenames);
         },
         fail: function(e, data) {
+          uploadError = true;
+          alert('Error uploading to ' + data.url);
           if (config.debug) console.log('fileupload() fail', data);
         },
         stop: function(e) {
           if (config.debug) console.log('fileupload() stop', filenames);
-          updateAssetsIndex(filenames);
+          if (!uploadError) {
+            updateAssetsIndex(filenames);
+          }
         }
       });
       
