@@ -26,9 +26,9 @@
             {% endfor %}
 
             <h3>Join the Conversation</h3>
-            {% set mdyDate = entry.postDate | date('F j, Y') %}
-            {% set ymdDate = entry.postDate | date('Y/m/d') %}
-            <button class="toggle-comments-for-date" data-mdy-date="{{ mdyDate }}" data-ymd-date={{ ymdDate }}">View Comments</button>
+            {% set mdyDate = groupedDate | date('F j, Y') %}
+            {% set ymdDate = groupedDate | date('Y/m/d') %}
+            <button class="toggle-comments-for-date" data-mdy-date="{{ mdyDate }}" data-ymd-date="{{ ymdDate }}">View Comments</button>
             {% if loop.first %}
               <div id="wrap-comments-for-date" style="display: none;">
                 {% include "_common/disqus_letters.html" with { 'mdyDate': mdyDate, 'ymdDate': ymdDate } only %}

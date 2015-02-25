@@ -4,20 +4,23 @@ $(function() {
   var commentsMdyDate = 'data-mdy-date';
   var commentsYmdDate = 'data-ymd-date';
 
-  var resetDisqusEmbed = function(mdyDate, ymdDate) {
+  var resetDisqusEmbed = function(mdy, ymd) {
+    console.log('resetting disqus', mdy, ymd);
+
     DISQUS.reset({
       reload: true,
       config: function () {
-        this.page.identifier = mdyDate;
-        this.page.url = window.location.href + '/' + ymdDate;
-        this.page.title = mdyDate;
+        this.page.identifier = mdy;
+        this.page.url = window.location.href + '/' + ymd;
+        this.page.title = mdy;
       }
     });
   };
 
   $(commentsToggleSel).click(function(e) {
-    var comments = $(this).next(commentsSel);
-    var mdyDate, ymdDate;
+    var button = $(this);
+    var comments = button.next(commentsSel);
+    var mdy, ymd;
 
     if (comments.length > 0) {
       comments.toggle();
@@ -25,12 +28,12 @@ $(function() {
       comments = $(commentsSel);
 
       if (comments.length > 0) {
-        mdyDate = $(this).attr(commentsMdyDate);
-        ymdDate = $(this).attr(commentsYmdDate);
+        mdy = button.attr(commentsMdyDate);
+        ymd = button.attr(commentsYmdDate);
 
-        resetDisqusEmbed(mdyDate, ymdDate);
+        resetDisqusEmbed(mdy, ymd);
 
-        $(this).after(comments.detach());
+        button.after(comments.detach());
       }
     }
   });
