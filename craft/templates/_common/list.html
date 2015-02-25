@@ -50,10 +50,12 @@
 </div>
 </main>
 
-{% set filterJs %}
+{% set js %}
   $(function() {
       $('ul.posts').filters();
   });
 {% endset %}
 
-{% includeJs filterJs %}
+{% includeJs js %}
+
+{% include "_common/disqus_count.html" %}
