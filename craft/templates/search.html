@@ -1,10 +1,12 @@
-{% set term = craft.request.param('term') %}
+{% set query = craft.request.param('query') | replace('/^\\s+$/', '') %}
 
-{% set entries = craft.entries.search(term).order('score') %}
+{% if query | length %}
+  {% set searchTerms = query | split(' ') | filter | join(' OR ') %}
+  {% set entries = craft.entries.search(searchTerms).order('score') %}
 
-{% set section = craft.request.param('section') %}
-
-{% set entries = section ? entries.section(section) : entries %}
+  {% set section = craft.request.param('section') %}
+  {% set entries = section ? entries.section(section) : entries %}
+{% endif %}
 
 {% extends "_common/layout" %}
 
@@ -17,14 +19,18 @@
 
     {% block post %}
       <h2>Search</h2>
-      {% if entries | length %}
-        <ul class="posts">
-        {% for entry in entries %}
-          {{ p.post(entry, true) }}
-        {% endfor %}
-        </ul>
+      {% if query | length %}
+        {% if entries | length %}
+          <ul class="posts">
+          {% for entry in entries %}
+            {{ p.post(entry, true) }}
+          {% endfor %}
+          </ul>
+        {% else %}
+          <p>Can't find no stinkin' <i>{{ query }}</i>{%- if section %} in {{ section }}{% endif -%}</p>
+        {% endif %}
       {% else %}
-        Can't find no stinkin' <b>{{ term }}</b>{%- if section %} in {{ section }}{% endif -%}
+        {% include "_common/search" %}
       {% endif %}
     {% endblock %}
   {% endembed %}

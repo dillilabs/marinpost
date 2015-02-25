@@ -226,7 +226,7 @@
 {% macro documents(documents) %}
   {% from _self import documentDownload %}
 
-  {% if documents | length > 0 %}
+  {% if documents | length %}
     {% for block in documents %}
       {% set file = block.document.first %}
       {{ documentDownload(file, block.documentTitle) }}
