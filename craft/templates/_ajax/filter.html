@@ -1,30 +1,33 @@
 {% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
-{# Filter list of entries by one or more:
+{# Filter list of entries by one or more of each the following:
  #
  #  Locations
- #
- # and one or more:
- #
  #  Topics
+ #  Authors
  #
- # Each Location is OR-ed together and each Topic is OR-ed together, then both filters are AND-d.
+ # 1. Each Location is OR-ed together
+ #
+ # 2. Each Topic is OR-ed together
+ #
+ # 3. Each Author is OR-ed together
+ #
+ # 4. All filters are AND-d together
  #
  # For example:
  #
- #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building"
+ #   "Larkspur OR Corte Madera OR Greenbrae" AND "Environment OR Green Building" AND "Joe Contributor OR Jane Blogger"
  #}
 {% spaceless %}
 
+{% set defaultLimit = 2 %} {# TODO change to 10 #}
+
 {% set section = craft.request.segments(2) %}
 
-{% set doDebug = false %}
+{% set doDebug = true %}
 {% set debug = {} %}
 
 {% set locations = craft.request.getParam('locations') | split(',') %}
 {% set debug = debug | merge({ 'Locations': locations }) %}
-
-{% set topics = craft.request.getParam('topics') | split(',') %}
-{% set debug = debug | merge({ 'Topics': topics }) %}
 
 {% if locations|first is empty %}
     {% set locationEntries = craft.entries.section(section) %}
@@ -40,7 +43,10 @@
 	{% set locationEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
 
-{% set debug = debug | merge({ 'Number of Locations': locationEntries | length }) %}
+{% set debug = debug | merge({ 'Number of Location entries': locationEntries | length }) %}
+
+{% set topics = craft.request.getParam('topics') | split(',') %}
+{% set debug = debug | merge({ 'Topics': topics }) %}
 
 {% if topics|first is empty %}
 	{% set topicEntries = craft.entries.section(section) %}
@@ -56,22 +62,36 @@
 	{% set topicEntries = craft.entries.section(section).relatedTo(relatedTo) %}
 {% endif %}
 
-{% set debug = debug | merge({ 'Number of Topics': topicEntries | length }) %}
+{% set debug = debug | merge({ 'Number of Topic entries': topicEntries | length }) %}
+
+{% set authors = craft.request.getParam('authors') | split(',') %}
+{% set debug = debug | merge({ 'Authors': authors }) %}
+
+{% if authors|first is empty %}
+    {% set authorEntries = craft.entries.section(section) %}
+{% else %}
+	{% set authorEntries = craft.entries.section(section).authorId(authors) %}
+{% endif %}
+
+{% set debug = debug | merge({ 'Number of Author entries': authorEntries | length }) %}
 
 {% set entries = [] %}
 {% set topicEntryIds = topicEntries.ids %}
+{% set authorEntryIds = authorEntries.ids %}
 
 {% for entry in locationEntries %}
-    {% if entry.id in topicEntryIds %}
-        {% set entries = entries | merge([entry]) %}
+  {% if entry.id in topicEntryIds %}
+    {% if entry.id in authorEntryIds %}
+      {% set entries = entries | merge([entry]) %}
     {% endif %}
+  {% endif %}
 {% endfor %}
 
 {% set debug = debug | merge({ 'Unlimited entries': entries | length }) %}
 
 {% set offset = craft.request.getParam('offset') | default(0) %}
 
-{% set limit = craft.request.getParam('limit') | default(2) %}
+{% set limit = craft.request.getParam('limit') | default(defaultLimit) %}
 
 {% set debug = debug | merge({ 'Offset': offset, 'Limit': limit }) %}
 
@@ -79,7 +99,7 @@
 
 {% set debug = debug | merge({ 'Limited entries': entries | length }) %}
 
-{% if craft.config.devMode and doDebug %}
+{% if doDebug %}
   <li><small>{{ debug | json_encode }}</small></li>
 {% endif %}
 

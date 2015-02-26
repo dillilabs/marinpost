@@ -26,7 +26,7 @@
         <fieldset>
           <h5>Bloggers</h5>
           <ul>
-            <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+            <li><input type="checkbox" class="author all" value="all" checked="checked" />All</li>
             {% for author in craft.users.group('contributor') %}
               <li><input type="checkbox" class="author filter" value="{{ author.id }}"/>{{ author.name }}</li>
             {% endfor %}
