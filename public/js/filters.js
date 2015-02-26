@@ -7,6 +7,7 @@
             var section = document.location.pathname.split('/')[1];
             var loadMoreLink = $('#load-more-content'); // TODO activate on scroll
           
+            // TODO refactor
             var filterType = function(e) {
               if (e.is('.location')) {
                 return '.location';
@@ -29,6 +30,9 @@
               return $('.listing').length;
             };
           
+            // TODO ascertain end of content
+            // and prevent further requests
+            // taking into account the current state of the filters
             var loadMoreContent = function() {
               $.get(
                 '/more/'+section+'?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&authors='+activeFilters('author')+'&offset='+currentContentLength(),

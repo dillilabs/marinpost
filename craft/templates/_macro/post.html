@@ -6,16 +6,21 @@
   {% switch entry.section.handle %}
     {% case 'blog' %}
       {% set fieldName = 'blogImages' %}
+
     {% case 'media' %}
       {% set fieldName = 'mediaImages' %}
+
     {% case 'notices' %}
       {% set fieldName = 'noticeImages' %}
+
     {% default %}
       {% set fieldName = null %}
+
   {% endswitch %}
 
   {% if fieldName is not null %}
     {% set images = attribute(entry, fieldName) %}
+
     {% if images is defined %}
       {% for block in images.order('sortOrder asc').limit(1) %}
         {% set image = block.image.first %}
@@ -24,11 +29,14 @@
 
     {% if image is not null %}
       {{ image.url(transform) }}
+
     {% else %}
       /img/default-{{ transform }}.png
+
     {% endif %}
   {% else %}
     /img/default-{{ transform }}.png
+
   {% endif %}
 {% endspaceless %}
 {% endmacro %}
@@ -47,8 +55,10 @@
 
   {% if author.isInGroup('contributor') %}
     <a href="{{ contributorUrl(author) }}">{{ author.name }}</a>
+
   {% else %}
     {{ author.name }}
+
   {% endif %}
 {% endmacro %}
 
@@ -58,14 +68,19 @@
   {% switch entry.section.handle %}
     {% case 'blog' %}
       {% set mainContent = entry.blogContent %}
+
     {% case 'letters' %}
       {% set mainContent = entry.letterContent %}
+
     {% case 'media' %}
       {% set mainContent = entry.linkComments %}
+
     {% case 'news' %}
       {% set mainContent = entry.linkComments %}
+
     {% case 'notices' %}
       {% set mainContent = entry.noticeContent %}
+
   {% endswitch %}
 
   {{- mainContent -}}
@@ -83,11 +98,14 @@
   {% switch media.type %}
     {% case 'video' %}
       {% set mediaUrl = media.videoUrl %}
+
     {% case 'document' %}
       {% set mediaUrl = media.documentUrl %}
+
     {% case 'upload' %}
       {% set file = media.document.first %}
       {% set mediaUrl = file.url %}
+
   {% endswitch %}
 
   {{ mediaUrl }}
@@ -104,10 +122,13 @@
   {% switch entry.section.handle %}
     {% case 'media' %}
       <a href="{{ mediaUrl(entry) }}" target="_blank"><img src="{{ image }}"></a>
+
     {% case 'news' %}
       <a href="{{ entry.newsLink }}" target="_blank"><img src="{{ image }}"></a>
+
     {% default %}
       <a href="{{ entry.url }}"><img src="{{ image }}"></a>
+
   {% endswitch %}
 {% endmacro %}
 
@@ -129,10 +150,13 @@
   {% switch entry.section.handle %}
     {% case 'blog' %}
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+
     {% case 'notices' %}
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+
     {% default %}
       <h3>{{ entry.title }}</h3>
+
   {% endswitch %}
 {% endmacro %}
 
@@ -152,10 +176,14 @@
   {% switch entry.section.handle %}
     {% case 'letters' %}
       <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}} {{ editLink(entry) }}</div>
+
     {% case 'news' %}
-      <div class="byline">{{ entry.postDate | date('M d, Y') }} by {{ authorLink(entry) }} <a class="more" href="{{ entry.newsLink }}" target="_blank">READ ARTICLE</a> {{ editLink(entry) }}</div>
+      Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorLink(entry) }} {{ editLink(entry) }}
+      <br>
+
     {% default %}
       <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ editLink(entry) }}</div>
+
   {% endswitch %}
 {% endmacro %}
 
@@ -169,14 +197,18 @@
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
       <p>{{ content }}</p>
+
     {% case 'news' %}
       {{ postTitle(entry) }}
-      <p>{{ content }}</p>
       {{ postBy(entry) }}
+      <p>{{ content }}</p>
+      <a href="{{ entry.newsLink }}" target="_blank">Read Article</a>
+
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
       <p>{{ content | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+
   {% endswitch %}
 {% endmacro %}
 
@@ -196,27 +228,32 @@
 
   {% set unfiltered = unfiltered | default(false) %}
 
-  <li class="listing">
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div>
-        {{ postTitle(entry) }}
-        {{ postBy(entry) }}
-        <p>{{ entry.letterContent }}</p>
-      </div>
+      <li class="listing">
+        <div>
+          {{ postTitle(entry) }}
+          {{ postBy(entry) }}
+          <p>{{ entry.letterContent }}</p>
+        </div>
+      </li>
+
     {% case 'news' %}
-      <li>
+      <li class="listing">
         {{ postTags(entry, unfiltered) }}
         {{ postSummary(entry) }}
       </li>
+
     {% default %}
-      {{ postImage(entry) }}
-      <div class="post">
-        {{ postTags(entry, unfiltered) }}
-        {{ postSummary(entry) }}
-      </div>
+      <li class="listing">
+        {{ postImage(entry) }}
+        <div class="post">
+          {{ postTags(entry, unfiltered) }}
+          {{ postSummary(entry) }}
+        </div>
+      </li>
+
   {% endswitch %}
-  </li>
 {% endmacro %}
 
 {% macro documentDownload(file, title) %}
@@ -231,6 +268,7 @@
       {% set file = block.document.first %}
       {{ documentDownload(file, block.documentTitle) }}
     {% endfor %}
+
   {% endif %}
 {% endmacro %}
 

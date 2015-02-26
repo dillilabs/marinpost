@@ -65,8 +65,8 @@
 
 {% from "_macro/post" import post %}
 
+{% endspaceless %}
+
 {% for entry in entries %}
 	{{ post(entry) }}
 {% endfor %}
-
-{% endspaceless %}
