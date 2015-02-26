@@ -25,12 +25,17 @@
       {% endif %}
 
       <ul>
-      {% for entry in craft.entries.authorId(user.id).find %}
-        <li>{{ entry.postDate | date('M d, Y') }} <a href="{{ entry.url }}">{{ entry.title }}</a> ({{ entry.section.name }})</li>
+      {% for entry in craft.entries.authorId(user.id) %}
+        <li>
+          {{ entry.postDate | date('M d, Y') }}
+          [{{ entry.section.name }}]
+          <a href="{{ entry.url | default(url(entry.section.handle))  }}">{{ entry.title }}</a>
+          {% if currentUser.id == user.id %}
+            [<a href="/edit/{{ entry.id }}">edit</a>]
+          {% endif %}
+        </li>
       {% endfor %}
       </ul>
     {% endblock %}
-
   {% endembed %}
 {% endblock %}
-
