@@ -21,8 +21,12 @@
           {{ f.errorList(entry.getAllErrors) }}
         {% endif %}
 
+        {% include "_form/images/notice" %}
+        <hr>
         {% include "_form/title" %}
-        {% include "_form/locations" %}<br>
+        <hr>
+        {% include "_form/locations" %}
+        <hr>
         {% include "_form/topics" %}
         <hr>
         <fieldset class="event">
@@ -33,11 +37,15 @@
             <label for="event-city">Event city</label><input type="text" id="event-city">
             <label for="event-zip">Event zip code</label><input type="text" pattern="[0-9]*" id="event-zip"><br>
         </fieldset>
-        <label for="notice-contact">Contact phone number</label>
-        <input type="tel" id="notice-contact"><br>
+        <hr>
+        <fieldset class="contact">
+            <label for="event-zip">Contact name</label><input type="text" id="contact-name"><br>
+	        <label for="notice-contact">Contact phone number</label><br>
+	        <input type="tel" id="notice-contact"><br>
+            <label for="event-zip">Contact email address</label><input type="text" id="contact-email-address"><br>
+        </fieldset>
         <hr>
         {% include "_form/content/notice" %}
-        {% include "_form/images/notice" %}
         {% include "_form/documents/notice" %}<br>
 
         <input type="submit" value="{{ f.userAction(entry) }} Notice">

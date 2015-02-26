@@ -1,4 +1,5 @@
-<label for="primaryTopic">Topic</label>
+<label for="primaryTopic">Primary Topic</label>
+<p>The "primary" topic shows up first.</p>
 {% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
 <select id="primaryTopic" name="fields[primaryTopic][]" class="array">
   <option value=""></option>
