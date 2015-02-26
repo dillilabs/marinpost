@@ -1,6 +1,7 @@
 {% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
 
-<label for="primaryLocation">Location</label>
+<label for="primaryLocation">Primary Location</label>
+<p>The "primary" location shows up first.</p>
 
 <select id="primaryLocation" name="fields[primaryLocation][]" class="array">
   <option value=""></option>
