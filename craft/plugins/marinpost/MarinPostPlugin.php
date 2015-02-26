@@ -12,8 +12,8 @@ class MarinPostPlugin extends BasePlugin
 
         $this->_onSaveUserEvent();
 
-        if ($this->_isCp()) {
-            $this->_includeJs();
+        if (craft()->request->isCpRequest()) {
+            $this->_includeCpJs();
         }
     }
 
@@ -66,19 +66,20 @@ class MarinPostPlugin extends BasePlugin
     }
 
     /**
-     * Keep {first,last}Name fields synchronized with name{First,Last} fields.
+     * Keep (native) firstName and lastName fields synchronized with (custom) nameFirst and nameLast fields.
      *
-     *  The former fields are:
+     *  The native fields are:
      *
-     *      "special"
      *      not required
-     *      hidden in Account tab by JS
+     *      hidden in User Account tab via Javascript (by this plugin)
+     *      "special"
      *
-     *  The latter fields are:
+     *  The custom fields are:
      *
-     *      custom
      *      required
-     *      editable in Profile tab
+     *      editable in User Profile tab
+     *
+     *  Synchronization is desirable because the native fields are ubiquitously used to display the User name.
      */
     private function _syncUserName($user) {
         if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
@@ -94,44 +95,21 @@ class MarinPostPlugin extends BasePlugin
     //----------------------
 
     /**
-     * Add Javascript to the Control Panel:
+     * Add Javascript to the Control Panel to do the following:
      *
-     *  For all Users:
+     *  In User Account tab remove the following fields:
      *
-     *      Remove First Name, Last Name and Week Start Day fields on user My Account Account tab
+     *      First Name
+     *      Last Name
+     *      Week Start Day
      */
-    private function _includeJs() {
+    private function _includeCpJs() {
         $js = <<<'JS'
 var userFormFields = $('form#userform .field');
 userFormFields.filter('#firstName-field, #lastName-field, #weekStartDay-field').remove();
 JS;
 
         craft()->templates->includeJs($js);
-    }
-
-    //----------------------
-    // Helper functions
-    //----------------------
-
-    /**
-     * Return true if control panel
-     */
-    private function _isCp() {
-        return craft()->request->isCpRequest();
-    }
-
-    /**
-     * Return true if logged-in.
-     */
-    private function _isLoggedIn() {
-        return craft()->userSession->isLoggedIn();
-    }
-
-    /**
-     * Return true if logged-in admin user.
-     */
-    private function _isAdmin() {
-        return $this->_isLoggedIn() && craft()->userSession->user->admin;
     }
 
     //----------------------

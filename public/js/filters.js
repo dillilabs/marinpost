@@ -22,8 +22,18 @@
               return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
             };
           
+            var urlFor = function(section) {
+              var locations = activeFilters('location');
+              var topics = activeFilters('topic');
+              var authors = activeFilters('author');
+
+              return '/filter/'+section+'?locations='+locations+'&topics='+topics+'&authors='+authors;
+            };
+
             var refreshViews = function() {
-              filteredContent.load('/filter/'+section+'?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&authors='+activeFilters('author'));
+              var url = urlFor(section);
+
+              filteredContent.load(url);
             };
           
             var currentContentLength = function() {
@@ -34,8 +44,11 @@
             // and prevent further requests
             // taking into account the current state of the filters
             var loadMoreContent = function() {
+              var url = urlFor(section);
+              var offset = currentContentLength();
+
               $.get(
-                '/more/'+section+'?locations='+activeFilters('location')+'&topics='+activeFilters('topic')+'&authors='+activeFilters('author')+'&offset='+currentContentLength(),
+                url+'&offset='+offset,
                 function(data) {
                   filteredContent.append(data);
                 }
