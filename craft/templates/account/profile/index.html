@@ -8,7 +8,7 @@
 
       <h2>Profile</h2>
 
-      <form method="post" accept-charset="UTF-8">
+      <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
           <input type="hidden" name="redirect" value="account/profile/updated">
