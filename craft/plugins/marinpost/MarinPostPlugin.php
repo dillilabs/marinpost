@@ -112,6 +112,25 @@ JS;
         craft()->templates->includeJs($js);
     }
 
+    //
+    // Settings
+    //
+
+    protected function defineSettings()
+    {
+        return array(
+            'defaultEntryLimit' => array(AttributeType::String, 'default' => 10),
+            'forceLog' => array(AttributeType::Bool, 'default' => false),
+        );
+    }
+
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('marinpost/_settings', array(
+            'settings' => $this->getSettings(),
+        ));
+    }
+
     //----------------------
     // Boilerplate functions
     //----------------------
@@ -123,7 +142,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.13';
+        return '0.0.14';
     }
 
     public function getDeveloper()

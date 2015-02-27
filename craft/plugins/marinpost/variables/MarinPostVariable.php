@@ -3,8 +3,12 @@ namespace Craft;
 
 class MarinPostVariable
 {
-    const DEFAULT_LIMIT = 10;
-    const FORCE_LOG = true;
+    private $settings;
+
+    function __construct()
+    {
+        $this->settings = craft()->plugins->getPlugin('marinpost')->getSettings();
+    }
 
     /**
      * Return array of Entries for optional filters:
@@ -30,7 +34,7 @@ class MarinPostVariable
         $section = $this->_get($filters, 'section');
 
         $offset = $this->_get($slice, 'offset', 0);
-        $limit = $this->_get($slice, 'limit', self::DEFAULT_LIMIT);
+        $limit = $this->_get($slice, 'limit', $this->settings['defaultEntryLimit']);
 
         if (empty($locations) && empty($topics) && empty($authors))
         {
@@ -163,10 +167,10 @@ class MarinPostVariable
         return $value;
     }
 
-    private function _log($mixed, $level = LogLevel::Info, $force = self::FORCE_LOG)
+    private function _log($mixed, $level = LogLevel::Info)
     {
         $message = is_array($mixed) ? json_encode($mixed) : $mixed;
 
-        MarinPostPlugin::log($message, $level, $force);
+        MarinPostPlugin::log($message, $level, $this->settings['forceLog']);
     }
 }
