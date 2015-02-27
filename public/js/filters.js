@@ -1,10 +1,11 @@
 (function($) {
     $.fn.filters  = function() {
+        var section = document.location.pathname.split('/')[1];
+
         return this.each(function() {
             var filteredContent = $(this);
             var noFilters = $(':checkbox.all');
             var filters = $(':checkbox.filter');
-            var section = document.location.pathname.split('/')[1];
             var loadMoreLink = $('#load-more-content'); // TODO activate on scroll
           
             // TODO refactor
@@ -27,7 +28,7 @@
               var topics = activeFilters('topic');
               var authors = activeFilters('author');
 
-              return '/filter/'+section+'?locations='+locations+'&topics='+topics+'&authors='+authors;
+              return '/filter?section='+section+'&locations='+locations+'&topics='+topics+'&authors='+authors;
             };
 
             var refreshViews = function() {

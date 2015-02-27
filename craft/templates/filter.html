@@ -1,0 +1,30 @@
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set defaultLimit = 3 %} {# TODO change to 10 #}
+
+{% set section = craft.request.param('section') %}
+
+{% set locations = craft.request.param('locations') | split(',') %}
+
+{% set topics = craft.request.param('topics') | split(',') %}
+
+{% set authors = craft.request.param('authors') | split(',') %}
+
+{% set filters = { 'locations': locations, 'topics': topics, 'authors': authors, 'section': section } %}
+
+{% set offset = craft.request.param('offset') | default(0)  %}
+
+{% set limit = craft.request.param('limit') | default(defaultLimit)  %}
+
+{% set slice = { 'offset': offset, 'limit': limit } %}
+
+{% set entries = craft.marinpost.entries(filters, slice) %}
+
+{% import "_macro/post" as p %}
+
+{% for entry in entries %}
+  {{ p.post(entry) }}
+{% endfor %}
+
+{% endspaceless %}

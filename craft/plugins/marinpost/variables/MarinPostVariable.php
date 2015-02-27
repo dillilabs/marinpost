@@ -67,7 +67,7 @@ class MarinPostVariable
         switch(count($filteredEntryArrays))
         {
         case 0:
-            $entries = craft()->elements->findElements();
+            $entries = array();
             break;
         case 1:
             $entries = array_pop($filteredEntryArrays);
