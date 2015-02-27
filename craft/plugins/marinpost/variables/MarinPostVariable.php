@@ -4,6 +4,7 @@ namespace Craft;
 class MarinPostVariable
 {
     const DEFAULT_LIMIT = 10;
+    const FORCE_LOG = true;
 
     /**
      * Return array of Entries for optional filters:
@@ -20,60 +21,81 @@ class MarinPostVariable
      */
     public function entries($filters = array(), $slice = array())
     {
-        $this->_log(array('filters' => $filters, 'slice' => $slice));
+        //$this->_log(array('filters' => $filters, 'slice' => $slice));
 
-        $filteredEntries = $this->_filtered_entries($filters);
+        $locations = $this->_get($filters, 'locations');
+        $topics = $this->_get($filters, 'topics');
+        $authors = $this->_get($filters, 'authors');
+
+        $section = $this->_get($filters, 'section');
 
         $offset = $this->_get($slice, 'offset', 0);
         $limit = $this->_get($slice, 'limit', self::DEFAULT_LIMIT);
 
-        $slicedEntries = array_slice($filteredEntries, $offset, $limit);
+        if (empty($locations) && empty($topics) && empty($authors))
+        {
+            $this->_log('No filters defined');
 
-        return $slicedEntries;
+            $entries =  $this->_slice($offset, $limit, array(), $section);
+        }
+        else
+        {
+            $filteredEntryIds = $this->_filteredEntries($locations, $topics, $authors, $section);
+            
+            $this->_log(array('Filtered entries' => count($filteredEntryIds)));
+
+            $entries =  $this->_slice($offset, $limit, $filteredEntryIds);
+        }
+
+        $this->_log(array('Sliced entries' => count($entries)));
+
+        return $entries;
     }
 
     //------------------
     // Private functions
     //------------------
 
-    private function _filtered_entries($filters)
+    private function _filteredEntries($locations, $topics, $authors, $section)
     {
-        $section = $this->_get($filters, 'section');
+        $entriesFilteredBy = array();
 
-        $locations = $this->_get($filters, 'locations');
-        $locationEntries = $this->_relatedEntries($locations, $section);
+        $this->_log(array('locations' => $locations));
 
-        $topics = $this->_get($filters, 'topics');
-        $topicEntries = $this->_relatedEntries($topics, $section);
+        if (!empty($locations))
+        {
+            $entriesFilteredBy['location'] = $this->_relatedEntries($locations, $section);
+        }
 
-        $authors = $this->_get($filters, 'authors');
-        $authorEntries = $this->_authoredEntries($authors, $section);
+        $this->_log(array('topics' => $topics));
 
-        $filteredEntryArrays = array_filter(
-            array(
-                $locationEntries,
-                $topicEntries,
-                $authorEntries
-            )
-        );
+        if (!empty($topics))
+        {
+            $entriesFilteredBy['topic'] = $this->_relatedEntries($topics, $section);
+        }
 
-        $this->_log(array(
-            'locations entries' => count($locationEntries),
-            'topics entries' => count($topicEntries),
-            'authors entries' => count($authorEntries),
-            'filtered entry arrays' => count($filteredEntryArrays),
-        ));
+        $this->_log(array('authors' => $authors));
 
-        switch(count($filteredEntryArrays))
+        if (!empty($authors))
+        {
+            $entriesFilteredBy['author'] = $this->_authoredEntries($authors, $section);
+        }
+
+        foreach ($entriesFilteredBy as $key => $val)
+        {
+            $this->_log(array($key => count($val)));
+        }
+
+        switch(count($entriesFilteredBy))
         {
         case 0:
             $entries = array();
             break;
         case 1:
-            $entries = array_pop($filteredEntryArrays);
+            $entries = array_pop($entriesFilteredBy);
             break;
         default:
-            $entries = call_user_func_array('array_intersect', $filteredEntryArrays);
+            $entries = call_user_func_array('array_intersect', $entriesFilteredBy);
         }
 
         return $entries;
@@ -89,7 +111,7 @@ class MarinPostVariable
 
         //$this->_log($criteria->attributes);
 
-        return $criteria->find();
+        return $criteria->ids();
     }
 
     private function _authoredEntries($authorIds = false, $section = false)
@@ -102,6 +124,23 @@ class MarinPostVariable
 
         //$this->_log($criteria->attributes);
 
+        return $criteria->ids();
+    }
+
+    private function _slice($offset, $limit, $entryIds = array(), $section = false)
+    {
+        $this->_log("Offset:$offset, Limit:$limit, Section:$section, Entries:".count($entryIds));
+
+        $criteria = craft()->elements->getCriteria(ElementType::Entry);
+
+        if (!empty($entryIds)) $criteria->id = $entryIds;
+
+        if ($section) $criteria->section = $section;
+
+        $criteria->offset = $offset;
+
+        $criteria->limit = $limit;
+
         return $criteria->find();
     }
 
@@ -111,18 +150,23 @@ class MarinPostVariable
 
     private function _get($array, $key, $default = false)
     {
+        $value = $default;
+
         if (array_key_exists($key, $array))
         {
-            return $array[$key];
+            $value = $array[$key];
+            if (is_array($value)) {
+                $value = array_filter($value);
+            }
         }
-        else
-        {
-            return $default;
-        }
+
+        return $value;
     }
 
-    private function _log($mixed, $level = LogLevel::Warning)
+    private function _log($mixed, $level = LogLevel::Info, $force = self::FORCE_LOG)
     {
-        MarinPostPlugin::log(print_r($mixed, true), $level);
+        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
+
+        MarinPostPlugin::log($message, $level, $force);
     }
 }
