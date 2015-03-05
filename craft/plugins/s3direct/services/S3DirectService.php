@@ -5,6 +5,12 @@ require CRAFT_PLUGINS_PATH.'/s3direct/vendor/autoload.php';
 
 class S3DirectService extends BaseApplicationComponent
 {
+    private $pluginSettings;
+
+    function __construct()
+    {
+        $this->pluginSettings = craft()->plugins->getPlugin('s3direct')->getSettings();
+    }
 
     /**
      * Return form inputs required to upload a file direct to AWS S3:
@@ -18,7 +24,7 @@ class S3DirectService extends BaseApplicationComponent
     public function s3UploadForm($assetSourceId)
     {
         $settings = $this->assetSourceSettings($assetSourceId);
-        S3DirectPlugin::log(print_r($settings, true), LogLevel::Info, true);
+        $this->_log($settings);
 
         $s3 = \Aws\S3\S3Client::factory(
             array(
@@ -163,4 +169,14 @@ class S3DirectService extends BaseApplicationComponent
         craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
     }
 
+    // ----------------
+    // Helper functions
+    // ----------------
+
+    private function _log($mixed, $level = LogLevel::Info)
+    {
+        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
+
+        S3DirectPlugin::log($message, $level, $this->pluginSettings['forceLog']);
+    }
 }

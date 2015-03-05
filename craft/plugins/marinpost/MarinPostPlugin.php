@@ -3,6 +3,8 @@ namespace Craft;
 
 class MarinPostPlugin extends BasePlugin
 {
+    private $settings;
+
     /**
      * Class init
      */
@@ -10,9 +12,16 @@ class MarinPostPlugin extends BasePlugin
     {
         parent::init();
 
+        $this->settings = $this->getSettings();
+
+        // respond to entries.onBeforeSaveEntry event
+        $this->_onBeforeSaveEntryEvent();
+
+        // respond to users.onSaveUser event
         $this->_onSaveUserEvent();
 
         if (craft()->request->isCpRequest()) {
+            // inject Javascript into the Control Panel
             $this->_includeCpJs();
         }
     }
@@ -55,6 +64,29 @@ class MarinPostPlugin extends BasePlugin
     //----------------------
 
     /**
+     * Respond to entries.onBeforeSaveEntry event.
+     */
+    private function _onBeforeSaveEntryEvent()
+    {
+        craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
+            $entry = $event->params['entry'];
+            $isNewEntry = $event->params['isNewEntry'];
+
+            if ($entry->status == 'disabled')
+            {
+                $this->_log('Validating disabled entry: ' . ($isNewEntry ? 'new' : $entry->id));
+
+                if (! $this->_validEntry($entry))
+                {
+                    $this->_log('Invalid disabled entry: ' . ($isNewEntry ? 'new' : $entry->id));
+
+                    $event->performAction = false;
+                }
+            }
+        });
+    }
+
+    /**
      * Respond to the users.onSaveUser event.
      */
     private function _onSaveUserEvent()
@@ -63,6 +95,26 @@ class MarinPostPlugin extends BasePlugin
             $user = $event->params['user'];
             $this->_syncUserName($user);
         });
+    }
+
+    //----------------------
+    // Event helper functions
+    //----------------------
+
+    /**
+     * Validate disabled entry, add errors and return false if invalid.
+     */
+    private function _validEntry($disabledEntry)
+    {
+        if (craft()->content->validateContent($disabledEntry))
+        {
+            return true;
+        }
+        else
+        {
+            $disabledEntry->addErrors($disabledEntry->getContent()->getErrors());
+            return false;
+        }
     }
 
     /**
@@ -131,6 +183,17 @@ JS;
         ));
     }
 
+    // ----------------
+    // Helper functions
+    // ----------------
+
+    private function _log($mixed, $level = LogLevel::Info)
+    {
+        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
+
+        self::log($message, $level, $this->settings['forceLog']);
+    }
+
     //----------------------
     // Boilerplate functions
     //----------------------
@@ -142,7 +205,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.14';
+        return '0.0.15';
     }
 
     public function getDeveloper()

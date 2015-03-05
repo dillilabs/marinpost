@@ -4,6 +4,24 @@ namespace Craft;
 class S3DirectPlugin extends BasePlugin
 {
     //
+    // Settings
+    //
+
+    protected function defineSettings()
+    {
+        return array(
+            'forceLog' => array(AttributeType::Bool, 'default' => false),
+        );
+    }
+
+    public function getSettingsHtml()
+    {
+        return craft()->templates->render('s3direct/_settings', array(
+            'settings' => $this->getSettings(),
+        ));
+    }
+
+    //
     // Boilerplate
     //
 
@@ -14,7 +32,7 @@ class S3DirectPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.1';
+        return '0.0.2';
     }
 
     public function getDeveloper()

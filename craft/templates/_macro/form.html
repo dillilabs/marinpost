@@ -2,10 +2,6 @@
   {{- entry and entry.id ? 'Edit' : 'Submit' -}}
 {% endmacro %}
 
-{% macro inputValueAction(entry) %}
-  {{- not entry and not currentUser.inGroup("contributor") ? 'guestEntries/saveEntry' : 'entries/saveEntry' -}}
-{% endmacro %}
-
 {% macro inputValueEnabled(entry) %}
   {{- entry and entry.status != 'live' ? 0 : 1 -}}
 {% endmacro %}
