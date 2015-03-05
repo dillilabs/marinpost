@@ -162,7 +162,7 @@
 
 {% macro editLink(entry) %}
   {% if currentUser and currentUser.id == entry.authorId %}
-    <a href="/edit/{{ entry.id }}">edit</a>
+    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">edit</a>
   {% endif %}
 {% endmacro %}
 

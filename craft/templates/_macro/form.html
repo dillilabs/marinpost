@@ -1,18 +1,16 @@
-{% macro entryId(entry) %}
-  {% if entry and entry.id %}
-    <input type="hidden" name="entryId" value="{{ entry.id }}">
-  {% endif %}
-{% endmacro %}
-
 {% macro userAction(entry) %}
   {{- entry and entry.id ? 'Edit' : 'Submit' -}}
 {% endmacro %}
 
-{% macro actionUrl() %}
-  {{- currentUser.inGroup("contributor") ? 'entries/SaveEntry' : 'guestEntries/SaveEntry' -}}
+{% macro inputValueAction(entry) %}
+  {{- not entry and not currentUser.inGroup("contributor") ? 'guestEntries/saveEntry' : 'entries/saveEntry' -}}
 {% endmacro %}
 
-{% macro redirectTo(section) %}
+{% macro inputValueEnabled(entry) %}
+  {{- entry and entry.status != 'live' ? 0 : 1 -}}
+{% endmacro %}
+
+{% macro inputValueRedirect(section) %}
 {% spaceless %}
   {% if currentUser.inGroup("contributor") %}
     {% switch section %}
@@ -27,6 +25,12 @@
     {{ url('submit/thank-you') }}
   {% endif %}
 {% endspaceless %}
+{% endmacro %}
+
+{% macro inputEntryId(entry) %}
+  {% if entry and entry.id %}
+    <input type="hidden" name="entryId" value="{{ entry.id }}">
+  {% endif %}
 {% endmacro %}
 
 {% macro categoryId(entry, fieldName, defaultId, limit) %}

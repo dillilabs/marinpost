@@ -1,0 +1,32 @@
+<main class="single">
+  <div class="sub-nav">
+    {% block subNav %}
+    {% endblock %}
+  </div>
+
+  <h2>
+    {{ f.userAction(entry) }} {{ entryType }}
+  </h2>
+
+  <form method="post" accept-charset="UTF-8" class="content-submission">
+    {{ getCsrfInput() }}
+    <input type="hidden" name="action" value="{{ f.inputValueAction(entry) }}">
+    <input type="hidden" name="redirect" value="{{ f.inputValueRedirect('notices') }}">
+    <input type="hidden" name="enabled" value="{{ f.inputValueEnabled(entry) }}">
+    <input type="hidden" name="sectionId" value="{{ sectionId }}">
+    {{ f.inputEntryId(entry) }}
+
+    {% block formFields %}
+    {% endblock %}
+
+    <input type="submit" value="{{ f.userAction(entry) }} {{ entryType }}">
+  </form>
+</main>
+
+{% set formJs %}
+  $(function() {
+      $('form.content-submission').forms();
+  });
+{% endset %}
+
+{% includeJs formJs %}

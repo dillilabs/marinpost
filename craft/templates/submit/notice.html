@@ -1,26 +1,13 @@
 {% requireLogin %}
 
+{% set entryType = "Notice" %}
+{% set sectionId = 4 %}
+
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% embed "_common/form" %}
-    {% block h2  %}
-      {{ f.userAction(entry) }} Notice
-    {% endblock %}
-
-    {% block form %}
-      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
-        {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ f.redirectTo('notices') }}">
-        <input type="hidden" name="sectionId" value="4">
-        <input type="hidden" name="enabled" value="1">
-        {{ f.entryId(entry) }}
-
-        {% if entry is defined %}
-          {{ f.errorList(entry.getAllErrors) }}
-        {% endif %}
-
+  {% embed "_form/layout" %}
+    {% block formFields %}
         {% include "_form/images/notice" %}
         <hr>
         {% include "_form/title" %}
@@ -47,17 +34,6 @@
         <hr>
         {% include "_form/content/notice" %}
         {% include "_form/documents/notice" %}<br>
-
-        <input type="submit" value="{{ f.userAction(entry) }} Notice">
-      </form>
     {% endblock %}
   {% endembed %}
 {% endblock %}
-
-{% set formJs %}
-  $(function() {
-      $('form.content-submission').forms();
-  });
-{% endset %}
-
-{% includeJs formJs %}

@@ -1,0 +1,5 @@
+<label for="letterContent">Letter</label>
+<textarea id="letterContent" name="fields[letterContent]" cols="60" rows="8" class="required"> {%- if entry is defined %}{{ entry.letterContent }}{% endif -%} </textarea>
+{% if entry is defined %}
+  {{ f.errorList(entry.getErrors('letterContent')) }}
+{% endif %}

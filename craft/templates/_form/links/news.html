@@ -1,0 +1,5 @@
+<label for="newsLink">News Link</label>
+<input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
+{% if entry is defined %}
+  {{ f.errorList(entry.getErrors('newsLink')) }}
+{% endif %}

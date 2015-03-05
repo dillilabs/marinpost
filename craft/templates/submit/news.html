@@ -1,50 +1,18 @@
 {% requireLogin %}
 
+{% set entryType = "News Link" %}
+{% set sectionId = 2 %}
+
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% embed "_common/form" %}
-    {% block h2  %}
-      {{ f.userAction(entry) }} News Link
-    {% endblock %}
-
-    {% block form %}
-      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
-        {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ f.redirectTo('news') }}">
-        <input type="hidden" name="sectionId" value="2">
-        <input type="hidden" name="enabled" value="1">
-        {{ f.entryId(entry) }}
-
-        {% if entry is defined %}
-          {{ f.errorList(entry.getAllErrors) }}
-        {% endif %}
-        <br>
-
-        {% include "_form/title" %}
-        {% include "_form/locations" %}<br>
-        {% include "_form/topics" %}
-
-        <label for="newsLink">News Link</label>
-        <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
-        {% if entry is defined %}
-          {{ f.errorList(entry.getErrors('newsLink')) }}
-        {% endif %}
-        <br>
-
-        {% include "_form/content/link" %}
-
-        <input type="submit" value="{{ f.userAction(entry) }} News Link">
-      </form>
+  {% embed "_form/layout" %}
+    {% block formFields %}
+      {% include "_form/title" %}
+      {% include "_form/locations" %}<br>
+      {% include "_form/topics" %}
+      {% include "_form/links/news" %}
+      {% include "_form/content/link" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
-
-{% set formJs %}
-  $(function() {
-      $('form.content-submission').forms();
-  });
-{% endset %}
-
-{% includeJs formJs %}

@@ -1,41 +1,19 @@
 {% requireLogin %}
 
+{% set entryType = "Blog Post" %}
+{% set sectionId = 3 %}
+
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% embed "_common/form" %}
-    {% block h2  %}
-      {{ f.userAction }} Blog Post
-    {% endblock %}
-
-    {% block form %}
-      <form method="post" accept-charset="UTF-8" enctype="multipart/form-data" class="content-submission">
-        {{ getCsrfInput() }}
-        <input type="hidden" name="action" value="{{ f.actionUrl() }}">
-        <input type="hidden" name="redirect" value="{{ f.redirectTo('blog') }}">
-        <input type="hidden" name="sectionId" value="3">
-        <input type="hidden" name="enabled" value="1">
-        {{ f.entryId(entry) }}
-
-        {% if entry is defined %}
-          {{ f.errorList(entry.getAllErrors) }}
-        {% endif %}
-        {% include "_form/title" %}<br>
-        {% include "_form/locations" %}<br>
-        {% include "_form/topics" %}<br>
-        {% include "_form/content/blog" %}
-        {% include "_form/images/blog" %}
-        {% include "_form/documents/blog" %}<br>
-        <input type="submit" value="{{ f.userAction(entry) }} Blog Post">
-      </form>
+  {% embed "_form/layout" %}
+    {% block formFields %}
+      {% include "_form/title" %}<br>
+      {% include "_form/locations" %}<br>
+      {% include "_form/topics" %}<br>
+      {% include "_form/content/blog" %}
+      {% include "_form/images/blog" %}
+      {% include "_form/documents/blog" %}<br>
     {% endblock %}
   {% endembed %}
 {% endblock %}
-
-{% set formJs %}
-  $(function() {
-      $('form.content-submission').forms();
-  });
-{% endset %}
-
-{% includeJs formJs %}
