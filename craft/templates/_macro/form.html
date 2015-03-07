@@ -6,26 +6,16 @@
   {{- entry and entry.status != 'live' ? 0 : 1 -}}
 {% endmacro %}
 
-{% macro inputValueRedirect(section) %}
-{% spaceless %}
-  {% if currentUser.inGroup("contributor") %}
-    {% switch section %}
-      {% case 'blog' %}
-        {{ section }}/{postDate.year}/{postDate.month}/{postDate.day}/{slug}
-      {% case 'notices' %}
-        {{ section }}/{postDate.year}/{postDate.month}/{postDate.day}/{slug}
-      {% default %}
-        {{ url(section) }}
-    {% endswitch %}
-  {% else %}
-    {{ url('submit/thank-you') }}
-  {% endif %}
-{% endspaceless %}
-{% endmacro %}
-
 {% macro inputEntryId(entry) %}
   {% if entry and entry.id %}
     <input type="hidden" name="entryId" value="{{ entry.id }}">
+  {% endif %}
+{% endmacro %}
+
+{% macro inputSubmit(entry) %}
+  <input type="button" class="submit" value="Save">
+  {% if currentUser.isInGroup('contributor') %}
+    <input type="button" class="submit" value="Publish">
   {% endif %}
 {% endmacro %}
 

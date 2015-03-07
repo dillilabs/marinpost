@@ -11,13 +11,13 @@
     {% redirect 404 %}
   {% endif %}
 
-  {% set entry = craft.entries.status(statuses).id(entryId).first %}
+  {% set entry = craft.entries.authorId(currentUser.id).status(statuses).id(entryId).first %}
 
   {% if not entry %}
     {% redirect 404 %}
   {% endif %}
 
-  {% if entry.author.id != currentUser.id %}
+  {% if currentUser.isInGroup('guest') and entry.status != 'disabled' %}
     {% redirect 404 %}
   {% endif %}
 {% endif %}

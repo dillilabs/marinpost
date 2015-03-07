@@ -16,6 +16,12 @@
             // Link to Media
             var mediaTypeSelect = form.find('input[type=radio][name=mediaTypeSelect]');
 
+            // Submit buttons
+            var submitButtons = form.find('input[type=button].submit');
+
+            // Entry status
+            var entryEnabled = form.find('input[name=enabled]');
+
             var onChangeMediaLinkType = function(mediaType) {
               var type = this.value;
 
@@ -82,6 +88,12 @@
             });
 
             mediaTypeSelect.change(onChangeMediaLinkType);
+
+            // Set entry enabled based on submit button
+            submitButtons.click(function(e) {
+              entryEnabled.val(this.value == 'Publish' ? 1 : 0);
+              form.submit();
+            });
 
             form.submit(function(e) {
               onSubmitMediaLink();

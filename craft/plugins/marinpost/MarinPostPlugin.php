@@ -64,23 +64,27 @@ class MarinPostPlugin extends BasePlugin
     //----------------------
 
     /**
-     * Respond to entries.onBeforeSaveEntry event.
+     * Listen to entries.onBeforeSaveEntry event.
+     *
+     * If request is from the front-end and entry is disabled
+     * then validate entry.
      */
     private function _onBeforeSaveEntryEvent()
     {
         craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
-            $entry = $event->params['entry'];
-            $isNewEntry = $event->params['isNewEntry'];
+            if (! craft()->request->isCpRequest()) {
+                $entry = $event->params['entry'];
 
-            if ($entry->status == 'disabled')
-            {
-                $this->_log('Validating disabled entry: ' . ($isNewEntry ? 'new' : $entry->id));
-
-                if (! $this->_validEntry($entry))
+                if ($entry->status == 'disabled')
                 {
-                    $this->_log('Invalid disabled entry: ' . ($isNewEntry ? 'new' : $entry->id));
+                    $entryId = $event->params['isNewEntry'] ? 'new' : $entry->id;
+                    $this->_log("Validating disabled entry: $entryId");
 
-                    $event->performAction = false;
+                    if (! $this->_validEntry($entry))
+                    {
+                        $this->_log("Invalid disabled entry: $entryId");
+                        $event->performAction = false;
+                    }
                 }
             }
         });

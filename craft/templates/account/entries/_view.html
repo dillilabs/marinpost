@@ -1,0 +1,50 @@
+{% requireLogin %}
+
+{% set statuses = ['live', 'disabled'] %}
+
+{% set entryId = craft.request.segment(2) %}
+
+{% set entry = craft.entries.authorId(currentUser.id).status(statuses).id(entryId).first %}
+
+{% if not entry %}
+  {% redirect 404 %}
+{% endif %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block post %}
+
+      {% switch entry.section.handle %}
+        {% case 'blog' %}
+          {{ p.postTags(entry) }}
+          {{ p.postTitle(entry) }}
+          {{ p.postBy(entry) }}
+          <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+          <p>{{ entry.blogContent }}</p>
+          {{ p.documents(entry.blogDocuments) }}
+          {{ p.otherImages(entry.blogImages) }}
+
+        {% case 'notices' %}
+          {{ p.postTags(entry) }}
+          {{ p.postTitle(entry) }}
+          {{ p.postBy(entry) }}
+          <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+          <p>{{ entry.blogContent }}</p>
+          {{ p.documents(entry.noticeDocuments) }}
+          {{ p.otherImages(entry.noticeImages) }}
+
+        {% case 'letters' %}
+          <h3>{{ entry.title }}</h3>
+          {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}}<br>
+          {{ entry.postDate | date('g:i A') }} <br>
+          <p>{{ entry.letterContent }}</p>
+
+        {% default %}
+          {{ p.post(entry) }}
+
+      {% endswitch %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
