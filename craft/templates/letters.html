@@ -5,37 +5,55 @@
 {% block main %}
   {% embed "_common/list" %}
     {% block subNav %}
+      <ul>
+      {% for n in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ] %}
+        {% set day = date('-'~n~'days') %}
+        <li><a href="/letters/{{ day | date('Y/m/d') }}">{{ day | date('F j, Y') }}</a></li>
+      {% endfor %}
+      </ul>
+      <h4>Archive</h4>
+      <input type="date" id="select-date">
     {% endblock %}
 
     {% block h2 %}
-      Letters to the Editor
+      Letters
     {% endblock %}
     
     {% block posts %}
-      {% set entries = craft.entries.section('letters').find %}
+      {% if craft.request.segments | length > 1 %}
+        {% set year = craft.request.segment(2) %}
+        {% set month = craft.request.segment(3) %}
+        {% set day = craft.request.segment(4) %}
+        {% set ymd = year~'-'~month~'-'~day %}
+      {% else %}
+        {% set ymd = date() | date('Y-m-d') %}
+      {% endif %}
+      {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
+      {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
 
-      <div id="letters-by-date">
-        {% for groupedDate, groupedEntries in entries | group("postDate") %}
-          <h2 class="date-divider">{{ groupedDate | date('F j, Y') }} <span class="comment-count disqus-comment-count" data-disqus-identifier="{{ groupedDate | date('F j, Y') }}"></span></h2>
-          <div>
-            {% for entry in groupedEntries | sort %}
-              <h3>{{ entry.title }}</h3>
-              {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}}<br>
-              {{ entry.postDate | date('g:i A') }} <br>
-              <p>{{ entry.letterContent }}</p>
-            {% endfor %}
+      <div>
+        <h2>{{ date(ymd) | date('F j, Y') }}</h2>
 
-            <h3>Join the Conversation</h3>
-            {% set mdyDate = groupedDate | date('F j, Y') %}
-            {% set ymdDate = groupedDate | date('Y/m/d') %}
-            <button class="toggle-comments-for-date" data-mdy-date="{{ mdyDate }}" data-ymd-date="{{ ymdDate }}">View Comments</button>
-            {% if loop.first %}
-              <div id="wrap-comments-for-date" style="display: none;">
-                {% include "_common/disqus_letters.html" with { 'mdyDate': mdyDate, 'ymdDate': ymdDate } only %}
-              </div>
-            {% endif %}
+        {% if entries %}
+          {% for entry in entries | sort %}
+            <h3>{{ entry.title }}</h3>
+            {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} {{ entry.postDate | date('g:i A') }}<br>
+            <p>{{ entry.letterContent }}</p>
+          {% endfor %}
+
+          <h3>Join the Conversation</h3>
+          <button id="toggle-comments">Show Comments</button>
+          <div id="comments" style="display: none;">
+            {% set disqusId = ymd %}
+            {% set disqusTitle = date(ymd) | date('F j, Y') %}
+            {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
+            {% include "_common/disqus_letters.html" with { 'id': disqusId, 'title': disqusTitle, 'url': disqusUrl } only %}
           </div>
-        {% endfor %}
+
+        {% else %}
+          No letters found
+
+        {% endif %}
       </div>
     {% endblock %}
   {% endembed %}
@@ -43,8 +61,21 @@
 
 {% set js %}
 $(function() {
-  $("#letters-by-date").accordion({
-    'header': 'h2'
+  var selectDate = $('#select-date');
+  var toggleComments = $('#toggle-comments');
+  var comments = $('#comments');
+
+  selectDate.change(function() {
+    var ymd = this.value.replace(/-/g, '/');
+
+    if (ymd.length > 0) {
+      document.location = '/letters/'+ymd;
+    }
+  });
+
+  toggleComments.click(function() {
+    comments.toggle();
+    toggleComments.text((comments.is(':visible') ? 'Hide' : 'Show') + ' Comments');
   });
 });
 {% endset %}
