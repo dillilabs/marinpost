@@ -1,6 +1,6 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">AWS Settings</p>
+<p style="font-weight:bold">Listing Settings</p>
 
 {{ forms.textField({
 	label: "Default Entry Limit"|t,
@@ -9,6 +9,8 @@
 	name: 'defaultEntryLimit',
 	value: settings.defaultEntryLimit,
 }) }}
+
+<p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
 	first: true,
