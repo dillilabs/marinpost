@@ -14,7 +14,7 @@
       {{ p.documents(entry.blogDocuments) }}
       {{ p.otherImages(entry.blogImages) }}
 
-      {% include "_common/disqus_embed" %}
+      {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

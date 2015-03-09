@@ -1,7 +1,16 @@
 <div id="disqus_thread"></div>
 <script type="text/javascript">
-var disqus_shortname = 'marinpost';
-var disqus_identifier = '{{ entry.id }}';
+var disqus_shortname = "marinpost";
+
+var disqus_identifier = "{{ identifier }}";
+
+{% if title %}
+  var disqus_title = "{{ title }}";
+{% endif %}
+
+{% if url %}
+  var disqus_url = "{{ url }}";
+{% endif %}
 
 (function() {
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

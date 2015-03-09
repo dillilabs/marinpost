@@ -14,7 +14,7 @@
       {{ p.otherImages(entry.noticeImages) }}
       {{ p.documents(entry.noticeDocuments) }}
 
-      {% include "_common/disqus_embed" %}
+      {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

@@ -6,7 +6,13 @@ class MarinPostPlugin extends BasePlugin
     private $settings;
 
     /**
-     * Class init
+     * Initialization:
+     *
+     *  Listen to entries.onBeforeSaveEntry event
+     *
+     *  Listen to users.onSaveUser event
+     *
+     *  Inject Javascript into the CP
      */
     public function init()
     {
@@ -14,14 +20,14 @@ class MarinPostPlugin extends BasePlugin
 
         $this->settings = $this->getSettings();
 
-        // respond to entries.onBeforeSaveEntry event
+        // Respond to entries.onBeforeSaveEntry event
         $this->_onBeforeSaveEntryEvent();
 
-        // respond to users.onSaveUser event
+        // Respond to users.onSaveUser event
         $this->_onSaveUserEvent();
 
+        // Inject Javascript into the Control Panel
         if (craft()->request->isCpRequest()) {
-            // inject Javascript into the Control Panel
             $this->_includeCpJs();
         }
     }
@@ -64,27 +70,45 @@ class MarinPostPlugin extends BasePlugin
     //----------------------
 
     /**
-     * Listen to entries.onBeforeSaveEntry event.
+     * Respond to entries.onBeforeSaveEntry event.
      *
-     * If request is from the front-end and entry is disabled
-     * then validate entry.
+     *  If request is from the front-end:
+     *
+     *      If the entry is disabled:
+     *
+     *          Then validate the entry and prevent save if invalid.
+     *
+     *      If the author is a Guest and the entry has already been published:
+     *
+     *          Then prevent save.
      */
     private function _onBeforeSaveEntryEvent()
     {
         craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
-            if (! craft()->request->isCpRequest()) {
+            if (!craft()->request->isCpRequest()) {
                 $entry = $event->params['entry'];
+                $isNew = $event->params['isNewEntry'];
 
                 if ($entry->status == 'disabled')
                 {
-                    $entryId = $event->params['isNewEntry'] ? 'new' : $entry->id;
-                    $this->_log("Validating disabled entry: $entryId");
-
-                    if (! $this->_validEntry($entry))
+                    if (!$this->_validEntry($entry))
                     {
-                        $this->_log("Invalid disabled entry: $entryId");
+                        $this->_log('Invalid disabled entry: ' . $isNew ? 'new' : $entryId);
                         $event->performAction = false;
+                        return;
                     }
+
+                    if ($this->_author()->isInGroup('guest') && $this->_publishedEntry($entry))
+                    {
+                        if ($this->_publishedEntry($entry))
+                        {
+                            $this->_log('Cannot update published entry: ' . $entry->id);
+                            $entry->addError('title', 'Cannot update published entry');
+                            $event->performAction = false;
+                            return;
+                        }
+                    }
+
                 }
             }
         });
@@ -119,6 +143,16 @@ class MarinPostPlugin extends BasePlugin
             $disabledEntry->addErrors($disabledEntry->getContent()->getErrors());
             return false;
         }
+    }
+
+    /**
+     * Return true if entry has already been published.
+     */
+    private function _publishedEntry($entry)
+    {
+        if (!$entry->id) return false;
+        $originalEntry = craft()->entries->getEntryById($entry->id);
+        return $originalEntry->status == 'live';
     }
 
     /**
@@ -190,6 +224,12 @@ JS;
     // ----------------
     // Helper functions
     // ----------------
+
+
+    private function _author()
+    {
+        return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
+    }
 
     private function _log($mixed, $level = LogLevel::Info)
     {

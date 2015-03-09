@@ -47,7 +47,7 @@
             {% set disqusId = ymd %}
             {% set disqusTitle = date(ymd) | date('F j, Y') %}
             {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
-            {% include "_common/disqus_letters.html" with { 'id': disqusId, 'title': disqusTitle, 'url': disqusUrl } only %}
+            {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
           </div>
 
         {% else %}
