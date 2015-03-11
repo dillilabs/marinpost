@@ -53,4 +53,17 @@ class S3DirectController extends BaseController
             $this->returnErrorJson($error);
         }
     }
+
+    public function actionGetAssetUrl()
+    {
+        $this->requireAjaxRequest();
+
+        $assetId = craft()->request->getParam('assetId');
+
+        $transform = craft()->request->getParam('transform');
+
+        $url = craft()->s3Direct->getAssetUrl($assetId, $transform);
+
+        $this->returnJson(array('url' => $url));
+    }
 }

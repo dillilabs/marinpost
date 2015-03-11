@@ -121,6 +121,22 @@ class S3DirectService extends BaseApplicationComponent
         return $updated;
     }
 
+    /**
+     * Return URL for Asset and optional transform.
+     * If transform does not yet exist it is created.
+     */
+    public function getAssetUrl($assetId, $transform = null)
+    {
+        $saveSetting = craft()->config->get('generateTransformsBeforePageLoad');
+        craft()->config->set('generateTransformsBeforePageLoad', true);
+
+        $assetFile = craft()->assets->getFileById($assetId);
+        $assetUrl = $assetFile->getUrl($transform);
+
+        craft()->config->set('generateTransformsBeforePageLoad', $saveSetting);
+        return $assetUrl;
+    }
+
     //
     // Private functions
     //
