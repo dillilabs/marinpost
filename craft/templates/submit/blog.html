@@ -8,11 +8,11 @@
 {% block main %}
   {% embed "_form/layout" %}
     {% block formFields %}
+      {% include "_form/images/blog" %}
       {% include "_form/title" %}<br>
       {% include "_form/locations" %}<br>
       {% include "_form/topics" %}<br>
       {% include "_form/content/blog" %}
-      {% include "_form/images/blog" %}
       {% include "_form/documents/blog" %}<br>
     {% endblock %}
   {% endembed %}

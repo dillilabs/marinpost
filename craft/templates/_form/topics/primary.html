@@ -1,12 +1,14 @@
-<label for="primaryTopic">Primary Topic</label>
-<p>The "primary" topic shows up first.</p>
+<label for="primaryTopic" class="required">Primary Topic</label>
+
 {% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
-<select id="primaryTopic" name="fields[primaryTopic][]" class="array">
-  <option value=""></option>
+
+<select id="primaryTopic" name="fields[primaryTopic][]" class="required array">
+  <option value="">Select one - This will be the Topic associated with your post on the Home page</option>
 {% for option in craft.categories.group('topics') %}
   <option value="{{ option.id }}" {%- if option.id == primaryTopicId %}selected{% endif %}>{{ option.title }}</option>
 {% endfor %}
 </select>
+
 {% if entry is defined %}
   {{ f.errorList(entry.getErrors('primaryTopic')) }}
 {% endif %}

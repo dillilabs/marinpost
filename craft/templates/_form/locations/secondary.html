@@ -7,9 +7,7 @@
 {% endif %}
 
 <input type="hidden" name="fields[secondaryLocations]">
-<label for="">Secondary Locations</label>
-
-<p>You may enter up to 5 secondary locations.</p>
+<label for="">Other Location</label>
 
 {% for i in 1..maxLocations %}
   {% set location = false %}
@@ -29,7 +27,7 @@
 
   <div class="multiple-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryLocations][]" class="array">
-      <option value=""></option>
+      <option value="">Select another Location</option>
     {% set geographicGroup = false %}
 
     {% for option in craft.categories.group('locations') %}

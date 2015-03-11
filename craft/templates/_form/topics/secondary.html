@@ -7,8 +7,8 @@
 {% endif %}
 
 <input type="hidden" name="fields[secondaryTopics]">
-<label for="">Secondary Topics</label>
-<p>You may add up to 5 secondary topics.</p>
+<label for="">Other Topic</label>
+
 {% for i in 1..maxTopics %}
   {% set topic = false %}
   {% set topicId = false %}
@@ -27,7 +27,7 @@
 
   <div class="multiple-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryTopics][]" class="array">
-      <option value=""></option>
+      <option value="">Select another Topic</option>
     {% for option in craft.categories.group('topics') %}
       <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
     {% endfor %}

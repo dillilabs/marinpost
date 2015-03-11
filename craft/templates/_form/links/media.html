@@ -35,7 +35,7 @@
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 
 <br>
-<label for="mediaLink">Media Link</label>
+<label for="mediaLink" class="required">Media Link</label>
 
 <input type="hidden" name="fields[mediaLink]">
 <input type="hidden" name="fields[mediaLink][{{ key }}]">
@@ -48,11 +48,11 @@
 <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
 <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
 
-<input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video" autocomplete="off" value="{{ videoUrl }}" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
-<input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document" autocomplete="off" value="{{ documentUrl }}" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
+<input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
+<input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
 
 <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
-<select class="s3direct mediaLink upload array" name="fields[mediaLink][{{ key }}][fields][document][]" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
+<select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]"  {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
   <option value=""></option>
 {% if folder %}
   {% for asset in craft.assets.folderId(folder.id) %}
@@ -62,7 +62,7 @@
 </select>
 
 <label for="documentTitle" class="mediaLink upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>Document title</label>
-<input type="text" name="fields[mediaLink][{{ key }}][fields][documentTitle]" class="mediaLink upload" value="{{ documentTitle }}" autocomplete="off" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
+<input type="text" name="fields[mediaLink][{{ key }}][fields][documentTitle]" class="mediaLink upload" value="{{ documentTitle }}" autocomplete="off" placeholder="Title of document (optional)" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
 
 <div class="file upload mediaLink" {%- if mediaType != 'upload' %}style="display: none;"{% endif -%}>
   <span class="fileinput-button">
