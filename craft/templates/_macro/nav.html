@@ -21,3 +21,13 @@
     {{- firstSegment == section ? 'checked' : '' -}}
   {% endif %}
 {% endmacro %}
+
+{% macro activeLetterDate(url, first) %}
+  {% set first = first | default(false) %}
+
+  {% if '/'~craft.request.path == url %}
+    class="active"
+  {% elseif craft.request.path == "letters" and first %}
+    class="active"
+  {% endif %}
+{% endmacro %}
