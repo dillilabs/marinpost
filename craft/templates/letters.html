@@ -15,8 +15,7 @@
       {% endfor %}
       </ul>
       <h4>Archive</h4>
-      {{ craft.request.path }}
-      <input type="date" id="select-date">
+      <input type="text" id="select-letter-date">
     {% endblock %}
 
     {% block h2 %}
@@ -46,8 +45,8 @@
           {% endfor %}
 
           <h3>Join the Conversation</h3>
-          <button id="toggle-comments">Show Comments</button>
-          <div id="comments" style="display: none;">
+          <button id="toggle-letter-comments">Show Comments</button>
+          <div id="letter-comments" style="display: none;">
             {% set disqusId = ymd %}
             {% set disqusTitle = date(ymd) | date('F j, Y') %}
             {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
@@ -62,26 +61,3 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
-
-{% set js %}
-$(function() {
-  var selectDate = $('#select-date');
-  var toggleComments = $('#toggle-comments');
-  var comments = $('#comments');
-
-  selectDate.change(function() {
-    var ymd = this.value.replace(/-/g, '/');
-
-    if (ymd.length > 0) {
-      document.location = '/letters/'+ymd;
-    }
-  });
-
-  toggleComments.click(function() {
-    comments.toggle();
-    toggleComments.text((comments.is(':visible') ? 'Hide' : 'Show') + ' Comments');
-  });
-});
-{% endset %}
-
-{% includeJs js %}
