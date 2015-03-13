@@ -1,38 +1,38 @@
-{% set isEditing = false %}
-{% set key = 'new1' %}
+{% set sourceId = 2 %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+
 {% set mediaType = 'video' %}
+{% set linkBlock = false %}
+
 {% set videoUrl = false %}
 {% set documentUrl = false %}
+
 {% set document = false %}
 {% set documentTitle = false %}
 
+{% set errors = false %}
+{% set key = 'new1' %}
+
 {% if entry %}
-  {% if entry.id %}
-    {% set isEditing = true %}
-  {% endif %}
-
-  {% set mediaLinkBlock = entry.mediaLink.first %}
-
-  {% if isEditing and mediaLinkBlock.id %}
-    {% set key = mediaLinkBlock.id %}
-  {% endif %}
-
-  {% set mediaType = mediaLinkBlock.type %}
+  {% set linkBlock =  entry.mediaLink.first %}
+  {% set mediaType = linkBlock.type %}
 
   {% switch mediaType %}
     {% case 'video' %}
-      {% set videoUrl = mediaLinkBlock.videoUrl %}
+      {% set videoUrl = linkBlock.videoUrl %}
+
     {% case 'document' %}
-      {% set documentUrl = mediaLinkBlock.documentUrl %}
+      {% set documentUrl = linkBlock.documentUrl %}
+
     {% case 'upload' %}
-      {% set document = mediaLinkBlock.document.first %}
-      {% set documentTitle = mediaLinkBlock.documentTitle %}
+      {% set document = linkBlock.document.first %}
+      {% set documentTitle = linkBlock.documentTitle %}
   {% endswitch %}
 
+  {% set errors = mediaBlock.hasErrors %}
+  {% set key = mediaBlock.id | default('new1') %}
 {% endif %}
-
-{% set sourceId = 2 %}
-{% set folder = craft.s3direct.s3Folder(sourceId) %}
 
 <br>
 <label for="mediaLink" class="required">Media Link</label>
@@ -52,7 +52,7 @@
 <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
 
 <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
-<select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]"  {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
+<select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
   <option value=""></option>
 {% if folder %}
   {% for asset in craft.assets.folderId(folder.id) %}
@@ -76,12 +76,10 @@
   </div>
 </div>
 
-{% if mediaLinkBlock %}
-  {{ f.errorList(mediaLinkBlock.allErrors) }}
+{% if linkBlock %}
+  {{ f.errorList(linkBlock.allErrors) }}
 {% endif %}
 <br>
-
-{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set js %}
 $(function() {
