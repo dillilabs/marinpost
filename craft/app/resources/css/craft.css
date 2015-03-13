@@ -130,6 +130,8 @@ h5 + p { margin-top: 0; }
 
 sup { vertical-align: super; font-size: smaller; }
 
+sub { vertical-align: sub; font-size: smaller; }
+
 body.ltr .indent { margin-left: 14px; }
 body.rtl .indent { margin-right: 14px; }
 

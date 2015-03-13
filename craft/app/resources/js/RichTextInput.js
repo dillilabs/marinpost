@@ -31,7 +31,6 @@ Craft.RichTextInput = Garnish.Base.extend(
 
 		this.redactorConfig.lang = redactorLang;
 		this.redactorConfig.direction = Craft.orientation;
-		this.redactorConfig.buttonSource = true;
 		this.redactorConfig.imageUpload = true;
 
 		var that = this,
@@ -225,7 +224,7 @@ Craft.RichTextInput = Garnish.Base.extend(
 				unlink:
 				{
 					title: Craft.t('Unlink'),
-					exec:  'link.unlink'
+					func:  'link.unlink'
 				}
 			});
 		}
