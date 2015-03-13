@@ -57,10 +57,20 @@
         <hr>
 
         <fieldset class="contact">
-          <label for="event-zip">Contact name</label><input type="text" id="contact-name"><br>
-	        <label for="notice-contact">Contact phone number</label><br>
-	        <input type="tel" id="notice-contact"><br>
-          <label for="event-zip">Contact email address</label><input type="text" id="contact-email-address"><br>
+          <label for="organization">Organization</label>
+          <input type="text" name="fields[organization]" autocomplete="off" placeholder="" value="{{ entry.organization }}">
+          <br>
+          <label for="contact-name">Contact name</label>
+          <input type="text" name="fields[contactName]" autocomplete="off" placeholder="" value="{{ entry.contactName }}">
+          <br>
+	        <label for="notice-contact">Contact phone number</label>
+          <input type="text" name="fields[phoneNumber]" autocomplete="off" placeholder="(415) 555-0101" value="{{ entry.phoneNumber }}">
+          <br>
+          <label for="event-zip">Contact email address</label>
+          <input type="text" name="fields[email]" autocomplete="off" placeholder="somebody@example.org" value="{{ entry.email }}">
+          <br>
+          <label for="website">Web Site</label>
+          <input type="text" name="fields[webSite]" autocomplete="off" placeholder="http://example.org" value="{{ entry.webSite }}">
         </fieldset>
     {% endblock %}
   {% endembed %}
