@@ -31,3 +31,13 @@
     class="active"
   {% endif %}
 {% endmacro %}
+
+{% macro submitLink(type, text) %}
+  {% set current = craft.request.segment(2) %}
+
+  {% if type == current %}
+    {{- text -}}
+  {% else %}
+    <a href="/submit/{{ type }}">{{ text }}</a>
+  {% endif %}
+{% endmacro %}

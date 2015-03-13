@@ -1,5 +1,20 @@
-{% macro userAction(entry) %}
-  {{- entry and entry.id ? 'Edit' : 'Submit' -}}
+{% macro h2() %}
+  {% switch craft.request.segment(2) %}
+    {% case 'blog' %}
+      Create a Blog Post
+
+    {% case 'media' %}
+      Link Media
+
+    {% case 'letter' %}
+      Write a Letter
+
+    {% case 'news' %}
+      Link News
+
+    {% case 'notice' %}
+      Post a Notice
+  {% endswitch %}
 {% endmacro %}
 
 {% macro inputValueEnabled(entry) %}
