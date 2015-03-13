@@ -7,12 +7,11 @@
             // Selectors
             //-----------------------
 
-            // Primary Location or Topic
-            // Select Image or Document
-            var arraySelects = form.find('select.array');
+            // Select Image, Document, Location and Topic
+            var arrayInputSelects = form.find('select.array');
 
-            // Secondary Locations, Topics, Images, Documents
-            var multipleFieldInputs = form.find('.multiple-field.inputs');
+            // Containers for optional Locations and Topics
+            var optionalCategoryContainers = form.find('.optional-category-field.inputs');
 
             // Link to Media
             var mediaTypeSelect = form.find('input[type=radio][name=mediaTypeSelect]');
@@ -71,8 +70,46 @@
               }
             };
 
-            var idFromLink = function(link) {
-              return link.attr('id').split('-').splice(1, 2).join('-');
+            // Optional Locations and Topics are removed in the UI by hiding them,
+            // so it is necessary to actually remove them prior to POST.
+            var removeHiddenOptionalCategories = function() {
+              optionalCategoryContainers.not(':visible').remove();
+
+            };
+
+            var removeEmptyImageFields = function() {
+              var image = form.find('select[name$="[fields][image][]"]');
+              var by = form.find('input[type=text][name$="[fields][by]"]');
+              var disclaimer = form.find('input[type=checkbox][name$="[fields][disclaimer][]"]');
+
+              // Craft doesn't take kindly to empty multiple fields
+              if (image.val() == '') {
+                image.remove();
+
+                // If all fields are empty then assume no image
+                // and explicitly remove all of the associated fields
+                // else Craft will assume incomplete data and return validation errors.
+                if ($.trim(by.val()) == '' && disclaimer.is(':not(:checked)')) {
+                  form.find('.image-field.inputs').remove();
+                }
+              }
+            };
+
+            var removeEmptyDocumentFields = function() {
+              var doc = form.find('select[name$="[fields][document][]"]');
+              var title = form.find('input[type=text][name$="[fields][documentTitle]"]');
+
+              // Craft doesn't take kindly to empty multiple fields
+              if (doc.val() == '') {
+                doc.remove();
+
+                // If all fields are empty then assume no document
+                // and explicitly remove all of the associated fields
+                // else Craft will assume incomplete data and return validation errors.
+                if ($.trim(title.val()) == '') {
+                  form.find('.document-field.inputs').remove();
+                }
+              }
 
             };
 
@@ -94,18 +131,19 @@
               // Handle Media Link
               onSubmitMediaLink();
 
+              removeHiddenOptionalCategories();
+              removeEmptyImageFields();
+              removeEmptyDocumentFields();
+
               // Array type input fields (eg fields[foo][]) with empty values are not correctly validated for presence by Craft.
               // Rather, they must be explicitly omitted from the request by removing the field's name attr.
-              arraySelects.each(function() {
+              arrayInputSelects.each(function() {
                 var select = $(this);
 
                 if (select.val().length == 0) {
                   select.removeAttr('name');
                 }
               });
-
-              // Remove hidden Locations, Topics, Images, Documents
-              multipleFieldInputs.not(':visible').remove();
             });
         });
     };

@@ -1,98 +1,83 @@
-{% set maxImages = 1 %}
-{% set imagesAdded = 0 %}
-{% set isEditing = false %}
-{% set hideAddLink = false %}
-
-{% if entry %}
-  {% set imagesAdded =  entry.blogImages | length %}
-
-  {% if entry.id %}
-    {% set isEditing = true %}
-  {% endif %}
-{% endif %}
-
 {% set sourceId = 3 %}
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
-<label>Images</label>
-<input type="hidden" name="fields[blogImages]">
+{% set imageBlock = false %}
+{% set image = false %}
+{% set by = false %}
+{% set disclaimer = false %}
+{% set errors = false %}
+{% set key = 'new' %}
 
-{% for i in 1..maxImages %}
-  {% set key = 'new'~i %}
+{% if entry %}
+  {% set imageBlock = entry.blogImages.first %}
+  {% set image = imageBlock.image.first %}
+  {% set by = imageBlock.by %}
 
-  {% set imageBlock = false %}
-  {% set image = false %}
-  {% set by = false %}
-  {% set disclaimer = false %}
+  {% for option in imageBlock.disclaimer.getOptions  %}
+    {% set disclaimer = option.selected %}
+  {% endfor %}
 
-  {% if imagesAdded >= i %}
-    {% set imageBlock = entry.blogImages.nth(i-1) %}
+  {% set errors = imageBlock.hasErrors %}
+  {% set key = imageBlock.id | default('new') %}
+{% endif %}
 
-    {% if isEditing and imageBlock.id %}
-      {% set key = imageBlock.id %}
-    {% endif %}
+<img src="{{ image ? image.url('list') : '/img/default-list.png' }}" class="display-image" />
+<label>Image</label>
 
-    {% set image = imageBlock.image.first %}
-    {% set by = imageBlock.by %}
+{% if not errors %}
+  <a href="#" class="image-field open">{{ image ? 'Replace/Remove' : 'Upload/Select' }}</a>
+{% endif %}
 
-    {% for option in imageBlock.disclaimer.getOptions  %}
-      {% set disclaimer = option.selected %}
-    {% endfor %}
-  {% endif %}
-
-  {% if not imageBlock %}
-    {% set text = loop.first ? 'Add an image' : 'Add another image' %}
-    <a href="#" class="multiple-field add" id="add-image-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
-    {% set hideAddLink = true %}
-  {% endif %}
-
-  <div class="multiple-field inputs"  id="input-image-{{ i }}"{%- if not image %}style="display: none;"{% endif %}>
-    <label for="image">Image file</label>
-    <input type="hidden" name="fields[blogImages][{{ key }}][type]" value="image">
-    <input type="hidden" name="fields[blogImages][{{ key }}][fields][image]" value="">
-    <select class="s3direct image array" name="fields[blogImages][{{ key }}][fields][image][]">
-      <option value=""></option>
-    {% if folder %}
-      {% for asset in craft.assets.folderId(folder.id) %}
-        <option value="{{ asset.id }}" {% if asset.id == image.id %}selected{% endif %}>{{ asset.filename }}</option>
-      {% endfor %}
-    {% endif %}
-    </select>
-    <br>
-
-    <label for="image-by">Image by</label>
-    <input type="text" name="fields[blogImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
-    <br>
-
-    <label for="image-disclaimer">Legal</label>
-    <input type="hidden" name="fields[blogImages][{{ key }}][fields][disclaimer]" value="">
-    <input type="checkbox" name="fields[blogImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
-    <span class="legal">Yes I have the right to use this image</span>
-    <br>
-
-    {% if imageBlock %}
-      {{ f.errorList(imageBlock.allErrors) }}
-      <br>
-    {% endif %}
-
-    <a href="#" class="multiple-field remove" id="remove-image-{{ i }}">Remove image</a>
-  </div>
-{% endfor %}
-
-<div>
-  <span class="fileinput-button">
-    <span>Upload file <b>.gif, .jpg or .png only</b></span>
+<div class="image-field inputs" {%- if not errors %}style="display: none;"{% endif -%}>
+  <div>
+    <span class="fileinput-button">
+      <span>Upload file <b>.gif, .jpg or .png only</b></span>
       <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
       <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
-  </span>
-  <br>
-  <div>
+    </span>
+    <br>
+    <div>
       <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    </div>
   </div>
-</div>
-<br>
 
-{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+  <label for="image" class="required">File</label>
+  <input type="hidden" name="fields[blogImages]">
+  <input type="hidden" name="fields[blogImages][{{ key }}][type]" value="image">
+  <input type="hidden" name="fields[blogImages][{{ key }}][fields][image]">
+
+  <select class="s3direct image" name="fields[blogImages][{{ key }}][fields][image][]">
+    <option value=""></option>
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <option value="{{ asset.id }}" {% if asset.id == image.id %}selected{% endif %} data-url="{{ asset.url('list') }}">
+          {{ asset.filename }}
+        </option>
+      {% endfor %}
+    {% endif %}
+  </select>
+  <br>
+
+  <label for="image-by" class="required">Image by</label>
+  <input type="text" name="fields[blogImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+  <br>
+
+  <label for="image-disclaimer" class="required">Legal</label>
+  <input type="hidden" name="fields[blogImages][{{ key }}][fields][disclaimer]">
+  <input type="checkbox" name="fields[blogImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
+  <span class="legal">Yes I have the right to use this image</span>
+  <br>
+
+  {% if errors %}
+    {{ f.errorList(imageBlock.allErrors) }}
+    <br>
+  {% endif %}
+
+  <a href="#" class="image-field close">Done</a>
+</div>
+
+<br>
 
 {% set js %}
 $(function() {

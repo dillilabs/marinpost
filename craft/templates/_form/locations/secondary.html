@@ -21,11 +21,11 @@
   {% endif %}
 
   {% if not location %}
-    <a href="#" class="multiple-field add" id="add-location-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Location</a>
+    <a href="#" class="optional-category-field add" id="add-location-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Location</a>
     {% set hideAddLink = true %}
   {% endif %}
 
-  <div class="multiple-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
+  <div class="optional-category-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryLocations][]" class="array">
       <option value="">Select another Location</option>
     {% set geographicGroup = false %}
@@ -46,6 +46,6 @@
       {{ f.errorList(location.allErrors) }}
     {% endif %}
 
-    <a href="#" class="multiple-field remove" id="remove-location-{{ i }}">Remove location</a>
+    <a href="#" class="optional-category-field remove" id="remove-location-{{ i }}">Remove location</a>
   </div>
 {% endfor %}

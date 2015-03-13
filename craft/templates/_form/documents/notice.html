@@ -1,88 +1,66 @@
-{% set maxDocuments = 1 %}
-{% set documentsAdded = 0 %}
-{% set isEditing = false %}
-{% set hideAddLink = false %}
-
-{% if entry %}
-  {% set documentsAdded =  entry.noticeDocuments | length %}
-
-  {% if entry.id %}
-    {% set isEditing = true %}
-  {% endif %}
-{% endif %}
-
 {% set sourceId = 2 %}
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+
+{% set documentBlock = false %}
+{% set document = false %}
+{% set title = false %}
+{% set errors = false %}
+{% set key = 'new' %}
+
+{% if entry %}
+  {% set documentBlock =  entry.noticeDocuments.first %}
+  {% set document = documentBlock.document.first %}
+  {% set title = documentBlock.documentTitle %}
+  {% set errors = documentBlock.hasErrors %}
+  {% set key = documentBlock.id | default('new') %}
+{% endif %}
 
 <br>
-<label>Documents</label>
-<input type="hidden" name="fields[noticeDocuments]">
+<label>Document</label>
 
-{% for i in 1..maxDocuments %}
-  {% set key = 'new'~i %}
+{% if not errors %}
+  <a href="#" class="document-field open">{{ document ? 'Replace/Remove' : 'Upload/Select' }}</a>
+{% endif %}
 
-  {% set documentBlock = false %}
-  {% set document = false %}
-  {% set documentTitle = false %}
+<div class="document-field inputs" {%- if not errors %}style="display: none;"{% endif %}>
+  <div>
+    <span class="fileinput-button">
+      <span>Upload file <b>.pdf only</b></span>
+      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+    </span>
+    <br>
+    <div>
+      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    </div>
+  </div>
+  <br>
 
-  {% if documentsAdded >= i %}
-    {% set documentBlock = entry.noticeDocuments.nth(i-1) %}
-
-    {% if isEditing and documentBlock.id %}
-      {% set key = documentBlock.id %}
-    {% endif %}
-
-    {% set document = documentBlock.document.first %}
-    {% set documentTitle = documentBlock.documentTitle %}
-  {% endif %}
-
-  {% if not documentBlock %}
-    {% set text = loop.first ? 'Add a document' : 'Add another document' %}
-    <a href="#" class="multiple-field add" id="add-document-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>{{text }}</a>
-    {% set hideAddLink = true %}
-  {% endif %}
-
-  <div class="multiple-field inputs"  id="input-document-{{ i }}"{%- if not documentBlock %}style="display: none;"{% endif %}>
-    <label for="noticeDocuments">Document file</label>
-    <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
-    <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]" value="">
-    <select class="s3direct document array" name="fields[noticeDocuments][{{ key }}][fields][document][]">
-      <option value=""></option>
+  <input type="hidden" name="fields[noticeDocuments]">
+  <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
+  <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]">
+  <select class="s3direct document" name="fields[noticeDocuments][{{ key }}][fields][document][]">
+    <option value=""></option>
     {% if folder %}
       {% for asset in craft.assets.folderId(folder.id) %}
         <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
       {% endfor %}
     {% endif %}
-    </select>
-    <br>
-
-    <label for="document-title">Document title</label>
-    <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if documentTitle %}value="{{ documentTitle }}"{% endif %}>
-    <br>
-
-    {% if documentBlock %}
-      {{ f.errorList(documentBlock.allErrors) }}
-    {% endif %}
-
-    <a href="#" class="multiple-field remove" id="remove-document-{{ i }}">Remove document</a>
-  </div>
-{% endfor %}
-<br>
-
-<div>
-  <span class="fileinput-button">
-      <span>Upload file <b>.pdf only</b></span>
-      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-  </span>
+  </select>
   <br>
-  <div>
-      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-  </div>
+
+  <label for="document-title">Document title</label>
+  <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+  <br>
+
+  {% if errors %}
+    {{ f.errorList(documentBlock.allErrors) }}
+  {% endif %}
+
+  <a href="#" class="document-field close">Done</a>
 </div>
 <br>
-
-{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set js %}
 $(function() {

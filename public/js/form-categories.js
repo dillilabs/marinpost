@@ -1,5 +1,5 @@
 (function($) {
-    $.fn.addRemove  = function() {
+    $.fn.formCategories  = function() {
         return this.each(function() {
             var form = $(this);
 
@@ -7,11 +7,9 @@
             // Selectors
             //-----------------------
 
-            // Secondary Locations, Topics, Images, Documents
-            var multipleFieldLinks = form.find('a.multiple-field');
-            var addMultipleFieldLink = multipleFieldLinks.filter('.add');
-            var removeMultipleFieldLink = multipleFieldLinks.filter('.remove');
-            var multipleFieldInputs = form.find('.multiple-field.inputs');
+            var links = form.find('a.optional-category-field');
+            var addLink = links.filter('.add');
+            var removeLink = links.filter('.remove');
 
             //-----------------------
             // Functions
@@ -26,24 +24,24 @@
             // Events
             //-----------------------
 
-            // Add Location/Topic/Image/Document
-            addMultipleFieldLink.click(function(e) {
+            // Add optional category
+            addLink.click(function(e) {
               e.preventDefault();
               var link = $(this);
               var id = idFromLink(link);
 
               $('#input-'+id).show();
-              link.nextAll('a.multiple-field.add:first').show().end()
+              link.nextAll('a.optional-category-field.add:first').show().end()
                   .hide();
             });
 
-            // Remove Location/Topic/Image/Document
-            removeMultipleFieldLink.click(function(e) {
+            // Remove optional category
+            removeLink.click(function(e) {
               e.preventDefault();
               var link = $(this);
               var id = idFromLink(link);
 
-              link.closest('.multiple-field.inputs').hide();
+              link.closest('.optional-category-field.inputs').hide();
               $('#add-'+id).show();
             });
 

@@ -25,7 +25,9 @@
 
 {% set formJs %}
   $(function() {
-      $('form.content-submission').addRemove();
+      $('form.content-submission').formImages();
+      $('form.content-submission').formCategories();
+      $('form.content-submission').formDocuments();
       $('form.content-submission').forms();
   });
 {% endset %}

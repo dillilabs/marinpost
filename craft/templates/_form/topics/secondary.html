@@ -21,11 +21,11 @@
   {% endif %}
 
   {% if not topic %}
-    <a href="#" class="multiple-field add" id="add-topic-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Topic</a>
+    <a href="#" class="optional-category-field add" id="add-topic-{{ i }}" {% if hideAddLink %}style="display: none;"{% endif %}>Add another Topic</a>
     {% set hideAddLink = true %}
   {% endif %}
 
-  <div class="multiple-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
+  <div class="optional-category-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
     <select name="fields[secondaryTopics][]" class="array">
       <option value="">Select another Topic</option>
     {% for option in craft.categories.group('topics') %}
@@ -37,6 +37,6 @@
       {{ f.errorList(topic.allErrors) }}
     {% endif %}
 
-    <a href="#" class="multiple-field remove" id="remove-topic-{{ i }}">Remove topic</a>
+    <a href="#" class="optional-category-field remove" id="remove-topic-{{ i }}">Remove topic</a>
   </div>
 {% endfor %}

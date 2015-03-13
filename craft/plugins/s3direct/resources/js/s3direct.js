@@ -40,7 +40,7 @@
       var addFileToSelectOptions = function(input, selectedFileId, file) {
         var selected = file.id == selectedFileId ? 'selected' : '';
 
-        input.append('<option value="'+file.id+'" '+selected+'>'+file.filename+'</option>');
+        input.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
       };
 
       var updateFormInputs = function(files) {
