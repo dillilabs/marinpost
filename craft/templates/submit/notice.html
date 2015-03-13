@@ -16,24 +16,52 @@
         <hr>
         {% include "_form/topics" %}
         <hr>
+        {% include "_form/content/notice" %}
+        <hr>
+        {% include "_form/documents/notice" %}<br>
+        <hr>
+
         <fieldset class="event">
-            <label for="event-start">Event start date/time</label> <input type="datetime" id="event-start"><br>
-            <label for="event-end">Event end date/time</label> <input type="datetime" id="event-end"><br>
-            <label for="event-venue">Event venue</label><input type="text" id="event-venue">
-            <label for="event-address">Event street address</label><input type="text" id="event-address">
-            <label for="event-city">Event city</label><input type="text" id="event-city">
-            <label for="event-zip">Event zip code</label><input type="text" pattern="[0-9]*" id="event-zip"><br>
+          <label for="event-start-date">Event start date</label>
+          <input type="text" name="fields[startDate][date]" class="date" value="{{ entry.startDate | date('m/d/Y') }}">
+          <br>
+          <label for="event-start-time">Event start time</label>
+          <select name="fields[startTime][time]"><br>
+            {{ f.timeOptions(entry.startTime) }}
+          </select>
+
+          <label for="event-end-date">Event end date</label>
+          <input type="text" name="fields[endDate][date]" class="date" value="{{ entry.endDate | date('m/d/Y') }}">
+          <br>
+          <label for="event-end-time">Event end time</label>
+          <select name="fields[endTime][time]"><br>
+            {{ f.timeOptions(entry.endTime) }}
+          </select>
+
+          <label for="event-venue">Event venue</label>
+          <input type="text" name="fields[venue]" autocomplete="off" value="{{ entry.venue }}">
+          <label for="event-address">Event street address</label>
+          <input type="text" name="fields[streetAddress]" autocomplete="off" value="{{ entry.streetAddress }}">
+          <label for="event-city">Event city</label>
+          <input type="text" name="fields[city]" autocomplete="off" value="{{ entry.city }}">
+          <label for="event-state">Event state</label>
+          <select name="fields[state]">
+            <option>Select -</option>
+            {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+              <option value="{{ option.value }}" {%- if option.value == entry.state %}selected{% endif %}>{{ option.label }}</option>
+            {% endfor %}
+          </select>
+          <label for="event-zip">Event zip code</label>
+          <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" value="{{ entry.zipCode }}">
         </fieldset>
         <hr>
+
         <fieldset class="contact">
-            <label for="event-zip">Contact name</label><input type="text" id="contact-name"><br>
+          <label for="event-zip">Contact name</label><input type="text" id="contact-name"><br>
 	        <label for="notice-contact">Contact phone number</label><br>
 	        <input type="tel" id="notice-contact"><br>
-            <label for="event-zip">Contact email address</label><input type="text" id="contact-email-address"><br>
+          <label for="event-zip">Contact email address</label><input type="text" id="contact-email-address"><br>
         </fieldset>
-        <hr>
-        {% include "_form/content/notice" %}
-        {% include "_form/documents/notice" %}<br>
     {% endblock %}
   {% endembed %}
 {% endblock %}

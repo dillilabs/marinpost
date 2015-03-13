@@ -19,6 +19,8 @@
             // Entry status
             var entryEnabled = form.find('input[name=enabled]');
 
+            var dateFields = form.find('input.date');
+
             // Submit buttons
             var submitButtons = form.find('input[type=button].submit');
 
@@ -112,6 +114,14 @@
               }
 
             };
+
+            //-----------------------
+            // Hooks
+            //-----------------------
+
+            dateFields.datepicker({
+              dateFormat: 'mm/dd/yy'
+            });
 
             //-----------------------
             // Events
