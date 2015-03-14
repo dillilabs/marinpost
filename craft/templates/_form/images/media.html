@@ -32,7 +32,7 @@
 <div class="image-field inputs" {%- if not errors %}style="display: none;"{% endif -%}>
   <div>
     <span class="fileinput-button">
-      <span>Upload file <b>.gif, .jpg or .png only</b></span>
+      <span>Upload gif, .jpg or .png image</span>
       <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
       <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
     </span>
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <label for="image" class="required">File</label>
+  <label for="image" class="required">Select image</label>
   <input type="hidden" name="fields[mediaImages]">
   <input type="hidden" name="fields[mediaImages][{{ key }}][type]" value="image">
   <input type="hidden" name="fields[mediaImages][{{ key }}][fields][image]">
