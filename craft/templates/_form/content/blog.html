@@ -1,16 +1,8 @@
 <label for="blogContent" class="required">Blog Content</label>
-<textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="required" placeholder="Create your post here">
+<textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="wysiwyg required" placeholder="Create your post here">
 {%- if entry is defined %}{{ entry.blogContent }}{% endif -%}
 </textarea>
 
 {% if entry is defined %}
   {{ f.errorList(entry.getErrors('blogContent')) }}
 {% endif %}
-
-{# includeJsResource "lib/redactor/redactor.js" #}
-{# Uncaught ReferenceError: Craft is not defined
- #   from line 2836 within /* BEGIN HACK! */
- #}
-{% includeJsFile "/js/redactor.js" %}
-{% includeCssResource "lib/redactor/redactor.css" %}
-{% includeJs "$('#blogContent').redactor();" %}

@@ -1,18 +1,8 @@
 <label for="noticeContent" class="required">Notice</label>
-<textarea id="noticeContent" name="fields[noticeContent]" cols="60" rows="12" class="required" placeholder="Create your Notice here">
+<textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" placeholder="Create your Notice here">
 {%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
 </textarea>
 
 {% if entry is defined %}
   {{ f.errorList(entry.getErrors('noticeContent')) }}
 {% endif %}
-
-<br>
-
-{# includeJsResource "lib/redactor/redactor.js" #}
-{# Uncaught ReferenceError: Craft is not defined
- #   from line 2836 within /* BEGIN HACK! */
- #}
-{% includeJsFile "/js/redactor.js" %}
-{% includeCssResource "lib/redactor/redactor.css" %}
-{% includeJs "$('#noticeContent').redactor();" %}

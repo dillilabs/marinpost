@@ -38,11 +38,11 @@
           </select>
 
           <label for="event-venue">Event venue</label>
-          <input type="text" name="fields[venue]" autocomplete="off" value="{{ entry.venue }}">
+          <input type="text" name="fields[venue]" autocomplete="off" placeholder="San Rafael Civic Center Auditorium" value="{{ entry.venue }}">
           <label for="event-address">Event street address</label>
-          <input type="text" name="fields[streetAddress]" autocomplete="off" value="{{ entry.streetAddress }}">
+          <input type="text" name="fields[streetAddress]" autocomplete="off" placeholder="3501 Civic Center Drive" value="{{ entry.streetAddress }}">
           <label for="event-city">Event city</label>
-          <input type="text" name="fields[city]" autocomplete="off" value="{{ entry.city }}">
+          <input type="text" name="fields[city]" autocomplete="off" placeholder="San Rafael" value="{{ entry.city }}">
           <label for="event-state">Event state</label>
           <select name="fields[state]">
             <option>Select -</option>
@@ -51,22 +51,22 @@
             {% endfor %}
           </select>
           <label for="event-zip">Event zip code</label>
-          <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" value="{{ entry.zipCode }}">
+          <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" placeholder="94903" value="{{ entry.zipCode }}">
         </fieldset>
         <hr>
 
         <fieldset class="contact">
           <label for="organization">Organization</label>
-          <input type="text" name="fields[organization]" autocomplete="off" placeholder="" value="{{ entry.organization }}">
+          <input type="text" name="fields[organization]" autocomplete="off" placeholder="Some Nonprofit" value="{{ entry.organization }}">
           <br>
           <label for="contact-name">Contact name</label>
-          <input type="text" name="fields[contactName]" autocomplete="off" placeholder="" value="{{ entry.contactName }}">
+          <input type="text" name="fields[contactName]" autocomplete="off" placeholder="Joe Organizer" value="{{ entry.contactName }}">
           <br>
 	        <label for="notice-contact">Contact phone number</label>
           <input type="text" name="fields[phoneNumber]" autocomplete="off" placeholder="(415) 555-0101" value="{{ entry.phoneNumber }}">
           <br>
           <label for="event-zip">Contact email address</label>
-          <input type="text" name="fields[email]" autocomplete="off" placeholder="somebody@example.org" value="{{ entry.email }}">
+          <input type="text" name="fields[email]" autocomplete="off" placeholder="someone@example.org" value="{{ entry.email }}">
           <br>
           <label for="website">Web Site</label>
           <input type="text" name="fields[webSite]" autocomplete="off" placeholder="http://example.org" value="{{ entry.webSite }}">

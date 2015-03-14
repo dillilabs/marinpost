@@ -16,6 +16,12 @@
             // Link to Media
             var mediaTypeSelect = form.find('input[type=radio][name=mediaTypeSelect]');
 
+            // Section ID
+            var sectionId = form.find('input[name=sectionId]');
+
+            // Entry ID
+            var entryId = form.find('input[name=entryId]');
+
             // Entry status
             var entryEnabled = form.find('input[name=enabled]');
 
@@ -132,8 +138,46 @@
 
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
-              entryEnabled.val(this.value == 'Publish' ? 1 : 0);
-              form.submit();
+              var section, url;
+
+              switch (this.value) {
+                case 'Publish':
+                  entryEnabled.val(1);
+                  form.submit();
+                  break;
+
+                case 'Save':
+                  entryEnabled.val(0);
+                  form.submit();
+                  break;
+
+                case 'Cancel':
+                  if (entryId.length > 0) {
+                    switch (sectionId.val()) {
+                      case '2':
+                        section = 'news';
+                        break;
+                      case '3':
+                        section = 'blog';
+                        break;
+                      case '4':
+                        section = 'notices';
+                        break;
+                      case '5':
+                        section = 'letters';
+                        break;
+                      case '6':
+                        section = 'media';
+                        break;
+                    }
+
+                    url = '/account/'+section;
+                  } else {
+                    url = '/submit';
+                  }
+
+                  document.location = url;
+              }
             });
 
             // Submit the form already

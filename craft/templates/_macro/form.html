@@ -29,9 +29,12 @@
 
 {% macro inputSubmit(entry) %}
   <input type="button" class="submit" value="Save">
+
   {% if currentUser.isInGroup('contributor') %}
     <input type="button" class="submit" value="Publish">
   {% endif %}
+
+  <input type="button" class="submit" value="Cancel">
 {% endmacro %}
 
 {% macro categoryId(entry, fieldName, defaultId, limit) %}

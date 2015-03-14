@@ -2,7 +2,16 @@
 
 {% set statuses = ['live', 'disabled'] %}
 
-{% if not craft.request.getPost('action') %}
+{% if craft.request.getPost('action') %}
+  {# returning (with errors) from POST #}
+
+  {% if entry.authorId != currentUser.id %}
+    {# should never occur...but just in case #}
+
+    {% redirect 404 %}
+  {% endif %}
+
+{% else %}
   {# initial GET request #}
 
   {% set entryId = craft.request.segment(2) %}
