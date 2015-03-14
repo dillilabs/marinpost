@@ -1,5 +1,5 @@
 (function($) {
-    $.fn.formContent  = function() {
+    $.fn.formWysiwyg = function() {
         return this.each(function() {
             var form = $(this);
 
