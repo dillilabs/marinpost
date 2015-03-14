@@ -2,11 +2,11 @@
   <div class="sub-nav">
     {% block subNav %}
       <ul>
-        <li {{ n.classActive('blog', 2) }}>{{ n.submitLink('blog', 'Create a Blog post') }}</li>
-        <li {{ n.classActive('news', 2) }}>{{ n.submitLink('news', 'Link News') }}</li>
-        <li {{ n.classActive('notice', 2) }}>{{ n.submitLink('notice', 'Post a Notice') }}</li>
-        <li {{ n.classActive('media', 2) }}>{{ n.submitLink('media', 'Link Media') }}</li>
-        <li {{ n.classActive('letter', 2) }}>{{ n.submitLink('letter', 'Write a Letter') }}</li>
+        {{ n.arrowLink('submit/blog', 'Create a Blog Post') }}
+        {{ n.arrowLink('submit/news', 'Link News') }}
+        {{ n.arrowLink('submit/notice', 'Post a Notice') }}
+        {{ n.arrowLink('submit/media', 'Link Media') }}
+        {{ n.arrowLink('submit/letter', 'Write a Letter') }}
       </ul>
     {% endblock %}
   </div>

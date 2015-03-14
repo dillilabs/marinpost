@@ -2,15 +2,20 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block subNav %}
+      <ul>
+        {{ n.arrowLink('submit/blog', 'Create a Blog Post') }}
+        {{ n.arrowLink('submit/news', 'Link News') }}
+        {{ n.arrowLink('submit/notice', 'Post a Notice') }}
+        {{ n.arrowLink('submit/media', 'Link Media') }}
+        {{ n.arrowLink('submit/letter', 'Write a Letter') }}
+      </ul>
+    {% endblock %}
+
     {% block post %}
-        <h2>Contributing to The Marin Post</h2>
-        <p>Staffy is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process.</p>
-        <h3>Become a Marin Post Contributor</h3>
-        <a class="comment-box" href="{{ url('submit/blog') }}">Submit a Blog Post</a>
-        <a class="comment-box" href="{{ url('submit/news') }}">Post a News Link</a>
-        <a class="comment-box" href="{{ url('submit/notice') }}">Post a Notice</a>
-        <a class="comment-box" href="{{ url('submit/media') }}">Post a Media Link</a>
-        <a class="comment-box" href="{{ url('submit/letter') }}">Write a Letter to the Community</a>
+      <h2>Contributing to The Marin Post</h2>
+      <p>Staffy is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process. Citizen Marin is a community-based non-profit organization that promotes civil dialogue between all members of the community in order to create a more open and transparent government process.</p>
+      <h3>Become a Marin Post Contributor</h3>
     {% endblock %}
   {% endembed %}
 {% endblock %}

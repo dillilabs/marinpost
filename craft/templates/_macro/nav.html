@@ -32,22 +32,12 @@
   {% endif %}
 {% endmacro %}
 
-{% macro submitLink(type, text) %}
-  {% set current = craft.request.segment(2) %}
-
-  {% if type == current %}
-    {{- text -}}
-  {% else %}
-    <a href="/submit/{{ type }}">{{ text }}</a>
-  {% endif %}
-{% endmacro %}
-
 {% macro arrowLink(path, text) %}
   {% set current = craft.request.path %}
 
-  {% if path == '/'~current %}
+  {% if path == current %}
     <li class="active">{{ text }}</li>
   {% else %}
-    <li><a href="{{ path }}">{{ text }}</a></li>
+    <li><a href="/{{ path }}">{{ text }}</a></li>
   {% endif %}
 {% endmacro %}
