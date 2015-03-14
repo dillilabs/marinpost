@@ -1,0 +1,42 @@
+{% requireLogin %}
+
+{% set statuses = ['live', 'disabled'] %}
+
+{% set entries = craft.entries.section(section).status(statuses).authorId(currentUser.id).order('dateCreated desc') %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h1>{{ title }}</h1>
+
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Created</th>
+          <th>Published</th>
+          <th></th>
+          <th></th>
+        </th>
+        {% for entry in entries %}
+          <tr>
+            <td>{{ entry.title }}</td>
+            <td>{{ entry.dateCreated | date('M d, Y') }}</td>
+            <td>
+              {% if entry.status != 'disabled' %}
+                {{ entry.postDate | date('M d, Y') }}
+              {% endif %}
+            </td>
+            <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">VIEW</a></td>
+            <td>
+              {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
+                <a href="/edit/{{ entry.id }}/{{ entry.slug }}">EDIT</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

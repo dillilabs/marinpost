@@ -41,3 +41,13 @@
     <a href="/submit/{{ type }}">{{ text }}</a>
   {% endif %}
 {% endmacro %}
+
+{% macro arrowLink(path, text) %}
+  {% set current = craft.request.path %}
+
+  {% if path == '/'~current %}
+    <li class="active">{{ text }}</li>
+  {% else %}
+    <li><a href="{{ path }}">{{ text }}</a></li>
+  {% endif %}
+{% endmacro %}

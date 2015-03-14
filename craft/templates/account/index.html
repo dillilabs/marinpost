@@ -1,11 +1,10 @@
+{% requireLogin %}
+
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% embed "_common/single" %}
+  {% embed "account/_layout" %}
     {% block post %}
-
-      <h3>Profile updated</h3>
-
     {% endblock %}
-  {% endembed%}
+  {% endembed %}
 {% endblock %}
