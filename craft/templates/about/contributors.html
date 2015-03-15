@@ -1,0 +1,31 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "about/_layout" %}
+
+    {% block post %}
+      <h2>Contributors</h2>
+
+      {% set imageSize = 200 %}
+
+      <ul>
+        {% for user in craft.users.group('contributor') %}
+          <li>
+            {% if user.photoUrl %}
+              <img src="{{ user.photoUrl(imageSize) }}" />
+            {% endif %}
+
+            <h3>{{ user.name }}</h3>
+            <p>{{ user.city }}, {{ user.state }}</p>
+
+            {% if user.bio %}
+              <p>{{ user.bio }}</p>
+            {% endif %}
+
+            <p><a href="{{ p.contributorUrl(user) }}">more</a></p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

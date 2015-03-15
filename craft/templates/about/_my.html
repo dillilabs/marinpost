@@ -1,0 +1,13 @@
+{% macro entries(entries, title) %}
+  {% import "_macro/post" as p %}
+
+  {% if entries | length > 0 %}
+    <h3>{{ title }}</h3>
+
+    <ul>
+      {% for entry in entries %}
+        {{ p.post(entry) }}
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

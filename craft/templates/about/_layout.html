@@ -1,0 +1,20 @@
+<main class="single">
+  <div class="sub-nav">
+    {% block subNav %}
+      <ul>
+        {{ n.arrowLink('about', 'About Us') }}
+        {{ n.arrowLink('about/editors', 'Editorial Board') }}
+        {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
+        {{ n.arrowLink('about/advisors', 'Marin Post Advisors') }}
+        {{ n.arrowLink('about/contributors', 'Contributors') }}
+        {{ n.arrowLink('about/terms', 'Terms of Use') }}
+        {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
+      </ul>
+    {% endblock %}
+  </div>
+
+  <div class="post">
+    {% block post %}
+    {% endblock %}
+  </div>
+</main>

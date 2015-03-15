@@ -9,7 +9,7 @@
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% embed "_common/single" %}
+  {% embed "about/_layout" %}
     {% block post %}
 
       {% if user.photoUrl %}
@@ -24,18 +24,15 @@
         <p>{{ user.bio }}</p>
       {% endif %}
 
-      <ul>
-      {% for entry in craft.entries.authorId(user.id) %}
-        <li>
-          {{ entry.postDate | date('M d, Y') }}
-          [{{ entry.section.name }}]
-          <a href="{{ entry.url | default(url(entry.section.handle))  }}">{{ entry.title }}</a>
-          {% if currentUser.id == user.id %}
-            [<a href="/edit/{{ entry.id }}">edit</a>]
-          {% endif %}
-        </li>
-      {% endfor %}
-      </ul>
+      {% set entries = craft.entries.authorId(user.id) | group('section.handle') %}
+
+      {% import "about/_my" as my %}
+
+      {{ my.entries(entries['blog'], 'My Blog Posts') }}
+      {{ my.entries(entries['news'], 'My News Links') }}
+      {{ my.entries(entries['notices'], 'My Notices') }}
+      {{ my.entries(entries['media'], 'My Media Links') }}
+      {{ my.entries(entries['letters'], 'My Letters') }}
     {% endblock %}
   {% endembed %}
 {% endblock %}
