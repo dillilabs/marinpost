@@ -30,7 +30,7 @@
           <ul>
             <li><input type="checkbox" class="author all" value="all" checked="checked" />All</li>
 
-            {% for author in craft.users.group('contributor') %}
+            {% for author in craft.users.group('contributor').order('lastName, firstName') %}
               <li><input type="checkbox" class="author filter" value="{{ author.id }}"/>{{ author.name }}</li>
             {% endfor %}
           </ul>

@@ -73,25 +73,26 @@
   <nav>
     <ul>
       <li><a href="{{ siteUrl }}" {{ n.classActive('') }}>Home</a></li>
-      <li>{{ n.navLink('Blog') }}</li>
-      <li>{{ n.navLink('News') }}</li>
-      <li>{{ n.navLink('Notices') }}</li>
-      <li>{{ n.navLink('Media') }}</li>
-      <li>{{ n.navLink('Surveys') }}</li>
-      <li>{{ n.navLink('Letters') }}</li>
-      <li>{{ n.navLink('About') }}
+      <li>{{ n.segmentLink('Blog') }}</li>
+      <li>{{ n.segmentLink('News') }}</li>
+      <li>{{ n.segmentLink('Notices') }}</li>
+      <li>{{ n.segmentLink('Media') }}</li>
+      <li>{{ n.segmentLink('Surveys') }}</li>
+      <li>{{ n.segmentLink('Letters') }}</li>
+      <li>{{ n.segmentLink('About') }}
         <ul>
-          <li>{{ n.navLink('About') }}</li>
-          <li><a href="/blogger.html">Bloggers</a></li>
-          <li><a href="/editor.html">Editors</a></li>
-          <li><a href="/staff.html">Staff</a></li>
-          <li><a href="#" onclick="return confirm('Not done yet.');">Terms</a></li>
-          <li><a href="#" onclick="return confirm('Not done yet.');">Privacy</a></li>
+          <li>{{ n.pathLink('About Us', 'about') }}</li>
+          <li>{{ n.pathLink('Editorial Board', 'about/editors') }}</li>
+          <li>{{ n.pathLink('Staff & Volunteers', 'about/staff') }}</li>
+          <li>{{ n.pathLink('Marin Post Advisors', 'about/advisors') }}</li>
+          <li>{{ n.pathLink('Contributors', 'about/contributors') }}</li>
+          <li>{{ n.pathLink('Terms of Use', 'about/terms') }}</li>
+          <li>{{ n.pathLink('Privacy Policy', 'about/privacy') }}</li>
         </ul>
       </li>
-      <li>{{ n.navLink('Submit') }}
+      <li>{{ n.segmentLink('Submit') }}
         <ul>
-          <li>{{ n.navLink('Submit') }}</li>
+          <li>{{ n.segmentLink('Submit') }}</li>
           <li><a href="{{ url('submit/blog') }}">Blog Post</a></li>
           <li><a href="{{ url('submit/news') }}">Link to News</a></li>
           <li><a href="{{ url('submit/notice') }}">Notice</a></li>
@@ -99,7 +100,7 @@
           <li><a href="{{ url('submit/letter') }}">Letter to the Community</a></li>
         </ul>
       </li>
-      <li>{{ n.navLink('Contact') }}</li>
+      <li>{{ n.segmentLink('Contact') }}</li>
       {% if currentUser %}
       <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
       <li class="account"><a href="{{ url('account') }}">My account</a></li>
