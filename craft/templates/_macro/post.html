@@ -132,15 +132,39 @@
   {% endswitch %}
 {% endmacro %}
 
-{% macro postTags(entry, unfiltered) %}
+{% macro filterLink(section, category) %}
+  <a href="/{{ section.handle }}?filter={{ category.group.handle }}&id={{ category.id }}">{{ category }}</a>
+{% endmacro %}
+
+{% macro postTags(entry, unfiltered, secondary) %}
   {% set unfiltered = unfiltered | default(false) %}
+  {% set secondary = secondary | default(false) %}
+
+  {% from _self import filterLink %}
 
   <ul class="tags">
-  {% if unfiltered %}
-    <li><a href="{{ url(entry.section.handle) }}">{{ entry.section.name }}</a></li> |
-  {% endif %}
-    <li><a href="#TODO">{{ entry.primaryLocation.first }}</a></li> |
-    <li><a href="#TODO">{{ entry.primaryTopic.first }}</a></li>
+    {% if unfiltered %}
+      <li><a href="/{{ entry.section.handle }}">{{ entry.section.name }}</a></li> |
+    {% endif %}
+
+    {% set location = entry.primaryLocation.first %}
+
+    <li>{{ filterLink(entry.section, location) }}</li> |
+
+    {% if secondary %}
+      {% for location in entry.secondaryLocations %}
+        <li>{{ filterLink(entry.section, location) }}</li> |
+      {% endfor %}
+    {% endif %}
+
+    {% set topic = entry.primaryTopic.first %}
+    <li>{{ filterLink(entry.section, topic) }}</li>
+
+    {% if secondary %}
+      {% for topic in entry.secondaryTopics %}
+        | <li>{{ filterLink(entry.section, topic) }}</li>
+      {% endfor %}
+    {% endif %}
   </ul>
 {% endmacro %}
 

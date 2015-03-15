@@ -3,7 +3,7 @@
 {% block main %}
   {% embed "_common/single" %}
     {% block post %}
-      {{ p.postTags(entry) }}
+      {{ p.postTags(entry, false, true) }}
       {{ p.postTitle(entry) }}
       {{ p.postBy(entry) }}
       
