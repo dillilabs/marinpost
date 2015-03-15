@@ -3,30 +3,33 @@
     {% block subNav %}
       <div class="filter" id="filters">
         <p>Save My Settings</p>
-        <fieldset>
+        <fieldset class="location">
           <h5>Locations</h5>
           <ul>
             <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+
             {% for location in craft.categories.group('locations') %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
             {% endfor %}
           </ul>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="topic">
           <h5>Topics</h5>
           <ul>
             <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
+
             {% for topic in craft.categories.group('topics') %}
               <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
             {% endfor %}
           </ul>
         </fieldset>
 
-        <fieldset>
+        <fieldset class="author">
           <h5>Bloggers</h5>
           <ul>
             <li><input type="checkbox" class="author all" value="all" checked="checked" />All</li>
+
             {% for author in craft.users.group('contributor') %}
               <li><input type="checkbox" class="author filter" value="{{ author.id }}"/>{{ author.name }}</li>
             {% endfor %}
@@ -50,9 +53,22 @@
 </div>
 </main>
 
+{% set filter = craft.request.query('filter') %}
+{% set id = craft.request.query('id') %}
+
 {% set js %}
   $(function() {
+    var filter = '{{ filter }}';
+    var id = '{{ id }}';
+    var fieldset;
+
       $('ul.posts').filters();
+
+      if (filter.length > 0 && id.length > 0) {
+          fieldset = $('#filters fieldset.'+filter);
+          fieldset.find('h5').click();
+          fieldset.find('li > input[value='+id+']').click();
+      }
   });
 {% endset %}
 

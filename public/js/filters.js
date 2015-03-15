@@ -4,9 +4,14 @@
 
         return this.each(function() {
             var filteredContent = $(this);
+            var toggleFilters = $('#filters fieldset h5');
             var noFilters = $(':checkbox.all');
             var filters = $(':checkbox.filter');
             var loadMoreLink = $('#load-more-content'); // TODO activate on scroll
+
+            //----------
+            // Functions
+            //----------
           
             // TODO refactor
             var filterType = function(e) {
@@ -55,7 +60,17 @@
                 }
               );
             };
+
+            //-------
+            // Events
+            //-------
           
+            toggleFilters.click(function() {
+              var toggle = $(this);
+
+              toggle.toggleClass('active').siblings('ul').slideToggle();
+            });
+
             filters.click(function() {
               var filter = $(this);
               var type = filterType(filter);
