@@ -10,26 +10,15 @@ class MarinPostPlugin extends BasePlugin
      *
      *  Listen to entries.onBeforeSaveEntry event
      *
-     *  Listen to users.onSaveUser event
-     *
-     *  Inject Javascript into the CP
+     *  Listen to users.onBeforeSaveUser event
      */
     public function init()
     {
         parent::init();
-
         $this->settings = $this->getSettings();
 
-        // Respond to entries.onBeforeSaveEntry event
         $this->_onBeforeSaveEntryEvent();
-
-        // Respond to users.onSaveUser event
-        $this->_onSaveUserEvent();
-
-        // Inject Javascript into the Control Panel
-        if (craft()->request->isCpRequest()) {
-            $this->_includeCpJs();
-        }
+        $this->_onBeforeSaveUserEvent();
     }
 
     //----------------------
@@ -115,13 +104,39 @@ class MarinPostPlugin extends BasePlugin
     }
 
     /**
-     * Respond to the users.onSaveUser event.
+     * Respond to users.onBeforeSaveUser event.
+     *
+     *  If User firstName or lastName is blank:
+     *
+     *      Then add error(s) and prevent save.
      */
-    private function _onSaveUserEvent()
+    private function _onBeforeSaveUserEvent()
     {
-        craft()->on('users.onSaveUser', function(Event $event) {
+        craft()->on('users.onBeforeSaveUser', function(Event $event) {
             $user = $event->params['user'];
-            $this->_syncUserName($user);
+
+            $firstName = craft()->request->getPost('firstName', $user->firstName);
+            $lastName = craft()->request->getPost('lastName', $user->lastName);
+
+            $valid = true;
+
+            if (empty(trim($firstName)))
+            {
+                $user->addError('firstName', 'First name cannot be blank.');
+                $valid= false;
+            }
+
+            if (empty(trim($lastName)))
+            {
+                $user->addError('lastName', 'Last name cannot be blank.');
+                $valid= false;
+            }
+
+            if (!$valid)
+            {
+                $this->_log('Invalid user: '.$user->username);
+                $event->performAction = false;
+            }
         });
     }
 
@@ -153,53 +168,6 @@ class MarinPostPlugin extends BasePlugin
         if (!$entry->id) return false;
         $originalEntry = craft()->entries->getEntryById($entry->id);
         return $originalEntry->status == 'live';
-    }
-
-    /**
-     * Keep (native) firstName and lastName fields synchronized with (custom) nameFirst and nameLast fields.
-     *
-     *  The native fields are:
-     *
-     *      not required
-     *      hidden in User Account tab via Javascript (by this plugin)
-     *      "special"
-     *
-     *  The custom fields are:
-     *
-     *      required
-     *      editable in User Profile tab
-     *
-     *  Synchronization is desirable because the native fields are ubiquitously used to display the User name.
-     */
-    private function _syncUserName($user) {
-        if (strcmp($user->firstName, $user->nameFirst) !== 0 || strcmp($user->lastName, $user->nameLast) !== 0) {
-            $user->firstName = $user->nameFirst;
-            $user->lastName = $user->nameLast;
-            self::log("Synchronizing first and last name of {$user->name} ({$user->email})", LogLevel::Warning);
-            craft()->users->saveUser($user);
-        }
-    }
-
-    //----------------------
-    // Universal CP functions
-    //----------------------
-
-    /**
-     * Add Javascript to the Control Panel to do the following:
-     *
-     *  In User Account tab remove the following fields:
-     *
-     *      First Name
-     *      Last Name
-     *      Week Start Day
-     */
-    private function _includeCpJs() {
-        $js = <<<'JS'
-var userFormFields = $('form#userform .field');
-userFormFields.filter('#firstName-field, #lastName-field, #weekStartDay-field').remove();
-JS;
-
-        craft()->templates->includeJs($js);
     }
 
     //
@@ -249,7 +217,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.15';
+        return '0.0.16';
     }
 
     public function getDeveloper()

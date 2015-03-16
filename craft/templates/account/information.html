@@ -8,7 +8,7 @@
 
       <h2>My Account Information</h2>
 
-      <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+      <form method="post" accept-charset="utf-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
         <input type="hidden" name="redirect" value="account">
@@ -18,17 +18,17 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <label for="nameFirst">First Name</label>
-        <input type="text" id="nameFirst" name="fields[nameFirst]" value="{{ currentUser.nameFirst }}">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" value="{{ currentUser.firstName }}">
         {% if account is defined %}
-          {{ f.errorList(account.getErrors('nameFirst')) }}
+          {{ f.errorList(account.getErrors('firstName')) }}
         {% endif %}
         <br>
 
-        <label for="nameLast">Last Name</label>
-        <input type="text" id="nameLast" name="fields[nameLast]" value="{{ currentUser.nameLast }}">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" value="{{ currentUser.lastName }}">
         {% if account is defined %}
-          {{ f.errorList(account.getErrors('nameLast')) }}
+          {{ f.errorList(account.getErrors('lastName')) }}
         {% endif %}
         <br>
 
@@ -91,8 +91,6 @@
 
         <input type="submit" value="Save Profile">
       </form>
-
-      <a href="/account/entries">Entries</a>
     {% endblock %}
   {% endembed %}
 {% endblock %}

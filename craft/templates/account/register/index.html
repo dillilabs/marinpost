@@ -9,21 +9,17 @@
           <input type="hidden" name="action" value="users/saveUser">
           <input type="hidden" name="redirect" value="account/register/email">
 
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
           {% if account is defined %}
-            {# f.errorList(account.allErrors) #}
-          {% endif %}
-
-          <label for="nameFirst">First Name</label>
-          <input type="text" id="nameFirst" name="fields[nameFirst]" {%- if account is defined %} value="{{ account.nameFirst }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('nameFirst')) }}
+            {{ f.errorList(account.getErrors('firstName')) }}
           {% endif %}
           <br>
 
-          <label for="nameLast">Last Name</label>
-          <input type="text" id="nameLast" name="fields[nameLast]" {%- if account is defined %} value="{{ account.nameLast }}"{% endif %}>
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
           {% if account is defined %}
-            {{ f.errorList(account.getErrors('nameLast')) }}
+            {{ f.errorList(account.getErrors('lastName')) }}
           {% endif %}
           <br>
 
