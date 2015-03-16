@@ -21,10 +21,10 @@
 
 {% set entries = craft.marinpost.entries(filters, slice) %}
 
-{% import "_macro/post" as p %}
+{% import "_entry/macros" as m %}
 
 {% for entry in entries %}
-  {{ p.post(entry) }}
+  {{ m.post(entry) }}
 {% endfor %}
 
 {% endspaceless %}

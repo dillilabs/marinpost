@@ -26,13 +26,13 @@
 
       {% set entries = craft.entries.authorId(user.id) | group('section.handle') %}
 
-      {% import "about/_my" as my %}
+      {% import "about/_macros" as m %}
 
-      {{ my.entries(entries['blog'], 'My Blog Posts') }}
-      {{ my.entries(entries['news'], 'My News Links') }}
-      {{ my.entries(entries['notices'], 'My Notices') }}
-      {{ my.entries(entries['media'], 'My Media Links') }}
-      {{ my.entries(entries['letters'], 'My Letters') }}
+      {{ m.entries(entries['blog'], 'My Blog Posts') }}
+      {{ m.entries(entries['news'], 'My News Links') }}
+      {{ m.entries(entries['notices'], 'My Notices') }}
+      {{ m.entries(entries['media'], 'My Media Links') }}
+      {{ m.entries(entries['letters'], 'My Letters') }}
     {% endblock %}
   {% endembed %}
 {% endblock %}

@@ -1,6 +1,6 @@
-{% import "_macro/nav" as n %}
-{% import "_macro/post" as p %}
-{% import "_macro/form" as f %}
+{% import "_common/macros" as n %}
+{% import "_entry/macros" as p %}
+{% import "_form/macros" as f %}
 {% set perPage = 3 %} {# TODO for testing only; change to 10 #}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -92,12 +92,12 @@
       </li>
       <li>{{ n.segmentLink('Submit') }}
         <ul>
-          <li>{{ n.segmentLink('Submit') }}</li>
-          <li><a href="{{ url('submit/blog') }}">Blog Post</a></li>
-          <li><a href="{{ url('submit/news') }}">Link to News</a></li>
-          <li><a href="{{ url('submit/notice') }}">Notice</a></li>
-          <li><a href="{{ url('submit/media') }}">Link to Media</a></li>
-          <li><a href="{{ url('submit/letter') }}">Letter to the Community</a></li>
+          <li>{{ n.pathLInk('Submit', 'submit') }}</li>
+          <li>{{ n.pathLInk('Blog Post', 'submit/blog') }}</li>
+          <li>{{ n.pathLInk('Link to News', 'submit/news') }}</li>
+          <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
+          <li>{{ n.pathLInk('Link to Media', 'submit/media') }}</li>
+          <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
         </ul>
       </li>
       <li>{{ n.segmentLink('Contact') }}</li>
