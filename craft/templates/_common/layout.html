@@ -45,7 +45,7 @@
       <li class="show-search">Search</li>
       <div class="clearfix">
       {% if currentUser %}
-        <li class="account"><a href="{{ url('account') }}">My account</a></li>
+        <li class="account"><a href="{{ url('account') }}">My Account</a></li>
         <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
       {% else %}
         <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
@@ -102,11 +102,11 @@
       </li>
       <li>{{ n.segmentLink('Contact') }}</li>
       {% if currentUser %}
-      <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
-      <li class="account"><a href="{{ url('account') }}">My account</a></li>
+        <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
+        <li class="account"><a href="{{ url('account') }}">My Account</a></li>
       {% else %}
-      <li class="bottom-only sign-in"><a href="{{ loginUrl }}">Log in</a></li>
-      <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
+        <li class="bottom-only sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+        <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
       {% endif %}
       <li class="bottom-only"><a href="#" class="show-search">Search</a></li>
     </ul>
@@ -139,7 +139,6 @@
   {% includeJsFile "/js/form-textarea.js" %}
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
-
-  {# include "_common/analytics.js" #} {# UNCOMMENT later #}
+  {# includeJsFile '/js/ga.js' #}
 </body>
 </html>

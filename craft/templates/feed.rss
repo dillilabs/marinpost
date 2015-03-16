@@ -17,7 +17,16 @@
                 <author>{{ entry.author }}</author>
                 <guid>{{ entry.url }}</guid>
                 <description><![CDATA[
-                    {{ entry.body }}
+                    {% switch entry.section.handle %}
+                      {% case 'blog' %}
+                        {{ entry.blogContent }}
+                      {% case 'letters' %}
+                        {{ entry.letterContent }}
+                      {% case 'notices' %}
+                        {{ entry.noticeContent }}
+                      {% default %}
+                        {{ entry.linkComments }}
+                    {% endswitch %}
                 ]]></description>
             </item>
         {% endfor %}
