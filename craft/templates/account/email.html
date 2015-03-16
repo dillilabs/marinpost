@@ -1,0 +1,39 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+
+      <h2>My Email & Password</h2>
+
+      <form method="post" accept-charset="utf-8">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="users/saveUser">
+        <input type="hidden" name="redirect" value="account">
+        <input type="hidden" name="userId" value="{{ currentUser.id }}">
+
+        {% if account is defined %}
+          {{ f.errorList(account.allErrors) }}
+        {% endif %}
+
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}">
+        {% if account is defined %}
+          {{ f.errorList(account.getErrors('email')) }}
+        {% endif %}
+        <br>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="off">
+        {% if account is defined %}
+          {{ f.errorList(account.getErrors('password')) }}
+        {% endif %}
+        <br>
+
+        <input type="submit" value="Update">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
