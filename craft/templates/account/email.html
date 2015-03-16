@@ -18,15 +18,22 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}">
+        <label for="email" class="required">Email</label>
+        <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('email')) }}
         {% endif %}
         <br>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" autocomplete="off">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" name="newPassword" autocomplete="off">
+        {% if account is defined %}
+          {{ f.errorList(account.getErrors('newPassword')) }}
+        {% endif %}
+        <br>
+
+        <label for="password" class="required">Current Password</label>
+        <input type="password" id="password" name="password" autocomplete="off" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('password')) }}
         {% endif %}

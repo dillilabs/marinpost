@@ -91,7 +91,8 @@
         </ul>
       </li>
       {% if currentUser %}
-        <li>{{ n.segmentLink('Submit') }}
+        <li>
+          {{ n.segmentLink('Submit') }}
           <ul>
             <li>{{ n.pathLInk('Submit', 'submit') }}</li>
             <li>{{ n.pathLInk('Blog Post', 'submit/blog') }}</li>
@@ -105,7 +106,21 @@
       <li>{{ n.segmentLink('Contact') }}</li>
       {% if currentUser %}
         <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
-        <li class="account"><a href="{{ url('account') }}">My Account</a></li>
+        <li class="account">
+          {{ n.pathLink('My Account', 'account') }}
+          <ul>
+            <li>{{ n.pathLInk('My Account Information', 'account/information') }}</li>
+            <li>{{ n.pathLInk('Email & Password', 'account/email') }}</li>
+          {% if currentUser.inGroup('contributor') %}
+            <li>{{ n.pathLInk('Personal Profile', 'account/profile') }}</li>
+          {% endif %}
+            <li>{{ n.pathLInk('My Blog Posts', 'account/blog') }}</li>
+            <li>{{ n.pathLInk('My News Links', 'account/news') }}</li>
+            <li>{{ n.pathLInk('My Notices', 'account/notice') }}</li>
+            <li>{{ n.pathLInk('My Media Links', 'account/media') }}</li>
+            <li>{{ n.pathLInk('My Letters', 'account/letter') }}</li>
+          </ul>
+        </li>
       {% else %}
         <li class="bottom-only sign-in"><a href="{{ loginUrl }}">Log in</a></li>
         <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
