@@ -10,7 +10,7 @@
     {% block post %}
       <h2>Contact</h2>
 
-      <form method="post" action="" accept-charset="UTF-8">
+      <form method="post" class="contact" accept-charset="UTF-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="contactForm/sendMessage">
         <input type="hidden" name="redirect" value="contact/thanks?name={fromName}&email={fromEmail}">
@@ -36,3 +36,10 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+  $(function() {
+    $('form.contact').contact();
+  });
+{% endset %}
+{% includeJs js %}
