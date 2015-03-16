@@ -1,0 +1,38 @@
+{% extends "_common/layout" %}
+
+{% set title = "Contact" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block subNav %}
+    {% endblock %}
+
+    {% block post %}
+      <h2>Contact</h2>
+
+      <form method="post" action="" accept-charset="UTF-8">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="contactForm/sendMessage">
+        <input type="hidden" name="redirect" value="contact/thanks?name={fromName}&email={fromEmail}">
+
+        <h3><label for="fromName">Your Name</label></h3>
+        <input id="fromName" type="text" name="fromName" autocomplete="off" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
+        {{ message is defined and message ? f.errorList(message.getErrors('fromName')) }}
+
+        <h3><label for="fromEmail">Your Email</label></h3>
+        <input id="fromEmail" type="text" name="fromEmail" autocomplete="off" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
+        {{ message is defined and message ? f.errorList(message.getErrors('fromEmail')) }}
+
+        <h3><label for="subject">Subject</label></h3>
+        <input id="subject" type="text" name="subject" autocomplete="off" value="{% if message is defined %}{{ message.subject }}{% endif %}">
+        {{ message is defined and message ? f.errorList(message.getErrors('subject')) }}
+
+        <h3><label for="message">Message</label></h3>
+        <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+        {{ message is defined and message ? f.errorList(message.getErrors('message')) }}
+
+        <input type="submit" value="Send">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

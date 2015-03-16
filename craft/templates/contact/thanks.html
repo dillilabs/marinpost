@@ -9,6 +9,9 @@
 
     {% block post %}
       <h2>Contact</h2>
+      Thank you, {{ craft.request.query('name') }}!
+      <br>
+      We will contact you shortly via {{ craft.request.query('email') }}.
     {% endblock %}
   {% endembed %}
 {% endblock %}
