@@ -1,13 +1,13 @@
 <?php
 namespace Craft;
 
-class MarinPostVariable
+class MpEntryVariable
 {
     private $settings;
 
     function __construct()
     {
-        $this->settings = craft()->plugins->getPlugin('marinpost')->getSettings();
+        $this->settings = craft()->plugins->getPlugin('mpentry')->getSettings();
     }
 
     /**
@@ -171,6 +171,6 @@ class MarinPostVariable
     {
         $message = is_array($mixed) ? json_encode($mixed) : $mixed;
 
-        MarinPostPlugin::log($message, $level, $this->settings['forceLog']);
+        MpEntryPlugin::log($message, $level, $this->settings['forceLog']);
     }
 }

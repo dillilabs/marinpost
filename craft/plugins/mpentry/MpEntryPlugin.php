@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class MarinPostPlugin extends BasePlugin
+class MpEntryPlugin extends BasePlugin
 {
     private $settings;
 
@@ -9,49 +9,12 @@ class MarinPostPlugin extends BasePlugin
      * Initialization:
      *
      *  Listen to entries.onBeforeSaveEntry event
-     *
-     *  Listen to users.onBeforeSaveUser event
      */
     public function init()
     {
         parent::init();
         $this->settings = $this->getSettings();
-
         $this->_onBeforeSaveEntryEvent();
-        $this->_onBeforeSaveUserEvent();
-    }
-
-    //----------------------
-    // Hook functions
-    //----------------------
-
-    /**
-     * Modify columns included in Control Panel entry list.
-     */
-    public function modifyEntryTableAttributes(&$attributes, $source)
-    {
-        $attributes['dateCreated'] = Craft::t('Created Date');
-        $attributes['author'] = Craft::t('Author');
-    }
-
-    /**
-     * Display of columns in Control Panel entry list.
-     */
-    public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
-    {
-        if (defined($attribute) && $attribute == 'author')
-        {
-            return $entry->author->name;
-        }
-    }
-
-    /**
-     * Modify sort by columns in Control Panel entry list.
-     */
-    public function modifyEntrySortableAttributes(&$attributes)
-    {
-        $attributes['dateCreated'] = Craft::t('Created Date');
-        // $attributes['author'] = Craft::t('Author');
     }
 
     //----------------------
@@ -103,43 +66,6 @@ class MarinPostPlugin extends BasePlugin
         });
     }
 
-    /**
-     * Respond to users.onBeforeSaveUser event.
-     *
-     *  If User firstName or lastName is blank:
-     *
-     *      Then add error(s) and prevent save.
-     */
-    private function _onBeforeSaveUserEvent()
-    {
-        craft()->on('users.onBeforeSaveUser', function(Event $event) {
-            $user = $event->params['user'];
-
-            $firstName = craft()->request->getPost('firstName', $user->firstName);
-            $lastName = craft()->request->getPost('lastName', $user->lastName);
-
-            $valid = true;
-
-            if (empty(trim($firstName)))
-            {
-                $user->addError('firstName', 'First name cannot be blank.');
-                $valid= false;
-            }
-
-            if (empty(trim($lastName)))
-            {
-                $user->addError('lastName', 'Last name cannot be blank.');
-                $valid= false;
-            }
-
-            if (!$valid)
-            {
-                $this->_log('Invalid user: '.$user->username);
-                $event->performAction = false;
-            }
-        });
-    }
-
     //----------------------
     // Event helper functions
     //----------------------
@@ -170,6 +96,22 @@ class MarinPostPlugin extends BasePlugin
         return $originalEntry->status == 'live';
     }
 
+    // ----------------
+    // Helper functions
+    // ----------------
+
+
+    private function _author()
+    {
+        return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
+    }
+
+    private function _log($mixed, $level = LogLevel::Info)
+    {
+        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
+        self::log($message, $level, $this->settings['forceLog']);
+    }
+
     //
     // Settings
     //
@@ -184,26 +126,9 @@ class MarinPostPlugin extends BasePlugin
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('marinpost/_settings', array(
+        return craft()->templates->render('mpentry/_settings', array(
             'settings' => $this->getSettings(),
         ));
-    }
-
-    // ----------------
-    // Helper functions
-    // ----------------
-
-
-    private function _author()
-    {
-        return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
-    }
-
-    private function _log($mixed, $level = LogLevel::Info)
-    {
-        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
-
-        self::log($message, $level, $this->settings['forceLog']);
     }
 
     //----------------------
@@ -212,12 +137,12 @@ class MarinPostPlugin extends BasePlugin
 
     public function getName()
     {
-        return 'Marin Post';
+        return 'Marin Post Entries';
     }
 
     public function getVersion()
     {
-        return '0.0.16';
+        return '0.0.17';
     }
 
     public function getDeveloper()

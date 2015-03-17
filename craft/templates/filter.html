@@ -19,7 +19,7 @@
 
 {% set slice = { 'offset': offset, 'limit': limit } %}
 
-{% set entries = craft.marinpost.entries(filters, slice) %}
+{% set entries = craft.mpentry.entries(filters, slice) %}
 
 {% import "_entry/macros" as m %}
 

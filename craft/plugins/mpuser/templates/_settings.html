@@ -1,0 +1,10 @@
+{% import '_includes/forms' as forms %}
+
+<p style="font-weight:bold">Logging Settings</p>
+
+{{ forms.checkboxField({
+	first: true,
+	label: "Force Logging"|t,
+	name: 'forceLog',
+	checked: (settings.forceLog is defined and settings.forceLog is not empty ? true : false),
+}) }}
