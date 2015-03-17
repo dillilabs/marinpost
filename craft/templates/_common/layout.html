@@ -90,19 +90,17 @@
           <li>{{ n.pathLink('Privacy Policy', 'about/privacy') }}</li>
         </ul>
       </li>
-      {% if currentUser %}
-        <li>
-          {{ n.segmentLink('Submit') }}
-          <ul>
-            <li>{{ n.pathLInk('Submit', 'submit') }}</li>
-            <li>{{ n.pathLInk('Blog Post', 'submit/blog') }}</li>
-            <li>{{ n.pathLInk('Link to News', 'submit/news') }}</li>
-            <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
-            <li>{{ n.pathLInk('Link to Media', 'submit/media') }}</li>
-            <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
-          </ul>
-        </li>
-      {% endif %}
+      <li>
+        {{ n.segmentLink('Submit') }}
+        <ul>
+          <li>{{ n.pathLInk('Submit', 'submit') }}</li>
+          <li>{{ n.pathLInk('Blog Post', 'submit/blog') }}</li>
+          <li>{{ n.pathLInk('Link to News', 'submit/news') }}</li>
+          <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
+          <li>{{ n.pathLInk('Link to Media', 'submit/media') }}</li>
+          <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
+        </ul>
+      </li>
       <li>{{ n.segmentLink('Contact') }}</li>
       {% if currentUser %}
         <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
