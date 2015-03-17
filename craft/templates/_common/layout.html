@@ -65,7 +65,6 @@
 
   <div class="sidebar">
     {% block sidebar %}
-      {% include "_common/notices" %}
       {% include "_common/revenue" %}
     {% endblock %}
   </div>
@@ -155,6 +154,7 @@
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
   {% includeJsFile '/js/contact.js' %}
+
   {# includeJsFile '/js/ga.js' #}
 </body>
 </html>

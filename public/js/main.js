@@ -3,12 +3,16 @@ function rejigger() {
     $('header').after($('nav'));
     $('.header-wrapper').append($('#mini-menu'));
     $('.sidebar').prepend($('#support'));
-    $('#subscribe').append($('#donate'));
+    $('#share').after($('#donate'));
+    $('#donate').after($('.revenue-opportunity'));
+    $('.revenue-opportunity').after($('#subscribe'));
   } else {
     $('footer').prepend($('nav'));
     $('header').after($('#mini-menu'));
     $('#mini-menu').after($('#support'));
     $('#share').before($('#donate'));
+    $('#subscribe').after($('#share'));
+    $('.sidebar').prepend($('.revenue-opportunity'));
   };
 };
 
