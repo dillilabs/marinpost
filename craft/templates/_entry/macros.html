@@ -239,9 +239,8 @@
 {% macro featuredPost(entry) %}
   {% from _self import postImage, postSummary, postTags %}
 
-  {{ postImage(entry, 'hero') }}
-
   <div class="featured">
+    {{ postImage(entry, 'hero') }}
     {{ postTags(entry, true) }}
     {{ postSummary(entry) }}
   </div>
@@ -270,8 +269,8 @@
 
     {% default %}
       <li class="listing">
-        {{ postImage(entry) }}
         <div class="post">
+          {{ postImage(entry) }}
           {{ postTags(entry, unfiltered) }}
           {{ postSummary(entry) }}
         </div>
