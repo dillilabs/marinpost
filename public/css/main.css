@@ -145,7 +145,7 @@ h4 {
     margin: 1em 0 .5em;
 }
 h5 {
-    font-size: 1em;
+    font-family: sans-serif;
     margin: 1em 0 .5em;
 }
 img {
@@ -328,7 +328,7 @@ nav ul ul {
     margin-bottom: 2em;
 }
 
-.sub-nav h4 {
+.sub-nav h5 {
     border: 1px solid #ccc;
     font-family: Georgia, Times, serif;
     font-size: 1em;
@@ -337,7 +337,7 @@ nav ul ul {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h4.active {
+.sub-nav h5.active {
     font-weight: bold;
 }
 
@@ -454,7 +454,7 @@ ul.tags > li {
     margin: 0;
     padding: .25em 0 .25em .25em;
 }
-.filter fieldset > h4 {
+.filter fieldset > h5 {
     cursor: pointer;
 }
 
