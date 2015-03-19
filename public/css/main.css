@@ -312,7 +312,28 @@ nav ul ul {
 
 .sub-nav {
 	float: left;
+	padding-top: 2em;
 	width: 25%;
+}
+
+.sub-nav h3 {
+    font-family: sans-serif;
+    font-size: .75em;
+    font-weight: normal;
+    margin-bottom: 2em;
+}
+
+.sub-nav h4 {
+    border: 1px solid #ccc;
+    font-family: Georgia, Times, serif;
+    font-size: 1em;
+    font-weight: normal;
+    margin-bottom: 0;
+    padding: 5px 0 5px 25px;
+}
+
+.sub-nav h4.active {
+    font-weight: bold;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -420,15 +441,15 @@ ul.tags > li {
 }
 .filter fieldset > ul {
     display: none;
-    font-family: sans-serif;
     font-size: .9em;
 }
-.filter ul > li:first-of-type {
-    border-bottom: 1px solid #ccc;
-    margin: 0 0 .75em;
-    padding: .5em 0;
+.filter ul > li {
+    border: 1px solid #d2def4;
+    border-top: none;
+    margin: 0;
+    padding: .25em 0 .25em .25em;
 }
-.filter fieldset > h5 {
+.filter fieldset > h4 {
     cursor: pointer;
 }
 
@@ -744,14 +765,9 @@ footer {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
 	.sub-nav {
-    	/*
-        float: left;
-        min-height: 100px;
-    	width: 25%;
-        */
         display: inline-block;
         min-height: 100px;
-        width: 25%;
+        width: 28%;
     }
 
     footer {
@@ -805,7 +821,7 @@ footer {
     }
 
     .filter {
-        padding: 0 10% 0 0;
+        padding: 0;
     }
     main, .notices-box {
         padding: 0 2%;
