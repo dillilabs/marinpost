@@ -3,9 +3,10 @@
     {% block subNav %}
       <ul>
         {{ n.arrowLink('account/information', 'My Account Information') }}
-        {{ n.arrowLink('account/email', 'Email & Password') }}
+        {{ n.arrowLink('account/email', 'My Email') }}
+        {{ n.arrowLink('account/password', 'My Password') }}
       {% if currentUser.inGroup('contributor') %}
-        {{ n.arrowLink('account/profile', 'Personal Profile') }}
+        {{ n.arrowLink('account/profile', 'My Personal Profile') }}
       {% endif %}
         {{ n.arrowLink('account/blog', 'My Blog Posts') }}
         {{ n.arrowLink('account/news', 'My News Links') }}

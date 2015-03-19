@@ -18,7 +18,7 @@
   <form method="post" accept-charset="UTF-8" class="content-submission">
     {{ getCsrfInput() }}
     <input type="hidden" name="action" value="entries/saveEntry">
-    <input type="hidden" name="redirect" value="{{ url('account/entries') }}">
+    <input type="hidden" name="redirect" value="/account">
     <input type="hidden" name="enabled" value="{{ f.inputValueEnabled(entry) }}">
     <input type="hidden" name="sectionId" value="{{ sectionId }}">
     {{ f.inputEntryId(entry) }}

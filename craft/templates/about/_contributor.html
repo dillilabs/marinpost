@@ -36,3 +36,14 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+  $(function() {
+    $('h3.my-content a').click(function(e) {
+      e.preventDefault();
+
+      $(this).parent().next('ul').toggle();
+    });
+  });
+{% endset %}
+{% includeJs js %}
