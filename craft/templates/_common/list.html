@@ -8,7 +8,12 @@
           <ul>
             <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
 
+            {% set group = null %}
             {% for location in craft.categories.group('locations') %}
+              {% if location.geographicGroup != group %}
+                {% set group = location.geographicGroup %}
+                <li>{{ group.label }}</li>
+              {% endif %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
             {% endfor %}
           </ul>
