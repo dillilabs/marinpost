@@ -4,7 +4,7 @@
 
         return this.each(function() {
             var filteredContent = $(this);
-            var toggleFilters = $('#filters fieldset h4');
+            var toggleFilters = $('#filters fieldset h5');
             var noFilters = $(':checkbox.all');
             var filters = $(':checkbox.filter');
             var loadMoreLink = $('#load-more-content'); // TODO activate on scroll
