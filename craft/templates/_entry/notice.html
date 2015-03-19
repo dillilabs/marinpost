@@ -3,12 +3,12 @@
 {% block main %}
   {% embed "_common/single" %}
     {% block post %}
+      <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+
       {{ p.postTags(entry, false, true) }}
       {{ p.postTitle(entry) }}
       {{ p.postBy(entry) }}
       
-      <img src="{{ p.primaryImage(entry, 'hero') }}"/>
-
       <p>{{ entry.noticeContent }}</p>
 
       {{ p.otherImages(entry.noticeImages) }}

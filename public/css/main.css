@@ -129,6 +129,11 @@ h2 {
     margin: 1.25em 0 .75em;
     padding: 0.25em 0;
 }
+h2 span {
+    float: right;
+    font-size: .75em;
+    line-height: 2.5em;
+}
 h3 {
     margin: .5em 0;
 }
@@ -848,15 +853,13 @@ footer {
     }
 
     ul.posts, .single > .post, main > form  {
-	    /*
-        display: inline-block;
-        margin-right: 3%;
-        width: 100%;
-        vertical-align: top;
-        */
         display: inline-block;
         width: 75%;
         vertical-align: top;
+    }
+    .single > .post  {
+        float: right;
+        width: 68%;
     }
     .post {
         display: inline-block;
@@ -866,9 +869,11 @@ footer {
 		padding: 0;
 	}
 
-    .single > img {
+    .single img {
         float: left;
+        margin-right: 15px;
         padding: .5em;
+        width: 160px;
     }
     .thumbs {
         padding: .5em 0;
