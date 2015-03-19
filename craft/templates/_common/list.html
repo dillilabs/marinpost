@@ -38,19 +38,19 @@
       </div>
     {% endblock %}
   </div>
-
-  <h2>
-    {% block h2 %}
-    {% endblock %}
-  </h2>
-
-  <ul class="posts">
-    {% block posts %}
-    {% endblock %}
-  </ul>
-
-  <a href="#" id="load-more-content">simulate scrolling content</a>
-</div>
+  <div class="list-wrapper">
+      <h2>
+        {% block h2 %}
+        {% endblock %}
+      </h2>
+    
+      <ul class="posts">
+        {% block posts %}
+        {% endblock %}
+      </ul>
+    
+      <a href="#" id="load-more-content">simulate scrolling content</a>
+    </div>
 </main>
 
 {% set filter = craft.request.query('filter') %}
