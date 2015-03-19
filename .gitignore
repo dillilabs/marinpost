@@ -5,3 +5,5 @@ craft/plugins/s3direct/vendor
 
 craft/storage/*
 !craft/storage/.keep
+
+public/.htaccess
