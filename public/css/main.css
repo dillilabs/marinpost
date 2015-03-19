@@ -335,6 +335,7 @@ ul.tags {
 
 #featured p {
     font-size: 1.05em;
+    padding-right: 3%;
 }
 
 .byline {
@@ -387,10 +388,13 @@ main.single {
 	padding: 0 3%;
 }
 
-#comments {
+.whats-new aside {
     background: #f9f9f9;
+    padding: 0 20px;
+}
+
+#comments {
     margin-bottom: 1em;
-    padding: 5%;
 }
 #comments > h2 {
     border-bottom: none;
@@ -779,8 +783,7 @@ footer {
     }
 
     #featured {
-	    width: 98%;
-	    padding: 0 2%;
+	    padding: 0;
     }
 
     #featured h3{
@@ -796,7 +799,7 @@ footer {
     .featured img {
         display: inline-block;
         float: left;
-        margin: 0 15px 0 -2%;
+        margin: 0 20px 0 0;
         width: 325px;
     }
 
@@ -857,7 +860,7 @@ footer {
     }
     #support {
         display: inline-block;
-        padding: 0 3%;
+        padding: 0;
     }
 }
 
@@ -865,7 +868,7 @@ footer {
 @media only screen and (min-width: 51em) { /* Laptop View >51 ems */
     body {
         padding: 0 1em;
-        max-width: 1200px;
+        max-width: 1158px;
     }
     nav {
 	    margin: 0;
@@ -934,7 +937,7 @@ footer {
 
     .sidebar {
         display: inline-block;
-        margin: 0 0 1em .5em;
+        margin: 1em 0 1em .5em;
         padding: 0;
         text-align: left;
         vertical-align: top;
@@ -993,21 +996,21 @@ footer {
         width: 70%;
     }
     ul.posts {
-        margin: 0;
+        margin: 0 3% 0 0;
         width: 66%;
     }
 
     #comments {
         display: inline-block;
-        padding: 10%;
         vertical-align: top;
-        width: 100%;
+        width: 100%
     }
 
     .whats-new aside {
 	    display: inline-block;
-        padding: 0;
-        width: 28%;
+	    float: right;
+		padding: 20px;
+        width: 24%;
     }
 }
 
@@ -1026,12 +1029,9 @@ footer {
         padding-bottom: 2em;
     }
     ul.posts {
-        width: 70%;
+        width: 67%;
     }
 
-    .home aside {
-        width: 25%;
-    }
 }
 
 
