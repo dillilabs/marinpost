@@ -593,6 +593,12 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 
 #subscribe {
     float: right;
+    padding-bottom: 1em;
+}
+
+#subscribe p {
+    font-family: sans-serif;
+    margin: 0;
 }
 
 button.donate, button.subscribe {
@@ -613,6 +619,7 @@ button.donate {
 
 button.subscribe {
     background: #00BFB0;
+    margin-bottom: 1em;
 }
 
 #share {
