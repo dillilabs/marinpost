@@ -989,8 +989,7 @@ footer {
     #donate {
         border-bottom: 1px solid #c8d4e9;
         float: none;
-        margin-bottom: 2em;
-        padding-bottom: 1em;
+        padding-bottom: 1.5em;
     }
 
     .revenue-opportunity {
@@ -1000,7 +999,6 @@ footer {
 
     #subscribe {
         border-bottom: 1px solid #c8d4e9;
-        border-top: 1px solid #c8d4e9;
         text-align: center;
         width: 100%;
     }
