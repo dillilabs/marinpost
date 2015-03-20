@@ -357,10 +357,16 @@ ul.tags {
 
 #featured ul.tags {
     margin-top: .5em;
+    padding-right: 3%;
+}
+
+#featured h3 {
+    padding-right: 3%;
 }
 
 #featured p {
     font-size: 1.05em;
+    margin-bottom: 0;
     padding-right: 3%;
 }
 
