@@ -5,15 +5,6 @@
 {% block main %}
   {% embed "_common/list" %}
     {% block subNav %}
-      <ul>
-      {% for i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ] %}
-        {% set day = date('-'~i~'days') %}
-        {% set url = '/letters/' ~ day | date('Y/m/d') %}
-        <li {{ n.activeLetterDate(url, loop.first) }}>
-          <a href="{{ url }}">{{ day | date('F j, Y') }}</a>
-        </li>
-      {% endfor %}
-      </ul>
       <h4>Archive</h4>
       <div id="select-letter-date"></div>
     {% endblock %}
