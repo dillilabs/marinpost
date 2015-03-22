@@ -7,7 +7,7 @@ $(function() {
 
   selectDate.datepicker({
     dateFormat: 'yy/mm/dd',
-    defaultDate: dateFromUrl ? dateFromUrl[1] : +0,
+    defaultDate: dateFromUrl ? dateFromUrl[1] : 0,
     onSelect: function() {
       document.location = baseUrl + this.value;
     }
