@@ -28,7 +28,7 @@
   <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <![endif]--> <!-- Modernizr with media queries and HTML5shiv for only IE lt 9 -->
 </head>
-<body class="{{ craft.request.lastSegment | default('home') }}">
+<body class="{{ craft.request.firstSegment | default('home') }}">
   <header>
     <div class="header-wrapper clearfix">
       <div class="logo"></div>

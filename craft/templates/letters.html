@@ -3,7 +3,7 @@
 {% set title = "Letters" %}
 
 {% block main %}
-  {% embed "_common/list" %}
+  {% embed "_common/unfiltered_list" %}
     {% block subNav %}
       <h2>Archive</h2>
       <div id="select-letter-date"></div>
@@ -26,29 +26,28 @@
       {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
       {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
 
-        <h2 class="date">{{ date(ymd) | date('F j, Y') }}   {# need comment count by date #} </h2>
+      <h2 class="date">{{ date(ymd) | date('F j, Y') }}</h2>
 
-        {% if entries %}
-          {% for entry in entries | sort %}
-            <li>
-                <h3>{{ entry.title }}</h3>
-                <div class="byline">{{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span></div>
-                <p>{{ entry.letterContent }}</p>
-            </li>
-          {% endfor %}
+      {% if entries %}
+        {% for entry in entries | sort %}
+          <li>
+              <h3>{{ entry.title }}</h3>
+              <div class="byline">{{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span></div>
+              <p>{{ entry.letterContent }}</p>
+          </li>
+        {% endfor %}
 
-          <h3 class="join" id="toggle-letter-comments">Join the Conversation</h3>
-          {# <button id="toggle-letter-comments">Show Comments</button> #}
-          <div id="letter-comments">
-            {% set disqusId = ymd %}
-            {% set disqusTitle = date(ymd) | date('F j, Y') %}
-            {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
-            {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
+        <h3 class="join" id="toggle-letter-comments">Show Comments</h3>
+        <div id="letter-comments" style="display: none;">
+          {% set disqusId = ymd %}
+          {% set disqusTitle = date(ymd) | date('F j, Y') %}
+          {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
+          {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
 
-        {% else %}
-          No letters found
+      {% else %}
+        No letters found
 
-        {% endif %}
+      {% endif %}
       </div>
     {% endblock %}
   {% endembed %}
