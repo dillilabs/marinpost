@@ -21,6 +21,7 @@ return array(
         'setPasswordPath' => 'account/password/reset',
         'setPasswordSuccessPath' => 'account/login',
         'siteName' => 'The Marin Post',
+        'timezone' => 'America/Los_Angeles',
         'useEmailAsUsername' => true,
     ),
     'dev' => array(
