@@ -134,8 +134,27 @@ h2 span {
     font-size: .75em;
     line-height: 2.5em;
 }
+h2.date {
+    background: #e5e5cd;
+    border-bottom: 1px solid #c9c8ac;
+    border-top: 1px solid #c9c8ac;
+    font-size: 1.1em;
+    margin: 0 0 1em;
+    padding: 0.5em 1em 0.25em;
+}
+
 h3 {
     margin: .5em 0;
+}
+.posts h3.join {
+    color: #38547b;
+    border-bottom: 1px solid #ebebeb;
+    font-family: sans-serif;
+    font-weight: normal;
+    margin: 2em 0 .25em;
+    padding: 0 0 .5em;
+    text-align: center;
+    text-transform: uppercase;
 }
 h3 > a, h3 > a:visited {
     color: #333;
@@ -160,6 +179,12 @@ fieldset > ul {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+.note {
+    color: red;
+    font-family: sans-serif;
+    font-size: .9em;
+    margin: 1em 0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -316,11 +341,12 @@ nav ul ul {
 }
 
 .sub-nav {
-	float: left;
 	padding-top: 2em;
 	width: 25%;
 }
-
+.sub-nav.archive {
+    padding-top: 0;
+}
 .sub-nav h3 {
     font-family: sans-serif;
     font-size: .75em;
@@ -371,19 +397,22 @@ ul.tags {
 }
 
 .byline {
-/*     font-family: sans-serif; */
+    font-family: sans-serif;
     font-size: .9em;
+}
+.timestamp {
+    float:right;
 }
 
 main {
     padding: 0 1em;
 }
-.posts > li {
-    border-bottom: 1px solid #edebeb;
+.posts > li:not(:last-of-type) {
+    border-bottom: 1px solid #c9c8ac;
     margin-bottom: 1em;
 }
 main.single {
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #c9c8ac;
     padding-bottom: 1em;
 }
 .media .posts > li {
@@ -808,6 +837,9 @@ footer {
 
 	header h2 {
 		font-size: 1.05em;
+	}
+	.sub-nav {
+  		float: left;
 	}
 
     #mini-menu #search {

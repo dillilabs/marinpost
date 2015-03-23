@@ -13,8 +13,11 @@ $(function() {
     }
   });
 
+  $('.sub-nav').addClass('archive');
+/*
   toggleComments.click(function() {
     comments.toggle();
     toggleComments.text((comments.is(':visible') ? 'Hide' : 'Show') + ' Comments');
   });
+*/
 });

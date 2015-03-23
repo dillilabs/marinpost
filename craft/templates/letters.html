@@ -5,8 +5,9 @@
 {% block main %}
   {% embed "_common/list" %}
     {% block subNav %}
-      <h4>Archive</h4>
+      <h2>Archive</h2>
       <div id="select-letter-date"></div>
+      <div class="note">Click date to view previous letters</div>
     {% endblock %}
 
     {% block h2 %}
@@ -25,24 +26,24 @@
       {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
       {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
 
-      <div>
-        <h2>{{ date(ymd) | date('F j, Y') }}</h2>
+        <h2 class="date">{{ date(ymd) | date('F j, Y') }}   {# need comment count by date #} </h2>
 
         {% if entries %}
           {% for entry in entries | sort %}
-            <h3>{{ entry.title }}</h3>
-            {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} {{ entry.postDate | date('g:i A') }}<br>
-            <p>{{ entry.letterContent }}</p>
+            <li>
+                <h3>{{ entry.title }}</h3>
+                <div class="byline">{{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span></div>
+                <p>{{ entry.letterContent }}</p>
+            </li>
           {% endfor %}
 
-          <h3>Join the Conversation</h3>
-          <button id="toggle-letter-comments">Show Comments</button>
-          <div id="letter-comments" style="display: none;">
+          <h3 class="join" id="toggle-letter-comments">Join the Conversation</h3>
+          {# <button id="toggle-letter-comments">Show Comments</button> #}
+          <div id="letter-comments">
             {% set disqusId = ymd %}
             {% set disqusTitle = date(ymd) | date('F j, Y') %}
             {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
             {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
-          </div>
 
         {% else %}
           No letters found
