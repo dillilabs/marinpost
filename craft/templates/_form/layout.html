@@ -11,23 +11,25 @@
     {% endblock %}
   </div>
 
-  <h2>
-    {{ f.h2() }}
-  </h2>
-
-  <form method="post" accept-charset="UTF-8" class="content-submission">
-    {{ getCsrfInput() }}
-    <input type="hidden" name="action" value="entries/saveEntry">
-    <input type="hidden" name="redirect" value="/account">
-    <input type="hidden" name="enabled" value="{{ f.inputValueEnabled(entry) }}">
-    <input type="hidden" name="sectionId" value="{{ sectionId }}">
-    {{ f.inputEntryId(entry) }}
-
-    {% block formFields %}
-    {% endblock %}
-
-    {{ f.inputSubmit(entry) }}
-  </form>
+  <div class="form-wrapper">
+      <h2>
+        {{ f.h2() }}
+      </h2>
+    
+      <form method="post" accept-charset="UTF-8" class="content-submission">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="entries/saveEntry">
+        <input type="hidden" name="redirect" value="/account">
+        <input type="hidden" name="enabled" value="{{ f.inputValueEnabled(entry) }}">
+        <input type="hidden" name="sectionId" value="{{ sectionId }}">
+        {{ f.inputEntryId(entry) }}
+    
+        {% block formFields %}
+        {% endblock %}
+    
+        {{ f.inputSubmit(entry) }}
+      </form>
+  </div>
 </main>
 
 {% set formJs %}

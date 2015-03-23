@@ -344,7 +344,7 @@ nav ul ul {
 	padding-top: 2em;
 	width: 25%;
 }
-.sub-nav.archive {
+.letters .sub-nav {
     padding-top: 0;
 }
 .sub-nav h3 {
@@ -483,6 +483,11 @@ ul.tags > li {
     display: none;
     font-size: .9em;
 }
+.sub-nav.about ul {
+    list-style: none;
+    margin-top: 2em;
+    padding: 0;
+}
 .filter ul > li {
     border: 1px solid #d2def4;
     border-top: none;
@@ -492,6 +497,15 @@ ul.tags > li {
 .filter fieldset > h5 {
     cursor: pointer;
 }
+.sub-nav.about ul > li a,
+.sub-nav.about ul > li.active {
+    border: 1px solid #ccc;
+    display: block;
+    margin: 1.5em 0;
+    padding: .25em 1em;
+    width: 90%;
+}
+
 
 .posts h3 {
     text-transform: capitalize;
@@ -877,7 +891,8 @@ footer {
         padding: 0 2%;
     }
 
-	.list-wrapper {
+	.list-wrapper,
+	.form-wrapper {
     	float: right;
     	width: 68%;
 	}

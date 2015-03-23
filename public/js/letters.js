@@ -11,5 +11,4 @@ $(function() {
     }
   });
 
-  $('.sub-nav').addClass('archive');
 });
