@@ -32,13 +32,16 @@
         {% for entry in entries | sort %}
           <li>
               <h3>{{ entry.title }}</h3>
-              <div class="byline">{{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}} <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span></div>
+              <div class="byline">
+                {{ p.authorLink(entry) }} &mdash; {{ entry.author.city }} {{- p.editLink(entry) -}}
+                <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
+              </div>
               <p>{{ entry.letterContent }}</p>
           </li>
         {% endfor %}
 
-        <h3 class="join" id="toggle-letter-comments">Show Comments</h3>
-        <div id="letter-comments" style="display: none;">
+        <h3 class="join">Join the Conversation</h3>
+        <div id="letter-comments">
           {% set disqusId = ymd %}
           {% set disqusTitle = date(ymd) | date('F j, Y') %}
           {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
