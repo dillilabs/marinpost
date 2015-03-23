@@ -1,6 +1,6 @@
 {% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
 
-<label for="primaryLocation" class="required">Primary Location</label>
+<label for="primaryLocation" class="required">Primary Location <span class="note">* required</span></label>
 
 <select id="primaryLocation" name="fields[primaryLocation][]" class="required array">
   <option value="">Select one - This wil be the Location associated with your post on the Home page</option>

@@ -1,5 +1,5 @@
 <label for="blogContent" class="required">Blog Content</label>
-<textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="wysiwyg required" placeholder="Create your post here">
+<textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="wysiwyg required" placeholder="Create your post here (limit 2,000 characters)">
 {%- if entry is defined %}{{ entry.blogContent }}{% endif -%}
 </textarea>
 
