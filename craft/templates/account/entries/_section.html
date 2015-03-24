@@ -18,6 +18,8 @@
           <th>Published</th>
           <th></th>
           <th></th>
+          <th></th>
+          <th></th>
         </th>
         {% for entry in entries %}
           <tr>
@@ -28,11 +30,19 @@
                 {{ entry.postDate | date('M d, Y') }}
               {% endif %}
             </td>
-            <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">VIEW</a></td>
+            <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">view</a></td>
             <td>
               {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
-                <a href="/edit/{{ entry.id }}/{{ entry.slug }}">EDIT</a>
+                <a href="/edit/{{ entry.id }}/{{ entry.slug }}">edit</a>
               {% endif %}
+            </td>
+            <td>
+              {% if entry.status == 'live' %}
+                <a href="{{ actionUrl('mpEntry/disableEntry', { entryId: entry.id }) }}">unpublish</a>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">delete</a>
             </td>
           </tr>
         {% endfor %}
