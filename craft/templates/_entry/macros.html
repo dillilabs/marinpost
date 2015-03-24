@@ -42,10 +42,12 @@
 {% endmacro %}
 
 {% macro contributorUrl(user) %}
+{% spaceless %}
   {% set slug = [user.firstName, user.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
   {% set base = "about/contributors" %}
 
-  {{- url([base, user.id, slug] | join('/')) -}}
+  {{ url([base, user.id, slug] | join('/')) }}
+{% endspaceless %}
 {% endmacro %}
 
 {% macro authorLink(entry) %}

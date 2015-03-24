@@ -6,7 +6,17 @@
         {{ n.arrowLink('about/editors', 'Editorial Board') }}
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
         {{ n.arrowLink('about/advisors', 'Marin Post Advisors') }}
-        {{ n.arrowLink('about/contributors', 'Contributors') }}
+        <li {% if craft.request.path == "about/contributors" %}class="active"{% endif %}>
+          <a href="/about/contributors">Contributors</a>
+          <ul class="contributors" style="display: none;">
+            <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" />All</li>
+            {% for author in craft.users.group('contributor').order('lastName, firstName') %}
+              <li>
+                <input type="radio" name="author" value="{{ p.contributorUrl(author) }}"/>{{ author.name }}
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
         {{ n.arrowLink('about/terms', 'Terms of Use') }}
         {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
       </ul>
