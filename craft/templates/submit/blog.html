@@ -7,12 +7,16 @@
 {% block main %}
   {% embed "_form/layout" %}
     {% block formFields %}
-      {% include "_form/images/blog" %}
-      {% include "_form/title" %}<br>
-      {% include "_form/locations" %}<br>
-      {% include "_form/topics" %}<br>
-      {% include "_form/content/blog" %}
-      {% include "_form/documents/blog" %}<br>
+        <div class="help">Submit a blog for publication. Your post will be reviewed prior to publication. You will be notified when it is published. Thank you for contributing to the Marin Post.</div>
+        <div class="field clearfix">
+          {% include "_form/images/blog" %}
+          file type: .gif, .png or .jpeg only
+        </div>
+        {% include "_form/title" %}
+        {% include "_form/locations" %}
+        {% include "_form/topics" %}
+        {% include "_form/content/blog" %}
+        {% include "_form/documents/blog" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

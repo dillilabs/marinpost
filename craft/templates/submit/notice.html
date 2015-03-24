@@ -7,69 +7,88 @@
 {% block main %}
   {% embed "_form/layout" %}
     {% block formFields %}
-        {% include "_form/images/notice" %}
-        <hr>
-        {% include "_form/title" %}
-        <hr>
-        {% include "_form/locations" %}
-        <hr>
-        {% include "_form/topics" %}
-        <hr>
-        {% include "_form/content/notice" %}
-        <hr>
-        {% include "_form/documents/notice" %}<br>
-        <hr>
+        <div class="help">Submit a notice for publication. Your post will be reviewed prior to publication. You will be notified when it is published. Thank you for contributing to the Marin Post.</div>
+        <fieldset class="notice">
+            <div class="field clearfix">
+                {% include "_form/images/notice" %}
+                file type: .gif, .png or .jpeg only
+            </div>
+            {% include "_form/title" %}
+            {% include "_form/locations" %}
+            {% include "_form/topics" %}
+            {% include "_form/content/notice" %}
+            {% include "_form/documents/notice" %}
+        </fieldset>
 
         <fieldset class="event">
-          <label for="event-start-date">Event start date</label>
-          <input type="text" name="fields[startDate][date]" class="date" value="{{ entry.startDate | date('m/d/Y') }}">
-          <br>
-          <label for="event-start-time">Event start time</label>
-          <select name="fields[startTime][time]"><br>
-            {{ f.timeOptions(entry.startTime) }}
-          </select>
-
-          <label for="event-end-date">Event end date</label>
-          <input type="text" name="fields[endDate][date]" class="date" value="{{ entry.endDate | date('m/d/Y') }}">
-          <br>
-          <label for="event-end-time">Event end time</label>
-          <select name="fields[endTime][time]"><br>
-            {{ f.timeOptions(entry.endTime) }}
-          </select>
-
-          <label for="event-venue">Event venue</label>
-          <input type="text" name="fields[venue]" autocomplete="off" placeholder="San Rafael Civic Center Auditorium" value="{{ entry.venue }}">
-          <label for="event-address">Event street address</label>
-          <input type="text" name="fields[streetAddress]" autocomplete="off" placeholder="3501 Civic Center Drive" value="{{ entry.streetAddress }}">
-          <label for="event-city">Event city</label>
-          <input type="text" name="fields[city]" autocomplete="off" placeholder="San Rafael" value="{{ entry.city }}">
-          <label for="event-state">Event state</label>
-          <select name="fields[state]">
-            <option>Select -</option>
-            {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-              <option value="{{ option.value }}" {%- if option.value == entry.state %}selected{% endif %}>{{ option.label }}</option>
-            {% endfor %}
-          </select>
-          <label for="event-zip">Event zip code</label>
-          <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" placeholder="94903" value="{{ entry.zipCode }}">
+            <div class="field date">
+                <label for="event-start-date">Event start date <span class="note">* required</span></label>
+                <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}">
+            </div>
+            <div class="field date">
+                <label for="event-start-time">Event start time <span class="note">* required</span></label>
+                <select name="fields[startTime][time]"><br>
+                {{ f.timeOptions(entry.startTime) }}
+                </select>
+            </div>
+            <div class="field date">
+                <label for="event-end-date">Event end date <span class="note">* required</span></label>
+                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}">
+            </div>
+            <div class="field date">
+                <label for="event-end-time">Event end time <span class="note">* required</span></label>
+                <select name="fields[endTime][time]"><br>
+                {{ f.timeOptions(entry.endTime) }}
+                </select>
+            </div>
+            <div class="field">
+                <label for="event-venue">Name of venue <span class="note">* required</span></label>
+                <input type="text" name="fields[venue]" autocomplete="off" placeholder="Name of a building or place or..." value="{{ entry.venue }}">
+            </div>
+            <div class="field">
+                <label for="event-address">Street address</label>
+                <input type="text" name="fields[streetAddress]" autocomplete="off" placeholder="" value="{{ entry.streetAddress }}">
+            </div>
+            <div class="field">
+                <label for="event-city">City</label>
+                <input type="text" name="fields[city]" autocomplete="off" placeholder="" value="{{ entry.city }}">
+            </div>
+            <div class="field">
+                <label for="event-state">State</label>
+                <select name="fields[state]">
+                <option>Select -</option>
+                {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+                  <option value="{{ option.value }}" {%- if option.value == entry.state %}selected{% endif %}>{{ option.label }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="field">
+                <label for="event-zip">Zip code</label>
+                <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" placeholder="" value="{{ entry.zipCode }}">
+            </div>
         </fieldset>
-        <hr>
 
         <fieldset class="contact">
-          <label for="organization">Organization</label>
-          <input type="text" name="fields[organization]" autocomplete="off" placeholder="Some Nonprofit" value="{{ entry.organization }}">
-          <br>
-          <label for="contact-name">Contact name</label>
-          <input type="text" name="fields[contactName]" autocomplete="off" placeholder="Joe Organizer" value="{{ entry.contactName }}">
-          <br>
-	        <label for="notice-contact">Contact phone number</label>
-          <input type="text" name="fields[phoneNumber]" autocomplete="off" placeholder="(415) 555-0101" value="{{ entry.phoneNumber }}">
-          <br>
-          <label for="event-zip">Contact email address</label>
-          <input type="text" name="fields[email]" autocomplete="off" placeholder="someone@example.org" value="{{ entry.email }}">
-          <br>
-          <label for="website">Web Site</label>
-          <input type="text" name="fields[webSite]" autocomplete="off" placeholder="http://example.org" value="{{ entry.webSite }}">
+            <div class="field">
+                <label for="organization">Organization</label>
+                <input type="text" name="fields[organization]" autocomplete="off" placeholder="Enter your organization's name if you represent one" value="{{ entry.organization }}">
+            </div>
+            <div class="field">
+                <label for="contact-name">Contact Name</label>
+                <input type="text" name="fields[contactName]" autocomplete="off" placeholder="" value="{{ entry.contactName }}">
+            </div>
+            <div class="field">
+                <label for="notice-contact">Contact Phone</label>
+                <input type="text" name="fields[phoneNumber]" autocomplete="off" placeholder="" value="{{ entry.phoneNumber }}">
+            </div>
+            <div class="field">
+                <label for="event-zip">Contact Email</label>
+                <input type="text" name="fields[email]" autocomplete="off" placeholder="" value="{{ entry.email }}">
+            </div>
+            <div class="field">
+                <label for="website">Web Site</label>
+                <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter website URL address" value="{{ entry.webSite }}">
+            </div>
         </fieldset>
     {% endblock %}
   {% endembed %}
