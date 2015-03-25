@@ -72,11 +72,21 @@
     <ul>
       <li><a href="{{ siteUrl }}" {{ n.classActive('') }}>Home</a></li>
       <li>{{ n.segmentLink('Blog') }}</li>
-      <li>{{ n.segmentLink('News') }}</li>
       <li>{{ n.segmentLink('Notices') }}</li>
+      <li>{{ n.segmentLink('News') }}</li>
       <li>{{ n.segmentLink('Media') }}</li>
-      <li>{{ n.segmentLink('Surveys') }}</li>
       <li>{{ n.segmentLink('Letters') }}</li>
+      <li>{{ n.segmentLink('Surveys') }}</li>
+      <li>
+        {{ n.segmentLink('Submit') }}
+        <ul>
+          <li>{{ n.pathLInk('Blog', 'submit/blog') }}</li>
+          <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
+          <li>{{ n.pathLInk('News', 'submit/news') }}</li>
+          <li>{{ n.pathLInk('Media', 'submit/media') }}</li>
+          <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
+        </ul>
+      </li>
       <li>{{ n.segmentLink('About') }}
         <ul>
           <li>{{ n.pathLink('About Us', 'about') }}</li>
@@ -88,17 +98,6 @@
           <li>{{ n.pathLink('Subscribe', 'about/subscribe') }}</li>
           <li>{{ n.pathLink('Sponsor Marin Post', 'about/sponsor') }}</li>
           <li>{{ n.pathLink('Advertise on Marin Post', 'about/advertise') }}</li>
-        </ul>
-      </li>
-      <li>
-        {{ n.segmentLink('Submit') }}
-        <ul>
-          <li>{{ n.pathLInk('Submit', 'submit') }}</li>
-          <li>{{ n.pathLInk('Blog Post', 'submit/blog') }}</li>
-          <li>{{ n.pathLInk('Link to News', 'submit/news') }}</li>
-          <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
-          <li>{{ n.pathLInk('Link to Media', 'submit/media') }}</li>
-          <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
         </ul>
       </li>
       <li>{{ n.segmentLink('Contact') }}</li>
