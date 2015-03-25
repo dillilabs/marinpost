@@ -1,25 +1,26 @@
 <main class="single">
-  <div class="sub-nav about">
+  <div class="sub-nav">
     {% block subNav %}
-      <ul>
+      <div class="filter" id="filters">
+        <h3>&nbsp;</h3>
         {{ n.arrowLink('about', 'About Us') }}
-        {{ n.arrowLink('about/editors', 'Editorial Board') }}
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
         {{ n.arrowLink('about/advisors', 'Marin Post Advisors') }}
-        <li {% if craft.request.path == "about/contributors" %}class="active"{% endif %}>
-          <a href="/about/contributors">Contributors</a>
+          <h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}><a href="/about/contributors">Contributors</a></h5>
           <ul class="contributors" style="display: none;">
-            <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" />All</li>
+            <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" /> All</li>
             {% for author in craft.users.group('contributor').order('lastName, firstName') %}
               <li>
-                <input type="radio" name="author" value="{{ p.contributorUrl(author) }}"/>{{ author.name }}
+                <input type="radio" name="author" value="{{ p.contributorUrl(author) }}"/> {{ author.name }}
               </li>
             {% endfor %}
           </ul>
-        </li>
         {{ n.arrowLink('about/terms', 'Terms of Use') }}
         {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
-      </ul>
+        {{ n.arrowLink('about/subscribe', 'Subscribe') }}
+        {{ n.arrowLink('about/sponsor', 'Sponsor Marin Post') }}
+        {{ n.arrowLink('about/advertise', 'Advertise on Marin Post') }}
+      </div>
     {% endblock %}
   </div>
 

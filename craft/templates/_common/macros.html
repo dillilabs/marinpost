@@ -44,8 +44,8 @@
   {% set current = craft.request.path %}
 
   {% if path == current %}
-    <li class="active">{{ text }}</li>
+    <h5 class="active">{{ text }}</h5>
   {% else %}
-    <li><a href="/{{ path }}">{{ text }}</a></li>
+    <h5><a href="/{{ path }}">{{ text }}</a></h5>
   {% endif %}
 {% endmacro %}
