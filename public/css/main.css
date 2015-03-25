@@ -1008,8 +1008,9 @@ footer {
 	nav li:hover ul {
 		background-color: #fcfeb3;
 		display: inline;
-		left: -20px;
-		padding: 10px;
+		left: -27px;
+		min-width: 100px;
+		padding: 5px 28px;
 		position: absolute;
 		top: 6px;
 		z-index: 100;
@@ -1017,6 +1018,8 @@ footer {
 
 	nav li:hover li {
 		display: block;
+		font-size: 1em;
+		margin-bottom: .5em;
 		text-align: left;
 		text-transform: none;
 	}
