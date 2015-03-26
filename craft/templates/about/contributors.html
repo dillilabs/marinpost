@@ -8,9 +8,9 @@
 
       {% set imageSize = 200 %}
 
-      <ul>
+      <ul class="posts">
         {% for user in craft.users.group('contributor').order('lastName, firstName') %}
-          <li>
+          <li class="listing">
             {% if user.photoUrl %}
               <img src="{{ user.photoUrl(imageSize) }}" />
             {% endif %}
