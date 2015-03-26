@@ -2,6 +2,7 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}Blog Post{% endblock %}
     {% block post %}
       <img src="{{ p.primaryImage(entry, 'hero') }}"/>
 
