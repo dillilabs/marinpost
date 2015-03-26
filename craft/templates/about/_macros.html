@@ -4,7 +4,7 @@
   {% if entries | length > 0 %}
     <h3 class="my-content"><a href="#">{{ title }}</a></h3>
 
-    <ul style="display: none;">
+    <ul class="posts" style="display: none;">
       {% for entry in entries %}
         {{ m.post(entry) }}
       {% endfor %}

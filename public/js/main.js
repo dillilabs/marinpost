@@ -35,6 +35,11 @@ $(function() {
       scrollTop: $('nav').offset().top
     }, 200);
   });
+
+  $('.my-content a').click(function() {
+  	$(this).toggleClass('active');
+  });
+
 });
 
 $(window).on('resize', function(){

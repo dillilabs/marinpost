@@ -356,7 +356,7 @@ nav ul ul {
     margin-bottom: 2em;
 }
 
-.sub-nav h5 {
+.sub-nav h5, .my-content {
     border: 1px solid #ccc;
     font-family: Georgia, Times, serif;
     font-size: 1em;
@@ -365,12 +365,16 @@ nav ul ul {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5.active {
+.sub-nav h5.active, .my-content a.active {
     font-weight: bold;
 }
 
 .sub-nav h5 a, .sub-nav h5 a:visited {
     color: #000;
+}
+
+.my-content {
+	margin: 0 0 1em;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
