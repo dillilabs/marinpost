@@ -17,8 +17,9 @@
     {% block subNav %}
     {% endblock %}
 
+    {% block typeOfWrapper %}list-wrapper{% endblock %}
+    {% block title %}Search Results{% endblock %}
     {% block post %}
-      <h2>Search</h2>
       {% if query | length %}
         {% if entries | length %}
           <ul class="posts">

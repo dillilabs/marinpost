@@ -4,7 +4,7 @@
     {% endblock %}
   </div>
 
-  <div class="post">
+  <div class="{% block typeOfWrapper %}post{% endblock %}">
     <h2>{% block title %}{% endblock %}<span>2 Comments</span></h2>
     {% block post %}
     {% endblock %}
