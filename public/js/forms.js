@@ -138,45 +138,40 @@
 
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
-              var section, url;
+              var submitType = $(this).attr('data-submit');
+              var section;
 
-              switch (this.value) {
-                case 'Publish':
+              switch (submitType) {
+                case 'publish':
                   entryEnabled.val(1);
                   form.submit();
                   break;
 
-                case 'Save':
+                case 'save':
                   entryEnabled.val(0);
                   form.submit();
                   break;
 
-                case 'Cancel':
-                  if (entryId.length > 0) {
-                    switch (sectionId.val()) {
-                      case '2':
-                        section = 'news';
-                        break;
-                      case '3':
-                        section = 'blog';
-                        break;
-                      case '4':
-                        section = 'notices';
-                        break;
-                      case '5':
-                        section = 'letters';
-                        break;
-                      case '6':
-                        section = 'media';
-                        break;
-                    }
-
-                    url = '/account/'+section;
-                  } else {
-                    url = '/submit';
+                case 'cancel':
+                  switch (sectionId.val()) {
+                    case '2':
+                      section = 'news';
+                      break;
+                    case '3':
+                      section = 'blog';
+                      break;
+                    case '4':
+                      section = 'notices';
+                      break;
+                    case '5':
+                      section = 'letters';
+                      break;
+                    case '6':
+                      section = 'media';
+                      break;
                   }
 
-                  document.location = url;
+                  document.location = '/account/'+section;
               }
             });
 
