@@ -12,10 +12,10 @@
         {% for user in craft.users.group('contributor').order('lastName, firstName') %}
           <li class="listing">
             {% if user.photoUrl %}
-              <img src="{{ user.photoUrl(imageSize) }}" />
+              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.photoUrl(imageSize) }}" /></a>
             {% endif %}
 
-            <h3>{{ user.name }}</h3>
+            <h3><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
             <p>{{ user.city }}, {{ user.state }}</p>
 
             {% if user.bio %}
