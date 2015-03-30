@@ -28,7 +28,7 @@
           {% endfor %}
           </ul>
         {% else %}
-          <p>Can't find no stinkin' <i>{{ query }}</i>{%- if section %} in {{ section }}{% endif -%}</p>
+          <p>Nothing found for <i>{{ query }}</i>{%- if section %} in {{ section }}{% endif -%}</p>
         {% endif %}
       {% else %}
         {% include "_common/search" %}
