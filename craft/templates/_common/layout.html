@@ -96,8 +96,8 @@
           <li>{{ n.pathLink('Terms of Use', 'about/terms') }}</li>
           <li>{{ n.pathLink('Privacy Policy', 'about/privacy') }}</li>
           <li>{{ n.pathLink('Subscribe', 'about/subscribe') }}</li>
-          <li>{{ n.pathLink('Sponsor Marin Post', 'about/sponsor') }}</li>
-          <li>{{ n.pathLink('Advertise on Marin Post', 'about/advertise') }}</li>
+          <li>{{ n.pathLink('Sponsor Us', 'about/sponsor') }}</li>
+          <li>{{ n.pathLink('Advertise', 'about/advertise') }}</li>
         </ul>
       </li>
       <li>{{ n.segmentLink('Contact') }}</li>
@@ -106,16 +106,16 @@
         <li class="account">
           {{ n.pathLink('My Account', 'account') }}
           <ul>
-            <li>{{ n.pathLInk('My Account Information', 'account/information') }}</li>
-            <li>{{ n.pathLInk('My Email', 'account/email') }}</li>
-            <li>{{ n.pathLInk('My Password', 'account/password') }}</li>
+            <li>{{ n.pathLInk('My Account', 'account/information') }}</li>
+            <li>{{ n.pathLInk('Email Address', 'account/email') }}</li>
+            <li>{{ n.pathLInk('Password', 'account/password') }}</li>
           {% if currentUser.inGroup('contributor') %}
-            <li>{{ n.pathLInk('My Personal Profile', 'account/profile') }}</li>
+            <li>{{ n.pathLInk('Profile', 'account/profile') }}</li>
           {% endif %}
-            <li>{{ n.pathLInk('My Blog Posts', 'account/blog') }}</li>
-            <li>{{ n.pathLInk('My News Links', 'account/news') }}</li>
+            <li>{{ n.pathLInk('My Blog', 'account/blog') }}</li>
+            <li>{{ n.pathLInk('My News', 'account/news') }}</li>
             <li>{{ n.pathLInk('My Notices', 'account/notice') }}</li>
-            <li>{{ n.pathLInk('My Media Links', 'account/media') }}</li>
+            <li>{{ n.pathLInk('My Media', 'account/media') }}</li>
             <li>{{ n.pathLInk('My Letters', 'account/letter') }}</li>
           </ul>
         </li>

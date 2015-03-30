@@ -183,7 +183,6 @@ fieldset > ul,
 }
 .note {
     color: red;
-    font-family: sans-serif;
     font-size: .9em;
     font-weight: normal;
     margin: 1em 0;
@@ -358,19 +357,20 @@ nav ul ul {
 
 .sub-nav h5, .my-content {
     border: 1px solid #ccc;
-    font-family: Georgia, Times, serif;
-    font-size: 1em;
+    font-size: .95em;
     font-weight: normal;
     margin-bottom: 0;
-    padding: 5px 0 5px 25px;
 }
 
 .sub-nav h5.active, .my-content a.active {
     font-weight: bold;
+    padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5 a, .sub-nav h5 a:visited {
+.sub-nav h5 a, .sub-nav .filter h5, .sub-nav h5 a:visited {
     color: #000;
+    display: block;
+    padding: 5px 0 5px 25px;
 }
 
 .my-content {
@@ -461,23 +461,23 @@ main.single {
     padding-left: 1em;
 }
 
+
 .whats-new {
 	padding: 0 3%;
 }
 
-.whats-new aside {
+#comments {
     background: #f9f9f9;
+    margin-bottom: 1em;
     padding: 0 20px;
 }
-
-#comments {
-    margin-bottom: 1em;
-}
-#comments > h2 {
+.whats-new aside > h2 {
     border-bottom: none;
     margin: 0;
-    padding: 0;
+    padding: 0 1em .1em;
 }
+
+
 #comments li > p {
     font-size: .9em;
     margin: .5em 0;
@@ -1010,23 +1010,36 @@ footer {
     }
 
 	nav li:hover ul {
-		background-color: #fcfeb3;
-		display: inline;
-		left: -27px;
-		min-width: 100px;
-		padding: 5px 28px;
+    	border: 1px solid #ccc;
+		display: block;
+		left: -19px;
+		list-style: none;
+		padding: 0;
 		position: absolute;
 		top: 6px;
 		z-index: 100;
 	}
 
 	nav li:hover li {
-		display: block;
-		font-size: 1em;
-		margin-bottom: .5em;
-		text-align: left;
-		text-transform: none;
+        display: block;
+        font-size: 1em;
+        list-style: none;
+        padding: 0;
+        text-align: left;
+        text-transform: none;
 	}
+	
+	nav li:hover li > a {
+        background-color: #fcfeb3;
+        display: block;
+        width: 175px;
+        padding: 5px 0 5px 18px;
+	}
+	
+	nav li:hover li:not(:last-of-type) > a {
+    	border-bottom: 1px solid #ccc;
+	}
+	
 
     nav li:last-of-type {
         padding-right: 0;
@@ -1139,7 +1152,7 @@ footer {
     .whats-new aside {
 	    display: inline-block;
 	    float: right;
-		padding: 20px;
+		padding: 0 20px;
         width: 24%;
     }
 }

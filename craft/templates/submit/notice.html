@@ -22,27 +22,27 @@
 
         <fieldset class="event">
             <div class="field date">
-                <label for="event-start-date">Event start date <span class="note">* required</span></label>
+                <label for="event-start-date">Event start date</label>
                 <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}">
             </div>
             <div class="field date">
-                <label for="event-start-time">Event start time <span class="note">* required</span></label>
+                <label for="event-start-time">Event start time</label>
                 <select name="fields[startTime][time]"><br>
                 {{ f.timeOptions(entry.startTime) }}
                 </select>
             </div>
             <div class="field date">
-                <label for="event-end-date">Event end date <span class="note">* required</span></label>
+                <label for="event-end-date">Event end date</label>
                 <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}">
             </div>
             <div class="field date">
-                <label for="event-end-time">Event end time <span class="note">* required</span></label>
+                <label for="event-end-time">Event end time</label>
                 <select name="fields[endTime][time]"><br>
                 {{ f.timeOptions(entry.endTime) }}
                 </select>
             </div>
             <div class="field">
-                <label for="event-venue">Name of venue <span class="note">* required</span></label>
+                <label for="event-venue">Name of venue</label>
                 <input type="text" name="fields[venue]" autocomplete="off" placeholder="Name of a building or place or..." value="{{ entry.venue }}">
             </div>
             <div class="field">
