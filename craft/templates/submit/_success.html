@@ -1,0 +1,22 @@
+{% requireLogin %}
+
+{% set entryId = craft.request.segment(3) %}
+
+{% if entryId %}
+  {% set entry = craft.entries.id(entryId).authorId(currentUser.id).status(['live', 'disabled']).first %}
+{% endif %}
+
+{% if not entry %}
+  {% redirect 404 %}
+{% endif %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h2>Success</h2>
+      {{ entry.status == 'disabled' ? 'Saved' : 'Published' }} <i>{{ entry.title }}</i> in <b>{{ entry.section }}</b>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
