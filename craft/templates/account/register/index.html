@@ -4,38 +4,38 @@
   {% embed "_common/single" %}
     {% block post %}
 
-      <form method="post" accept-charset="UTF-8">
+      <form method="post" accept-charset="UTF-8" id="register">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
           <input type="hidden" name="redirect" value="account/register/email">
 
           <label for="firstName">First Name</label>
-          <input type="text" id="firstName" name="firstName" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
+          <input type="text" id="firstName" name="firstName" maxlength="30" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('firstName')) }}
           {% endif %}
           <br>
 
           <label for="lastName">Last Name</label>
-          <input type="text" id="lastName" name="lastName" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
+          <input type="text" id="lastName" name="lastName" maxlength="30" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('lastName')) }}
           {% endif %}
           <br>
 
           <label for="organization">Organization</label>
-          <input type="text" id="organization" name="fields[organization]" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
+          <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
           <br>
 
           <label for="organization">Street Address</label>
-          <input type="text" id="streetAddress" name="fields[streetAddress]" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
+          <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="128" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('streetAddress')) }}
           {% endif %}
           <br>
 
           <label for="city">City</label>
-          <input type="text" id="city" name="fields[city]" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
+          <input type="text" id="city" name="fields[city]" maxlength="30" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('city')) }}
           {% endif %}
@@ -53,28 +53,32 @@
           <br>
 
           <label for="zipCode">Zip Code</label>
-          <input type="text" id="zipCode" name="fields[zipCode]" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
+          <input type="text" id="zipCode" name="fields[zipCode]" maxlength="5" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('zipCode')) }}
           {% endif %}
           <br>
 
           <label for="phoneNumber">Phone Number</label>
-          <input type="text" id="phoneNumber" name="fields[phoneNumber]" {%- if account is defined %} value="{{ account.phoneNumber }}"{% endif %}>
+          <input type="text" id="phoneNumber" name="fields[phoneNumber]" maxlength="20" {%- if account is defined %} value="{{ account.phoneNumber }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('phoneNumber')) }}
           {% endif %}
           <br>
 
           <h3><label for="email">Email</label></h3>
-          <input id="email" type="text" name="email" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
+          <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('email')) }}
           {% endif %}
           <br>
 
+          <h3><label for="confirm_email">Re-enter Email</label></h3>
+          <input id="confirm_email" type="text" maxlength="64" autocomplete="off">
+          <br>
+
           <h3><label for="password">Password</label></h3>
-          <input id="password" type="password" name="password">
+          <input id="password" type="password" name="password" maxlength="32" autocomplete="off">
           {% if account is defined %}
             {{ f.errorList(account.getErrors('password')) }}
           {% endif %}

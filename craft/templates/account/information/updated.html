@@ -1,0 +1,15 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+
+      <h2>My Account Information</h2>
+
+      <h3>Updated</h3>
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

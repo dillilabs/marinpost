@@ -5,10 +5,10 @@
     {% block post %}
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}
-          <input type="hidden" name="redirect" value="">
           <input type="hidden" name="action" value="users/setPassword">
           <input type="hidden" name="code" value="{{ code }}">
           <input type="hidden" name="id" value="{{ id }}">
+          <input type="hidden" name="redirect" value="">
 
           <h3><label for="newPassword">New Password</label></h3>
           <input id="newPassword" type="password" name="newPassword">

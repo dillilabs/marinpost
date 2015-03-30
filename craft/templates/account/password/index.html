@@ -11,8 +11,8 @@
       <form method="post" accept-charset="utf-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
-        <input type="hidden" name="redirect" value="account">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
+        <input type="hidden" name="redirect" value="account/password/updated">
 
         {% if account is defined %}
           {{ f.errorList(account.allErrors) }}

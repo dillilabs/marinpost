@@ -11,40 +11,40 @@
       <form method="post" accept-charset="utf-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
-        <input type="hidden" name="redirect" value="account">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
+        <input type="hidden" name="redirect" value="account/information/updated">
 
         {% if account is defined %}
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
         <label for="firstName">First Name</label>
-        <input type="text" id="firstName" name="firstName" value="{{ currentUser.firstName }}">
+        <input type="text" id="firstName" name="firstName" value="{{ currentUser.firstName }}" maxlength="30">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('firstName')) }}
         {% endif %}
         <br>
 
         <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" name="lastName" value="{{ currentUser.lastName }}">
+        <input type="text" id="lastName" name="lastName" value="{{ currentUser.lastName }}" maxlength="30">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('lastName')) }}
         {% endif %}
         <br>
 
         <label for="organization">Organization</label>
-        <input type="text" id="organization" name="fields[organization]" value="{{ currentUser.organization }}">
+        <input type="text" id="organization" name="fields[organization]" value="{{ currentUser.organization }}" maxlength="128">
         <br>
 
         <label for="organization">Street Address</label>
-        <input type="text" id="streetAddress" name="fields[streetAddress]" value="{{ currentUser.streetAddress }}">
+        <input type="text" id="streetAddress" name="fields[streetAddress]" value="{{ currentUser.streetAddress }}" maxlength="128">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('streetAddress')) }}
         {% endif %}
         <br>
 
         <label for="city">City</label>
-        <input type="text" id="city" name="fields[city]" value="{{ currentUser.city }}">
+        <input type="text" id="city" name="fields[city]" value="{{ currentUser.city }}" maxlength="30">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('city')) }}
         {% endif %}
@@ -66,14 +66,14 @@
         <br>
 
         <label for="zipCode">Zip Code</label>
-        <input type="text" id="zipCode" name="fields[zipCode]" value="{{ currentUser.zipCode }}">
+        <input type="text" id="zipCode" name="fields[zipCode]" value="{{ currentUser.zipCode }}" maxlength="5">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('zipCode')) }}
         {% endif %}
         <br>
 
         <label for="phoneNumber">Phone Number</label>
-        <input type="text" id="phoneNumber" name="fields[phoneNumber]" value="{{ currentUser.phoneNumber }}">
+        <input type="text" id="phoneNumber" name="fields[phoneNumber]" value="{{ currentUser.phoneNumber }}" maxlength="20">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('phoneNumber')) }}
         {% endif %}
@@ -89,7 +89,7 @@
         {% endif %}
         <br>
 
-        <input type="submit" value="Save Profile">
+        <input type="submit" value="Update">
       </form>
     {% endblock %}
   {% endembed %}

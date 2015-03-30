@@ -8,11 +8,15 @@
 
       <h2>My Email Address</h2>
 
-      <form method="post" accept-charset="utf-8">
+      {% if account is defined and not account.hasErrors %}
+        <h3>Updated</h3>
+      {% endif %}
+
+      <form method="post" accept-charset="utf-8" id="update-email">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
-        <input type="hidden" name="redirect" value="account">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
+        <input type="hidden" name="redirect" value="account/email/updated">
 
         {% if account is defined %}
           {{ f.errorList(account.allErrors) }}
@@ -23,6 +27,10 @@
         {% if account is defined %}
           {{ f.errorList(account.getErrors('email')) }}
         {% endif %}
+        <br>
+
+        <label for="confirm_email" class="required">Re-enter Email</label>
+        <input type="text" id="confirm_email" autocomplete="off" class="required">
         <br>
 
         <label for="password" class="required">Current Password</label>
