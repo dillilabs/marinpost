@@ -2,7 +2,7 @@
   <div class="sub-nav">
     {% block subNav %}
       <div class="filter" id="filters">
-        <a href="#"><h3>Save My Settings</h3></a>
+<!--         <a href="#"><h3>Save My Settings</h3></a> -->
         <fieldset class="locations">
           <h5>Location</h5>
           <ul>
@@ -12,7 +12,7 @@
             {% for location in craft.categories.group('locations') %}
               {% if location.geographicGroup != group %}
                 {% set group = location.geographicGroup %}
-                <li>{{ group.label }}</li>
+                <li class="group-label">{{ group.label }}</li>
               {% endif %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
             {% endfor %}
