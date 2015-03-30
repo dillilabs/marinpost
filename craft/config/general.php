@@ -23,7 +23,6 @@ return array(
         'siteName' => 'The Marin Post',
         'timezone' => 'America/Los_Angeles',
         'useEmailAsUsername' => true,
-        'siteUrl' => 'http://10.0.1.2:8087',
     ),
     'dev' => array(
 //      'devMode' => true,
