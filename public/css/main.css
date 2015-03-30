@@ -163,7 +163,7 @@ h4 {
     font-family: sans-serif;
     margin: 1em 0 .5em;
 }
-h5 {
+h5, h3.my-content {
     font-family: sans-serif;
     margin: 1em 0 .5em;
 }
@@ -355,24 +355,39 @@ nav ul ul {
     margin-bottom: 2em;
 }
 
-.sub-nav h5, .my-content {
+.sub-nav h5, .my-content > a {
+    background: url('../img/right-arrow.png') no-repeat scroll 6px 8px;
     border: 1px solid #ccc;
     font-size: .95em;
     font-weight: normal;
-    margin-bottom: 0;
 }
-
+h3.my-content {
+    font-size: .95em;
+}
 .sub-nav h5.active, .my-content a.active {
+    background: url('../img/down-arrow.png') no-repeat scroll 6px 8px;
     font-weight: bold;
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5 a, .sub-nav .filter h5, .sub-nav h5 a:visited {
+.sub-nav h5 a, .sub-nav .filter h5, .my-content > a, .sub-nav h5 a:visited {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
 }
+.sub-nav h5.active a {
+    padding: 0;
+}
+.filter ul > li.group-label {
+    border-left: none;
+    border-right: none;
+    font-weight: bold;
+    margin-top: 2px;
+}
+.filter ul > li:first-of-type {
+    border:none;
 
+}
 .my-content {
 	margin: 0 0 1em;
 }
@@ -502,6 +517,7 @@ ul.tags > li {
 .filter ul > li {
     border: 1px solid #d2def4;
     border-top: none;
+    font-family: sans-serif;
     margin: 0;
     padding: .25em 0 .25em .25em;
 }
