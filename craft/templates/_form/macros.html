@@ -103,20 +103,6 @@
   {% set selected = selected ? selected | date('g:i A') : null %}
   {% from _self import timeOption %}
 
-  {% set time = '12:00 PM' %}
-  {{ timeOption(time, time == selected) }}
-
-  {% set time = '12:30 PM' %}
-  {{ timeOption(time, time == selected) }}
-
-  {% for i in 1..11 %}
-    {% set time = loop.index~':00 PM' %}
-    {{ timeOption(time, time == selected) }}
-
-    {% set time = loop.index~':30 PM' %}
-    {{ timeOption(time, time == selected) }}
-  {% endfor %}
-
   {% set time = '12:00 AM' %}
   {{ timeOption(time, time == selected) }}
 
@@ -128,6 +114,20 @@
     {{ timeOption(time, time == selected) }}
 
     {% set time = loop.index~':30 AM' %}
+    {{ timeOption(time, time == selected) }}
+  {% endfor %}
+
+  {% set time = '12:00 PM' %}
+  {{ timeOption(time, time == selected) }}
+
+  {% set time = '12:30 PM' %}
+  {{ timeOption(time, time == selected) }}
+
+  {% for i in 1..11 %}
+    {% set time = loop.index~':00 PM' %}
+    {{ timeOption(time, time == selected) }}
+
+    {% set time = loop.index~':30 PM' %}
     {{ timeOption(time, time == selected) }}
   {% endfor %}
 {% endmacro %}
