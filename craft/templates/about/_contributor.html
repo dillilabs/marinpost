@@ -17,6 +17,9 @@
       {% endif %}
 
       <h3>{{ user.name }}</h3>
+      {% if user.titleOrProfession %}
+        <p>{{ user.titleOrProfession }}</p>
+      {% endif %}
 
       <p>{{ user.city }}, {{ user.state }}</p>
 

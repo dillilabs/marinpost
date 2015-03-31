@@ -1,6 +1,6 @@
 {% extends "_common/layout" %}
 
-{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(10).find %}
+{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(siteDefault.entriesPerPage).find %}
 {% set featured = entries | first %}
 
 {% block main %}

@@ -26,6 +26,13 @@
         <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" />
         <br>
         <input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
+        <br style="clear: both;">
+
+        <label for="titleOrProfession">Title or Profession</label>
+        <input type="text" id="firstName" name="fields[titleOrProfession]" value="{{ currentUser.titleOrProfession }}" maxlength="64">
+        {% if account is defined %}
+          {{ f.errorList(account.getErrors('titleOrProfession')) }}
+        {% endif %}
         <br>
 
         <label for="bio">Bio</label>

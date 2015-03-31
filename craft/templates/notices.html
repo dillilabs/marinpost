@@ -9,7 +9,7 @@
     {% endblock %}
 
     {% block posts %}
-      {% for entry in craft.entries.section('notices').limit(perPage).find %}
+      {% for entry in craft.entries.section('notices').limit(siteDefault.entriesPerPage).find %}
         {{ p.post(entry) }}
       {% endfor %}
     {% endblock %}
