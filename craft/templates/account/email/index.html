@@ -6,7 +6,7 @@
   {% embed "account/_layout" %}
     {% block post %}
 
-      <h2>My Email Address</h2>
+      <h2>Change My Email Address</h2>
 
       {% if account is defined and not account.hasErrors %}
         <h3>Updated</h3>
@@ -22,18 +22,18 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <label for="email" class="required">Email</label>
+        <label for="email" class="required">New Email Address</label>
         <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('email')) }}
         {% endif %}
         <br>
 
-        <label for="confirm_email" class="required">Re-enter Email</label>
+        <label for="confirm_email" class="required">Re-enter New Email Address</label>
         <input type="text" id="confirm_email" autocomplete="off" class="required">
         <br>
 
-        <label for="password" class="required">Current Password</label>
+        <label for="password" class="required">Current Password <small>for security</small></label>
         <input type="password" id="password" name="password" autocomplete="off" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('password')) }}

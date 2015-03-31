@@ -66,14 +66,14 @@
           {% endif %}
           <br>
 
-          <h3><label for="email">Email</label></h3>
+          <h3><label for="email">Email Address</label></h3>
           <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('email')) }}
           {% endif %}
           <br>
 
-          <h3><label for="confirm_email">Re-enter Email</label></h3>
+          <h3><label for="confirm_email">Re-enter Email Address</label></h3>
           <input id="confirm_email" type="text" maxlength="64" autocomplete="off">
           <br>
 

@@ -1,34 +1,97 @@
 $(function() {
   var registerForm = $('form#register');
   var emailForm = $('form#update-email');
+  var passwordForm = $('form#update-password');
+
+  var clearErrors = function(field) {
+    field.next('ul.errors').remove();
+  };
+
+  var isBlank = function(field) {
+    return field.val().trim().length == 0;
+  };
+
+  var notEqual = function(field, otherField) {
+    return field.val() !== otherField.val();
+  }
+
+  var addError = function(field, msg) {
+    field.after('<ul class="errors"><li>'+msg+'</li></ul>');
+  };
 
   registerForm.submit(function(e) {
     var email = $(this).find('input#email');
     var confirmEmail = $(this).find('input#confirm_email');
+    var populated = true;
 
-    confirmEmail.next('ul.errors').remove();
+    clearErrors(email);
+    clearErrors(confirmEmail);
 
-    if (confirmEmail.val() !== email.val()) {
-      confirmEmail.after('<ul class="errors"><li>Does not match Email</li></ul>');
+    if (isBlank(email)) {
+      addError(email, 'Email Address is required.');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (isBlank(confirmEmail)) {
+      addError(confirmEmail, 'Email Address confirmation is required.');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (populated && notEqual(email, confirmEmail)) {
+      addError(confirmEmail, 'Does not match Email Address');
       e.preventDefault();
     }
   });
 
   emailForm.submit(function(e) {
-    var email = $(this).find('input#email');
+    var newEmail = $(this).find('input#email');
     var confirmEmail = $(this).find('input#confirm_email');
-    var password = $(this).find('input#password');
+    var currentPassword = $(this).find('input#password');
+    var populated = true;
 
-    confirmEmail.next('ul.errors').remove();
-    password.next('ul.errors').remove();
+    clearErrors(newEmail);
+    clearErrors(confirmEmail);
+    clearErrors(currentPassword);
 
-    if (confirmEmail.val() !== email.val()) {
-      confirmEmail.after('<ul class="errors"><li>Does not match Email</li></ul>');
+    if (isBlank(newEmail)) {
+      addError(newEmail, 'New Email Address is required.');
+      populated = false;
       e.preventDefault();
     }
 
-    if (password.val().trim().length == 0) {
-      password.after('<ul class="errors"><li>Current password is required.</li></ul>');
+    if (isBlank(confirmEmail)) {
+      addError(confirmEmail, 'Email Address confirmation is required.');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (populated && notEqual(newEmail, confirmEmail)) {
+      addError(confirmEmail, 'Does not match New Email Address');
+      e.preventDefault();
+    }
+
+    if (isBlank(currentPassword)) {
+      addError(currentPassword, 'Current Password is required for security.');
+      e.preventDefault();
+    }
+  });
+
+  passwordForm.submit(function(e) {
+    var newPassword = $(this).find('input#newPassword');
+    var currentPassword = $(this).find('input#password');
+
+    clearErrors(newPassword);
+    clearErrors(currentPassword);
+
+    if (isBlank(newPassword)) {
+      addError(newPassword, 'New Password is required');
+      e.preventDefault();
+    }
+
+    if (isBlank(currentPassword)) {
+      addError(currentPassword, 'Current Password is required for security.');
       e.preventDefault();
     }
   });

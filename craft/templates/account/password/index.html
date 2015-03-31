@@ -6,9 +6,9 @@
   {% embed "account/_layout" %}
     {% block post %}
 
-      <h2>My Password</h2>
+      <h2>Change My Password</h2>
 
-      <form method="post" accept-charset="utf-8">
+      <form method="post" accept-charset="utf-8" id="update-password">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
@@ -19,13 +19,13 @@
         {% endif %}
 
         <label for="newPassword">New Password</label>
-        <input type="password" id="newPassword" name="newPassword" autocomplete="off">
+        <input type="password" id="newPassword" name="newPassword" autocomplete="off" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('newPassword')) }}
         {% endif %}
         <br>
 
-        <label for="password" class="required">Current Password</label>
+        <label for="password" class="required">Current Password <small>for security</small></label>
         <input type="password" id="password" name="password" autocomplete="off" class="required">
         {% if account is defined %}
           {{ f.errorList(account.getErrors('password')) }}
