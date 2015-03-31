@@ -66,18 +66,18 @@
           {% endif %}
           <br>
 
-          <h3><label for="email">Email Address</label></h3>
+          <label for="email">Email Address</label>
           <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
           {% if account is defined %}
             {{ f.errorList(account.getErrors('email')) }}
           {% endif %}
           <br>
 
-          <h3><label for="confirm_email">Re-enter Email Address</label></h3>
+          <label for="confirm_email">Re-enter Email Address</label>
           <input id="confirm_email" type="text" maxlength="64" autocomplete="off">
           <br>
 
-          <h3><label for="password">Password</label></h3>
+          <label for="password">Password</label>
           <input id="password" type="password" name="password" maxlength="32" autocomplete="off">
           {% if account is defined %}
             {{ f.errorList(account.getErrors('password')) }}
