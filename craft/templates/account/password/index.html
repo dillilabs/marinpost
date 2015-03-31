@@ -25,6 +25,10 @@
         {% endif %}
         <br>
 
+        <label for="confirmPassword" class="required">Re-enter New Password</label>
+        <input type="password" id="confirmPassword" autocomplete="off" class="required">
+        <br>
+
         <label for="password" class="required">Current Password <small>for security</small></label>
         <input type="password" id="password" name="password" autocomplete="off" class="required">
         {% if account is defined %}

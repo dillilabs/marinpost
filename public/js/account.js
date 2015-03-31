@@ -21,7 +21,7 @@ $(function() {
 
   registerForm.submit(function(e) {
     var email = $(this).find('input#email');
-    var confirmEmail = $(this).find('input#confirm_email');
+    var confirmEmail = $(this).find('input#confirmEmail');
     var populated = true;
 
     clearErrors(email);
@@ -47,7 +47,7 @@ $(function() {
 
   emailForm.submit(function(e) {
     var newEmail = $(this).find('input#email');
-    var confirmEmail = $(this).find('input#confirm_email');
+    var confirmEmail = $(this).find('input#confirmEmail');
     var currentPassword = $(this).find('input#password');
     var populated = true;
 
@@ -68,7 +68,7 @@ $(function() {
     }
 
     if (populated && notEqual(newEmail, confirmEmail)) {
-      addError(confirmEmail, 'Does not match New Email Address');
+      addError(confirmEmail, 'Does not match New Email Address.');
       e.preventDefault();
     }
 
@@ -80,13 +80,28 @@ $(function() {
 
   passwordForm.submit(function(e) {
     var newPassword = $(this).find('input#newPassword');
+    var confirmPassword = $(this).find('input#confirmPassword');
     var currentPassword = $(this).find('input#password');
+    var populated = true;
 
     clearErrors(newPassword);
+    clearErrors(confirmPassword);
     clearErrors(currentPassword);
 
     if (isBlank(newPassword)) {
       addError(newPassword, 'New Password is required');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (isBlank(confirmPassword)) {
+      addError(confirmPassword, 'New Password confirmation is required');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (populated && notEqual(newPassword, confirmPassword)) {
+      addError(confirmPassword, 'Does not match New Password.');
       e.preventDefault();
     }
 
