@@ -10,6 +10,9 @@
     {% case 'media' %}
       {% set fieldName = 'mediaImages' %}
 
+    {% case 'news' %}
+      {% set fieldName = 'newsImages' %}
+
     {% case 'notices' %}
       {% set fieldName = 'noticeImages' %}
 
@@ -261,12 +264,6 @@
           {{ postBy(entry) }}
           <p>{{ entry.letterContent }}</p>
         </div>
-      </li>
-
-    {% case 'news' %}
-      <li class="listing">
-        {{ postTags(entry, unfiltered) }}
-        {{ postSummary(entry) }}
       </li>
 
     {% default %}
