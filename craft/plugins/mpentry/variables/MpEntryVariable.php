@@ -48,7 +48,7 @@ class MpEntryVariable
             
             $this->_log(array('Filtered entries' => count($filteredEntryIds)));
 
-            $entries =  $this->_slice($offset, $limit, $filteredEntryIds);
+            $entries = empty($filteredEntryIds) ? array() : $this->_slice($offset, $limit, $filteredEntryIds);
         }
 
         $this->_log(array('Sliced entries' => count($entries)));
