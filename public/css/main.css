@@ -976,7 +976,9 @@ footer {
 
     .filter {
         padding: 0;
+        margin-top: 29px;
     }
+
     main, .notices-box {
         padding: 0 2%;
     }
