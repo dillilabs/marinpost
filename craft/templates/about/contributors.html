@@ -16,6 +16,11 @@
             {% endif %}
 
             <h3><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
+
+            {% if user.titleOrProfession %}
+              <p>{{ user.titleOrProfession }}</p>
+            {% endif %}
+
             <p>{{ user.city }}, {{ user.state }}</p>
 
             {% if user.bio %}
