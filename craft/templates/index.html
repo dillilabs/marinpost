@@ -41,3 +41,8 @@
   {% endembed %}
 {% endblock %}
 
+{% set js %}
+  $(function() {
+    $('ul.posts').scrollingContent();
+  });
+{% endset %}

@@ -7,7 +7,10 @@
             var toggleFilters = $('#filters fieldset h5');
             var noFilters = $(':checkbox.all');
             var filters = $(':checkbox.filter');
-            var loadMoreLink = $('#load-more-content'); // TODO activate on scroll
+            var contentLengthThreshold = 20;
+            var scrollPositionThreshold = 0.85;
+            var isLoadingContent = false;
+            var endOfContent = false;
 
             //----------
             // Functions
@@ -46,17 +49,22 @@
               return $('.listing').length;
             };
           
-            // TODO ascertain end of content
-            // and prevent further requests
-            // taking into account the current state of the filters
             var loadMoreContent = function() {
               var url = urlFor(section);
               var offset = currentContentLength();
 
+              isLoadingContent = true;
+
               $.get(
                 url+'&offset='+offset,
                 function(data) {
-                  filteredContent.append(data);
+                  if (data.length > contentLengthThreshold) {
+                    filteredContent.append(data);
+                  } else {
+                    endOfContent = true;
+                  }
+
+                  isLoadingContent = false;
                 }
               );
             };
@@ -97,10 +105,15 @@
               refreshViews();
             });
           
-            // TODO activate on scroll
-            loadMoreLink.click(function(e) {
-              e.preventDefault();
-              loadMoreContent();
+            $(window).scroll(function() {
+              var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
+              var offset;
+        
+              if (isLoadingContent || endOfContent) return;
+        
+              if (currentPosition > scrollPositionThreshold) {
+                loadMoreContent();
+              }
             });
         });
     };

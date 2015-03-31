@@ -43,19 +43,18 @@
       </div>
     {% endblock %}
   </div>
+
   <div class="list-wrapper">
-      <h2>
-        {% block h2 %}
-        {% endblock %}
-      </h2>
-    
-      <ul class="posts">
-        {% block posts %}
-        {% endblock %}
-      </ul>
-    
-      <a href="#" id="load-more-content">simulate scrolling content</a>
-    </div>
+    <h2>
+      {% block h2 %}
+      {% endblock %}
+    </h2>
+  
+    <ul class="posts">
+      {% block posts %}
+      {% endblock %}
+    </ul>
+  </div>
 </main>
 
 {% set filter = craft.request.query('filter') %}
@@ -67,13 +66,13 @@
     var id = '{{ id }}';
     var fieldset;
 
-      $('ul.posts').filters();
+    $('ul.posts').filters();
 
-      if (filter.length > 0 && id.length > 0) {
-          fieldset = $('#filters fieldset.'+filter);
-          fieldset.find('h5').click();
-          fieldset.find('li > input[value='+id+']').click();
-      }
+    if (filter.length > 0 && id.length > 0) {
+      fieldset = $('#filters fieldset.'+filter);
+      fieldset.find('h5').click();
+      fieldset.find('li > input[value='+id+']').click();
+    }
   });
 {% endset %}
 
