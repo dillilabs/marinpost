@@ -190,8 +190,8 @@
 {% endmacro %}
 
 {% macro editLink(entry) %}
-  {% if currentUser and currentUser.id == entry.authorId %}
-    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">edit</a>
+  {% if currentUser and currentUser.isInGroup('contributor') and currentUser.id == entry.authorId %}
+    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
   {% endif %}
 {% endmacro %}
 
