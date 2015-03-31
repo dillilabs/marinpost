@@ -1,0 +1,11 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h3>Unpublished</h3>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

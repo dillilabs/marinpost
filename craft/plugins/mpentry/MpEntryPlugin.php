@@ -100,7 +100,6 @@ class MpEntryPlugin extends BasePlugin
     // Helper functions
     // ----------------
 
-
     private function _author()
     {
         return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
@@ -142,7 +141,7 @@ class MpEntryPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.17';
+        return '0.0.18';
     }
 
     public function getDeveloper()

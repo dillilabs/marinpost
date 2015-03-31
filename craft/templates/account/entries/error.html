@@ -1,0 +1,12 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h3>Error</h3>
+      {{ error }}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

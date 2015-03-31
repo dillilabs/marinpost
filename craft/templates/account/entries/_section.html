@@ -30,19 +30,19 @@
                 {{ entry.postDate | date('M d, Y') }}
               {% endif %}
             </td>
-            <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">view</a></td>
+            <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a></td>
             <td>
               {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
-                <a href="/edit/{{ entry.id }}/{{ entry.slug }}">edit</a>
+                <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
               {% endif %}
             </td>
             <td>
-              {% if entry.status == 'live' %}
-                <a href="{{ actionUrl('mpEntry/disableEntry', { entryId: entry.id }) }}">unpublish</a>
+              {% if currentUser.isInGroup('contributor') and entry.status == 'live' %}
+                <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
               {% endif %}
             </td>
             <td>
-              <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">delete</a>
+              <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
             </td>
           </tr>
         {% endfor %}

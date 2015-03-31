@@ -1,0 +1,22 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      {% if error is defined %}
+        <h3>Error</h3>
+        {{ error}}
+
+      {% else %}
+        <h3>Sucess</h3>
+        {{ success}}
+
+      {% endif %}
+
+      <br>
+      <a href="/account/">OK</a>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
