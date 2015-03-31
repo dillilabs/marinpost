@@ -2,17 +2,18 @@
   <div class="sub-nav account">
     {% block subNav %}
       <ul>
-        {{ n.arrowLink('account/information', 'My Account Information') }}
-        {{ n.arrowLink('account/email', 'My Email') }}
-        {{ n.arrowLink('account/password', 'My Password') }}
+        {{ n.arrowLink('account/information', 'My Account') }}
+        {{ n.arrowLink('account/email', 'Email Address') }}
+        {{ n.arrowLink('account/password', 'Password') }}
       {% if currentUser.inGroup('contributor') %}
-        {{ n.arrowLink('account/profile', 'My Personal Profile') }}
+        {{ n.arrowLink('account/profile', 'Profile') }}
       {% endif %}
-        {{ n.arrowLink('account/blog', 'My Blog Posts') }}
-        {{ n.arrowLink('account/news', 'My News Links') }}
+        {{ n.arrowLink('account/blog', 'My Blog') }}
+        {{ n.arrowLink('account/news', 'My News') }}
         {{ n.arrowLink('account/notices', 'My Notices') }}
-        {{ n.arrowLink('account/media', 'My Media Links') }}
+        {{ n.arrowLink('account/media', 'My Media') }}
         {{ n.arrowLink('account/letters', 'My Letters') }}
+
       </ul>
     {% endblock %}
   </div>

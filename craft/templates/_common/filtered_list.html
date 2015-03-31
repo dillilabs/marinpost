@@ -6,7 +6,7 @@
         <fieldset class="locations">
           <h5>Location</h5>
           <ul>
-            <li><input type="checkbox" class="location all" value="all" checked="checked" />All</li>
+            <li><input type="checkbox" class="location all" id="location-all" value="all" checked="checked" /><label for="location-all">All</label></li>
 
             {% set group = null %}
             {% for location in craft.categories.group('locations') %}
@@ -14,7 +14,7 @@
                 {% set group = location.geographicGroup %}
                 <li class="group-label">{{ group.label }}</li>
               {% endif %}
-              <li><input type="checkbox" class="location filter" value="{{ location.id }}"/>{{ location.title }}</li>
+              <li><input type="checkbox" class="location filter" id="{{ location.id }}" value="{{ location.id }}"/><label for="{{ location.id }}">{{ location.title }}</label></li>
             {% endfor %}
           </ul>
         </fieldset>
@@ -25,7 +25,7 @@
             <li><input type="checkbox" class="topic all" value="all" checked="checked" />All</li>
 
             {% for topic in craft.categories.group('topics') %}
-              <li><input type="checkbox" class="topic filter" value="{{ topic.id }}"/>{{ topic.title }}</li>
+              <li><input type="checkbox" class="topic filter" id="{{ topic.id }}" value="{{ topic.id }}"/><label for="{{ topic.id }}">{{ topic.title }}</label></li>
             {% endfor %}
           </ul>
         </fieldset>
@@ -36,7 +36,7 @@
             <li><input type="checkbox" class="author all" value="all" checked="checked" />All</li>
 
             {% for author in craft.users.group('contributor').order('lastName, firstName') %}
-              <li><input type="checkbox" class="author filter" value="{{ author.id }}"/>{{ author.name }}</li>
+              <li><input type="checkbox" class="author filter" id="{{ author.id }}" value="{{ author.id }}"/><label for="{{ author.id }}">{{ author.name }}</label></li>
             {% endfor %}
           </ul>
         </fieldset>

@@ -1,11 +1,9 @@
 <main class="single">
-  <div class="sub-nav">
+  <div class="sub-nav about">
     {% block subNav %}
-      <div>
-        <h3>&nbsp;</h3>
         {{ n.arrowLink('about', 'About Us') }}
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
-        {{ n.arrowLink('about/advisors', 'Marin Post Advisors') }}
+        {{ n.arrowLink('about/advisors', 'Advisors') }}
           <h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}><a href="/about/contributors">Contributors</a></h5>
           <ul class="contributors" style="display: none;">
             <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" /> All</li>
@@ -20,7 +18,6 @@
         {{ n.arrowLink('about/subscribe', 'Subscribe') }}
         {{ n.arrowLink('about/sponsor', 'Sponsor Us') }}
         {{ n.arrowLink('about/advertise', 'Advertise') }}
-      </div>
     {% endblock %}
   </div>
 

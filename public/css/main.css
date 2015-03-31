@@ -176,7 +176,9 @@ ul.posts,
 .notices-box > ul,
 #comments > ul,
 fieldset > ul,
-.about .sub-nav ul {
+.about .sub-nav ul,
+.account .sub-nav ul,
+.submit .sub-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -186,6 +188,11 @@ fieldset > ul,
     font-size: .9em;
     font-weight: normal;
     margin: 1em 0;
+}
+.submit .comment-count,
+.account .comment-count,
+.contact .comment-count {
+    display: none;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -271,6 +278,11 @@ header h2 {
     display: inline-block;
     vertical-align: top;
 }
+#mini-menu div li:last-of-type {
+    border-right: 1px solid;
+    margin-right: 5px;
+    padding-right: 5px;
+}
 
 #mini-menu div {
     float: right;
@@ -345,6 +357,10 @@ nav ul ul {
 	padding-top: 2em;
 	width: 25%;
 }
+
+.about .sub-nav, .account .sub-nav, .submit .sub-nav {
+    margin-top: 1em;
+}
 .letters .sub-nav {
     padding-top: 0;
 }
@@ -360,6 +376,7 @@ nav ul ul {
     border: 1px solid #ccc;
     font-size: .95em;
     font-weight: normal;
+    text-transform: uppercase;
 }
 h3.my-content {
     font-size: .95em;
@@ -381,12 +398,21 @@ h3.my-content {
 .filter ul > li.group-label {
     border-left: none;
     border-right: none;
+    border-top: none;
     font-weight: bold;
     margin-top: 2px;
 }
 .filter ul > li:first-of-type {
-    border:none;
+    border: none;
+}
+.filter li:nth-of-type(2) {
+    border-top: 1px solid #d2def4;
 
+}
+.filter ul > li label {
+    display: inline-block;
+    vertical-align: middle;
+    width: 90%;
 }
 .my-content {
 	margin: 0 0 1em;
@@ -423,7 +449,7 @@ ul.tags {
 
 .byline {
     font-family: sans-serif;
-    font-size: .9em;
+    font-size: .924em;
 }
 .timestamp {
     float:right;
@@ -440,6 +466,9 @@ main.single {
     border-bottom: 1px solid #c9c8ac;
     padding-bottom: 1em;
 }
+main.single > .post > h3 {
+    font-size: 1.185em;
+}
 .media .posts > li {
     padding: 1em 0;
 }
@@ -448,6 +477,7 @@ main.single {
 }
 .help {
     border-bottom: 1px solid #ccc;
+    color: #676158;
     font-family: sans-serif;
     margin-bottom: 1em;
     padding-bottom: 1em;
@@ -581,28 +611,34 @@ a.comment-box:hover {
 input[type="checkbox"] {
     margin-right: .5em;
 }
+label.check {
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
 .field {
     padding: .5em 0;
 }
 .field .redactor-box {
     margin-bottom: 0;
 }
-.event .field label, .contact .field label {
+.event .field label, .contact .field label,
+.statezip label {
     display: inline-block;
     vertical-align: top;
     width: 19%;
 }
-.event .field input, .event .field select, .contact .field input, .contact .field select {
+.event .field input, .event .field select, .contact .field input, .contact .field select,
+.statezip input, .statezip select {
     float: right;
     width: 76%;
 }
-.event .field.date label {
+.event .field.date label, .statezip .field label {
     width: 40%;
 }
-.event .field.date input, .event .field.date select {
+.event .field.date input, .event .field.date select, .statezip .field input, .statezip .field select {
     width: 50%;
 }
-.event .field.date {
+.event .field.date, .statezip .field {
     display: inline-block;
     width: 48%;
     padding-right: .5em;
@@ -1098,7 +1134,7 @@ footer {
 
     .sidebar {
         display: inline-block;
-        margin: 1em 0 1em .5em;
+        margin: 0.5em 0 1em .5em;
         padding: 0;
         text-align: left;
         vertical-align: top;
