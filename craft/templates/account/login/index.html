@@ -3,6 +3,7 @@
 {% block main %}
   {% embed "_common/single" %}
     {% block post %}
+      <div class="help">{{ n.siteMessage }}</div>
 
       <form method="post" accept-charset="UTF-8">
         {{ getCsrfInput() }}

@@ -7,7 +7,7 @@
 {% block main %}
   {% embed "_form/layout" %}
     {% block formFields %}
-        <div class="help">Submit a blog for publication. Your post will be reviewed prior to publication. You will be notified when it is published. Thank you for contributing to the Marin Post.</div>
+      <div class="help">{{ n.siteMessage }}</div>
         <div class="field clearfix">
           {% include "_form/images/blog" %}
           file type: .gif, .png or .jpeg only

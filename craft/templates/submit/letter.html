@@ -7,7 +7,7 @@
 {% block main %}
   {% embed "_form/layout" %}
     {% block formFields %}
-        <div class="help">Submit a letter for publication. Your post will be reviewed prior to publication. You will be notified when it is published. Thank you for contributing to the Marin Post.</div>
+      <div class="help">{{ n.siteMessage }}</div>
       {% include "_form/title" %}
       {% include "_form/content/letter" %}
     {% endblock %}

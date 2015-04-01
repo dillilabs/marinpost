@@ -11,7 +11,7 @@
     {% block post %}
 
       <h2>My Personal Profile</h2>
-      <div class="help">Instructions.</div>
+      <div class="help">{{ n.siteMessage }}</div>
 
       <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
         {{ getCsrfInput() }}

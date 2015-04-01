@@ -49,3 +49,9 @@
     <h5><a href="/{{ path }}">{{ text }}</a></h5>
   {% endif %}
 {% endmacro %}
+
+{% macro siteMessage(path) %}
+  {% set path = path | default(craft.request.path) %}
+  {% set message = siteMessages.siteMessages.path(path).first %}
+  {{ message ? message.text : null }}
+{% endmacro %}
