@@ -50,9 +50,8 @@
             {{ f.errorList(account.getErrors('zipCode')) }}
           {% endif %}
 
-          <label for="organization">Organization</label>
+          <label for="organization">Organization</label> (optional)
           <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
-          <br>
 
           <label for="email">Email Address <span class="note">* required</span></label>
           <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
@@ -68,7 +67,7 @@
           {% if account is defined %}
             {{ f.errorList(account.getErrors('password')) }}
           {% endif %}
-
+          <br>
           <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
         {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
           <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">

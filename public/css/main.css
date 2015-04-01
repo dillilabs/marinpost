@@ -719,6 +719,11 @@ form > button {
 input[type="checkbox"], input[type="radio"] {
     margin: 0 .25em;
 }
+
+.account input[type="checkbox"], input[type="radio"] {
+    margin: 0 .25em 0 0;
+}
+
 fieldset.image, fieldset.document, .add-topic, .add-location {
     display: none;
 }
