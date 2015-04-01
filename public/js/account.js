@@ -22,10 +22,14 @@ $(function() {
   registerForm.submit(function(e) {
     var email = $(this).find('input#email');
     var confirmEmail = $(this).find('input#confirmEmail');
+    var password = $(this).find('input#password');
+    var confirmPassword = $(this).find('input#confirmPassword');
     var populated = true;
 
     clearErrors(email);
     clearErrors(confirmEmail);
+    clearErrors(password);
+    clearErrors(confirmPassword);
 
     if (isBlank(email)) {
       addError(email, 'Email Address is required.');
@@ -41,6 +45,23 @@ $(function() {
 
     if (populated && notEqual(email, confirmEmail)) {
       addError(confirmEmail, 'Does not match Email Address');
+      e.preventDefault();
+    }
+
+    if (isBlank(password)) {
+      addError(password, 'Password is required');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (isBlank(confirmPassword)) {
+      addError(confirmPassword, 'Password confirmation is required');
+      populated = false;
+      e.preventDefault();
+    }
+
+    if (populated && notEqual(password, confirmPassword)) {
+      addError(confirmPassword, 'Does not match New Password.');
       e.preventDefault();
     }
   });

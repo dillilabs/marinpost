@@ -68,6 +68,11 @@
             {{ f.errorList(account.getErrors('password')) }}
           {% endif %}
           <br>
+
+          <label for="confirmPassword">Re-enter Password <span class="note">* required</span></label>
+          <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
+          <br>
+
           <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
         {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
           <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
