@@ -75,8 +75,8 @@
       <li>{{ n.segmentLink('Media') }}</li>
       <li>{{ n.segmentLink('Letters') }}</li>
       <li>{{ n.segmentLink('Surveys') }}</li>
-      <li>
-        {{ n.segmentLink('Submit') }}
+      <li class="submit">
+          {{ n.pathLink('Submit', 'submit/blog') }}
         <ul>
           <li>{{ n.pathLInk('Blog', 'submit/blog') }}</li>
           <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
@@ -102,7 +102,7 @@
       {% if currentUser %}
         <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
         <li class="account">
-          {{ n.pathLink('My Account', 'account') }}
+          {{ n.pathLink('My Account', 'account/information') }}
           <ul>
             <li>{{ n.pathLInk('My Account', 'account/information') }}</li>
             <li>{{ n.pathLInk('Email Address', 'account/email') }}</li>
