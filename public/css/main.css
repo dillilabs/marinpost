@@ -277,10 +277,15 @@ header h2 {
     display: inline-block;
     vertical-align: top;
 }
-#mini-menu div li:last-of-type {
+
+#mini-menu div li {
     border-right: 1px solid;
     margin-right: 5px;
     padding-right: 5px;
+}
+
+#mini-menu div li:first-of-type {
+    border-right: none;
 }
 
 #mini-menu div {

@@ -44,7 +44,6 @@
       <li class="show-search">Search</li>
       <div class="clearfix">
       {% if currentUser %}
-        <li class="account"><a href="{{ url('account') }}">My Account</a></li>
         <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
       {% else %}
         <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
