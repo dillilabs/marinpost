@@ -486,6 +486,16 @@ main.single > .post > h3 {
     margin-bottom: 1em;
     padding-bottom: 1em;
 }
+
+.account .help {
+    color: #000;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding-top: .5em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 .download {
     background: url('../img/download.png') 0 2px scroll no-repeat;
     cursor: pointer;
