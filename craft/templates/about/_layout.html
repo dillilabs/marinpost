@@ -1,5 +1,6 @@
 <main class="single">
-  <div class="sub-nav filter">
+  <div class="sub-nav">
+      <div class="filter">
     {% block subNav %}
         {{ n.arrowLink('about', 'About Us') }}
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
@@ -19,6 +20,7 @@
         {{ n.arrowLink('about/sponsor', 'Sponsor Marin Post') }}
         {{ n.arrowLink('about/advertise', 'Advertise on Marin Post') }}
     {% endblock %}
+      </div>
   </div>
 
   <div class="list-wrapper">

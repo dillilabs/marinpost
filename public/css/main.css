@@ -366,7 +366,7 @@ nav ul ul {
 	width: 25%;
 }
 
-.about .sub-nav, .account .sub-nav, .submit .sub-nav {
+.about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav {
     margin-top: 1em;
 }
 .letters .sub-nav {
@@ -395,7 +395,7 @@ h3.my-content {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5 a, .sub-nav .filter h5, .my-content > a, .sub-nav h5 a:visited {
+.sub-nav h5, .sub-nav .filter h5, .my-content > a, .sub-nav h5 a:visited {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
@@ -1001,7 +1001,7 @@ footer {
 
     .filter {
         padding: 0;
-        margin-top: 29px;
+/*         margin-top: 29px; */
     }
 
     main, .notices-box {
