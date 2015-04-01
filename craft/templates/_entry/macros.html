@@ -95,17 +95,22 @@
   <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span>
 {% endmacro %}
 
+{%macro externalUrl(url) %}
+  {{ url matches '~^https?://~' ? url : 'http://'~url }}
+{% endmacro %}
+
 {% macro mediaUrl(entry) %}
+  {% from _self import externalUrl %}
 {% spaceless %}
 
   {% set media = entry.mediaLink.first %}
 
   {% switch media.type %}
     {% case 'video' %}
-      {% set mediaUrl = media.videoUrl %}
+      {% set mediaUrl = externalUrl(media.videoUrl) %}
 
     {% case 'document' %}
-      {% set mediaUrl = media.documentUrl %}
+      {% set mediaUrl = externalUrl(media.documentUrl) %}
 
     {% case 'upload' %}
       {% set file = media.document.first %}
@@ -118,7 +123,7 @@
 {% endmacro %}
 
 {% macro postImage(entry, transform) %}
-  {% from _self import mediaUrl, primaryImage %}
+  {% from _self import externalUrl, mediaUrl, primaryImage %}
 
   {% set transform = transform | default('list') %}
 
@@ -129,7 +134,7 @@
       <a href="{{ mediaUrl(entry) }}" target="_blank"><img src="{{ image }}"></a>
 
     {% case 'news' %}
-      <a href="{{ entry.newsLink }}" target="_blank"><img src="{{ image }}"></a>
+      <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
 
     {% default %}
       <a href="{{ entry.url }}"><img src="{{ image }}"></a>
@@ -217,7 +222,7 @@
 {% endmacro %}
 
 {% macro postSummary(entry) %}
-  {% from _self import mainContent, postBy, postTitle %}
+  {% from _self import externalUrl, mainContent, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
 
@@ -231,7 +236,7 @@
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
       <p>{{ content }}</p>
-      <a href="{{ entry.newsLink }}" target="_blank">Read Article</a>
+      <a href="{{ externalUrl(entry.newsLink) }}" target="_blank">Read Article</a>
 
     {% default %}
       {{ postTitle(entry) }}
