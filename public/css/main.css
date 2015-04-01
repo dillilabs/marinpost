@@ -190,7 +190,6 @@ fieldset > ul,
     margin: 1em 0;
 }
 .submit .comment-count,
-.account .comment-count,
 .contact .comment-count {
     display: none;
 }

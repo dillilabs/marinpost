@@ -2,8 +2,9 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}Create a MARIN POST Account{% endblock %}
     {% block post %}
-
+      <div class="help">Your personal information will never be shared with third parties.</div>
       <form method="post" accept-charset="UTF-8" id="register">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="users/saveUser">
