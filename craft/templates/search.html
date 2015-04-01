@@ -5,15 +5,16 @@
   {% set section = craft.request.param('section') %}
 
   {% set entries = craft.entries.search(searchTerms).order('score') %}
-  {% set entries = section ? entries.section(section) : entries %}
+  {% set entryIds = section ? entries.section(section).ids : entries.ids %}
 
   {% set authorIds = craft.users.search(searchTerms).order('score').ids | default([]) %}
+
   {% if authorIds %}
     {% set authorEntries = craft.entries.authorId(authorIds) %}
-    {% set authorEntries = section ? authorEntries.section(section) : authorEntries %}
+    {% set authorEntryIds = section ? authorEntries.section(section).ids : authorEntries.ids %}
 
-    {% if authorEntries %}
-      {% set entries = entries.find  | merge(authorEntries.find) %}
+    {% if authorEntryIds %}
+      {% set entryIds = entryIds | merge(authorEntryIds) %}
     {% endif %}
   {% endif %}
 {% endif %}
@@ -31,9 +32,9 @@
     {% block title %}Search Results{% endblock %}
     {% block post %}
       {% if query | length %}
-        {% if entries | length %}
+        {% if entryIds | length %}
           <ul class="posts">
-          {% for entry in entries %}
+          {% for entry in craft.entries.id(entryIds) %}
             {{ p.post(entry, true) }}
           {% endfor %}
           </ul>
