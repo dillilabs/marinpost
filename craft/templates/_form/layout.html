@@ -15,6 +15,9 @@
       <h2>
         {{ f.h2() }}
       </h2>
+
+      {% set path = craft.request.path starts with 'edit' ? 'edit' : craft.request.path %}
+      <div class="help">{{ n.siteMessage(path) }}</div>
     
       <form method="post" accept-charset="UTF-8" class="content-submission">
         {{ getCsrfInput() }}
