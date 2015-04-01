@@ -1,10 +1,1 @@
-{% requireLogin %}
-
-{% extends "_common/layout" %}
-
-{% block main %}
-  {% embed "account/_layout" %}
-    {% block post %}
-    {% endblock %}
-  {% endembed %}
-{% endblock %}
+{% redirect 'account/information' %}
