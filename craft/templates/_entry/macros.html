@@ -204,19 +204,32 @@
   <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
 {% endmacro %}
 
+{% macro authorOnlyLinks(entry) %}
+  {% if currentUser and currentUser.id == entry.authorId %}
+    <a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a>
+    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
+
+    {% if currentUser.isInGroup('contributor') and entry.status == 'live' %}
+      <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
+    {% endif %}
+
+    <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+  {% endif %}
+{% endmacro %}
+
 {% macro postBy(entry) %}
-  {% from _self import authorLink, commentCount, editLink %}
+  {% from _self import authorLink, authorOnlyLinks, commentCount %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}} {{ editLink(entry) }}</div>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}} {{ authorOnlyLinks(entry) }}</div>
 
     {% case 'news' %}
-      Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorLink(entry) }} {{ editLink(entry) }}
+      Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorLink(entry) }} {{ authorOnlyLinks(entry) }}
       <br>
 
     {% default %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ editLink(entry) }}</div>
+      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ authorOnlyLinks(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}
