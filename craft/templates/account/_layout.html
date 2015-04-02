@@ -23,46 +23,11 @@
     {% block post %}
       <h2 class="comment-count">{{ title }}</h2>
 
-      {% if title == 'My Subscription' %}
-        <div class="coming-soon">Coming soon!</div>
-
-      {% else %}
-        <div class="help">{{ n.siteMessage }}</div>
-
-        <ul class="posts">
-          {% for entry in entries %}
-            {{ p.post(entry) }}
-          {% endfor %}
-        </ul>
-        {#
-          {% for entry in entries %}
-            <tr>
-              <td>{{ entry.title }}</td>
-              <td>{{ entry.dateCreated | date('M d, Y') }}</td>
-              <td>
-                {% if entry.status != 'disabled' %}
-                  {{ entry.postDate | date('M d, Y') }}
-                {% endif %}
-              </td>
-              <td><a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a></td>
-              <td>
-                {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
-                  <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
-                {% endif %}
-              </td>
-              <td>
-                {% if currentUser.isInGroup('contributor') and entry.status == 'live' %}
-                  <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
-                {% endif %}
-              </td>
-              <td>
-                <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
-              </td>
-            </tr>
-          {% endfor %}
-        #}
-      {% endif %}
-
+      <ul class="posts">
+        {% for entry in entries %}
+          {{ p.post(entry) }}
+        {% endfor %}
+      </ul>
     {% endblock %}
   </div>
 </main>

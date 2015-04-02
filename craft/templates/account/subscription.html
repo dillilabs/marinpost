@@ -1,3 +1,12 @@
-{% set section = 'subscription' %}
-{% set title = 'My Subscription' %}
-{% extends "account/entries/_section" %}
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h2 class="comment-count">My Subscription</h2>
+      <div class="coming-soon">Coming soon!</div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
