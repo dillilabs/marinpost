@@ -366,9 +366,14 @@ nav ul ul {
 	width: 25%;
 }
 
-.about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav {
+.about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
     margin-top: 1em;
 }
+
+.about .sub-nav .filter, .account .sub-nav ul, .submit .sub-nav ul {
+    margin-top: 16px;
+}
+
 .letters .sub-nav {
     padding-top: 0;
 }
