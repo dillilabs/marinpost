@@ -1072,9 +1072,6 @@ footer {
         justify-content: flex-start;
     }
 
-    #comments {
-        width: 90%;
-    }
     #support {
         display: inline-block;
         padding: 0;
@@ -1238,14 +1235,13 @@ footer {
     #comments {
         display: inline-block;
         vertical-align: top;
-        width: 100%
     }
 
     .whats-new aside {
 	    display: inline-block;
 	    float: right;
-		padding: 0 20px;
-        width: 24%;
+		padding: 0;
+        width: 30%;
     }
 }
 
