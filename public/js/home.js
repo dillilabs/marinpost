@@ -21,7 +21,7 @@
               isLoadingContent = true;
 
               $.get(
-                '/filter?offset='+offset,
+                '/filter?unfiltered=true&offset='+offset,
                 function(data) {
                   if (data.length > contentLengthThreshold) {
                     content.append(data);

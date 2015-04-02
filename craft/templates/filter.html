@@ -21,10 +21,12 @@
 
 {% set entries = craft.mpentry.entries(filters, slice) %}
 
+{% set unfiltered = craft.request.param('unfiltered') | default(false)  %}
+
 {% import "_entry/macros" as m %}
 
 {% for entry in entries %}
-  {{ m.post(entry) }}
+  {{ m.post(entry, unfiltered) }}
 {% endfor %}
 
 {% endspaceless %}
