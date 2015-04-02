@@ -761,11 +761,12 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
     margin: 0;
 }
 
-button.donate, button.subscribe {
+button.donate, a.subscribe {
     background: #ff9669;
     border: none;
     border-radius: 25px;
     color: #000;
+    font-family: sans-serif;
     font-size: .85em;
     font-weight: bold;
     margin: 0 auto;
@@ -777,9 +778,9 @@ button.donate {
     background: #ff9669;
 }
 
-button.subscribe {
+a.subscribe {
     background: #00BFB0;
-    margin-bottom: 1em;
+    margin-bottom: 8em;
 }
 
 #share {
@@ -1199,6 +1200,10 @@ footer {
     #support h4, #subscribe h4, #subscribe p {
         display: block;
         text-align: center;
+    }
+
+    #subscribe p:first-of-type {
+        margin-top: 1em;
     }
 
     .notices-box {
