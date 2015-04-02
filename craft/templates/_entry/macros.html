@@ -201,10 +201,22 @@
 {% macro authorOnlyLinks(entry) %}
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a>
-    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
 
-    {% if currentUser.isInGroup('contributor') and entry.status == 'live' %}
-      <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
+    {% if currentUser.isInGroup('contributor') %}
+      {% if entry.status == 'live' %}
+        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
+        <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
+
+      {% else %}
+        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
+      {% endif %}
+
+    {% else %}
+      {# Guest user #}
+
+      {% if entry.status == 'disabled' %}
+        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
+      {% endif %}
     {% endif %}
 
     <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
