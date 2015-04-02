@@ -7,9 +7,9 @@
     {% block subNav %}
     {% endblock %}
 
-    {% block post %}
-      <h2>Contact The Marin Post</h2>
+    {% block title %}Contact The Marin Post{% endblock %}
 
+    {% block post %}
       <form method="post" class="contact" accept-charset="UTF-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="contactForm/sendMessage">
