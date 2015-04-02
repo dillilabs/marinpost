@@ -7,11 +7,6 @@
     {% block post %}
 
       <h2>Change My Email Address</h2>
-      <div class="help">{{ n.siteMessage }}</div>
-
-      {% if account is defined and not account.hasErrors %}
-        <h3>Updated</h3>
-      {% endif %}
 
       <form method="post" accept-charset="utf-8" id="update-email">
         {{ getCsrfInput() }}
