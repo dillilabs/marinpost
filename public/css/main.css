@@ -732,7 +732,7 @@ input[type="checkbox"], input[type="radio"] {
     margin: 0 .25em;
 }
 
-.account input[type="checkbox"], input[type="radio"] {
+.account main input[type="checkbox"], .account main input[type="radio"] {
     margin: 0 .25em 0 0;
 }
 
