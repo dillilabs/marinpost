@@ -560,7 +560,7 @@ ul.tags > li {
 #support, .notices-box, .filter {
     padding: 0 3%;
 }
-.filter fieldset > ul {
+.filter ul {
     display: none;
     font-size: .9em;
 }
