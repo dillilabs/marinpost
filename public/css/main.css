@@ -207,7 +207,7 @@ header {
     margin-bottom: 4px;
 }
 
-.header-wrapper a {
+.header-wrapper a.logo-link {
     color: #000;
 }
 
