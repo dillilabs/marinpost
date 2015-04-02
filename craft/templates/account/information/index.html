@@ -73,13 +73,6 @@
         {% endif %}
         <br>
 
-        <label for="phoneNumber">Phone Number</label>
-        <input type="text" id="phoneNumber" name="fields[phoneNumber]" value="{{ currentUser.phoneNumber }}" maxlength="20">
-        {% if account is defined %}
-          {{ f.errorList(account.getErrors('phoneNumber')) }}
-        {% endif %}
-        <br>
-
         <input type="submit" value="Update">
       </form>
     {% endblock %}
