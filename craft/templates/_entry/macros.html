@@ -194,18 +194,12 @@
   {% endswitch %}
 {% endmacro %}
 
-{% macro editLink(entry) %}
-  {% if currentUser and currentUser.isInGroup('contributor') and currentUser.id == entry.authorId %}
-    <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
-  {% endif %}
-{% endmacro %}
-
 {% macro commentCount(entry) %}
   <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
 {% endmacro %}
 
 {% macro authorOnlyLinks(entry) %}
-  {% if currentUser and currentUser.id == entry.authorId %}
+  {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a>
     <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
 
