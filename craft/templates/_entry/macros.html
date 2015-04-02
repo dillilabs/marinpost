@@ -53,7 +53,7 @@
 {% endspaceless %}
 {% endmacro %}
 
-{% macro authorLink(entry) %}
+{% macro contributorLink(entry) %}
   {% from _self import contributorUrl %}
 
   {% set author = entry.author %}
@@ -179,8 +179,6 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import authorLink %}
-
   {% switch entry.section.handle %}
     {% case 'blog' %}
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
@@ -224,18 +222,18 @@
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import authorLink, authorOnlyLinks, commentCount %}
+  {% from _self import authorOnlyLinks, commentCount, contributorLink %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.author.city}} {{ authorOnlyLinks(entry) }}</div>
+      <div class="byline">By {{ contributorLink(entry) }} - {{ entry.author.city}} {{ authorOnlyLinks(entry) }}</div>
 
     {% case 'news' %}
-      Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorLink(entry) }} {{ authorOnlyLinks(entry) }}
+      Posted {{ entry.postDate | date('M. d, Y') }} by {{ contributorLink(entry) }} {{ authorOnlyLinks(entry) }}
       <br>
 
     {% default %}
-      <div class="byline">By {{ authorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ authorOnlyLinks(entry) }}</div>
+      <div class="byline">By {{ contributorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ authorOnlyLinks(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}

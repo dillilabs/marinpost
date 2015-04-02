@@ -36,6 +36,8 @@
       {{ m.entries(entries['notices'], 'My Notices') }}
       {{ m.entries(entries['media'], 'My Media Links') }}
       {{ m.entries(entries['letters'], 'My Letters') }}
+
+      {% include "_common/disqus_count.html" %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
