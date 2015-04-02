@@ -1,0 +1,15 @@
+{% extends "_common/layout" %}
+
+{% set title = "Donate" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block subNav %}
+    {% endblock %}
+
+    {% block post %}
+      <h2>Donate</h2>
+      {{ entry.genericContent }}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
