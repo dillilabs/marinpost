@@ -462,7 +462,7 @@ ul.tags {
     padding-right: 3%;
 }
 
-.byline {
+.byline, .profession, .hometown {
     font-family: sans-serif;
     font-size: .924em;
 }
