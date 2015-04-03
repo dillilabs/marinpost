@@ -426,7 +426,6 @@ h3.my-content {
 
 }
 .filter ul > li label {
-    display: inline-block;
     vertical-align: middle;
     width: 90%;
 }
