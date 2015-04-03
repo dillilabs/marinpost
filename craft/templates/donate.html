@@ -4,12 +4,13 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}Donate{% endblock %}
+
     {% block subNav %}
     {% endblock %}
 
     {% block post %}
-      <h2>Donate</h2>
-      {{ entry.genericContent }}
+      {{ n.siteMessage }}
     {% endblock %}
   {% endembed %}
 {% endblock %}
