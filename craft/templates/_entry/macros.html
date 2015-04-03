@@ -230,14 +230,14 @@
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import commentCount, authorNameOrLink %}
+  {% from _self import authorNameOrLink, commentCount %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.author.city}}</div>
+      <div class="byline">By {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('M d, Y') }}{% endif %}</div>
 
     {% case 'news' %}
-      <div class="byline">Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorNameOrLink(entry) }}</div>
+      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('M d, Y') }}</div>
 
     {% default %}
       <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }}</div>
@@ -245,12 +245,20 @@
   {% endswitch %}
 {% endmacro %}
 
+{% macro letterUrl(entry) %}
+  {{- '/letters/' ~ entry.postDate | date('Y/m/d') -}}
+{% endmacro %}
+
 {% macro postSummary(entry) %}
-  {% from _self import externalUrl, mainContent, mediaUrl, postBy, postTitle %}
+  {% from _self import externalUrl, letterUrl, mainContent, mediaUrl, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
+  {% set maxChars = 200 %}
 
   {% switch entry.section.handle %}
+    {% case 'letters' %}
+      <p>{{ content | striptags | slice(0, maxChars) }} &hellip; <a class="more" href="{{ letterUrl(entry) }}">more »</a></p>
+
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
@@ -264,7 +272,7 @@
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content | striptags | slice(0, 200) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+      <p>{{ content | striptags | slice(0, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
 
   {% endswitch %}
 {% endmacro %}
@@ -288,9 +296,13 @@
     {% case 'letters' %}
       <li class="listing">
         <div>
-          {{ postTitle(entry) }}
-          {{ postBy(entry) }}
-          <p>{{ entry.letterContent }}</p>
+            {{ postTitle(entry) }}
+          {% if craft.request.segment(1) == 'letters' %}
+            <p>{{ entry.letterContent }}</p>
+          {% else %}
+            {{ postBy(entry) }}
+            {{ postSummary(entry) }}
+          {% endif %}
           {{ authorLinks(entry) }}
         </div>
       </li>
