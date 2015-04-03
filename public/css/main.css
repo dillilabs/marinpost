@@ -489,7 +489,7 @@ main.single > .post > h3 {
     width: 100%;
 }
 .help {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #C8D4E9;
     color: #676158;
     font-family: sans-serif;
     margin-bottom: 1em;
@@ -497,7 +497,7 @@ main.single > .post > h3 {
 }
 
 .coming-soon {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #C8D4E9;
     color: #000;
     font-family: sans-serif;
     font-size: 1.5em;
