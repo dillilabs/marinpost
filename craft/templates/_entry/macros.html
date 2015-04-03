@@ -186,6 +186,12 @@
     {% case 'notices' %}
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
 
+    {% case 'news' %}
+      <h3><a class="more" href="" target="_blank">{{ entry.title }}</a></h3>
+
+    {% case 'media' %}
+      <h3><a class="more" href="" target="_blank">{{ entry.title }}</a></h3>
+
     {% default %}
       <h3>{{ entry.title }}</h3>
 
@@ -229,8 +235,7 @@
       <div class="byline">By {{ contributorLink(entry) }} - {{ entry.author.city}} {{ authorOnlyLinks(entry) }}</div>
 
     {% case 'news' %}
-      Posted {{ entry.postDate | date('M. d, Y') }} by {{ contributorLink(entry) }} {{ authorOnlyLinks(entry) }}
-      <br>
+      <div class="byline">Posted {{ entry.postDate | date('M. d, Y') }} by {{ contributorLink(entry) }} {{ authorOnlyLinks(entry) }}</div>
 
     {% default %}
       <div class="byline">By {{ contributorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ authorOnlyLinks(entry) }}</div>
@@ -247,13 +252,12 @@
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }}</p>
+      <p>{{ content }} &hellip; <a class="more" href="" target="_blank">view media »</a></p>
 
     {% case 'news' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }}</p>
-      <a href="{{ externalUrl(entry.newsLink) }}" target="_blank">Read Article</a>
+      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more »</a></p>
 
     {% default %}
       {{ postTitle(entry) }}
