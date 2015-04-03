@@ -13,7 +13,7 @@
       <h2>My Personal Profile</h2>
       <div class="help">{{ n.siteMessage }}</div>
 
-      <form method="post" accept-charset="utf-8" enctype="multipart/form-data">
+      <form method="post" accept-charset="utf-8" enctype="multipart/form-data" class="profile-form">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
@@ -53,3 +53,8 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+  $('form.profile-form').formWysiwyg();
+{% endset %}
+{% includeJs js %}
