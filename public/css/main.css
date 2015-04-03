@@ -1218,7 +1218,7 @@ footer {
     }
 
     #featured {
-        display: inline-block;
+        display: block;
         margin-top: 1em;
     }
 
