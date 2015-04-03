@@ -696,7 +696,7 @@ a.optional-category-field {
 form input, form select {
     margin-bottom: .5em;
 }
-fieldset {
+#search fieldset, .form-wrapper fieldset {
     margin: 1em 0 .5em;
 }
 form input[type="text"], form input[type="password"],
