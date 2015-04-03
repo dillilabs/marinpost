@@ -9,11 +9,11 @@
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/login">
 
-        <h3><label for="loginName">Username or email</label></h3>
+        <label for="loginName">Username or email</label>
         <input id="loginName" type="text" name="loginName"
         value="{{ craft.session.rememberedUsername }}">
 
-        <h3><label for="password">Password</label></h3>
+        <label for="password">Password</label>
         <input id="password" type="password" name="password">
 
         <label>

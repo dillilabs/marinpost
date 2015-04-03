@@ -484,9 +484,6 @@ main.single {
 main.single > .post > h3 {
     font-size: 1.185em;
 }
-.media .posts > li {
-    padding: 1em 0;
-}
 .single iframe {
     width: 100%;
 }
