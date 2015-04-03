@@ -2,8 +2,9 @@
 
 {% block main %}
   {% embed "_common/single" %}
-    {% block post %}
+    {% block title %}Reset My Password{% endblock %}
 
+    {% block post %}
       <form method="post" accept-charset="UTF-8">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/forgotPassword">

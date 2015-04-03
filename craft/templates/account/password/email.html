@@ -2,11 +2,10 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}Account Created{% endblock %}
+
     {% block post %}
-
-      <h2>Thank you!</h3>
       <p>Please check your email for password reset instructions.</p>
-
     {% endblock %}
   {% endembed%}
 {% endblock %}

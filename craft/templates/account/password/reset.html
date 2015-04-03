@@ -2,6 +2,8 @@
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}Create New Password{% endblock %}
+
     {% block post %}
       <form method="post" accept-charset="UTF-8">
           {{ getCsrfInput() }}
