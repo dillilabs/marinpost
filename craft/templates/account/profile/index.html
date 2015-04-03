@@ -23,22 +23,30 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <label for="photoUrl">Photo</label>
-        <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" />
-        <br>
-        <input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
-        <br style="clear: both;">
+        <div class="field clearfix">
+	        <label for="photoUrl">Photo</label>
+	        <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" class="profile"/>
+	        <br>
+	        <input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
+        </div>
 
-        <label for="titleOrProfession">Title or Profession</label>
-        <input type="text" id="firstName" name="fields[titleOrProfession]" value="{{ currentUser.titleOrProfession }}" maxlength="64">
-        {% if account is defined %}
-          {{ f.errorList(account.getErrors('titleOrProfession')) }}
-        {% endif %}
-        <br>
+        <div class="field">
+	        <label for="titleOrProfession" class="required">Title or Profession</label> <span class="note">* required</span>
+	        <input type="text" id="firstName" name="fields[titleOrProfession]" value="{{ currentUser.titleOrProfession }}" maxlength="64">
+	        {% if account is defined %}
+	          {{ f.errorList(account.getErrors('titleOrProfession')) }}
+	        {% endif %}
+        </div>
 
-        <label for="bio">Bio</label>
-        <textarea id="bio" name="fields[bio]" rows="6">{{ currentUser.bio }}</textarea>
-        <br>
+        <div class="field">
+	        <label for="bio">Personal Bio</label> <span class="note">* required</span>
+	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" class="wysiwyg required" >{{ currentUser.bio }}</textarea>
+        </div>
+
+        <div class="field">
+            <label for="website">My Website</label>
+            <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter website URL address" value="{{ entry.webSite }}">
+        </div>
 
         <input type="submit" value="Update">
       </form>

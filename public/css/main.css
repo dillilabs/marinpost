@@ -1031,7 +1031,7 @@ footer {
 /* 		margin-left: 25%; */
 	}
 
-    ul.posts li img {
+    ul.posts li img, img.profile {
         display:inline-block;
         float: left;
         width: 160px;
