@@ -3,6 +3,8 @@
 {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(siteDefault.entriesPerPage).find %}
 {% set featured = entries | first %}
 
+{% set letters = craft.entries.section('letters').limit(siteDefault.entriesPerPage) %}
+
 {% block main %}
   {% embed "_common/home" %}
     {% block featured %}
@@ -24,16 +26,13 @@
         <h2>Letters</h2>
         <div id="comments">
           <ul>
+          {% for letter in letters %}
             <li>
-                <h4><a href="blog-post.html">Supervisors Need to Support Larkspur</a></h4>
-                <p>I found Mr. Johnson's statements about our Board of Supervisors…</p>
-                <a class="user" href="blogger.html">Brett Millard</a>
+              <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ letter.title }}</a></h4>
+              <p>{{ letter.letterContent | slice(0, 200) }} &hellip;</p>
+              {{ p.authorNameOrLink(letter, 'user') }}
             </li>
-            <li>
-                <h4><a href="blog-post.html">Kentfield Schools Assist Town</a></h4>
-                <p>We should all be grateful that the Kentfield School Board decided to reuse…</p>
-                <a class="user" href="blogger.html">Sally McDowell</a>
-            </li>
+          {% endfor %}
           </ul>
         </div>
       </aside>

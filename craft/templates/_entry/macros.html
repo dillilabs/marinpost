@@ -53,13 +53,13 @@
 {% endspaceless %}
 {% endmacro %}
 
-{% macro authorNameOrLink(entry) %}
+{% macro authorNameOrLink(entry, class) %}
   {% from _self import contributorUrl %}
 
   {% set author = entry.author %}
 
   {% if author.isInGroup('contributor') %}
-    <a href="{{ contributorUrl(author) }}">{{ author.name }}</a>
+    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ author.name }}</a>
 
   {% else %}
     {{ author.name }}
