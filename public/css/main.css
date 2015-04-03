@@ -400,7 +400,10 @@ h3.my-content {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5, .sub-nav .filter h5, .my-content > a, .sub-nav h5 a:visited {
+.sub-nav h5 a, .sub-nav h5 a:visited {
+    color: #000;
+}
+.sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
