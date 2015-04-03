@@ -246,7 +246,7 @@
 {% endmacro %}
 
 {% macro postSummary(entry) %}
-  {% from _self import externalUrl, mainContent, postBy, postTitle %}
+  {% from _self import externalUrl, mainContent, mediaUrl, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
 
@@ -254,7 +254,7 @@
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="" target="_blank">view media »</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media »</a></p>
 
     {% case 'news' %}
       {{ postTitle(entry) }}
