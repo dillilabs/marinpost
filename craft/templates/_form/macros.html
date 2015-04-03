@@ -18,7 +18,7 @@
 {% endmacro %}
 
 {% macro inputValueEnabled(entry) %}
-  {{- entry and entry.status != 'live' ? 0 : 1 -}}
+  {{- entry and entry.id and entry.status != 'live' ? 0 : 1 -}}
 {% endmacro %}
 
 {% macro inputEntryId(entry) %}
@@ -28,19 +28,18 @@
 {% endmacro %}
 
 {% macro inputSubmit(entry) %}
-  {% switch entry.status %}
-    {% case 'live' %}
-      <input type="button" class="submit" data-submit="publish" value="Update and Re-Publish">
+  {% if entry.status == 'live' %}
+    <input type="button" class="submit" data-submit="publish" value="Update and Re-Publish">
 
-    {% case 'disabled' %}
-      <input type="button" class="submit" data-submit="save" value="Update but do not Publish">
-      <input type="button" class="submit" data-submit="publish" value="Update and Publish">
+  {% elseif entry.id %}
+    <input type="button" class="submit" data-submit="save" value="Update but do not Publish">
+    <input type="button" class="submit" data-submit="publish" value="Update and Publish">
 
-    {% default %}
-      <input type="button" class="submit" data-submit="save" value="Create but do not Publish">
-      <input type="button" class="submit" data-submit="publish" value="Create and Publish">
+  {% else %}
+    <input type="button" class="submit" data-submit="save" value="Create but do not Publish">
+    <input type="button" class="submit" data-submit="publish" value="Create and Publish">
 
-  {% endswitch %}
+  {% endif %}
 
   <input type="button" class="submit" data-submit="cancel" value="Cancel">
 {% endmacro %}
