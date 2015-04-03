@@ -18,10 +18,10 @@
 
       <h3>{{ user.name }}</h3>
       {% if user.titleOrProfession %}
-        <p>{{ user.titleOrProfession }}</p>
+        <p class="profession">{{ user.titleOrProfession }}</p>
       {% endif %}
 
-      <p>{{ user.city }}, {{ user.state }}</p>
+      <p class="hometown">{{ user.city }}, {{ user.state }}</p>
 
       {% if user.bio %}
         <p>{{ user.bio }}</p>
