@@ -1254,10 +1254,6 @@ footer {
  }
 
 @media only screen and (min-width: 64em) { /* Extras for big size */
-    #featured {
-        display: inline-block;
-        margin-top: 1em;
-    }
     main {
         padding-bottom: 2em;
     }
