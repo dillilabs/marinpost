@@ -53,7 +53,7 @@
 {% endspaceless %}
 {% endmacro %}
 
-{% macro contributorLink(entry) %}
+{% macro authorNameOrLink(entry) %}
   {% from _self import contributorUrl %}
 
   {% set author = entry.author %}
@@ -202,43 +202,45 @@
   <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
 {% endmacro %}
 
-{% macro authorOnlyLinks(entry) %}
+{% macro authorLinks(entry) %}
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
-    <a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a>
+    <p class="author-links">
+      <a href="/view/{{ entry.id }}/{{ entry.slug }}">View</a>
 
-    {% if currentUser.isInGroup('contributor') %}
-      {% if entry.status == 'live' %}
-        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
-        <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
+      {% if currentUser.isInGroup('contributor') %}
+        {% if entry.status == 'live' %}
+          | <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
+          | <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a>
+
+        {% else %}
+          | <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
+        {% endif %}
 
       {% else %}
-        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
+        {# Guest user #}
+
+        {% if entry.status == 'disabled' %}
+          | <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
+        {% endif %}
       {% endif %}
 
-    {% else %}
-      {# Guest user #}
-
-      {% if entry.status == 'disabled' %}
-        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit/Publish</a>
-      {% endif %}
-    {% endif %}
-
-    <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+      | <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+    </p>
   {% endif %}
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import authorOnlyLinks, commentCount, contributorLink %}
+  {% from _self import commentCount, authorNameOrLink %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ contributorLink(entry) }} - {{ entry.author.city}} {{ authorOnlyLinks(entry) }}</div>
+      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.author.city}}</div>
 
     {% case 'news' %}
-      <div class="byline">Posted {{ entry.postDate | date('M. d, Y') }} by {{ contributorLink(entry) }} {{ authorOnlyLinks(entry) }}</div>
+      <div class="byline">Posted {{ entry.postDate | date('M. d, Y') }} by {{ authorNameOrLink(entry) }}</div>
 
     {% default %}
-      <div class="byline">By {{ contributorLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }} {{ authorOnlyLinks(entry) }}</div>
+      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('M d, Y') }} - {{ commentCount(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}
@@ -278,7 +280,7 @@
 {% endmacro %}
 
 {% macro post(entry, unfiltered) %}
-  {% from _self import postBy, postImage, postSummary, postTags, postTitle %}
+  {% from _self import authorLinks, postBy, postImage, postSummary, postTags, postTitle %}
 
   {% set unfiltered = unfiltered | default(false) %}
 
@@ -289,6 +291,7 @@
           {{ postTitle(entry) }}
           {{ postBy(entry) }}
           <p>{{ entry.letterContent }}</p>
+          {{ authorLinks(entry) }}
         </div>
       </li>
 
@@ -298,6 +301,7 @@
           {{ postImage(entry) }}
           {{ postTags(entry, unfiltered) }}
           {{ postSummary(entry) }}
+          {{ authorLinks(entry) }}
         </div>
       </li>
 

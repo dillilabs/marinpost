@@ -33,7 +33,7 @@
           <li>
               <h3>{{ entry.title }}</h3>
               <div class="byline">
-                {{ p.contributorLink(entry) }} &mdash; {{ entry.author.city }}
+                {{ p.authorNameOrLink(entry) }} &mdash; {{ entry.author.city }}
                 <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
               </div>
               <p>{{ entry.letterContent }}</p>
