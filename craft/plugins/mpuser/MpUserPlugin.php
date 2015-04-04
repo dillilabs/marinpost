@@ -8,13 +8,44 @@ class MpUserPlugin extends BasePlugin
     /**
      * Initialization:
      *
+     *  Inject Javascript into the Control Panel
+     *
      *  Listen to users.onBeforeSaveUser event
      */
     public function init()
     {
         parent::init();
         $this->settings = $this->getSettings();
+
+        if (craft()->request->isCpRequest())
+        {
+            $this->_ensureOneUserGroup();
+        }
+
         $this->_onBeforeSaveUserEvent();
+    }
+
+    //----------------------
+    // Private functions
+    //----------------------
+
+    /**
+     * Inject Javascript into the Control Panel to ensure that
+     * only one User Group is selected for a User.
+     */
+    private function _ensureOneUserGroup()
+    {
+        $js = <<<'JS'
+var groups = $('form#userform input[type=checkbox][name="groups[]"]');
+
+groups.click(function(e) {
+    if (groups.filter(':checked').length > 1) {
+        alert('Please select only one User Group.');
+        return false;
+    }
+});
+JS;
+        craft()->templates->includeJs($js);
     }
 
     //----------------------
@@ -98,7 +129,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.17';
+        return '0.0.18';
     }
 
     public function getDeveloper()
