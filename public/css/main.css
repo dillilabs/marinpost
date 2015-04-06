@@ -748,6 +748,11 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
     display: none;
 }
 
+.first-option {
+	color: #666;	
+}
+
+
 /* * * * * * * * * * * * * * * * * * * * *
         SUPPORT
 * * * * * * * * * * * * * * * * * * * * * */

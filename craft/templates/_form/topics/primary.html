@@ -3,7 +3,7 @@
 {% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
 
 <select id="primaryTopic" name="fields[primaryTopic][]" class="required array">
-  <option value="">Select one - This will be the Topic associated with your post on the Home page</option>
+  <option value="" class="first-option">Select one - The Topic will be posted on the Home Page</option>
 {% for option in craft.categories.group('topics') %}
   <option value="{{ option.id }}" {%- if option.id == primaryTopicId %}selected{% endif %}>{{ option.title }}</option>
 {% endfor %}
