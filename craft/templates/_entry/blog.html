@@ -4,7 +4,12 @@
   {% embed "_common/single" %}
     {% block title %}Blog Post{% endblock %}
     {% block post %}
+    <div class="image-wrapper">
       <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+      {% for block in entry.blogImages.limit(1) %}
+      <p class="image-credit">{{ block.by }}</p>
+      {% endfor %}
+    </div>
 
       {{ p.postTags(entry, false, true) }}
       {{ p.postTitle(entry) }}
