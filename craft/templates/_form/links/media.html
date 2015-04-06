@@ -34,52 +34,52 @@
   {% set key = mediaBlock.id | default('new1') %}
 {% endif %}
 
-<br>
-<label for="mediaLink" class="required">Media Link</label>
-
-<input type="hidden" name="fields[mediaLink]">
-<input type="hidden" name="fields[mediaLink][{{ key }}]">
-<input type="hidden" name="fields[mediaLink][{{ key }}][type]" id="mediaType" value="{{ mediaType }}">
-
-<input type="hidden" id="originalMediaType" value="{{ mediaType }}">
-<input type="hidden" id="originalMediaLinkBlockId" value="{{ key }}">
-
-<input type="radio" name="mediaTypeSelect" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link to a video
-<input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
-<input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
-
-<input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
-<input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
-
-<input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
-<select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-  <option value=""></option>
-{% if folder %}
-  {% for asset in craft.assets.folderId(folder.id) %}
-    <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-  {% endfor %}
-{% endif %}
-</select>
-
-<label for="documentTitle" class="mediaLink upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>Document title</label>
-<input type="text" name="fields[mediaLink][{{ key }}][fields][documentTitle]" class="mediaLink upload" value="{{ documentTitle }}" autocomplete="off" placeholder="Title of document (optional)" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-
-<div class="file upload mediaLink" {%- if mediaType != 'upload' %}style="display: none;"{% endif -%}>
-  <span class="fileinput-button">
-      <span>Upload .pdf file</span>
-      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-  </span>
-  <br>
-  <div>
-      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-  </div>
+<div class="field">
+    <label for="mediaLink" class="required">Media Link</label>
+    
+    <input type="hidden" name="fields[mediaLink]">
+    <input type="hidden" name="fields[mediaLink][{{ key }}]">
+    <input type="hidden" name="fields[mediaLink][{{ key }}][type]" id="mediaType" value="{{ mediaType }}">
+    
+    <input type="hidden" id="originalMediaType" value="{{ mediaType }}">
+    <input type="hidden" id="originalMediaLinkBlockId" value="{{ key }}">
+    
+    <input type="radio" name="mediaTypeSelect" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link to a video
+    <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
+    <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
+    
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
+    
+    <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
+    <select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
+      <option value=""></option>
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+      {% endfor %}
+    {% endif %}
+    </select>
+    
+    <label for="documentTitle" class="mediaLink upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>Document title</label>
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][documentTitle]" class="mediaLink upload" value="{{ documentTitle }}" autocomplete="off" placeholder="Title of document (optional)" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
+    
+    <div class="file upload mediaLink" {%- if mediaType != 'upload' %}style="display: none;"{% endif -%}>
+      <span class="fileinput-button">
+          <span>Upload .pdf file</span>
+          <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+          <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+      </span>
+      <br>
+      <div>
+          <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+      </div>
+    </div>
+    
+    {% if linkBlock %}
+      {{ f.errorList(linkBlock.allErrors) }}
+    {% endif %}
 </div>
-
-{% if linkBlock %}
-  {{ f.errorList(linkBlock.allErrors) }}
-{% endif %}
-<br>
 
 {% set js %}
 $(function() {

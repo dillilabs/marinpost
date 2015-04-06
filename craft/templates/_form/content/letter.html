@@ -1,11 +1,13 @@
-<label for="letterContent" class="required">Letter</label>
-
-<textarea id="letterContent" name="fields[letterContent]" cols="60" rows="12" class="limited required" data-limit="2000" placeholder="Write or copy & paste your letter here (maximum of 2000 characters)">
-{%- if entry is defined %}{{ entry.letterContent }}{% endif -%}
-</textarea>
-
-<div class="characters-remaining">Characters remaining: <span class="count"></span></div>
-
-{% if entry is defined %}
-  {{ f.errorList(entry.getErrors('letterContent')) }}
-{% endif %}
+<div class="field">
+    <label for="letterContent" class="required">Letter</label>
+    
+    <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="12" class="limited required" data-limit="2000" placeholder="Write or copy & paste your letter here (maximum of 2000 characters)">
+    {%- if entry is defined %}{{ entry.letterContent }}{% endif -%}
+    </textarea>
+    
+    <div class="characters-remaining">Characters remaining: <span class="count"></span></div>
+    
+    {% if entry is defined %}
+      {{ f.errorList(entry.getErrors('letterContent')) }}
+    {% endif %}
+</div>

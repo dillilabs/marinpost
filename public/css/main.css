@@ -643,7 +643,7 @@ label.check {
     font-size: 0.9em;
 }
 .field {
-    padding: .5em 0;
+/*     padding: .5em 0; */
 }
 .field .redactor-box {
     margin-bottom: 0;
@@ -693,7 +693,7 @@ a.optional-category-field {
 form input, form select {
     margin-bottom: .5em;
 }
-#search fieldset, .form-wrapper fieldset {
+#search fieldset {
     margin: 1em 0 .5em;
 }
 form input[type="text"], form input[type="password"],

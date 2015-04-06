@@ -12,79 +12,88 @@
           <input type="hidden" name="action" value="users/saveUser">
           <input type="hidden" name="redirect" value="account/register/email">
 
-          <label for="firstName">First Name <span class="note">* required</span></label>
-          <input type="text" id="firstName" name="firstName" maxlength="30" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('firstName')) }}
-          {% endif %}
-
-          <label for="lastName">Last Name <span class="note">* required</span></label>
-          <input type="text" id="lastName" name="lastName" maxlength="30" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('lastName')) }}
-          {% endif %}
-
-          <label for="organization">Street Address <span class="note">* required</span></label>
-          <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="128" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('streetAddress')) }}
-          {% endif %}
-
-          <label for="city">City <span class="note">* required</span></label>
-          <input type="text" id="city" name="fields[city]" maxlength="30" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('city')) }}
-          {% endif %}
-
-          <label for="state">State <span class="note">* required</span></label>
-          <select id="state" name="fields[state]">
-          {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-            <option value="{{ option.value }}" {%- if account is defined and option.value == account.state.value %}selected{% endif %}>{{ option.label }}</option>
-          {% endfor %}
-          </select>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('state')) }}
-          {% endif %}
-
-          <label for="zipCode">Zip Code <span class="note">* required</span></label>
-          <input type="text" id="zipCode" name="fields[zipCode]" maxlength="5" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('zipCode')) }}
-          {% endif %}
-
-          <label for="organization">Organization</label> (optional)
-          <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
-
-          <label for="email">Email Address <span class="note">* required</span></label>
-          <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('email')) }}
-          {% endif %}
-
-          <label for="confirmEmail">Re-enter Email Address <span class="note">* required</span></label>
-          <input id="confirmEmail" type="text" maxlength="64" autocomplete="off">
-
-          <label for="password">Password <span class="note">* required</span></label>
-          <input id="password" type="password" name="password" maxlength="32" autocomplete="off" placeholder="Password must be at least 8 letters, numbers or characters.">
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('password')) }}
-          {% endif %}
-          <br>
-
-          <label for="confirmPassword">Re-enter Password <span class="note">* required</span></label>
-          <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
-          <br>
-
-          <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
-        {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
-          <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
-        {% endfor %}
-          <label for="termsOfUse">I agree to the Marin Post <a href="/about/terms">Terms and Conditions</a> and <a href="/about/privacy">Privacy Policy</a>.</label>
-          {% if account is defined %}
-            {{ f.errorList(account.getErrors('termsOfUse')) }}
-          {% endif %}
-          <br>
-          <br>
+          <div class="field">
+              <label for="firstName">First Name <span class="note">* required</span></label>
+              <input type="text" id="firstName" name="firstName" maxlength="30" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('firstName')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="lastName">Last Name <span class="note">* required</span></label>
+              <input type="text" id="lastName" name="lastName" maxlength="30" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('lastName')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="organization">Street Address <span class="note">* required</span></label>
+              <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="128" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('streetAddress')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="city">City <span class="note">* required</span></label>
+              <input type="text" id="city" name="fields[city]" maxlength="30" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('city')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="state">State <span class="note">* required</span></label>
+              <select id="state" name="fields[state]">
+              {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+                <option value="{{ option.value }}" {%- if account is defined and option.value == account.state.value %}selected{% endif %}>{{ option.label }}</option>
+              {% endfor %}
+              </select>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('state')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="zipCode">Zip Code <span class="note">* required</span></label>
+              <input type="text" id="zipCode" name="fields[zipCode]" maxlength="5" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('zipCode')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="organization">Organization</label> (optional)
+              <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
+          </div>
+          <div class="field">
+              <label for="email">Email Address <span class="note">* required</span></label>
+              <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('email')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="confirmEmail">Re-enter Email Address <span class="note">* required</span></label>
+              <input id="confirmEmail" type="text" maxlength="64" autocomplete="off">
+          </div>
+          <div class="field">
+              <label for="password">Password <span class="note">* required</span></label>
+              <input id="password" type="password" name="password" maxlength="32" autocomplete="off" placeholder="Password must be at least 8 letters, numbers or characters.">
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('password')) }}
+              {% endif %}
+          </div>
+          <div class="field">
+              <label for="confirmPassword">Re-enter Password <span class="note">* required</span></label>
+              <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
+          </div>
+          <div class="field">
+              <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
+            {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
+              <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
+            {% endfor %}
+              <label for="termsOfUse">I agree to the Marin Post <a href="/about/terms">Terms and Conditions</a> and <a href="/about/privacy">Privacy Policy</a>.</label>
+              {% if account is defined %}
+                {{ f.errorList(account.getErrors('termsOfUse')) }}
+              {% endif %}
+          </div>
           <input type="submit" value="Create Account">
       </form>
 

@@ -1,8 +1,10 @@
-<label for="noticeContent" class="required">Notice text <span class="note">* required</span></label>
-<textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" placeholder="Create your notice here (limit 2,000 characters)">
-{%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
-</textarea>
-
-{% if entry is defined %}
-  {{ f.errorList(entry.getErrors('noticeContent')) }}
-{% endif %}
+<div class="field">
+    <label for="noticeContent" class="required">Notice text <span class="note">* required</span></label>
+    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" placeholder="Create your notice here (limit 2,000 characters)">
+    {%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
+    </textarea>
+    
+    {% if entry is defined %}
+      {{ f.errorList(entry.getErrors('noticeContent')) }}
+    {% endif %}
+</div>

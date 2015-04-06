@@ -16,7 +16,7 @@
   {% set key = documentBlock.id | default('new') %}
 {% endif %}
 
-<br>
+<div class="field">
 <label>Attach a Document</label>
 
 {% if not errors %}
@@ -60,7 +60,7 @@
 
   <a href="#" class="document-field close">Done</a>
 </div>
-<br>
+        </div>
 
 {% set js %}
 $(function() {

@@ -16,50 +16,51 @@
   {% set key = documentBlock.id | default('new') %}
 {% endif %}
 
-<label>Attach a Document</label>
-
-{% if not errors %}
-  <a href="#" class="document-field open">{{ document ? 'Replace/Remove' : 'Upload/Select' }}</a>
-{% endif %}
-
-<div class="document-field inputs" {%- if not errors %}style="display: none;"{% endif %}>
-  <div>
-    <span class="fileinput-button">
-      <span>Upload .pdf document</span>
-      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-    </span>
-    <br>
-    <div>
-      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-    </div>
-  </div>
-  <br>
-
-  <input type="hidden" name="fields[noticeDocuments]">
-  <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
-  <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]">
-  <select class="s3direct document" name="fields[noticeDocuments][{{ key }}][fields][document][]">
-    <option value=""></option>
-    {% if folder %}
-      {% for asset in craft.assets.folderId(folder.id) %}
-        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-      {% endfor %}
+<div class="field">
+    <label>Attach a Document</label>
+    
+    {% if not errors %}
+      <a href="#" class="document-field open">{{ document ? 'Replace/Remove' : 'Upload/Select' }}</a>
     {% endif %}
-  </select>
-  <br>
-
-  <label for="document-title">Document title</label>
-  <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
-  <br>
-
-  {% if errors %}
-    {{ f.errorList(documentBlock.allErrors) }}
-  {% endif %}
-
-  <a href="#" class="document-field close">Done</a>
+    
+    <div class="document-field inputs" {%- if not errors %}style="display: none;"{% endif %}>
+      <div>
+        <span class="fileinput-button">
+          <span>Upload .pdf document</span>
+          <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+          <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+        </span>
+        <br>
+        <div>
+          <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+        </div>
+      </div>
+      <br>
+    
+      <input type="hidden" name="fields[noticeDocuments]">
+      <input type="hidden" name="fields[noticeDocuments][{{ key }}][type]" value="document">
+      <input type="hidden" name="fields[noticeDocuments][{{ key }}][fields][document]">
+      <select class="s3direct document" name="fields[noticeDocuments][{{ key }}][fields][document][]">
+        <option value=""></option>
+        {% if folder %}
+          {% for asset in craft.assets.folderId(folder.id) %}
+            <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+          {% endfor %}
+        {% endif %}
+      </select>
+      <br>
+    
+      <label for="document-title">Document title</label>
+      <input type="text" name="fields[noticeDocuments][{{ key }}][fields][documentTitle]" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+      <br>
+    
+      {% if errors %}
+        {{ f.errorList(documentBlock.allErrors) }}
+      {% endif %}
+    
+      <a href="#" class="document-field close">Done</a>
+    </div>
 </div>
-<br>
 
 {% set js %}
 $(function() {

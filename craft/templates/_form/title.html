@@ -1,7 +1,7 @@
-<label for="title" class="required">Title <span class="note">* required</span></label>
-
-<input type="text" name="title" autocomplete="off" {%- if entry is defined %} value="{{ entry.title }}"{% endif -%} placeholder="Title of your post" class="required">
-
+<div class="field">
+    <label for="title" class="required">Title <span class="note">* required</span></label>
+    <input type="text" name="title" autocomplete="off" {%- if entry is defined %} value="{{ entry.title }}"{% endif -%} placeholder="Title of your post" class="required">
 {% if entry is defined %}
   {{ f.errorList(entry.getErrors('title')) }}
 {% endif %}
+</div>
