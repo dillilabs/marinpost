@@ -7,11 +7,11 @@
     {% block post %}
       {% if error is defined %}
         <h2>Error</h2>
-        <p>{{ error}}</p>
+        <p class="result-message">{{ error}}</p>
 
       {% else %}
         <h2>Success</h2>
-        <p>{{ success}}</p>
+        <p class="result-message">{{ success}}</p>
 
       {% endif %}
     {% endblock %}

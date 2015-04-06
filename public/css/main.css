@@ -1035,6 +1035,10 @@ footer {
     	text-align: justify;
 	}
 	
+	.result-message {
+		font-size: 1.2em;
+	}
+	
 	.list-wrapper ul.posts {
     	width: 100%;
 	}

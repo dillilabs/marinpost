@@ -10,9 +10,9 @@
     {% block title %}Contact The Marin Post{% endblock %}
 
     {% block post %}
-      <p>Thank you, {{ craft.request.query('name') }}!</p>
+      <p class="result-message">Thank you, {{ craft.request.query('name') }}!</p>
 
-      <p>We will contact you shortly via {{ craft.request.query('email') }}.</p>
+      <p class="result-message">We will contact you shortly via {{ craft.request.query('email') }}.</p>
     {% endblock %}
   {% endembed %}
 {% endblock %}
