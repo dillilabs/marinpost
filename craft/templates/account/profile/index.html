@@ -23,7 +23,7 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <div class="field clearfix">
+        <div class="field account-profile clearfix">
 	        <label for="photoUrl">Photo</label>
 	        <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" class="profile"/>
 	        <br>

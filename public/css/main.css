@@ -649,6 +649,11 @@ label.check {
 .field {
 /*     padding: .5em 0; */
 }
+
+.field.account-profile {
+    margin-bottom: .5em;
+}
+
 .field .redactor-box {
     margin-bottom: 0;
 }
