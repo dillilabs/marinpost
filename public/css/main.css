@@ -495,6 +495,10 @@ main.single > .post > h3 {
     padding-bottom: 1em;
 }
 
+.help p {
+    text-align: justify;
+}
+
 .coming-soon {
     border-bottom: 1px solid #C8D4E9;
     color: #000;
@@ -1020,6 +1024,10 @@ footer {
 	.form-wrapper {
     	float: right;
     	width: 68%;
+	}
+	
+	.list-wrapper p, .post p, #comments p {
+    	text-align: justify;
 	}
 	
 	.list-wrapper ul.posts {
