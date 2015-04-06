@@ -10,8 +10,10 @@
         <input type="hidden" name="action" value="users/forgotPassword">
         <input type="hidden" name="redirect" value="account/password/email">
 
-        <h3><label for="loginName">Email</label></h3>
-        <input id="loginName" type="text" name="loginName" value="{% if loginName is defined %}{{ loginName }}{% else %}{{ craft.session.rememberedUsername }}{% endif %}" autocompete="off">
+        <div class="field">
+            <label for="loginName">Email</label>
+            <input id="loginName" type="text" name="loginName" value="{% if loginName is defined %}{{ loginName }}{% else %}{{ craft.session.rememberedUsername }}{% endif %}" autocompete="off">
+        </div>
 
         {% if errors is defined %}
           <ul class="errors">

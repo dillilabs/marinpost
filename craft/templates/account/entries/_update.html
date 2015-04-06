@@ -6,12 +6,12 @@
   {% embed "account/_layout" %}
     {% block post %}
       {% if error is defined %}
-        <h3>Error</h3>
-        {{ error}}
+        <h2>Error</h2>
+        <p>{{ error}}</p>
 
       {% else %}
-        <h3>Success</h3>
-        {{ success}}
+        <h2>Success</h2>
+        <p>{{ success}}</p>
 
       {% endif %}
     {% endblock %}

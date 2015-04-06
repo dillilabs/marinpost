@@ -18,24 +18,24 @@
           {{ f.errorList(account.allErrors) }}
         {% endif %}
 
-        <label for="email" class="required">New Email Address</label>
-        <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}" class="required">
-        {% if account is defined %}
-          {{ f.errorList(account.getErrors('email')) }}
-        {% endif %}
-        <br>
-
-        <label for="confirmEmail" class="required">Re-enter New Email Address</label>
-        <input type="text" id="confirmEmail" autocomplete="off" class="required">
-        <br>
-
-        <label for="password" class="required">Current Password <small>for security</small></label>
-        <input type="password" id="password" name="password" autocomplete="off" class="required">
-        {% if account is defined %}
-          {{ f.errorList(account.getErrors('password')) }}
-        {% endif %}
-        <br>
-
+        <div class="field">
+            <label for="email" class="required">New Email Address</label>
+            <input type="text" id="email" name="email" autocomplete="off" value="{{ currentUser.email }}" class="required">
+            {% if account is defined %}
+              {{ f.errorList(account.getErrors('email')) }}
+            {% endif %}
+        </div>
+        <div class="field">
+            <label for="confirmEmail" class="required">Re-enter New Email Address</label>
+            <input type="text" id="confirmEmail" autocomplete="off" class="required">
+        </div>
+        <div class="field">
+            <label for="password" class="required">Current Password <small>for security</small></label>
+            <input type="password" id="password" name="password" autocomplete="off" class="required">
+            {% if account is defined %}
+              {{ f.errorList(account.getErrors('password')) }}
+            {% endif %}
+        </div>
         <input type="submit" value="Update">
       </form>
     {% endblock %}

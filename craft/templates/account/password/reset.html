@@ -12,8 +12,10 @@
           <input type="hidden" name="id" value="{{ id }}">
           <input type="hidden" name="redirect" value="">
 
-          <h3><label for="newPassword">New Password</label></h3>
+        <div class="field">
+          <label for="newPassword">New Password</label>
           <input id="newPassword" type="password" name="newPassword">
+        </div>
 
           {% if errors is defined %}
             <ul class="errors">

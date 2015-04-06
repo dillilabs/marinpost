@@ -16,7 +16,7 @@
   {% embed "account/_layout" %}
     {% block post %}
       <h2>Success</h2>
-      {{ entry.status == 'disabled' ? 'Saved' : 'Published' }} <i>{{ entry.title }}</i> in <b>{{ entry.section }}</b>
+      <p>{{ entry.status == 'disabled' ? 'Saved' : 'Published' }} <i>{{ entry.title }}</i> in <b>{{ entry.section }}</b></p>
     {% endblock %}
   {% endembed %}
 {% endblock %}
