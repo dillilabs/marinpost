@@ -46,7 +46,7 @@
   {% if path == current %}
     <h5 class="active">{{ text }}</h5>
   {% else %}
-    <h5><a href="/{{ path }}">{{ text }}</a></h5>
+    <a href="/{{ path }}"><h5>{{ text }}</h5></a>
   {% endif %}
 {% endmacro %}
 
