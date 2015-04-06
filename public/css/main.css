@@ -1031,7 +1031,7 @@ footer {
     	width: 68%;
 	}
 	
-	.list-wrapper p, .post p, .list-wrapper li, .post li, #comments p {
+	.list-wrapper p, .post p, .list-wrapper li, .post li {
     	text-align: justify;
 	}
 	
