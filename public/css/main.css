@@ -456,6 +456,10 @@ ul.tags {
     padding-right: 3%;
 }
 
+#featured h3, .post h3 {
+    font-family: 'Georgia', serif;
+}
+
 #featured p {
     font-size: 1.05em;
     margin-bottom: 0;
