@@ -11,6 +11,10 @@ $(function() {
     return field.val().trim().length == 0;
   };
 
+  var tooShort = function(field) {
+    return field.val().trim().length < 8;
+  }
+
   var notEqual = function(field, otherField) {
     return field.val() !== otherField.val();
   }
@@ -24,7 +28,7 @@ $(function() {
     var confirmEmail = $(this).find('input#confirmEmail');
     var password = $(this).find('input#password');
     var confirmPassword = $(this).find('input#confirmPassword');
-    var populated = true;
+    var populated = { email: true, password: true };
 
     clearErrors(email);
     clearErrors(confirmEmail);
@@ -33,35 +37,40 @@ $(function() {
 
     if (isBlank(email)) {
       addError(email, 'Email Address is required.');
-      populated = false;
+      populated.email = false;
       e.preventDefault();
     }
 
-    if (isBlank(confirmEmail)) {
+    if (populated.email && isBlank(confirmEmail)) {
       addError(confirmEmail, 'Email Address confirmation is required.');
-      populated = false;
+      populated.email = false;
       e.preventDefault();
     }
 
-    if (populated && notEqual(email, confirmEmail)) {
+    if (populated.email && notEqual(email, confirmEmail)) {
       addError(confirmEmail, 'Does not match Email Address');
       e.preventDefault();
     }
 
     if (isBlank(password)) {
       addError(password, 'Password is required');
-      populated = false;
+      populated.password = false;
       e.preventDefault();
     }
 
-    if (isBlank(confirmPassword)) {
+    if (populated.password && isBlank(confirmPassword)) {
       addError(confirmPassword, 'Password confirmation is required');
-      populated = false;
+      populated.password = false;
       e.preventDefault();
     }
 
-    if (populated && notEqual(password, confirmPassword)) {
+    if (populated.password && notEqual(password, confirmPassword)) {
       addError(confirmPassword, 'Does not match New Password.');
+      e.preventDefault();
+    }
+
+    if (populated.password && tooShort(password)) {
+      addError(password, 'Must have at least 8 characters.');
       e.preventDefault();
     }
   });
@@ -82,7 +91,7 @@ $(function() {
       e.preventDefault();
     }
 
-    if (isBlank(confirmEmail)) {
+    if (populated && isBlank(confirmEmail)) {
       addError(confirmEmail, 'Email Address confirmation is required.');
       populated = false;
       e.preventDefault();
@@ -123,6 +132,11 @@ $(function() {
 
     if (populated && notEqual(newPassword, confirmPassword)) {
       addError(confirmPassword, 'Does not match New Password.');
+      e.preventDefault();
+    }
+
+    if (populated && tooShort(newPassword)) {
+      addError(newPassword, 'Must have at least 8 characters.');
       e.preventDefault();
     }
 
