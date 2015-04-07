@@ -470,6 +470,15 @@ ul.tags {
     float:right;
 }
 
+p.author-links {
+  float: right;
+  margin-top: 0;
+}
+
+br.author-links {
+  clear: both;
+}
+
 main {
     padding: 0 1em;
 }
