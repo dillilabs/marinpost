@@ -831,11 +831,21 @@ a.subscribe {
    	width: 30%;
 }
 
-.rrssb-buttons {
+#share ul {
+	list-style: none;
 	margin: 0 auto;
+	padding: 0 10%;
+	text-align: right;
 }
-.rrssb-buttons li {
 
+#share li {
+	display: inline-block;
+	margin-right: 3%;
+	width: 12%;
+}
+
+#share li:last-of-type {
+	margin-right: 0;
 }
 
 footer {
@@ -1232,12 +1242,16 @@ footer {
 
     .sidebar {
         display: inline-block;
-        margin: 0.5em 0 1em .5em;
+        margin: 1em 0 1em .5em;
         padding: 0;
         text-align: left;
         vertical-align: top;
         width: 26%;
         z-index: 0;
+    }
+
+    #support {
+        width: 100%;
     }
 
     #support div {
