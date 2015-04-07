@@ -4,10 +4,10 @@
   {% embed "_common/single" %}
     {% block title %}Blog Post{% endblock %}
     {% block post %}
-    <div class="image-wrapper">
-      <img src="{{ p.primaryImage(entry, 'hero') }}"/>
-      <p class="image-credit">{{ p.primaryImageBy(entry) }}</p>
-    </div>
+      <div class="image-wrapper">
+        <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+        <p class="image-credit">{{ p.primaryImageBy(entry) }}</p>
+      </div>
 
       {{ p.postTags(entry, false, true) }}
       {{ p.postTitle(entry) }}
@@ -16,7 +16,6 @@
       <p>{{ entry.blogContent }}</p>
 
       {{ p.documents(entry.blogDocuments) }}
-      {{ p.otherImages(entry.blogImages) }}
 
       {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
