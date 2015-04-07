@@ -88,7 +88,6 @@
             var removeEmptyImageFields = function() {
               var image = form.find('select[name$="[fields][image][]"]');
               var by = form.find('input[type=text][name$="[fields][by]"]');
-              var disclaimer = form.find('input[type=checkbox][name$="[fields][disclaimer][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
               if (image.val() == '') {
@@ -97,7 +96,7 @@
                 // If all fields are empty then assume no image
                 // and explicitly remove all of the associated fields
                 // else Craft will assume incomplete data and return validation errors.
-                if ($.trim(by.val()) == '' && disclaimer.is(':not(:checked)')) {
+                if (by.val().trim().length == 0) {
                   form.find('.image-field.inputs').remove();
                 }
               }
@@ -114,7 +113,7 @@
                 // If all fields are empty then assume no document
                 // and explicitly remove all of the associated fields
                 // else Craft will assume incomplete data and return validation errors.
-                if ($.trim(title.val()) == '') {
+                if (title.val().trim().length == 0) {
                   form.find('.document-field.inputs').remove();
                 }
               }

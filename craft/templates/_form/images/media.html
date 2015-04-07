@@ -5,7 +5,6 @@
 {% set imageBlock = false %}
 {% set image = false %}
 {% set by = false %}
-{% set disclaimer = false %}
 {% set errors = false %}
 {% set key = 'new' %}
 
@@ -13,10 +12,6 @@
   {% set imageBlock = entry.mediaImages.first %}
   {% set image = imageBlock.image.first %}
   {% set by = imageBlock.by %}
-
-  {% for option in imageBlock.disclaimer.getOptions  %}
-    {% set disclaimer = option.selected %}
-  {% endfor %}
 
   {% set errors = imageBlock.hasErrors %}
   {% set key = imageBlock.id | default('new') %}
@@ -60,13 +55,6 @@
 
   <label for="image-by" class="required">Image by</label>
   <input type="text" name="fields[mediaImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
-
-  <div class="field">
-	  <label for="image-disclaimer" class="required">Legal</label>
-	  <input type="hidden" name="fields[mediaImages][{{ key }}][fields][disclaimer]">
-	  <input type="checkbox" name="fields[mediaImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
-	  <span class="legal">Yes I have the right to use this image</span>
-  </div>
 
   {% if errors %}
     {{ f.errorList(imageBlock.allErrors) }}
