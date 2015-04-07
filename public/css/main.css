@@ -1037,7 +1037,7 @@ footer {
     .featured img {
         display: inline-block;
         float: left;
-        margin: 0 20px 0 0;
+        margin: 0;
         width: 325px;
     }
 
@@ -1076,6 +1076,9 @@ footer {
         display:inline-block;
         float: left;
         width: 160px;
+    }
+
+    img.profile {
         margin-right: 15px;
     }
 
@@ -1096,21 +1099,31 @@ footer {
 		padding: 0;
 	}
 
-	.single .image-wrapper {
+	.post .image-wrapper, .featured .image-wrapper {
 		float: left;
         margin-right: 15px;
+        position: relative;
 	}
 
-    .single .image-wrapper img {
+    .post .image-wrapper img {
         width: 160px;
     }
     
-	.single .image-wrapper p {
+	.post .image-wrapper p, .featured .image-wrapper p {
 		color: #666;
 		font-family: 'Arial', sans-serif;
 		font-size: .08em;
         margin: 0;
         text-align: right;
+	}
+
+	.featured .image-wrapper p {
+		bottom: -1.5em;
+		font-size: .08em !important;
+		margin-right: 0;
+		padding-right: 0 !important;
+		position: absolute;
+		right: 0;
 	}
 
     .thumbs {

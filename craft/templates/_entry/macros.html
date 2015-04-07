@@ -165,16 +165,22 @@
 
   {% switch entry.section.handle %}
     {% case 'media' %}
+    <div class="image-wrapper">
       <a href="{{ mediaUrl(entry) }}" target="_blank"><img src="{{ image }}"></a>
-      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
+      <p class="image-credit">{{ primaryImageBy(entry) }}</p>
+    </div>
 
     {% case 'news' %}
+    <div class="image-wrapper">
       <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
-      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
+      <p class="image-credit">{{ primaryImageBy(entry) }}</p>
+    </div>
 
     {% default %}
+    <div class="image-wrapper">
       <a href="{{ entry.url }}"><img src="{{ image }}"></a>
-      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
+      <p class="image-credit">{{ primaryImageBy(entry) }}</p>
+    </div>
 
   {% endswitch %}
 {% endmacro %}
