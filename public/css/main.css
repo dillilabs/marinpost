@@ -760,6 +760,9 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 	color: #666;	
 }
 
+.file-type {
+	margin: 0;
+}
 
 /* * * * * * * * * * * * * * * * * * * * *
         SUPPORT

@@ -28,7 +28,7 @@
 {% if not errors %}
   <a href="#" class="image-field open">{{ image ? 'Replace/Remove' : 'Upload/Select' }}</a>
 {% endif %}
-<p>file type: .gif, .png or .jpeg only</p>
+<p class="file-type">file type: .gif, .png or .jpeg only</p>
 
 <div class="image-field inputs" {%- if not errors %}style="display: none;"{% endif -%}>
   <div>
