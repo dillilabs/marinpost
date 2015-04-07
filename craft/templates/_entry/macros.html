@@ -179,18 +179,19 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
+  {% from _self import externalUrl, mediaUrl %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
       <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
 
-    {% case 'notices' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+    {% case 'media' %}
+      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ entry.title }}</a></h3>
 
     {% case 'news' %}
-      <h3><a class="more" href="" target="_blank">{{ entry.title }}</a></h3>
+      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ entry.title }}</a></h3>
 
-    {% case 'media' %}
-      <h3><a class="more" href="" target="_blank">{{ entry.title }}</a></h3>
+    {% case 'notices' %}
+      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
 
     {% default %}
       <h3>{{ entry.title }}</h3>
