@@ -492,7 +492,6 @@ main.single > .post > h3 {
     color: #676158;
     font-family: sans-serif;
     margin-bottom: 1em;
-    padding-bottom: 1em;
 }
 
 .help p {
@@ -657,6 +656,14 @@ label.check {
 .field .redactor-box {
     margin-bottom: 0;
 }
+
+.image-field-wrapper {
+	display: inline-block;
+}
+img.display-image {
+	float: left;
+	margin: 0 15px 15px 0;
+}
 .event .field label, .contact .field label,
 .statezip label {
     display: inline-block;
@@ -686,8 +693,9 @@ a.optional-category-field {
     font-family: sans-serif;
     font-size: .9em;
 }
-.inputs > label,
-.field > label {
+.inputs label,
+.field label {
+	display: block;
     font-weight: bold;
 }
 .buttons {

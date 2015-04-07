@@ -24,10 +24,10 @@
 
 <img src="{{ image ? image.url('list') : '/img/default-list.png' }}" class="display-image" />
 <label>Image</label>
-
 {% if not errors %}
   <a href="#" class="image-field open">{{ image ? 'Replace/Remove' : 'Upload/Select' }}</a>
 {% endif %}
+<p>file type: .gif, .png or .jpeg only</p>
 
 <div class="image-field inputs" {%- if not errors %}style="display: none;"{% endif -%}>
   <div>
@@ -36,7 +36,6 @@
       <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
       <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
     </span>
-    <br>
     <div>
       <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
@@ -57,27 +56,22 @@
       {% endfor %}
     {% endif %}
   </select>
-  <br>
 
   <label for="image-by" class="required">Image by</label>
   <input type="text" name="fields[newsImages][{{ key }}][fields][by]" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
-  <br>
 
-  <label for="image-disclaimer" class="required">Legal</label>
-  <input type="hidden" name="fields[newsImages][{{ key }}][fields][disclaimer]">
-  <input type="checkbox" name="fields[newsImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
-  <span class="legal">Yes I have the right to use this image</span>
-  <br>
-
+  <div class="field">
+	  <label for="image-disclaimer" class="required">Legal</label>
+	  <input type="hidden" name="fields[newsImages][{{ key }}][fields][disclaimer]">
+	  <input type="checkbox" name="fields[newsImages][{{ key }}][fields][disclaimer][]" value="Yes I have the right to use this image" {%- if disclaimer %}checked{% endif %}>
+	  <span class="legal">Yes I have the right to use this image</span>
+  </div>
   {% if errors %}
     {{ f.errorList(imageBlock.allErrors) }}
-    <br>
   {% endif %}
 
   <a href="#" class="image-field close">Done</a>
 </div>
-
-<br>
 
 {% set js %}
 $(function() {

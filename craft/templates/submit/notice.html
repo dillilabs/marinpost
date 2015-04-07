@@ -10,7 +10,6 @@
         <fieldset class="notice">
             <div class="field clearfix">
                 {% include "_form/images/notice" %}
-                file type: .gif, .png or .jpeg only
             </div>
             {% include "_form/title" %}
             {% include "_form/locations" %}
@@ -26,7 +25,7 @@
             </div>
             <div class="field date">
                 <label for="event-start-time">Event start time</label>
-                <select name="fields[startTime][time]"><br>
+                <select name="fields[startTime][time]">
                 {{ f.timeOptions(entry.startTime) }}
                 </select>
             </div>
@@ -36,7 +35,7 @@
             </div>
             <div class="field date">
                 <label for="event-end-time">Event end time</label>
-                <select name="fields[endTime][time]"><br>
+                <select name="fields[endTime][time]">
                 {{ f.timeOptions(entry.endTime) }}
                 </select>
             </div>
