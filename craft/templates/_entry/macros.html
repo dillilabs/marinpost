@@ -1,3 +1,37 @@
+{% macro primaryImageBy(entry) %}
+{% spaceless %}
+  {% set by = null %}
+
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      {% set fieldName = 'blogImages' %}
+
+    {% case 'media' %}
+      {% set fieldName = 'mediaImages' %}
+
+    {% case 'news' %}
+      {% set fieldName = 'newsImages' %}
+
+    {% case 'notices' %}
+      {% set fieldName = 'noticeImages' %}
+
+    {% default %}
+      {% set fieldName = null %}
+
+  {% endswitch %}
+
+  {% if fieldName is not null %}
+    {% set images = attribute(entry, fieldName) %}
+
+    {% if images is defined %}
+      {% for block in images.order('sortOrder asc').limit(1) %}
+        {{ block.by }}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
 {% macro primaryImage(entry, transform) %}
 {% spaceless %}
   {% set image = null %}
@@ -123,7 +157,7 @@
 {% endmacro %}
 
 {% macro postImage(entry, transform) %}
-  {% from _self import externalUrl, mediaUrl, primaryImage %}
+  {% from _self import externalUrl, mediaUrl, primaryImage, primaryImageBy %}
 
   {% set transform = transform | default('list') %}
 
@@ -132,12 +166,15 @@
   {% switch entry.section.handle %}
     {% case 'media' %}
       <a href="{{ mediaUrl(entry) }}" target="_blank"><img src="{{ image }}"></a>
+      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
 
     {% case 'news' %}
       <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
+      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
 
     {% default %}
       <a href="{{ entry.url }}"><img src="{{ image }}"></a>
+      <!--p class="image-credit">{{ primaryImageBy(entry) }}</p-->
 
   {% endswitch %}
 {% endmacro %}

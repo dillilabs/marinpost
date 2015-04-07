@@ -6,9 +6,7 @@
     {% block post %}
     <div class="image-wrapper">
       <img src="{{ p.primaryImage(entry, 'hero') }}"/>
-      {% for block in entry.noticeImages.limit(1) %}
-      <p class="image-credit">{{ block.by }}</p>
-      {% endfor %}
+      <p class="image-credit">{{ p.primaryImageBy(entry) }}</p>
     </div>
 
       {{ p.postTags(entry, false, true) }}
