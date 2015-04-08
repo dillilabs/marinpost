@@ -1,3 +1,6 @@
+{% requireLogin %}
+{% requirePermission 'accessCp' %}
+
 {% set sourceId = 3 %}
 
 {% macro excerpt(text) %}
