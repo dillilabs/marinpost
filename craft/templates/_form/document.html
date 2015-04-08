@@ -27,10 +27,10 @@
   <input type="hidden" name="fields[{{ documentsAttribute }}]">
 
   <div class="document-field inputs">
-    {%
+    {#
       These inputs are grouped together to allow them to be removed
       from the DOM and omitted from the POST if no document is selected.
-    %}
+    #}
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document]">
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document][]" {% if document %}value="{{ document.id }}"{% endif -%}>

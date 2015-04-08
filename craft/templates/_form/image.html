@@ -26,10 +26,10 @@
 <input type="hidden" name="fields[{{ imagesAttribute }}]">
 
 <div class="image-field inputs">
-  {%
+  {#
     These inputs are grouped together to allow them to be removed
     from the DOM and omitted from the POST if no image is selected.
-  %}
+  #}
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][type]" value="image">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image]">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image][]" {% if image %}value="{{ image.id }}"{% endif -%}>
