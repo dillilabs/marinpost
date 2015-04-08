@@ -1109,7 +1109,7 @@ footer {
 		padding: 0;
 	}
 
-	.post .image-wrapper, .featured .image-wrapper {
+	.post .image-wrapper, .posts .image-wrapper, .featured .image-wrapper {
 		float: left;
         margin-right: 15px;
         position: relative;
@@ -1119,7 +1119,7 @@ footer {
         width: 160px;
     }
     
-	.post .image-wrapper p, .featured .image-wrapper p {
+	.post .image-wrapper p, .posts .image-wrapper p, .featured .image-wrapper p {
 		color: #666;
 		font-family: 'Arial', sans-serif;
 		font-size: .75em;

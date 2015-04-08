@@ -23,7 +23,7 @@
       </div>
   </div>
 
-  <div class="list-wrapper">
+  <div class="{% if craft.request.path == "about/contributors" %}list-wrapper{% else %}post{% endif %}">
     {% block post %}
     {% endblock %}
   </div>
