@@ -45,7 +45,7 @@
 
   <div>
     <span class="fileinput-button">
-      <span>Or upload a new .pdf document file</span>
+      <span>Or upload a new .pdf file</span>
       <input id="document-fileupload" type="file" name="file" accept="application/pdf">
       <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
     </span>
@@ -80,8 +80,10 @@ $(function() {
   documentModal.dialog({
     autoOpen: false,
     modal: true,
+    dialogClass: 'no-close',
     height: $(window).height() / 2,
     width: $(window).width() / 2,
+    closeOnEscape: false,
     buttons: {
       OK: function() {
         populateDocumentFromModal();
@@ -114,5 +116,11 @@ $(function() {
   });
 });
 {% endset %}
-
 {% includeJs js %}
+
+{% set css %}
+.no-close .ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+{% endset %}
+{% includeCss css %}

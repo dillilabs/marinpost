@@ -91,8 +91,10 @@ $(function() {
   imageModal.dialog({
     autoOpen: false,
     modal: true,
+    dialogClass: 'no-close',
     height: $(window).height() / 2,
     width: $(window).width() / 2,
+    closeOnEscape: false,
     buttons: {
       OK: function() {
         populateImageFromModal();
@@ -125,5 +127,11 @@ $(function() {
   });
 });
 {% endset %}
-
 {% includeJs js %}
+
+{% set css %}
+.no-close .ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+{% endset %}
+{% includeCss css %}
