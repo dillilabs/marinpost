@@ -14,7 +14,7 @@
         {% include "_form/locations" %}
         {% include "_form/topics" %}
         {% include "_form/content/blog" %}
-        {% include "_form/documents/blog" %}
+        {% include "_form/document" with { documentsAttribute: 'blogDocuments' } %}
     {% endblock %}
   {% endembed %}
 {% endblock %}

@@ -15,7 +15,7 @@
             {% include "_form/locations" %}
             {% include "_form/topics" %}
             {% include "_form/content/notice" %}
-            {% include "_form/documents/notice" %}
+            {% include "_form/document" with { documentsAttribute: 'noticeDocuments' } %}
         </fieldset>
 
         <fieldset class="event">

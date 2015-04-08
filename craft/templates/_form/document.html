@@ -1,0 +1,118 @@
+{% set sourceId = 2 %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+
+{% set documentBlock = false %}
+{% set document = false %}
+{% set title = false %}
+{% set errors = false %}
+{% set key = 'new' %}
+
+{% if entry %}
+  {% set documentBlock = attribute(entry, documentsAttribute).first %}
+  {% set document = documentBlock.document.first %}
+  {% set title = documentBlock.documentTitle %}
+  {% set errors = documentBlock.hasErrors %}
+  {% set key = documentBlock.id | default('new') %}
+{% endif %}
+
+<div class="field">
+  <label> <a href="#" id="open-document-modal">{{ document ? 'Replace/Remove' : 'Upload/Select' }} Document</a> </label>
+
+  {% if errors %}
+    {{ f.errorList(documentBlock.allErrors) }}
+  {% endif %}
+
+  <div class="document-field inputs">
+    <input type="hidden" name="fields[{{ documentsAttribute }}]">
+    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][type]" value="document">
+    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document]">
+    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document][]" {% if document %}value="{{ document.id }}"{% endif -%}>
+    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][documentTitle]" {% if title %}value="{{ title }}"{% endif %}>
+  </div>
+</div>
+
+<div id="document-modal" title="{{ document ? 'Replace / Remove' : 'Upload / Select' }} Document">
+  <label for="document">Select an existing document</label>
+  <select id="document-asset-id">
+    <option value=""></option>
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+      {% endfor %}
+    {% endif %}
+  </select>
+
+  <div>
+    <span class="fileinput-button">
+      <span>Or upload a new .pdf document file</span>
+      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+    </span>
+
+    <br>
+    <div>
+      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    </div>
+  </div>
+
+  <br>
+  <label for="document-title">Document title</label>
+  <input type="text" id="document-title" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+  <br>
+</div>
+
+{% set js %}
+$(function() {
+  var openDocumentModal = $('#open-document-modal');
+  var documentModal = $('#document-modal');
+  var documentFileUpload = $('#document-fileupload');
+  var srcDocumentAssetId = $('select#document-asset-id');
+  var srcDocumentTitle = $('input#document-title');
+  var targetDocumentAssetId = $('input[type=hidden][name$="[fields][document][]"]');
+  var targetDocumentTitle = $('input[type=hidden][name$="[fields][documentTitle]"]');
+
+  var populateDocumentFromModal = function() {
+    targetDocumentAssetId.val(srcDocumentAssetId.val());
+    targetDocumentTitle.val(srcDocumentTitle.val());
+  };
+
+  documentModal.dialog({
+    autoOpen: false,
+    modal: true,
+    height: $(window).height() / 2,
+    width: $(window).width() / 2,
+    buttons: {
+      OK: function() {
+        populateDocumentFromModal();
+        documentModal.dialog('close');
+      },
+      Cancel: function() {
+        documentModal.dialog('close');
+      }
+    }
+  });
+
+  openDocumentModal.click(function(e) {
+    e.preventDefault();
+    documentModal.dialog('open');
+  });
+
+  documentFileUpload.s3direct({
+    bucket: "{{ s3.bucket }}",
+    subfolder: "{{ s3.subfolder }}",
+    currentUserId: "{{ currentUser.id }}",
+    policy: "{{ s3.policy }}",
+    signature: "{{ s3.signature }}",
+    accessKey: "{{ s3.keyId }}",
+    assetsSourceId: {{ sourceId }},
+    acceptFileTypes: /.+\.pdf$/i,
+    uploadProgressBarSelector: '.s3direct.document.progress-bar',
+    updateIndexIndicatorSelector: 'img.s3direct.document',
+    selectFilesSelector: 'select#document-asset-id',
+    debug: true,
+  });
+});
+{% endset %}
+
+{% includeJs js %}

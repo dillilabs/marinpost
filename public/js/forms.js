@@ -103,8 +103,8 @@
             };
 
             var removeEmptyDocumentFields = function() {
-              var doc = form.find('select[name$="[fields][document][]"]');
-              var title = form.find('input[type=text][name$="[fields][documentTitle]"]');
+              var doc = form.find('input[type=hidden][name$="[fields][document][]"]');
+              var title = form.find('input[type=hidden][name$="[fields][documentTitle]"]');
 
               // Craft doesn't take kindly to empty multiple fields
               if (doc.length && doc.val().length == 0) {

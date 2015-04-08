@@ -12,7 +12,6 @@
   {% set imageBlock = attribute(entry, imagesAttribute).first %}
   {% set image = imageBlock.image.first %}
   {% set by = imageBlock.by %}
-
   {% set errors = imageBlock.hasErrors %}
   {% set key = imageBlock.id | default('new') %}
 {% endif %}
@@ -53,6 +52,7 @@
         <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
       </span>
 
+      <br>
       <div>
         <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
       </div>
