@@ -37,27 +37,6 @@
         if (config.debug) console.log('fileUploadSubmit()', data);
       };
 
-      var addFileToSelectOptions = function(input, selectedFileId, file) {
-        var selected = file.id == selectedFileId ? 'selected' : '';
-
-        input.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
-      };
-
-      var updateFormInputs = function(files) {
-        if (config.debug) console.log('updateFormInputs()', files);
-
-        $(config.selectFilesSelector).each(function() {
-          var input = $(this);
-          var selectedFileId = input.children(':selected').val();
-
-          input.children().remove().end().append('<option value=""></option>');
-
-          $.each(files, function(index, file) {
-            addFileToSelectOptions(input, selectedFileId, file);
-          });
-        });
-      };
-
       var updateAssetsIndex = function(filenames) {
         var data = { 'sourceid': config.assetsSourceId };
 
@@ -77,7 +56,11 @@
           type: 'POST'
         }).done(function(data) {
           if (config.debug) console.log('updateAssetsIndex() done', data);
-          updateFormInputs(data.files);
+          if (typeof config.onUpdateAssetsIndex == 'function') {
+            if (config.debug) console.log('onUpdateAssetsIndex() begin', data.files);
+            config.onUpdateAssetsIndex(data.files);
+            if (config.debug) console.log('onUpdateAssetsIndex() end');
+          }
         }).fail(function(jqXHR, textStatus, errorThrown) {
           if (config.debug) console.log('updateAssetsIndex() fail', textStatus, errorThrown);
         }).always(function() {
@@ -136,8 +119,8 @@
     updateAssetsIndexUrl: '/actions/s3Direct/updateAssetsIndex',
     uploadProgressBarSelector: '.progress-bar.s3direct',
     updateIndexIndicatorSelector: 'img.s3direct',
-    selectFilesSelector: 'select.s3direct',
     acceptFileTypes: undefined,
+    onUpdateAssetsIndex: false,
     debug: false,
   };
 

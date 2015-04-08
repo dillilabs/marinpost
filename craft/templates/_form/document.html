@@ -33,19 +33,21 @@
 </div>
 
 <div id="document-modal" title="{{ document ? 'Replace / Remove' : 'Upload / Select' }} Document">
-  <label for="document">Select an existing document</label>
-  <select id="document-asset-id">
-    <option value=""></option>
-    {% if folder %}
-      {% for asset in craft.assets.folderId(folder.id) %}
-        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-      {% endfor %}
-    {% endif %}
-  </select>
+  <label for="document">
+    Select a PDF document
+    <select id="document-asset-id">
+      <option value=""></option>
+      {% if folder %}
+        {% for asset in craft.assets.folderId(folder.id) %}
+          <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+        {% endfor %}
+      {% endif %}
+    </select>
+  </label>
 
   <div>
     <span class="fileinput-button">
-      <span>Or upload a new .pdf file</span>
+      <span>Upload a PDF document</span>
       <input id="document-fileupload" type="file" name="file" accept="application/pdf">
       <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
     </span>
@@ -56,10 +58,11 @@
     </div>
   </div>
 
-  <br>
-  <label for="document-title">Document title</label>
-  <input type="text" id="document-title" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
-  <br>
+  <br class="clear">
+  <label for="document-title">
+    Document title
+    <input type="text" id="document-title" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+  </label>
 </div>
 
 {% set js %}
@@ -71,6 +74,16 @@ $(function() {
   var srcDocumentTitle = $('input#document-title');
   var targetDocumentAssetId = $('input[type=hidden][name$="[fields][document][]"]');
   var targetDocumentTitle = $('input[type=hidden][name$="[fields][documentTitle]"]');
+
+  var populateSelectOptionsFromIndex = function(files) {
+    var selectedId = srcDocumentAssetId.val();
+    srcDocumentAssetId.children().remove().end().append('<option value=""></option>');
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'selected' : '';
+      srcDocumentAssetId.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
+    });
+  };
 
   var populateDocumentFromModal = function() {
     targetDocumentAssetId.val(srcDocumentAssetId.val());
@@ -111,7 +124,7 @@ $(function() {
     acceptFileTypes: /.+\.pdf$/i,
     uploadProgressBarSelector: '.s3direct.document.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.document',
-    selectFilesSelector: 'select#document-asset-id',
+    onUpdateAssetsIndex: populateSelectOptionsFromIndex,
     debug: true,
   });
 });
@@ -119,6 +132,10 @@ $(function() {
 {% includeJs js %}
 
 {% set css %}
+.clear {
+  clear: both;
+}
+
 .no-close .ui-dialog-titlebar-close {
   visibility: hidden;
 }

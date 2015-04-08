@@ -16,7 +16,7 @@
   {% set key = imageBlock.id | default('new') %}
 {% endif %}
 
-<img src="{{ image ? image.url('list') : '/img/default-list.png' }}" class="display-image" />
+<img src="{{ image ? image.url('thumb') : '/img/default-thumb.png' }}" class="display-image" />
 <label>Image</label>
 
 {% if errors %}
@@ -33,33 +33,41 @@
 
 <div id="image-modal" title="{{ image ? 'Replace / Remove' : 'Upload / Select' }} Image">
   <div>
-    <label for="image" class="required">Select an existing image</label>
-    <select id="image-asset-id">
-      <option value=""></option>
+    <label for="image" class="required">
+      Image <span class="note">* required</span>
+
+      <ul id="src-images">
       {% if folder %}
         {% for asset in craft.assets.folderId(folder.id) %}
-          <option value="{{ asset.id }}" {% if asset.id == image.id %}selected{% endif %} data-url="{{ asset.url('list') }}">
-            {{ asset.filename }}
-          </option>
+          <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url('thumb') }}" {% if asset.id == image.id %}class="selected"{% endif %}>
+            <div><img src="{{ asset.url('thumb') }}" /></div>
+            <span class="title">{{ asset.filename | slice(0, 15) }}</span>
+          </li>
         {% endfor %}
       {% endif %}
-    </select>
+      </ul>
+    </label>
 
+    <br class="clear">
     <div>
       <span class="fileinput-button">
-        <span>Or upload a new .gif, .jpg or .png image file</span>
+        <span>Upload an image</span>
         <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
         <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
       </span>
 
-      <br>
+      <br class="clear">
       <div>
         <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
       </div>
     </div>
 
-    <label for="image-by" class="required">Image by</label>
-    <input type="text" id="image-by" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+    <br class="clear">
+    <label for="image-credit" class="required">
+      Credit <span class="note">* required</span>
+      <br>
+      <input type="text" id="image-credit" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+    </label>
   </div>
 </div>
 
@@ -70,31 +78,68 @@ $(function() {
   var openImageModal = $('#open-image-modal');
   var imageModal = $('#image-modal');
   var imageFileUpload = $('#image-fileupload');
-  var srcImageAssetId = $('select#image-asset-id');
-  var srcImageBy = $('input#image-by');
-  var targetImageAssetId = $('input[type=hidden][name$="[fields][image][]"]');
-  var targetImageBy = $('input[type=hidden][name$="[fields][by]"]');
+  var srcImages = $('ul#src-images');
+  var srcImageCredit = $('input#image-credit');
+  var okButton = false;
+  var targetImageId = $('input[type=hidden][name$="[fields][image][]"]');
+  var targetImageCredit = $('input[type=hidden][name$="[fields][by]"]');
   var displayImage = $('img.display-image');
-  var defaultImageUrl = '/img/default-list.png';
-
-  var populateImageFromModal = function() {
-    targetImageAssetId.val(srcImageAssetId.val());
-    targetImageBy.val(srcImageBy.val());
-
-    if (srcImageAssetId.val().length == 0) {
-      displayImage.prop('src', defaultImageUrl);
-    } else {
-      displayImage.prop('src', srcImageAssetId.children(':selected').attr('data-url'));
-    }
+  var defaultImageUrl = '/img/default-thumb.png';
+  
+  var selectedImage = function() {
+    return srcImages.children('li.selected:first');
+  }
+  
+  var imageCredit = function() {
+    return srcImageCredit.val().trim();
   };
 
+  var selectImage = function(li) {
+    li.parent().children().removeClass('selected');
+    li.addClass('selected');
+  };
+  
+  var populateListFromIndex = function(files) {
+    var selectedId = selectedImage().attr('data-asset-id');
+    srcImages.children().remove();
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'class="selected"' : '';
+      var name = file.filename.length > 15 ? file.filename.slice(0, 15)+'...' : file.filename;
+
+      srcImages.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+name+'</span></li>');
+    });
+  };
+
+  var updateOkButton = function() {
+    okButton.button((selectedImage().length == 1 && imageCredit().length > 0) ? 'enable' : 'disable');
+  };
+
+  var populateImageFromModal = function() {
+    var selectedImage = srcImages.children('li.selected:first');
+
+    if (selectedImage.length == 1) {
+      targetImageId.val(selectedImage.attr('data-asset-id'));
+      displayImage.prop('src', selectedImage.attr('data-asset-url'));
+    } else {
+      targetImageId.val('');
+      displayImage.prop('src', defaultImageUrl);
+    }
+
+    targetImageCredit.val(imageCredit());
+  };
+
+  openImageModal.click(function(e) {
+    e.preventDefault();
+    imageModal.dialog('open');
+  });
+
   imageModal.dialog({
-    autoOpen: false,
     modal: true,
+    autoOpen: false,
+    height: $(window).height() * 0.75,
+    width: $(window).width() * 0.75,
     dialogClass: 'no-close',
-    height: $(window).height() / 2,
-    width: $(window).width() / 2,
-    closeOnEscape: false,
     buttons: {
       OK: function() {
         populateImageFromModal();
@@ -103,12 +148,22 @@ $(function() {
       Cancel: function() {
         imageModal.dialog('close');
       }
-    }
+    },
+    open: function(event, ui) {
+      var widget = $(this).dialog('widget');
+      okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
+      updateOkButton();
+    },
+    closeOnEscape: false,
   });
 
-  openImageModal.click(function(e) {
-    e.preventDefault();
-    imageModal.dialog('open');
+  srcImages.on('click', 'li', function(e) {
+    selectImage($(this));
+    updateOkButton();
+  });
+
+  srcImageCredit.blur(function(e) {
+    updateOkButton();
   });
 
   imageFileUpload.s3direct({
@@ -122,7 +177,7 @@ $(function() {
     acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
     uploadProgressBarSelector: '.s3direct.image.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.image',
-    selectFilesSelector: 'select#image-asset-id',
+    onUpdateAssetsIndex: populateListFromIndex,
     debug: true,
   });
 });
@@ -130,8 +185,32 @@ $(function() {
 {% includeJs js %}
 
 {% set css %}
+.clear {
+  clear: both;
+}
+
 .no-close .ui-dialog-titlebar-close {
   visibility: hidden;
+}
+
+.fileinput-button {
+  float: right;
+}
+
+ul#src-images {
+  list-style: none;
+}
+ul#src-images li {
+  height: 128px;
+  width: 100px;
+  margin: 14px 0 0 14px;
+  float: left;
+}
+ul#src-images li .title {
+  font-size: 10px;
+}
+ul#src-images li.selected {
+  background: #d5d8dd;
 }
 {% endset %}
 {% includeCss css %}

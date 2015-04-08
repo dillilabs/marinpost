@@ -22,7 +22,7 @@ class S3DirectController extends BaseController
             $files = array();
             foreach ($assets as $asset)
             {
-                $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, 'list') : $asset->url;
+                $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, 'thumb') : $asset->url;
 
                 array_push($files, array(
                     'id' => $asset->id,
@@ -45,7 +45,7 @@ class S3DirectController extends BaseController
         }
         else
         {
-            $error = "Can't find no stinkin' sourceid or filenames...";
+            $error = "No files found.";
             $this->returnErrorJson($error);
         }
     }

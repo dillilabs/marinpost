@@ -1,0 +1,33 @@
+{% set sourceId = 3 %}
+
+{% macro excerpt(text) %}
+  {% if (text | length) < 9 %}
+    {{ text }}
+  {% else %}
+    {{ text | slice(0, 8) }}...
+  {% endif %}
+{% endmacro %}
+
+{% import _self as m %}
+
+<h3>Thumbs</h3>
+{% set images = craft.assets.sourceId(sourceId) %}
+<ul>
+{% for image in images %}
+<li data-id="{{ image.id }}" data-folder-id="{{ image.folderId }}">
+      <div class="thumb"><img src="{{ image.url('thumb') }}"></div>
+      <div>{{ m.excerpt(image.filename) }}</div>
+    </li>
+{% endfor %}
+</ul>
+
+{% set css %}
+ul {
+  list-style: none;
+}
+ul li {
+  float: left;
+  width: 120px;
+}
+{% endset %}
+{% includeCss css %}
