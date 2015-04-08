@@ -23,15 +23,20 @@
   {{ f.errorList(imageBlock.allErrors) }}
 {% endif %}
 
+<input type="hidden" name="fields[{{ imagesAttribute }}]">
+
 <div class="image-field inputs">
-  <input type="hidden" name="fields[{{ imagesAttribute }}]">
+  {%
+    These inputs are grouped together to allow them to be removed
+    from the DOM and omitted from the POST if no image is selected.
+  %}
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][type]" value="image">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image]">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image][]" {% if image %}value="{{ image.id }}"{% endif -%}>
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][by]" {% if by %}value="{{ by }}"{% endif %}>
 </div>
 
-<div id="image-modal" title="{{ image ? 'Replace / Remove' : 'Upload / Select' }} Image">
+<div id="image-modal" title="{{ image ? 'Change' : 'Add' }} Image">
   <div>
     <label for="image" class="required">
       Image <span class="note">* required</span>
@@ -71,7 +76,7 @@
   </div>
 </div>
 
-<a href="#" id="open-image-modal">{{ image ? 'Replace/Remove' : 'Upload/Select' }}</a>
+<a href="#" id="open-image-modal">{{ image ? 'Change' : 'Add' }}</a>
 
 {% set js %}
 $(function() {

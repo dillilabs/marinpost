@@ -17,15 +17,20 @@
 {% endif %}
 
 <div class="field">
-  <label> <a href="#" id="open-document-modal">{{ document ? 'Replace/Remove' : 'Upload/Select' }} Document</a> </label>
+  <label>Document</label>
   <p class="display-document">{{ document ? p.documentTitle(document, title) : '' }}</p> 
 
   {% if errors %}
     {{ f.errorList(documentBlock.allErrors) }}
   {% endif %}
 
+  <input type="hidden" name="fields[{{ documentsAttribute }}]">
+
   <div class="document-field inputs">
-    <input type="hidden" name="fields[{{ documentsAttribute }}]">
+    {%
+      These inputs are grouped together to allow them to be removed
+      from the DOM and omitted from the POST if no document is selected.
+    %}
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][type]" value="document">
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document]">
     <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document][]" {% if document %}value="{{ document.id }}"{% endif -%}>
@@ -33,7 +38,7 @@
   </div>
 </div>
 
-<div id="document-modal" title="{{ document ? 'Replace / Remove' : 'Upload / Select' }} Document">
+<div id="document-modal" title="{{ document ? 'Change' : 'Add' }} Document">
   <label for="document">
     Select a PDF document
     <select id="document-asset-id">
@@ -66,6 +71,7 @@
   </label>
 </div>
 
+<a href="#" id="open-document-modal">{{ document ? 'Change' : 'Add' }}</a>
 {% set js %}
 $(function() {
   var openDocumentModal = $('#open-document-modal');
