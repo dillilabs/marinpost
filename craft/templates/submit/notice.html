@@ -21,7 +21,7 @@
         <fieldset class="event">
             <div class="field date">
                 <label for="event-start-date">Event start date</label>
-                <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}">
+                <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}" class="date">
             </div>
             <div class="field date">
                 <label for="event-start-time">Event start time</label>
@@ -31,7 +31,7 @@
             </div>
             <div class="field date">
                 <label for="event-end-date">Event end date</label>
-                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}">
+                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}" class="date">
             </div>
             <div class="field date">
                 <label for="event-end-time">Event end time</label>
