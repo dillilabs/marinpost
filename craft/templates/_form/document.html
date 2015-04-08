@@ -18,6 +18,7 @@
 
 <div class="field">
   <label> <a href="#" id="open-document-modal">{{ document ? 'Replace/Remove' : 'Upload/Select' }} Document</a> </label>
+  <p class="display-document">{{ document ? p.documentTitle(document, title) : '' }}</p> 
 
   {% if errors %}
     {{ f.errorList(documentBlock.allErrors) }}
@@ -70,24 +71,28 @@ $(function() {
   var openDocumentModal = $('#open-document-modal');
   var documentModal = $('#document-modal');
   var documentFileUpload = $('#document-fileupload');
-  var srcDocumentAssetId = $('select#document-asset-id');
+  var srcDocument = $('select#document-asset-id');
   var srcDocumentTitle = $('input#document-title');
   var targetDocumentAssetId = $('input[type=hidden][name$="[fields][document][]"]');
   var targetDocumentTitle = $('input[type=hidden][name$="[fields][documentTitle]"]');
+  var displayDocument = $('.display-document');
 
   var populateSelectOptionsFromIndex = function(files) {
-    var selectedId = srcDocumentAssetId.val();
-    srcDocumentAssetId.children().remove().end().append('<option value=""></option>');
+    var selectedId = srcDocument.val();
+    srcDocument.children().remove().end().append('<option value=""></option>');
 
     $.each(files, function(index, file) {
       var selected = file.id == selectedId ? 'selected' : '';
-      srcDocumentAssetId.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
+      srcDocument.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
     });
   };
 
   var populateDocumentFromModal = function() {
-    targetDocumentAssetId.val(srcDocumentAssetId.val());
-    targetDocumentTitle.val(srcDocumentTitle.val());
+    var title = srcDocumentTitle.val();
+
+    targetDocumentAssetId.val(srcDocument.val());
+    targetDocumentTitle.val(title);
+    displayDocument.text(title || srcDocument.children('option:selected').text());
   };
 
   documentModal.dialog({

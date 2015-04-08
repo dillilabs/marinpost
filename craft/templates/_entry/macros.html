@@ -367,8 +367,14 @@
   {% endswitch %}
 {% endmacro %}
 
+{% macro documentTitle(file, title) %}
+  {{ title | default(file.title) }}
+{% endmacro %}
+
 {% macro documentDownload(file, title) %}
-  <div class="download"><a href="{{ file.url }}">{{ title | default(file.title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
+  {% from _self import documentTitle %}
+
+  <div class="download"><a href="{{ file.url }}">{{ documentTitle(file, title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
 {% endmacro %}
 
 {% macro documents(documents) %}
