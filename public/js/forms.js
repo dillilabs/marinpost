@@ -86,17 +86,17 @@
             };
 
             var removeEmptyImageFields = function() {
-              var image = form.find('select[name$="[fields][image][]"]');
-              var by = form.find('input[type=text][name$="[fields][by]"]');
+              var image = form.find('input[type=hidden][name$="[fields][image][]"]');
+              var by = form.find('input[type=hidden][name$="[fields][by]"]');
 
               // Craft doesn't take kindly to empty multiple fields
-              if (image.val() == '') {
+              if (image.length && image.val().length == 0) {
                 image.remove();
 
                 // If all fields are empty then assume no image
                 // and explicitly remove all of the associated fields
                 // else Craft will assume incomplete data and return validation errors.
-                if (by.val().trim().length == 0) {
+                if (by.length && by.val().trim().length == 0) {
                   form.find('.image-field.inputs').remove();
                 }
               }
@@ -107,13 +107,13 @@
               var title = form.find('input[type=text][name$="[fields][documentTitle]"]');
 
               // Craft doesn't take kindly to empty multiple fields
-              if (doc.val() == '') {
+              if (doc.length && doc.val().length == 0) {
                 doc.remove();
 
                 // If all fields are empty then assume no document
                 // and explicitly remove all of the associated fields
                 // else Craft will assume incomplete data and return validation errors.
-                if (title.val().trim().length == 0) {
+                if (title.length && title.val().trim().length == 0) {
                   form.find('.document-field.inputs').remove();
                 }
               }

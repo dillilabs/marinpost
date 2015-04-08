@@ -8,7 +8,7 @@
   {% embed "_form/layout" %}
     {% block formFields %}
         <div class="field clearfix">
-          {% include "_form/images/blog" %}
+          {% include "_form/image" with { imagesAttribute: 'blogImages' } %}
         </div>
         {% include "_form/title" %}
         {% include "_form/locations" %}
