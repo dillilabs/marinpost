@@ -1105,6 +1105,10 @@ footer {
         display: inline-block;
         width: 100%;
     }
+    
+    .post .posts {
+	    width: 100%;
+    }
 	.whats-new {
 		padding: 0;
 	}
