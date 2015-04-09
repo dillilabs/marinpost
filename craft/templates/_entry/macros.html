@@ -249,7 +249,11 @@
 {% macro authorLinks(entry) %}
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <p class="author-links">
+      {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
         <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
+      {% else %}
+        <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+      {% endif %}
     </p>
     <br class="author-links">
   {% endif %}

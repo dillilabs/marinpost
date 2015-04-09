@@ -158,7 +158,7 @@
                   break;
 
                 case 'delete':
-                  if (confirm('Are you sure')) {
+                  if (confirm('Are you sure?')) {
                     document.location = $(this).attr('data-url');
                   } else {
                     e.preventDefault();

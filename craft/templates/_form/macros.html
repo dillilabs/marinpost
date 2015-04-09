@@ -33,21 +33,17 @@
     <input type="button" class="submit" data-submit="save" value="{{ entry.id ? 'Unpublish' : 'Save' }}">
     <input type="button" class="submit" data-submit="publish" value="Publish">
 
-    {% if entry.id %}
-      <input type="button" class="submit" data-submit="delete" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}" value="Delete">
-    {% endif %}
-
-  {% else %}
-    {% if entry.id %}
-      <input type="button" class="submit" data-submit="delete" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}" value="Delete">
-
-    {% else %}
-      <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
-      <input type="button" class="submit" data-submit="save" value="{{ entry.id ? 'Unpublish' : 'Save' }}">
-      <input type="button" class="submit" data-submit="publish" value="Publish">
-    {% endif %}
+  {% else %} {# Guest #}
+    <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
+    <input type="button" class="submit" data-submit="save" value="Save">
+    <input type="button" class="submit" data-submit="publish" value="Publish">
 
   {% endif %}
+
+  {% if entry.id %}
+    <input type="button" class="submit" data-submit="delete" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}" value="Delete">
+  {% endif %}
+
   <input type="button" class="submit" data-submit="cancel" value="Cancel">
 {% endmacro %}
 
