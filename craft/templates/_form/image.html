@@ -7,14 +7,14 @@
 
 {% set imageBlock = false %}
 {% set image = false %}
-{% set by = false %}
+{% set credit = false %}
 {% set errors = false %}
 {% set key = 'new' %}
 
 {% if entry %}
   {% set imageBlock = attribute(entry, imagesAttribute).first %}
   {% set image = imageBlock.image.first %}
-  {% set by = imageBlock.by %}
+  {% set credit = imageBlock.credit %}
   {% set errors = imageBlock.hasErrors %}
   {% set key = imageBlock.id | default('new') %}
 {% endif %}
@@ -36,7 +36,7 @@
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][type]" value="image">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image]">
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image][]" {% if image %}value="{{ image.id }}"{% endif -%}>
-  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][by]" {% if by %}value="{{ by }}"{% endif %}>
+  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][credit]" {% if credit %}value="{{ credit }}"{% endif %}>
 </div>
 
 <div id="image-modal" title="{{ image ? 'Change' : 'Add' }} Image">
@@ -58,7 +58,7 @@
   <label for="image-credit" class="required">
     Image Credit <span class="note">* required</span>
     <br>
-    <input type="text" id="image-credit" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+    <input type="text" id="image-credit" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
   </label>
 
   <br>
@@ -90,7 +90,7 @@ $(function() {
   var srcImageCredit = $('input#image-credit');
   var okButton = false;
   var targetImageId = $('input[type=hidden][name$="[fields][image][]"]');
-  var targetImageCredit = $('input[type=hidden][name$="[fields][by]"]');
+  var targetImageCredit = $('input[type=hidden][name$="[fields][credit]"]');
   var displayImage = $('img.display-image');
   var defaultImageUrl = '/img/default-{{ transform }}.png';
   

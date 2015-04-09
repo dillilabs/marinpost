@@ -6,7 +6,7 @@
     {% block post %}
       <div class="image-wrapper">
         <img src="{{ p.primaryImage(entry, 'hero') }}"/>
-        <p class="image-credit">{{ p.primaryImageBy(entry) }}</p>
+        <p class="image-credit">{{ p.primaryImageCredit(entry) }}</p>
       </div>
 
       {{ p.postTags(entry, false, true) }}

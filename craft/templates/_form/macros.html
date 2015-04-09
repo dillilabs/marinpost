@@ -64,18 +64,18 @@
 {% endspaceless %}
 {% endmacro %}
 
-{% macro imageBy(entry, fieldName) %}
+{% macro imageCredit(entry, fieldName) %}
 {% spaceless %}
   {% set fieldName = fieldName | default('image') %}
-  {% set imageBy = null %}
+  {% set imageCredit = null %}
 
   {% if entry is defined %}
     {# FIXME for image in attribute(entry, fieldName).type('image') #}
     {% for image in attribute(entry, fieldName) %}
-      {% set imageBy = image.by %}
+      {% set imageCredit = image.credit %}
     {% endfor %}
   {% endif %}
-  {{ imageBy }}
+  {{ imageCredit }}
 {% endspaceless %}
 {% endmacro %}
 
