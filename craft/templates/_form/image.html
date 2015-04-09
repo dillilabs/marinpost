@@ -2,6 +2,7 @@
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 {% set transform = 'list' %}
+{% set excerptLength = 20 %}
 
 {% set imageBlock = false %}
 {% set image = false %}
@@ -39,42 +40,42 @@
 
 <div id="image-modal" title="{{ image ? 'Change' : 'Add' }} Image">
   <div>
-    <label for="image" class="required">
-      Image <span class="note">* required</span>
-
-      <ul id="src-images">
-      {% if folder %}
-        {% for asset in craft.assets.folderId(folder.id) %}
-          <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
-            <div><img src="{{ asset.url(transform) }}" /></div>
-            <span class="title">{{ p.excerpt(asset.filename, 25) }}</span>
-          </li>
-        {% endfor %}
-      {% endif %}
-      </ul>
-    </label>
+    <span class="fileinput-button">
+      <span>Upload an image</span>
+      <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
+      <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
+    </span>
 
     <br class="clear">
+    <br>
     <div>
-      <span class="fileinput-button">
-        <span>Upload an image</span>
-        <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
-        <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
-      </span>
-
-      <br class="clear">
-      <div>
-        <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-      </div>
+      <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
-
-    <br class="clear">
-    <label for="image-credit" class="required">
-      Credit <span class="note">* required</span>
-      <br>
-      <input type="text" id="image-credit" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
-    </label>
   </div>
+
+  <br class="clear">
+  <label for="image-credit" class="required">
+    Image Credit <span class="note">* required</span>
+    <br>
+    <input type="text" id="image-credit" autocomplete="off" {%- if by %}value="{{ by }}"{% endif %}>
+  </label>
+
+  <br>
+  <br>
+  <label for="image" class="required">
+    Select an Image <span class="note">* required</span>
+
+    <ul id="src-images">
+    {% if folder %}
+      {% for asset in craft.assets.folderId(folder.id) %}
+        <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
+          <div><img src="{{ asset.url(transform) }}" /></div>
+          <span class="title">{{ p.excerpt(asset.filename, excerptLength) }}</span>
+        </li>
+      {% endfor %}
+    {% endif %}
+    </ul>
+  </label>
 </div>
 
 <a href="#" id="open-image-modal">{{ image ? 'Change' : 'Add' }}</a>
@@ -111,7 +112,7 @@ $(function() {
 
     $.each(files, function(index, file) {
       var selected = file.id == selectedId ? 'class="selected"' : '';
-      var name = file.filename.length > 25 ? file.filename.slice(0, 25)+'...' : file.filename;
+      var name = file.filename.length > {{ excerptLength }} ? file.filename.slice(0, {{ excerptLength }})+'...' : file.filename;
 
       srcImages.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+name+'</span></li>');
     });
@@ -168,7 +169,7 @@ $(function() {
     updateOkButton();
   });
 
-  srcImageCredit.blur(function(e) {
+  srcImageCredit.keyup(function(e) {
     updateOkButton();
   });
 
@@ -191,24 +192,16 @@ $(function() {
 {% includeJs js %}
 
 {% set css %}
-.clear {
-  clear: both;
-}
-
-.no-close .ui-dialog-titlebar-close {
-  visibility: hidden;
-}
-
-.fileinput-button {
-  float: right;
+img.display-image {
+  width: 160px;
 }
 
 ul#src-images {
   list-style: none;
 }
 ul#src-images li {
-  height: 200px;
-  width: 200px;
+  height: 160px;
+  width: 160px;
   margin: 14px 0 0 14px;
   float: left;
 }
@@ -217,6 +210,14 @@ ul#src-images li .title {
 }
 ul#src-images li.selected {
   background: #d5d8dd;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+
+.clear {
+  clear: both;
 }
 {% endset %}
 {% includeCss css %}
