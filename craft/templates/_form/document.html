@@ -1,4 +1,5 @@
 {% set sourceId = 2 %}
+
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
@@ -39,8 +40,24 @@
 </div>
 
 <div id="document-modal" title="{{ document ? 'Change' : 'Add' }} Document">
-  <label for="document">
-    Select a PDF document
+  <div>
+    <span class="fileinput-button">
+      <span>Upload a Document</span>
+      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+    </span>
+
+    <br class="clear">
+    <br>
+    <div>
+      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    </div>
+  </div>
+
+  <br class="clear">
+  <label for="document" class="required">
+    Select a Document <span class="note">* required</span>
+    <br>
     <select id="document-asset-id">
       <option value=""></option>
       {% if folder %}
@@ -51,22 +68,11 @@
     </select>
   </label>
 
-  <div>
-    <span class="fileinput-button">
-      <span>Upload a PDF document</span>
-      <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-      <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-    </span>
-
-    <br>
-    <div>
-      <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
-    </div>
-  </div>
-
-  <br class="clear">
+  <br>
+  <br>
   <label for="document-title">
     Document title
+    <br>
     <input type="text" id="document-title" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
   </label>
 </div>

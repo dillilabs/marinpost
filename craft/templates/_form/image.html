@@ -1,8 +1,9 @@
 {% set sourceId = 3 %}
-{% set folder = craft.s3direct.s3Folder(sourceId) %}
-{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 {% set transform = 'list' %}
 {% set excerptLength = 20 %}
+
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set imageBlock = false %}
 {% set image = false %}
