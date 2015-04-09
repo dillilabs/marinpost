@@ -26,9 +26,11 @@
     {% redirect 404 %}
   {% endif %}
 
+{#
   {% if currentUser.isInGroup('guest') and entry.status != 'disabled' %}
     {% redirect 404 %}
   {% endif %}
+#}
 {% endif %}
 
 {% set section = entry.section.handle %}

@@ -138,17 +138,31 @@
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
               var submitType = $(this).attr('data-submit');
-              var section;
+              var section = '';
 
               switch (submitType) {
-                case 'publish':
-                  entryEnabled.val(1);
-                  form.submit();
+                case 'preview':
+                  // document.location = $(this).attr('data-url');
+                  alert('Coming Soon');
+                  e.preventDefault();
                   break;
 
                 case 'save':
                   entryEnabled.val(0);
                   form.submit();
+                  break;
+
+                case 'publish':
+                  entryEnabled.val(1);
+                  form.submit();
+                  break;
+
+                case 'delete':
+                  if (confirm('Are you sure')) {
+                    document.location = $(this).attr('data-url');
+                  } else {
+                    e.preventDefault();
+                  }
                   break;
 
                 case 'cancel':

@@ -28,10 +28,26 @@
 {% endmacro %}
 
 {% macro inputSubmit(entry) %}
-  <input type="button" class="submit" data-submit="preview" value="Preview" onclick="alert('Coming Soon')">
-  <input type="button" class="submit" data-submit="save" value="{{ entry.id ? 'Unpublish' : 'Save' }}">
-  <input type="button" class="submit" data-submit="publish" value="Publish">
-  <input type="button" class="submit" data-submit="delete" value="Delete" onclick="alert('Coming Soon')">
+  {% if entry.author.isInGroup('contributor') %}
+    <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
+    <input type="button" class="submit" data-submit="save" value="{{ entry.id ? 'Unpublish' : 'Save' }}">
+    <input type="button" class="submit" data-submit="publish" value="Publish">
+
+    {% if entry.id %}
+      <input type="button" class="submit" data-submit="delete" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}" value="Delete">
+    {% endif %}
+
+  {% else %}
+    {% if entry.id %}
+      <input type="button" class="submit" data-submit="delete" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}" value="Delete">
+
+    {% else %}
+      <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
+      <input type="button" class="submit" data-submit="save" value="{{ entry.id ? 'Unpublish' : 'Save' }}">
+      <input type="button" class="submit" data-submit="publish" value="Publish">
+    {% endif %}
+
+  {% endif %}
   <input type="button" class="submit" data-submit="cancel" value="Cancel">
 {% endmacro %}
 

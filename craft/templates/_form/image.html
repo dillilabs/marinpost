@@ -17,7 +17,7 @@
   {% set key = imageBlock.id | default('new') %}
 {% endif %}
 
-<img src="{{ image ? image.url(transform) : '/img/default-'+transform~'.png' }}" class="display-image" />
+<img src="{{ image ? image.url(transform) : '/img/default-'~transform~'.png' }}" class="display-image" />
 <label>Image</label>
 
 {% if errors %}
