@@ -3,6 +3,13 @@ namespace Craft;
 
 class S3DirectController extends BaseController
 {
+    private $pluginSettings;
+
+    function __construct()
+    {
+        $this->pluginSettings = craft()->plugins->getPlugin('s3direct')->getSettings();
+    }
+
     public function actionUpdateAssetsIndex()
     {
         $this->requirePostRequest();
@@ -10,6 +17,7 @@ class S3DirectController extends BaseController
 
         $sourceId = craft()->request->getParam('sourceid');
         $fileNames = craft()->request->getParam('filenames');
+        $transform = $this->pluginSettings['imageTransform'];
 
         if ($sourceId && $fileNames)
         {
@@ -22,7 +30,7 @@ class S3DirectController extends BaseController
             $files = array();
             foreach ($assets as $asset)
             {
-                $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, 'thumb') : $asset->url;
+                $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, $transform) : $asset->url;
 
                 array_push($files, array(
                     'id' => $asset->id,

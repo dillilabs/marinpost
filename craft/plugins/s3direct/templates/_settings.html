@@ -1,10 +1,24 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Logging Settings</p>
+<p style="font-weight:bold">Image Upload Settings</p>
+
+{{ forms.textField({
+	first:        true,
+	label:        "Image Transform"|t,
+	id:           'imageTransform',
+	name:         'imageTransform',
+	instructions: "Auto-generate transform for uploaded image."|t,
+	value:        settings.imageTransform,
+	autofocus:    true,
+	errors:       settings.getErrors('imageTransform')
+}) }}
+
+<p style="font-weight:bold">Log Settings</p>
 
 {{ forms.checkboxField({
-	first: true,
 	label: "Force Logging"|t,
+	id: 'forceLog',
 	name: 'forceLog',
+	instructions: "Log messages even if below threshold."|t,
 	checked: (settings.forceLog is defined and settings.forceLog is not empty ? true : false),
 }) }}

@@ -10,6 +10,7 @@ class S3DirectPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
+            'imageTransform' => array(AttributeType::String, 'default' => 'list', 'required' => true),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }

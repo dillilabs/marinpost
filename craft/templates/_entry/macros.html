@@ -399,3 +399,13 @@
     </div>
   {% endif %}
 {% endmacro %}
+
+{% macro excerpt(text, maxLength) %}
+  {% set maxLength = maxLength | default(25) %}
+
+  {% if (text | length) < maxLength %}
+    {{ text }}
+  {% else %}
+    {{ text | slice(0, maxLength) }}...
+  {% endif %}
+{% endmacro %}

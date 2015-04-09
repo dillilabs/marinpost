@@ -1,6 +1,7 @@
 {% set sourceId = 3 %}
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+{% set transform = 'list' %}
 
 {% set imageBlock = false %}
 {% set image = false %}
@@ -16,7 +17,7 @@
   {% set key = imageBlock.id | default('new') %}
 {% endif %}
 
-<img src="{{ image ? image.url('thumb') : '/img/default-thumb.png' }}" class="display-image" />
+<img src="{{ image ? image.url(transform) : '/img/default-'+transform~'.png' }}" class="display-image" />
 <label>Image</label>
 
 {% if errors %}
@@ -44,9 +45,9 @@
       <ul id="src-images">
       {% if folder %}
         {% for asset in craft.assets.folderId(folder.id) %}
-          <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url('thumb') }}" {% if asset.id == image.id %}class="selected"{% endif %}>
-            <div><img src="{{ asset.url('thumb') }}" /></div>
-            <span class="title">{{ asset.filename | slice(0, 15) }}</span>
+          <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
+            <div><img src="{{ asset.url(transform) }}" /></div>
+            <span class="title">{{ p.excerpt(asset.filename, 25) }}</span>
           </li>
         {% endfor %}
       {% endif %}
@@ -89,7 +90,7 @@ $(function() {
   var targetImageId = $('input[type=hidden][name$="[fields][image][]"]');
   var targetImageCredit = $('input[type=hidden][name$="[fields][by]"]');
   var displayImage = $('img.display-image');
-  var defaultImageUrl = '/img/default-thumb.png';
+  var defaultImageUrl = '/img/default-{{ transform }}.png';
   
   var selectedImage = function() {
     return srcImages.children('li.selected:first');
@@ -110,7 +111,7 @@ $(function() {
 
     $.each(files, function(index, file) {
       var selected = file.id == selectedId ? 'class="selected"' : '';
-      var name = file.filename.length > 15 ? file.filename.slice(0, 15)+'...' : file.filename;
+      var name = file.filename.length > 25 ? file.filename.slice(0, 25)+'...' : file.filename;
 
       srcImages.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+name+'</span></li>');
     });
@@ -206,13 +207,13 @@ ul#src-images {
   list-style: none;
 }
 ul#src-images li {
-  height: 128px;
-  width: 100px;
+  height: 200px;
+  width: 200px;
   margin: 14px 0 0 14px;
   float: left;
 }
 ul#src-images li .title {
-  font-size: 10px;
+  font-size: 12px;
 }
 ul#src-images li.selected {
   background: #d5d8dd;
