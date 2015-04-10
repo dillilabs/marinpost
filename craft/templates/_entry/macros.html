@@ -252,7 +252,7 @@
       {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
         <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
       {% else %}
-        <a href="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+        <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
       {% endif %}
     </p>
     <br class="author-links">

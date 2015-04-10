@@ -2,6 +2,7 @@ $(function() {
   var registerForm = $('form#register');
   var emailForm = $('form#update-email');
   var passwordForm = $('form#update-password');
+  var deleteEntryLinks = $('a.delete-entry');
 
   var clearErrors = function(field) {
     field.next('ul.errors').remove();
@@ -143,6 +144,14 @@ $(function() {
     if (isBlank(currentPassword)) {
       addError(currentPassword, 'Current Password is required for security.');
       e.preventDefault();
+    }
+  });
+
+  deleteEntryLinks.click(function(e) {
+    e.preventDefault();
+
+    if (confirm('Are you sure?')) {
+      document.location = $(this).attr('data-url');
     }
   });
 });
