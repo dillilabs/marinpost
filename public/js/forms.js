@@ -87,7 +87,7 @@
 
             var removeEmptyImageFields = function() {
               var image = form.find('input[type=hidden][name$="[fields][image][]"]');
-              var by = form.find('input[type=hidden][name$="[fields][by]"]');
+              var credit = form.find('input[type=hidden][name$="[fields][credit]"]');
 
               // Craft doesn't take kindly to empty multiple fields
               if (image.length && image.val().length == 0) {
@@ -96,7 +96,7 @@
                 // If all fields are empty then assume no image
                 // and explicitly remove all of the associated fields
                 // else Craft will assume incomplete data and return validation errors.
-                if (by.length && by.val().trim().length == 0) {
+                if (credit.length && credit.val().trim().length == 0) {
                   form.find('.image-field.inputs').remove();
                 }
               }
