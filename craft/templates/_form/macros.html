@@ -1,4 +1,4 @@
-{% macro h2() %}
+{% macro h2(entry) %}
   {% switch craft.request.segment(2) %}
     {% case 'blog' %}
       Create a Blog Post
@@ -14,6 +14,24 @@
 
     {% case 'notice' %}
       Post a Notice
+
+    {% default %}
+      {% switch entry.section.handle %}
+        {% case 'blog' %}
+          Edit Blog Post
+
+        {% case 'letters' %}
+          Edit Letter
+
+        {% case 'media' %}
+          Edit Media Link
+
+        {% case 'news' %}
+          Edit News Link
+
+        {% case 'notices' %}
+          Edit Notice
+      {% endswitch %}
   {% endswitch %}
 {% endmacro %}
 
