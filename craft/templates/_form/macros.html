@@ -46,18 +46,24 @@
 {% endmacro %}
 
 {% macro inputSubmit(entry) %}
-  {% if entry.author.isInGroup('contributor') %}
-    <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
-    {% if entry.status == 'disabled' %}
-      <input type="button" class="submit" data-submit="save" value="Save">
-    {% endif %}
+  <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
+
+  {% if not entry.id %}
+    <input type="button" class="submit" data-submit="save" value="Save">
     <input type="button" class="submit" data-submit="publish" value="Publish">
 
-  {% else %} {# Guest #}
-    {% if entry.status == 'disabled' %}
-      <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
-      <input type="button" class="submit" data-submit="save" value="Save">
+    {% else %} {# existing entry #}
+    {% if entry.author.isInGroup('contributor') %}
+      {% if entry.status == 'disabled' %}
+        <input type="button" class="submit" data-submit="save" value="Save">
+      {% endif %}
       <input type="button" class="submit" data-submit="publish" value="Publish">
+
+    {% else %} {# Guest #}
+      {% if entry.status == 'disabled' %}
+        <input type="button" class="submit" data-submit="save" value="Save">
+        <input type="button" class="submit" data-submit="publish" value="Publish">
+      {% endif %}
     {% endif %}
   {% endif %}
 
