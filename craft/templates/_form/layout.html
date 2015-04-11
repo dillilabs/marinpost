@@ -1,5 +1,16 @@
 <main class="single">
   <div class="sub-nav">
+  {% if craft.request.segment(1) == 'submit' %}
+    {% block subNav %}
+      <ul>
+        {{ n.arrowLink('submit/blog', 'Create a Blog') }}
+        {{ n.arrowLink('submit/notice', 'Post a Notice') }}
+        {{ n.arrowLink('submit/news', 'Link News') }}
+        {{ n.arrowLink('submit/media', 'Link Media') }}
+        {{ n.arrowLink('submit/letter', 'Write a Letter') }}
+      </ul>
+    {% endblock %}
+  {% endif %}
   </div>
 
   <div class="form-wrapper">
