@@ -157,15 +157,12 @@
                   form.submit();
                   break;
 
-                case 'delete':
-                  if (confirm('Are you sure?')) {
-                    document.location = $(this).attr('data-url');
-                  } else {
-                    e.preventDefault();
-                  }
-                  break;
-
                 case 'cancel':
+                  if (!confirm('Are you sure?')) {
+                    e.preventDefault();
+                    break;
+                  }
+
                   switch (sectionId.val()) {
                     case '2':
                       section = 'news';

@@ -249,11 +249,23 @@
 {% macro authorLinks(entry) %}
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <p class="author-links">
-      {% if currentUser.isInGroup('contributor') or entry.status == 'disabled' %}
-        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a>
+    {% if currentUser.isInGroup('contributor') %}
+      <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a> |
+
+      {% if entry.status == 'disabled' %}
+        <a href="{{ actionUrl('mpEntry/publishEntry', { entryId: entry.id }) }}">Publish</a> |
       {% else %}
-        <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+        <a href="{{ actionUrl('mpEntry/unpublishEntry', { entryId: entry.id }) }}">Unpublish</a> |
       {% endif %}
+
+    {% else %} {# Guest #}
+      {% if entry.status == 'disabled' %}
+        <a href="/edit/{{ entry.id }}/{{ entry.slug }}">Edit</a> |
+        <a href="{{ actionUrl('mpEntry/publishEntry', { entryId: entry.id }) }}">Publish</a> |
+      {% endif %}
+    {% endif %}
+
+      <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
     </p>
     <br class="author-links">
   {% endif %}
