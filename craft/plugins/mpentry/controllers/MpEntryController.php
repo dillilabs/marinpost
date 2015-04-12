@@ -24,7 +24,7 @@ class MpEntryController extends BaseController
 
         $this->_updateStatus($entry->id, BaseElementModel::ENABLED);
 
-        $this->_setPostDate($entry->id);
+        $this->_setPostDateAndSlug($entry->id);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content published.'));
     }
@@ -163,10 +163,14 @@ class MpEntryController extends BaseController
     }
 
     /**
-     * Publishing a never-before-published entry does not automatically set the postDate,
+     * Publishing a never-before-published entry does set the following attributes:
+     *
+     *   post date
+     *   uri slug
+     * 
      * so we must do so manually.
      */
-    private function _setPostDate($entryId)
+    private function _setPostDateAndSlug($entryId)
     {
         $entryRecord = EntryRecord::model()->findById($entryId);
 
@@ -174,6 +178,11 @@ class MpEntryController extends BaseController
         {
 
             $entryRecord->saveAttributes(array('postDate' => DateTimeHelper::currentTimeForDb()));
+
+            // fetch entry with brand new post date
+            $entry = craft()->entries->getEntryById($entryId);
+
+            craft()->elements->updateElementSlugAndUri($entry);
         }
     }
 
