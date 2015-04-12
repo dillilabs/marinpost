@@ -12,6 +12,10 @@ class MpEntryController extends BaseController
         $this->currentUser = craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
     }
 
+    /**
+     * Publish an entry directly by setting the status
+     * ...and the postDate, if never before published.
+     */
     public function actionPublishEntry()
     {
         $this->requireLogin();
@@ -20,9 +24,14 @@ class MpEntryController extends BaseController
 
         $this->_updateStatus($entry->id, BaseElementModel::ENABLED);
 
+        $this->_setPostDate($entry->id);
+
         $this->renderTemplate('account/entries/_update', array('success' => 'Content published.'));
     }
 
+    /**
+     * Unpublish an entry directly by setting the status.
+     */
     public function actionUnpublishEntry()
     {
         $this->requireLogin();
@@ -36,6 +45,9 @@ class MpEntryController extends BaseController
         $this->renderTemplate('account/entries/_update', array('success' => 'Content unpublished.'));
     }
 
+    /**
+     * Just that.
+     */
     public function actionDeleteEntry()
     {
         $this->requireLogin();
@@ -44,6 +56,8 @@ class MpEntryController extends BaseController
 
         $this->_deleteEntry($entry->id);
 
+        $this->_log("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
+
         $this->renderTemplate('account/entries/_update', array('success' => 'Content deleted.'));
     }
 
@@ -51,6 +65,9 @@ class MpEntryController extends BaseController
     // Helper functions
     // ----------------
 
+    /**
+     * Fetch the entry and ensure authorship.
+     */
     private function _getEntry()
     {
         $entryId = craft()->request->getParam('entryId');
@@ -75,6 +92,9 @@ class MpEntryController extends BaseController
         return $entry;
     }
 
+    /**
+     * Some functionality is only available to contributors.
+     */
     private function _ensureContributor($user)
     {
         if (!$user->isInGroup('contributor'))
@@ -86,6 +106,9 @@ class MpEntryController extends BaseController
         return true;
     }
 
+    /**
+     * Update the status already.
+     */
     private function _updateStatus($entryId, $status)
     {
         $elementIds = array($entryId);
@@ -139,6 +162,21 @@ class MpEntryController extends BaseController
         $this->raiseEvent('onSetStatus', $event);
     }
 
+    /**
+     * Publishing a never-before-published entry does not automatically set the postDate,
+     * so we must do so manually.
+     */
+    private function _setPostDate($entryId)
+    {
+        $entryRecord = EntryRecord::model()->findById($entryId);
+
+        if (!$entryRecord->postDate)
+        {
+
+            $entryRecord->saveAttributes(array('postDate' => DateTimeHelper::currentTimeForDb()));
+        }
+    }
+
     private function _deleteEntry($entryId)
     {
         return craft()->entries->deleteEntryById($entryId);
@@ -146,7 +184,6 @@ class MpEntryController extends BaseController
 
     private function _log($mixed, $level = LogLevel::Info)
     {
-        $message = is_string($mixed) ? $mixed : json_encode($mixed);
-        MpEntryPlugin::log($message, $level, $this->pluginSettings['forceLog']);
+        MpEntryPlugin::log(is_string($mixed) ? $mixed : json_encode($mixed), $level, $this->pluginSettings['forceLog']);
     }
 }
