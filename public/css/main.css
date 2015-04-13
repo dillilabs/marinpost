@@ -159,6 +159,9 @@ h3 {
 h3 > a, h3 > a:visited {
     color: #333;
 }
+h3 > a:hover {
+    text-decoration: underline;
+}
 h4 {
     font-family: sans-serif;
     margin: 1em 0 .5em;
@@ -387,7 +390,7 @@ nav ul ul {
 .sub-nav h5, .my-content > a {
     background: url('../img/right-arrow.png') no-repeat scroll 6px 8px;
     border: 1px solid #ccc;
-    font-size: .95em;
+    font-size: .9em;
     font-weight: normal;
     text-transform: uppercase;
 }
@@ -400,7 +403,7 @@ h3.my-content {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5 a, .sub-nav h5 a:visited {
+.filter > a, .sub-nav h5 a, .sub-nav h5 a:visited {
     color: #000;
 }
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
@@ -411,6 +414,7 @@ h3.my-content {
 .sub-nav h5.active a {
     padding: 0;
 }
+
 .filter ul > li.group-label {
     border-left: none;
     border-right: none;
@@ -486,7 +490,7 @@ main {
     padding: 0 1em;
 }
 .posts > li:not(:last-of-type) {
-    border-bottom: 1px solid #c9c8ac;
+    border-bottom: 1px solid #DAE4F4;
     margin-bottom: 1em;
 }
 main.single {
