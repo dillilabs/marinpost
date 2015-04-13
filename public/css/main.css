@@ -113,7 +113,7 @@ body {
     margin: 0 auto;
 }
 ul.tags, nav, h2 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: normal;
 }
 a, a:visited {
@@ -149,7 +149,7 @@ h3 {
 .posts h3.join {
     color: #38547b;
     border-bottom: 1px solid #ebebeb;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: normal;
     margin: 2em 0 .25em;
     padding: 0 0 .5em;
@@ -163,11 +163,11 @@ h3 > a:hover {
     text-decoration: underline;
 }
 h4 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 1em 0 .5em;
 }
 h5, h3.my-content {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 1em 0 .5em;
 }
 img {
@@ -246,7 +246,7 @@ header h2 {
 }
 .show-menu {
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     position: relative;
     padding-left: 2em;
     text-transform: uppercase;
@@ -264,7 +264,7 @@ header h2 {
 .show-search {
     background: url('../img/search-black.png') 60px 7px no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     left: 40%;
     margin: 0 auto;
     padding-top: 5px;
@@ -274,7 +274,7 @@ header h2 {
 }
 
 #mini-menu > ul {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -381,7 +381,7 @@ nav ul ul {
     padding-top: 0;
 }
 .sub-nav h3 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .75em;
     font-weight: normal;
     margin-bottom: 2em;
@@ -470,7 +470,7 @@ h3.contributor {
     margin-bottom: 0;
 }
 .byline, .profession, .hometown {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .924em;
 }
 .timestamp {
@@ -506,7 +506,7 @@ main.single > .post > h3 {
 .help {
     border-bottom: 1px solid #C8D4E9;
     color: #676158;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: 1em;
 }
 
@@ -517,7 +517,7 @@ main.single > .post > h3 {
 .coming-soon {
     border-bottom: 1px solid #C8D4E9;
     color: #000;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1.5em;
     font-weight: bold;
     padding: .5em 0 1em 0;
@@ -528,7 +528,7 @@ main.single > .post > h3 {
 .download {
     background: url('../img/download.png') 0 2px scroll no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: .5em;
     padding-left: 1em;
 }
@@ -544,7 +544,7 @@ main.single > .post > h3 {
 .video-link {
     background: url('../img/video.png') 0 2px scroll no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: .5em;
     padding-left: 1em;
 }
@@ -590,7 +590,7 @@ ul.tags > li {
 .filter ul > li {
     border: 1px solid #d2def4;
     border-top: none;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0 0 .25em .25em;
 }
@@ -619,7 +619,7 @@ a.comment-box {
     border-radius: 2px;
     color: #333;
     display: block;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1.1em;
     font-weight: bold;
     margin: .5em 0;
@@ -658,7 +658,7 @@ input[type="checkbox"] {
     margin-right: .5em;
 }
 label.check {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 0.9em;
 }
 .field {
@@ -685,7 +685,7 @@ img.display-image {
 	float: left;
 	margin: 0 15px 15px 0;
 }
-.event .field.date, .statezip .field {
+.event .field.date, .field.statezip {
     display: inline-block;
     width: 48%;
     padding-right: .5em;
@@ -694,7 +694,7 @@ a.optional-category-field {
     float:right;
 }
 .legal {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
 }
 .inputs label,
@@ -793,7 +793,7 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 }
 
 #subscribe p {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
 }
 
@@ -802,7 +802,7 @@ button.donate, a.subscribe {
     border: none;
     border-radius: 25px;
     color: #000;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .85em;
     font-weight: bold;
     margin: 0 auto;
@@ -1120,7 +1120,7 @@ footer {
     
 	.post .image-wrapper p, .posts .image-wrapper p, .featured .image-wrapper p {
 		color: #666;
-		font-family: 'Arial', sans-serif;
+		font-family: 'Arial', Arial, sans-serif;
 		font-size: .75em;
         margin: 0;
         text-align: right;
