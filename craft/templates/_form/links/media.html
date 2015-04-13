@@ -44,9 +44,9 @@
     <input type="hidden" id="originalMediaType" value="{{ mediaType }}">
     <input type="hidden" id="originalMediaLinkBlockId" value="{{ key }}">
     
-    <input type="radio" name="mediaTypeSelect" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link to a video
-    <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link to a document
-    <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload a document
+    <input type="radio" name="mediaTypeSelect" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link Video
+    <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link Document
+    <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload Document
     
     <input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
     <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>

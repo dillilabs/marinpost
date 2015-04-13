@@ -277,6 +277,9 @@ header h2 {
     position: absolute;
     text-transform: uppercase;
 }
+.bottom-only {
+    display: none;
+}
 
 #mini-menu > ul {
     font-family: Arial, sans-serif;
@@ -311,6 +314,9 @@ nav {
     background: #fff;
     margin: 1em 0;
     padding: 1em 0;
+}
+#support + nav {
+    display: none;
 }
 nav li {
     padding: 2%;
@@ -1094,7 +1100,7 @@ footer {
 
     ul.posts, .single > .post, main > form  {
         display: inline-block;
-        width: 75%;
+        width: 95%;
         vertical-align: top;
     }
     .single > .post  {
@@ -1154,6 +1160,7 @@ footer {
     #support {
         display: inline-block;
         padding: 0;
+        width: 100%;
     }
 }
 
