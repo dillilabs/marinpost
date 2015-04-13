@@ -18,13 +18,14 @@
             {% endif %}
 
             <h3><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
-
-            {% if user.titleOrProfession %}
-              <p class="profession">{{ user.titleOrProfession }}</p>
-            {% endif %}
-
-            <p class="hometown">{{ user.city }}, {{ user.state }}</p>
-
+            <div class="profession">
+                {% if user.titleOrProfession %}
+                {{ user.titleOrProfession }}<br>
+                {% endif %}
+                
+                {{ user.city }}, {{ user.state }}
+            </div>
+        
             {% if user.bio %}
               <p>{{ user.bio }}</p>
             {% endif %}

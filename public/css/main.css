@@ -121,7 +121,7 @@ a, a:visited {
     text-decoration: none;
 }
 a:hover {
-    color: #3b5266;
+    color: red;
 }
 h2 {
     border-bottom: 1px solid #C8D4E9;
@@ -156,7 +156,7 @@ h3 {
     text-align: center;
     text-transform: uppercase;
 }
-h3 > a, h3 > a:visited {
+h3 > a, h3 > a:visited, h3 > a:hover {
     color: #333;
 }
 h3 > a:hover {
@@ -195,6 +195,11 @@ fieldset > ul,
 .submit .comment-count,
 .contact .comment-count {
     display: none;
+}
+.errors > li {
+    color: red;
+    font-weight: bold;
+    font-size: 1.5em;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
