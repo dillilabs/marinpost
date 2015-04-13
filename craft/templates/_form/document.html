@@ -17,7 +17,7 @@
   {% set key = documentBlock.id | default('new') %}
 {% endif %}
 
-<div class="field">
+<div class="field document">
   <label>Document</label>
   <p class="display-document">{{ document ? p.documentTitle(document, title) : '' }}</p> 
 
@@ -78,6 +78,7 @@
 </div>
 
 <a href="#" id="open-document-modal">{{ document ? 'Change' : 'Add' }}</a>
+<!-- <div class="note">Upload PDF only</div> -->
 {% set js %}
 $(function() {
   var openDocumentModal = $('#open-document-modal');
