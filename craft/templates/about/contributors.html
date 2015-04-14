@@ -25,6 +25,10 @@
                 
                 {{ user.city }}, {{ user.state }}
             </div>
+
+            {% if user.webSite %}
+              <p><a href="{{ p.externalUrl(user.webSite) }}" target="_blank">My Web Site</a></p>
+            {% endif %}
         
             {% if user.bio %}
               <p>{{ user.bio }}</p>
