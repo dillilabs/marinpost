@@ -13,8 +13,7 @@ class MpEntryController extends BaseController
     }
 
     /**
-     * Publish an entry directly by setting the status
-     * ...and the postDate, if never before published.
+     * Publish an entry directly by setting the status.
      */
     public function actionPublishEntry()
     {
@@ -24,6 +23,9 @@ class MpEntryController extends BaseController
 
         $this->_updateStatus($entry->id, BaseElementModel::ENABLED);
 
+        // Updating the status of a never-before published entry
+        // does not update either the postDate or the URI slug
+        // so we must do it manually.
         $this->_setPostDateAndSlug($entry->id);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content published.'));
@@ -162,28 +164,18 @@ class MpEntryController extends BaseController
         $this->raiseEvent('onSetStatus', $event);
     }
 
-    /**
-     * Publishing a never-before-published entry does set the following attributes:
-     *
-     *   post date
-     *   uri slug
-     * 
-     * so we must do so manually.
-     */
     private function _setPostDateAndSlug($entryId)
     {
         $entryRecord = EntryRecord::model()->findById($entryId);
 
         if (!$entryRecord->postDate)
         {
-
             $entryRecord->saveAttributes(array('postDate' => DateTimeHelper::currentTimeForDb()));
-
-            // fetch entry with brand new post date
-            $entry = craft()->entries->getEntryById($entryId);
-
-            craft()->elements->updateElementSlugAndUri($entry);
         }
+
+        $entry = craft()->entries->getEntryById($entryId);
+
+        craft()->elements->updateElementSlugAndUri($entry);
     }
 
     private function _deleteEntry($entryId)
