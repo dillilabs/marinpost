@@ -714,11 +714,6 @@ img.display-image {
     width: 48%;
     padding-right: .5em;
 }
-.event .field.date input {
-    background: url('../img/calendar-icon.png') .25em 45% no-repeat;
-    background-color: #fff;
-    padding-left: 2em;
-}
 a.optional-category-field {
     float:right;
 }
@@ -771,6 +766,12 @@ form input[type="text"]::-moz-placeholder {  /* Firefox 19+ */
     line-height: 1.5em;
 }
 
+.event .field.date input {
+    background: url('../img/calendar-icon.png') .25em 45% no-repeat;
+    background-color: #fff;
+    padding-left: 2em;
+    width: 88%;
+}
 
 form input[type="datetime"], form input[type="tel"] {
     padding: .25em;
