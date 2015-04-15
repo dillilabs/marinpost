@@ -104,7 +104,7 @@ textarea {
         jQuery UI Overrides
 * * * * * * * * * * * * * * * * * * * * * */
 
-.ui-datepicker {
+.sub-nav .ui-datepicker {
 	width: 100%
 }
 
