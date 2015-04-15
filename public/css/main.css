@@ -711,6 +711,11 @@ img.display-image {
     width: 48%;
     padding-right: .5em;
 }
+.event .field.date input {
+    background: url('../img/calendar-icon.png') .25em 45% no-repeat;
+    background-color: #fff;
+    padding-left: 2em;
+}
 a.optional-category-field {
     float:right;
 }
