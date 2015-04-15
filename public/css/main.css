@@ -767,7 +767,8 @@ form input[type="text"]::-moz-placeholder {  /* Firefox 19+ */
 }
 
 :-ms-input-placeholder {  
-   color: red;  
+/*     font-size: 1em; */
+    line-height: 1.5em;
 }
 
 
