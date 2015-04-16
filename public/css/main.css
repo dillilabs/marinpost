@@ -424,13 +424,20 @@ h3.my-content {
     padding: 5px 0 5px 25px;
 }
 
-.filter > a, .sub-nav h5 a, .sub-nav h5 a:visited {
+.filter a, .sub-nav a, .sub-nav a:visited {
     color: #000;
+}
+.filter a:hover, .sub-nav a:hover {
+    font-weight: bold;
 }
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
+}
+.sub-nav h5:hover, .sub-nav .filter h5:hover, .my-content > a:hover {
+    font-weight: bold;
+    text-decoration: underline;
 }
 .sub-nav h5.active a {
     padding: 0;
