@@ -38,8 +38,11 @@ $(function() {
   	$(this).toggleClass('active');
   });
 
+  $('.sidebar').show();
+
 });
 
 $(window).on('resize', function(){
   rejigger();
+  
 });

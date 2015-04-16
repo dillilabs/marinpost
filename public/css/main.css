@@ -1291,7 +1291,7 @@ footer {
     }
 
     .sidebar {
-        display: inline-block;
+        display: none;
         margin: 1em 0 1em .5em;
         padding: 0;
         text-align: left;
