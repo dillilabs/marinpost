@@ -6,6 +6,7 @@
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
         {{ n.arrowLink('about/advisors', 'Advisors') }}
           <a href="/about/contributors"><h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}>Contributors</h5></a>
+<!--
           <ul class="contributors" style="display: none;">
             <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" /> All</li>
             {% for author in craft.users.group('contributor').order('lastName, firstName') %}
@@ -14,6 +15,7 @@
               </li>
             {% endfor %}
           </ul>
+-->
         {{ n.arrowLink('about/terms', 'Terms of Use') }}
         {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
         {{ n.arrowLink('about/subscribe', 'Subscribe') }}
