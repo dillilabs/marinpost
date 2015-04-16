@@ -38,7 +38,7 @@ $(function() {
   	$(this).toggleClass('active');
   });
 
-  $('.sidebar').show();
+  $('.sidebar, #support').show();
 
 });
 

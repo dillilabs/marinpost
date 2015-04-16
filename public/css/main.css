@@ -1304,6 +1304,7 @@ footer {
     }
 
     #support {
+        display: none;
         width: 100%;
     }
 
