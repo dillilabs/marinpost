@@ -38,7 +38,7 @@ $(function() {
   	$(this).toggleClass('active');
   });
 
-  $('.sidebar, #support').show();
+  $('.sidebar, #support, #mini-menu').show();
 
 });
 

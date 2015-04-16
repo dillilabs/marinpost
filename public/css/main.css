@@ -1265,6 +1265,7 @@ footer {
     }
 
     #mini-menu {
+        display: none;
         float: right;
         padding: 2.5% 1% 0 0;
     }
