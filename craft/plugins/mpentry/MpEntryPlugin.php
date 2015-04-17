@@ -83,11 +83,18 @@ class MpEntryPlugin extends BasePlugin
         });
     }
 
+    /**
+     * Respond to entries.onSaveEntry event.
+     *
+     * Manage the hidden, "child" Locations of the entry's selected Locations.
+     *
+     * This is required to maintain geographically hierarchical Locations
+     * for filtering and searching purposes.
+     */
     private function _onSaveEntryEvent()
     {
         craft()->on('entries.onSaveEntry', function(Event $event) {
             $entry = $event->params['entry'];
-            // $isNew = $event->params['isNewEntry'];
 
             craft()->mpEntry->synchronizeChildLocations($entry);
         });

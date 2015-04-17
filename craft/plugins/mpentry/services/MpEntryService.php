@@ -3,7 +3,6 @@ namespace Craft;
 
 class MpEntryService extends BaseApplicationComponent
 {
-    const ROOT_LOCATION = 42;
     private $plugin;
 
     function __construct()
@@ -45,11 +44,13 @@ class MpEntryService extends BaseApplicationComponent
     }
 
     /**
-     * Populate entry's childLocations
+     * Populate entry's implicit child Locations
+     * from it's explicit primary and secondary Locations.
+     * And update the search index.
      */
     public function synchronizeChildLocations($entry)
     {
-            $locationIds = $this->impliedLocationIds($entry->id);
+            $locationIds = $this->_impliedLocationIds($entry->id);
 
             $field = craft()->fields->getFieldByHandle('childLocations');
 
@@ -61,14 +62,16 @@ class MpEntryService extends BaseApplicationComponent
 
             $savedElement = craft()->elements->saveElement($entry, false);
 
-            $this->plugin->logger("synchronizeChildLocations() saved relations=$savedRelations, saved element=$savedElement, locationIds=".json_encode($locationIds));
-
             $this->_updateSearchIndex($entry);
 
-            $this->plugin->logger("synchronizeChildLocations() updated search index for $entry");
+            $this->plugin->logger("synchronizeChildLocations() entry=$entry [{$entry->id}] saved relations=$savedRelations, saved element=$savedElement, locationIds=".json_encode($locationIds));
     }
 
-    public function impliedLocationIds($entryId)
+    //------------------
+    // Private functions
+    //------------------
+
+    private function _impliedLocationIds($entryId)
     {
         $selectedLocationIds = $this->_selectedLocationIds($entryId);
 
@@ -85,10 +88,6 @@ class MpEntryService extends BaseApplicationComponent
 
         return array_values(array_diff(array_unique($impliedLocationIds), $selectedLocationIds));
     }
-
-    //------------------
-    // Private functions
-    //------------------
 
     private function _selectedLocationIds($entryId)
     {
@@ -117,7 +116,7 @@ class MpEntryService extends BaseApplicationComponent
         return array_unique($selectedLocations);
     }
 
-    private function _locationIdsFrom($rootId = self::ROOT_LOCATION)
+    private function _locationIdsFrom($rootId)
     {
         $locations = $this->_locationsFrom($rootId);
 
@@ -219,36 +218,36 @@ class MpEntryService extends BaseApplicationComponent
 
             if ($element)
             {
-                    craft()->search->indexElementAttributes($element);
+                craft()->search->indexElementAttributes($element);
 
-                    if ($elementType->hasContent())
+                if ($elementType->hasContent())
+                {
+                    $fieldLayout = $element->getFieldLayout();
+                    $keywords = array();
+
+                    foreach ($fieldLayout->getFields() as $fieldLayoutField)
                     {
-                        $fieldLayout = $element->getFieldLayout();
-                        $keywords = array();
+                        $field = $fieldLayoutField->getField();
 
-                        foreach ($fieldLayout->getFields() as $fieldLayoutField)
+                        if ($field)
                         {
-                            $field = $fieldLayoutField->getField();
+                            $fieldType = $field->getFieldType();
 
-                            if ($field)
+                            if ($fieldType)
                             {
-                                $fieldType = $field->getFieldType();
+                                $fieldType->element = $element;
 
-                                if ($fieldType)
-                                {
-                                        $fieldType->element = $element;
+                                $handle = $field->handle;
 
-                                        $handle = $field->handle;
-
-                                        // Set the keywords for the content's locale
-                                        $fieldSearchKeywords = $fieldType->getSearchKeywords($element->getFieldValue($handle));
-                                        $keywords[$field->id] = $fieldSearchKeywords;
-                                }
+                                // Set the keywords for the content's locale
+                                $fieldSearchKeywords = $fieldType->getSearchKeywords($element->getFieldValue($handle));
+                                $keywords[$field->id] = $fieldSearchKeywords;
                             }
                         }
-
-                        craft()->search->indexElementFields($element->id, $localeId, $keywords);
                     }
+
+                    craft()->search->indexElementFields($element->id, $localeId, $keywords);
+                }
             }
         }
     }
