@@ -3,11 +3,26 @@ namespace Craft;
 
 class MpControlPanelPlugin extends BasePlugin
 {
+    /**
+     * Initialization:
+     *
+     *  Inject Javascript into the Control Panel
+     */
     public function init()
     {
         parent::init();
+
         $this->settings = $this->getSettings();
+
+        if (craft()->request->isCpRequest())
+        {
+            $this->_ensureOneUserGroup();
+        }
     }
+
+    //----------------------
+    // Hook functions
+    //----------------------
 
     public function modifyEntryTableAttributes(&$attributes, $source)
     {
@@ -26,7 +41,30 @@ class MpControlPanelPlugin extends BasePlugin
     public function modifyEntrySortableAttributes(&$attributes)
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
-//      $attributes['author'] = Craft::t('Author');
+        // $attributes['author'] = Craft::t('Author');
+    }
+
+    //----------------------
+    // Private functions
+    //----------------------
+
+    /**
+     * Inject Javascript into the Control Panel to ensure that
+     * only one User Group is selected for a User.
+     */
+    private function _ensureOneUserGroup()
+    {
+        $js = <<<'JS'
+var groups = $('form#userform input[type=checkbox][name="groups[]"]');
+
+groups.click(function(e) {
+    if (groups.filter(':checked').length > 1) {
+        alert('Please select only one User Group.');
+        return false;
+    }
+});
+JS;
+        craft()->templates->includeJs($js);
     }
 
     // ----------------
@@ -35,9 +73,7 @@ class MpControlPanelPlugin extends BasePlugin
 
     private function _log($mixed, $level = LogLevel::Info)
     {
-        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
-
-        self::log($message, $level, $this->settings['forceLog']);
+        self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
 
     //---------
@@ -69,7 +105,7 @@ class MpControlPanelPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.17';
+        return '0.0.18';
     }
 
     public function getDeveloper()

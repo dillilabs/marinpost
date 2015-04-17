@@ -3,12 +3,12 @@ namespace Craft;
 
 class MpEntryController extends BaseController
 {
-    private $pluginSettings;
+    private $plugin;
     private $currentUser;
 
     function __construct()
     {
-        $this->pluginSettings = craft()->plugins->getPlugin('mpentry')->getSettings();
+        $this->plugin = craft()->plugins->getPlugin('mpentry');
         $this->currentUser = craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
     }
 
@@ -58,7 +58,7 @@ class MpEntryController extends BaseController
 
         $this->_deleteEntry($entry->id);
 
-        $this->_log("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
+        $this->plugin->logger("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content deleted.'));
     }
@@ -181,10 +181,5 @@ class MpEntryController extends BaseController
     private function _deleteEntry($entryId)
     {
         return craft()->entries->deleteEntryById($entryId);
-    }
-
-    private function _log($mixed, $level = LogLevel::Info)
-    {
-        MpEntryPlugin::log(is_string($mixed) ? $mixed : json_encode($mixed), $level, $this->pluginSettings['forceLog']);
     }
 }

@@ -8,13 +8,32 @@ class MpEntryPlugin extends BasePlugin
     /**
      * Initialization:
      *
-     *  Listen to entries.onBeforeSaveEntry event
+     *  If front-end request:
+     *
+     *    Listen to entries.onBeforeSaveEntry event
+     *
+     *  Listen to entries.onSaveEntry event
      */
     public function init()
     {
         parent::init();
+
         $this->settings = $this->getSettings();
-        $this->_onBeforeSaveEntryEvent();
+
+        if (!craft()->request->isCpRequest())
+        {
+            $this->_onBeforeSaveEntryEvent();
+        }
+
+        $this->_onSaveEntryEvent();
+    }
+
+    /**
+     * Semi-smart logger.
+     */
+    public function logger($mixed, $level = LogLevel::Info)
+    {
+        self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
 
     //----------------------
@@ -37,83 +56,55 @@ class MpEntryPlugin extends BasePlugin
     private function _onBeforeSaveEntryEvent()
     {
         craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
-            if (!craft()->request->isCpRequest()) {
-                $entry = $event->params['entry'];
-                $isNew = $event->params['isNewEntry'];
+            $entry = $event->params['entry'];
+            $isNew = $event->params['isNewEntry'];
+            $this->logger("entries.onBeforeSaveEntry: $entry [ {$entry->id}]");
 
-                if ($entry->status == 'disabled')
+            if ($entry->status == 'disabled')
+            {
+                if (!craft()->mpEntry->isValidEntry($entry))
                 {
-                    if (!$this->_validEntry($entry))
-                    {
-                        $this->_log('Invalid disabled entry: ' . $isNew ? 'new' : $entryId);
-                        $event->performAction = false;
-                        return;
-                    }
+                    $this->logger("entries.onBeforeSaveEntry: Invalid (disabled) entry: $entry [{$entry->id}]");
+                    $event->performAction = false;
+                    return;
+                }
+            }
 
-                    if ($this->_author()->isInGroup('guest') && $this->_publishedEntry($entry))
-                    {
-                        if ($this->_publishedEntry($entry))
-                        {
-                            $this->_log('Cannot update published entry: ' . $entry->id);
-                            $entry->addError('title', 'Cannot update published entry');
-                            $event->performAction = false;
-                            return;
-                        }
-                    }
-
+            if ($this->_author()->isInGroup('guest'))
+            {
+                if (craft()->mpEntry->isPublishedEntry($entry))
+                {
+                    $this->logger("entries.onBeforeSaveEntry: Guest may not update published entry: $entry [{$entry->id}]");
+                    $entry->addError('title', 'You may not update a published entry.');
+                    $event->performAction = false;
+                    return;
                 }
             }
         });
     }
 
-    //----------------------
-    // Event helper functions
-    //----------------------
-
-    /**
-     * Validate disabled entry, add errors and return false if invalid.
-     */
-    private function _validEntry($disabledEntry)
+    private function _onSaveEntryEvent()
     {
-        if (craft()->content->validateContent($disabledEntry))
-        {
-            return true;
-        }
-        else
-        {
-            $disabledEntry->addErrors($disabledEntry->getContent()->getErrors());
-            return false;
-        }
+        craft()->on('entries.onSaveEntry', function(Event $event) {
+            $entry = $event->params['entry'];
+            // $isNew = $event->params['isNewEntry'];
+
+            craft()->mpEntry->synchronizeChildLocations($entry);
+        });
     }
 
-    /**
-     * Return true if entry has already been published.
-     */
-    private function _publishedEntry($entry)
-    {
-        if (!$entry->id) return false;
-        $originalEntry = craft()->entries->getEntryById($entry->id);
-        return $originalEntry->status == 'live';
-    }
-
-    // ----------------
+    //-----------------
     // Helper functions
-    // ----------------
+    //-----------------
 
     private function _author()
     {
         return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
     }
 
-    private function _log($mixed, $level = LogLevel::Info)
-    {
-        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
-        self::log($message, $level, $this->settings['forceLog']);
-    }
-
-    //
+    //---------
     // Settings
-    //
+    //---------
 
     protected function defineSettings()
     {
@@ -141,7 +132,7 @@ class MpEntryPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.20';
+        return '0.0.23';
     }
 
     public function getDeveloper()
