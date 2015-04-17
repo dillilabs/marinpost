@@ -86,9 +86,11 @@ class MpEntryPlugin extends BasePlugin
     /**
      * Respond to entries.onSaveEntry event.
      *
-     * Manage the hidden, "child" Locations of the entry's selected Locations.
+     * If entry section is NOT letters:
      *
-     * This is required to maintain geographically hierarchical Locations
+     *   Then manage the hidden, "child" Locations of the entry's selected Locations.
+     *
+     * Note this is required to maintain geographically hierarchical Locations
      * for filtering and searching purposes.
      */
     private function _onSaveEntryEvent()
@@ -96,7 +98,11 @@ class MpEntryPlugin extends BasePlugin
         craft()->on('entries.onSaveEntry', function(Event $event) {
             $entry = $event->params['entry'];
 
-            craft()->mpEntry->synchronizeChildLocations($entry);
+            // TODO refactor to plugin settings
+            if ($entry->section->handle != 'letters')
+            {
+                craft()->mpEntry->synchronizeChildLocations($entry);
+            }
         });
     }
 
