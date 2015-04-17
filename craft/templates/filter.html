@@ -19,7 +19,7 @@
 
 {% set slice = { 'offset': offset, 'limit': limit } %}
 
-{% set entries = craft.mpentry.entries(filters, slice) %}
+{% set entries = craft.mpfilter.entries(filters, slice) %}
 
 {% set unfiltered = craft.request.param('unfiltered') | default(false)  %}
 

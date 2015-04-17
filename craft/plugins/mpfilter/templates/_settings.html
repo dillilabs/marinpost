@@ -1,0 +1,20 @@
+{% import '_includes/forms' as forms %}
+
+<p style="font-weight:bold">Listing Settings</p>
+
+{{ forms.textField({
+	label: "Default Entry Limit"|t,
+	instructions: "Enter default limit of entries per filter/more request"|t,
+	id: 'defaultEntryLimit',
+	name: 'defaultEntryLimit',
+	value: settings.defaultEntryLimit,
+}) }}
+
+<p style="font-weight:bold">Logging Settings</p>
+
+{{ forms.checkboxField({
+	first: true,
+	label: "Force Logging"|t,
+	name: 'forceLog',
+	checked: (settings.forceLog is defined and settings.forceLog is not empty ? true : false),
+}) }}
