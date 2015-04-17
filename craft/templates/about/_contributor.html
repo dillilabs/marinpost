@@ -18,17 +18,22 @@
         </div>
       {% endif %}
 
-      <h3>{{ user.name }}</h3>
-      {% if user.titleOrProfession %}
-        <p class="profession">{{ user.titleOrProfession }}</p>
-      {% endif %}
+      <h3 class="contributor">{{ user.name }}</h3>
+      <div class="profession">
+          {% if user.titleOrProfession %}
+            {{ user.titleOrProfession }}<br>
+          {% endif %}
+    
+          {{ user.city }}, {{ user.state }}
+      </div>
 
-      <p class="hometown">{{ user.city }}, {{ user.state }}</p>
+      {% if user.webSite %}
+        <p class="my-web-site"><a href="{{ p.externalUrl(user.webSite) }}" target="_blank">My Web Site</a></p>
+      {% endif %}
 
       {% if user.bio %}
         <p>{{ user.bio }}</p>
       {% endif %}
-
       {% set entries = craft.entries.authorId(user.id) | group('section.handle') %}
 
       {% import "about/_macros" as m %}

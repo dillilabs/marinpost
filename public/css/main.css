@@ -99,6 +99,16 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+
+/* * * * * * * * * * * * * * * * * * * * *
+        jQuery UI Overrides
+* * * * * * * * * * * * * * * * * * * * * */
+
+.sub-nav .ui-datepicker {
+	width: 100%
+}
+
+
 /* * * * * * * * * * * * * * * * * * * * *
         SHARED
 * * * * * * * * * * * * * * * * * * * * * */
@@ -113,7 +123,7 @@ body {
     margin: 0 auto;
 }
 ul.tags, nav, h2 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: normal;
 }
 a, a:visited {
@@ -121,7 +131,7 @@ a, a:visited {
     text-decoration: none;
 }
 a:hover {
-    color: #3b5266;
+    text-decoration: underline;
 }
 h2 {
     border-bottom: 1px solid #C8D4E9;
@@ -149,22 +159,25 @@ h3 {
 .posts h3.join {
     color: #38547b;
     border-bottom: 1px solid #ebebeb;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-weight: normal;
     margin: 2em 0 .25em;
     padding: 0 0 .5em;
     text-align: center;
     text-transform: uppercase;
 }
-h3 > a, h3 > a:visited {
+h3 > a, h3 > a:visited, h3 > a:hover {
     color: #333;
 }
+h3 > a:hover {
+    text-decoration: underline;
+}
 h4 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 1em 0 .5em;
 }
 h5, h3.my-content {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 1em 0 .5em;
 }
 img {
@@ -192,6 +205,11 @@ fieldset > ul,
 .submit .comment-count,
 .contact .comment-count {
     display: none;
+}
+.errors > li {
+    color: red;
+    font-weight: bold;
+    font-size: 1.05em;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -243,7 +261,7 @@ header h2 {
 }
 .show-menu {
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     position: relative;
     padding-left: 2em;
     text-transform: uppercase;
@@ -261,7 +279,7 @@ header h2 {
 .show-search {
     background: url('../img/search-black.png') 60px 7px no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     left: 40%;
     margin: 0 auto;
     padding-top: 5px;
@@ -269,9 +287,12 @@ header h2 {
     position: absolute;
     text-transform: uppercase;
 }
+.bottom-only {
+    display: none;
+}
 
 #mini-menu > ul {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -303,6 +324,9 @@ nav {
     background: #fff;
     margin: 1em 0;
     padding: 1em 0;
+}
+#support + nav {
+    display: none;
 }
 nav li {
     padding: 2%;
@@ -378,7 +402,7 @@ nav ul ul {
     padding-top: 0;
 }
 .sub-nav h3 {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .75em;
     font-weight: normal;
     margin-bottom: 2em;
@@ -387,7 +411,7 @@ nav ul ul {
 .sub-nav h5, .my-content > a {
     background: url('../img/right-arrow.png') no-repeat scroll 6px 8px;
     border: 1px solid #ccc;
-    font-size: .95em;
+    font-size: .9em;
     font-weight: normal;
     text-transform: uppercase;
 }
@@ -400,17 +424,25 @@ h3.my-content {
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav h5 a, .sub-nav h5 a:visited {
+.filter a, .sub-nav a, .sub-nav a:visited {
     color: #000;
+}
+.filter a:hover, .sub-nav a:hover {
+    font-weight: bold;
 }
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
 }
+.sub-nav h5:hover, .sub-nav .filter h5:hover, .my-content > a:hover {
+    font-weight: bold;
+    text-decoration: underline;
+}
 .sub-nav h5.active a {
     padding: 0;
 }
+
 .filter ul > li.group-label {
     border-left: none;
     border-right: none;
@@ -462,8 +494,11 @@ ul.tags {
     padding-right: 3%;
 }
 
-.byline, .profession, .hometown {
-    font-family: sans-serif;
+h3.contributor {
+    margin-bottom: 0;
+}
+.byline, .profession, .hometown, .my-web-site {
+    font-family: Arial, sans-serif;
     font-size: .924em;
 }
 .timestamp {
@@ -483,7 +518,7 @@ main {
     padding: 0 1em;
 }
 .posts > li:not(:last-of-type) {
-    border-bottom: 1px solid #c9c8ac;
+    border-bottom: 1px solid #DAE4F4;
     margin-bottom: 1em;
 }
 main.single {
@@ -499,7 +534,7 @@ main.single > .post > h3 {
 .help {
     border-bottom: 1px solid #C8D4E9;
     color: #676158;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: 1em;
 }
 
@@ -510,7 +545,7 @@ main.single > .post > h3 {
 .coming-soon {
     border-bottom: 1px solid #C8D4E9;
     color: #000;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1.5em;
     font-weight: bold;
     padding: .5em 0 1em 0;
@@ -521,7 +556,7 @@ main.single > .post > h3 {
 .download {
     background: url('../img/download.png') 0 2px scroll no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: .5em;
     padding-left: 1em;
 }
@@ -537,7 +572,7 @@ main.single > .post > h3 {
 .video-link {
     background: url('../img/video.png') 0 2px scroll no-repeat;
     cursor: pointer;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin-bottom: .5em;
     padding-left: 1em;
 }
@@ -552,6 +587,7 @@ main.single > .post > h3 {
     margin-bottom: 1em;
     padding: 0 20px;
 }
+
 .whats-new aside > h2 {
     border-bottom: none;
     margin: 0;
@@ -583,7 +619,7 @@ ul.tags > li {
 .filter ul > li {
     border: 1px solid #d2def4;
     border-top: none;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0 0 .25em .25em;
 }
@@ -612,7 +648,7 @@ a.comment-box {
     border-radius: 2px;
     color: #333;
     display: block;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 1.1em;
     font-weight: bold;
     margin: .5em 0;
@@ -651,11 +687,16 @@ input[type="checkbox"] {
     margin-right: .5em;
 }
 label.check {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 0.9em;
 }
 .field {
 /*     padding: .5em 0; */
+}
+
+.field.document, .field.document + a {
+    display: inline-block;
+    margin-top: .5em;
 }
 
 .field.account-profile {
@@ -673,24 +714,7 @@ img.display-image {
 	float: left;
 	margin: 0 15px 15px 0;
 }
-.event .field label, .contact .field label,
-.statezip label {
-    display: inline-block;
-    vertical-align: top;
-    width: 19%;
-}
-.event .field input, .event .field select, .contact .field input, .contact .field select,
-.statezip input, .statezip select {
-    float: right;
-    width: 76%;
-}
-.event .field.date label, .statezip .field label {
-    width: 40%;
-}
-.event .field.date input, .event .field.date select, .statezip .field input, .statezip .field select {
-    width: 50%;
-}
-.event .field.date, .statezip .field {
+.event .field.date, .field.statezip {
     display: inline-block;
     width: 48%;
     padding-right: .5em;
@@ -699,7 +723,7 @@ a.optional-category-field {
     float:right;
 }
 .legal {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .9em;
 }
 .inputs label,
@@ -728,6 +752,35 @@ form select, textarea {
     padding: .25em;
     width: 98%;
 }
+form input[type="text"]::-webkit-input-placeholder {
+    color: #000;
+    font-size: .9em;
+    line-height: 1.5em;
+}
+form input[type="text"]:-moz-placeholder { /* Firefox 18- */
+    color: #000;
+    font-size: .8em;
+    line-height: 1.5em;
+}
+
+form input[type="text"]::-moz-placeholder {  /* Firefox 19+ */
+    color: #000;
+/*     font-size: .8em; */
+/*     line-height: 1.5em; */
+}
+
+:-ms-input-placeholder {  
+    color: #000;
+    line-height: 1em;
+}
+
+.event .field.date input {
+    background: url('../img/calendar-icon.png') .25em 45% no-repeat;
+    background-color: #fff;
+    padding-left: 2em;
+    width: 88%;
+}
+
 form input[type="datetime"], form input[type="tel"] {
     padding: .25em;
 
@@ -798,7 +851,7 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 }
 
 #subscribe p {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
 }
 
@@ -807,7 +860,7 @@ button.donate, a.subscribe {
     border: none;
     border-radius: 25px;
     color: #000;
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     font-size: .85em;
     font-weight: bold;
     margin: 0 auto;
@@ -1094,7 +1147,7 @@ footer {
 
     ul.posts, .single > .post, main > form  {
         display: inline-block;
-        width: 75%;
+        width: 95%;
         vertical-align: top;
     }
     .single > .post  {
@@ -1125,7 +1178,7 @@ footer {
     
 	.post .image-wrapper p, .posts .image-wrapper p, .featured .image-wrapper p {
 		color: #666;
-		font-family: 'Arial', sans-serif;
+		font-family: 'Arial', Arial, sans-serif;
 		font-size: .75em;
         margin: 0;
         text-align: right;
@@ -1154,6 +1207,7 @@ footer {
     #support {
         display: inline-block;
         padding: 0;
+        width: 100%;
     }
 }
 
@@ -1170,7 +1224,7 @@ footer {
     nav li {
         display: inline-block;
         font-size: .9em;
-        padding: 0 2.5% 0 0;
+        padding: 0 2.5% 1% 0;
     }
 
 	nav li:hover ul {
@@ -1216,6 +1270,7 @@ footer {
     }
 
     #mini-menu {
+        display: none;
         float: right;
         padding: 2.5% 1% 0 0;
     }
@@ -1245,7 +1300,7 @@ footer {
     }
 
     .sidebar {
-        display: inline-block;
+        display: none;
         margin: 1em 0 1em .5em;
         padding: 0;
         text-align: left;
@@ -1255,6 +1310,7 @@ footer {
     }
 
     #support {
+        display: none;
         width: 100%;
     }
 

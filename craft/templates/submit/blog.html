@@ -16,7 +16,7 @@
         {% include "_form/content/blog" %}
         {% include "_form/document" with { documentsAttribute: 'blogDocuments' } %}
         <div class="field">
-            <label for="website">Web Site</label>
+            <label for="website">Video Web Site Link</label>
             <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter video website URL address" value="{{ entry.webSite }}">
         </div>
     {% endblock %}

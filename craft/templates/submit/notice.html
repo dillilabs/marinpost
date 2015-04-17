@@ -20,38 +20,38 @@
 
         <fieldset class="event">
             <div class="field date">
-                <label for="event-start-date">Event start date</label>
+                <label for="event-start-date">Start Date</label>
                 <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}" class="date">
             </div>
             <div class="field date">
-                <label for="event-start-time">Event start time</label>
+                <label for="event-end-date">End Date</label>
+                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}" class="date">
+            </div>
+            <div class="field date">
+                <label for="event-start-time">Start Time</label>
                 <select name="fields[startTime][time]">
                 {{ f.timeOptions(entry.startTime) }}
                 </select>
             </div>
             <div class="field date">
-                <label for="event-end-date">Event end date</label>
-                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}" class="date">
-            </div>
-            <div class="field date">
-                <label for="event-end-time">Event end time</label>
+                <label for="event-end-time">End Time</label>
                 <select name="fields[endTime][time]">
                 {{ f.timeOptions(entry.endTime) }}
                 </select>
             </div>
             <div class="field">
-                <label for="event-venue">Name of venue</label>
+                <label for="event-venue">Name of Venue</label>
                 <input type="text" name="fields[venue]" autocomplete="off" placeholder="Name of a building or place or..." value="{{ entry.venue }}">
             </div>
             <div class="field">
-                <label for="event-address">Street address</label>
+                <label for="event-address">Street Address</label>
                 <input type="text" name="fields[streetAddress]" autocomplete="off" placeholder="" value="{{ entry.streetAddress }}">
             </div>
             <div class="field">
                 <label for="event-city">City</label>
                 <input type="text" name="fields[city]" autocomplete="off" placeholder="" value="{{ entry.city }}">
             </div>
-            <div class="field">
+            <div class="field statezip">
                 <label for="event-state">State</label>
                 <select name="fields[state]">
                 <option>Select -</option>
@@ -60,8 +60,8 @@
                 {% endfor %}
                 </select>
             </div>
-            <div class="field">
-                <label for="event-zip">Zip code</label>
+            <div class="field statezip">
+                <label for="event-zip">Zip Code</label>
                 <input type="text" pattern="[0-9]*" name="fields[zipCode]" autocomplete="off" placeholder="" value="{{ entry.zipCode }}">
             </div>
         </fieldset>

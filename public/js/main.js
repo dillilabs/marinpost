@@ -7,7 +7,7 @@ function rejigger() {
     $('#donate').after($('.revenue-opportunity'));
     $('.revenue-opportunity').after($('#subscribe'));
   } else {
-    $('footer').prepend($('nav'));
+    $('#mini-menu').after($('nav'));
     $('header').after($('#mini-menu'));
     $('#mini-menu').after($('#support'));
     $('#share').before($('#donate'));
@@ -31,17 +31,18 @@ $(function() {
   });
 
   $('.show-menu').click(function() {
-    htmlBody.animate({
-      scrollTop: $('nav').offset().top
-    }, 200);
+    $('nav').slideToggle();
   });
 
   $('.my-content a').click(function() {
   	$(this).toggleClass('active');
   });
 
+  $('.sidebar, #support, #mini-menu').show();
+
 });
 
 $(window).on('resize', function(){
   rejigger();
+  
 });

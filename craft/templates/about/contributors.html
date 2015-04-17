@@ -17,14 +17,19 @@
             </div>
             {% endif %}
 
-            <h3><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
+            <h3 class="contributor"><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
+            <div class="profession">
+                {% if user.titleOrProfession %}
+                {{ user.titleOrProfession }}<br>
+                {% endif %}
+                
+                {{ user.city }}, {{ user.state }}
+            </div>
 
-            {% if user.titleOrProfession %}
-              <p class="profession">{{ user.titleOrProfession }}</p>
+            {% if user.webSite %}
+              <p class="my-web-site"><a href="{{ p.externalUrl(user.webSite) }}" target="_blank">My Web Site</a></p>
             {% endif %}
-
-            <p class="hometown">{{ user.city }}, {{ user.state }}</p>
-
+        
             {% if user.bio %}
               <p>{{ user.bio }}</p>
             {% endif %}

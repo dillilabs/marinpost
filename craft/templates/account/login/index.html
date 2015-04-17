@@ -20,11 +20,12 @@
           <input type="checkbox" name="rememberMe" value="1">
           Remember me
         </label>
+        <div class="note">Do not use "remember me" on a public or shared computer.</div>
 
         <input type="submit" value="Login">
 
         {% if errorMessage is defined %}
-          <p>{{ errorMessage }}</p>
+          <p class="note">{{ errorMessage }}</p>
         {% endif %}
       </form>
 
