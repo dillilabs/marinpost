@@ -29,7 +29,7 @@
       <h2 class="date">{{ date(ymd) | date('F j, Y') }}</h2>
 
       {% if entries %}
-        {% for entry in entries | sort %}
+        {% for entry in entries %}
           <li>
               <h3>{{ entry.title }}</h3>
               <div class="byline">
