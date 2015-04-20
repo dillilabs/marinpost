@@ -16,7 +16,8 @@
             };
           
             var loadMoreContent = function() {
-              var offset = currentContentLength();
+              // +1 to exclude featured entry
+              var offset = currentContentLength() + 1;
 
               isLoadingContent = true;
 
@@ -40,7 +41,6 @@
           
             $(window).scroll(function() {
               var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
-              var offset;
         
               if (isLoadingContent || endOfContent) return;
         
