@@ -1,9 +1,9 @@
-<label for="primaryTopic" class="required">Topic <span class="note">* required</span></label>
+<label for="primaryTopic" class="required">Primary Topic <span class="note">* required</span></label>
 
 {% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
 
 <select id="primaryTopic" name="fields[primaryTopic][]" class="required array">
-  <option value="" class="first-option">Select one - The Topic will be posted on the Home Page</option>
+  <option value="" class="first-option">Select one - This Topic will be posted on the Home Page</option>
 {% for option in craft.categories.group('topics') %}
   <option value="{{ option.id }}" {%- if option.id == primaryTopicId %}selected{% endif %}>{{ option.title }}</option>
 {% endfor %}

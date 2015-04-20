@@ -25,6 +25,7 @@
   {% endif %}
 
   <div class="optional-category-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
+    <label>Scondary Location</label>
     <select name="fields[secondaryLocations][]" class="array">
       <option value="">Select another Location</option>
     {% set geographicGroup = false %}
