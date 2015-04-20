@@ -196,6 +196,9 @@ fieldset > ul,
     margin: 0;
     padding: 0;
 }
+nav > .close {
+    display:none;
+}
 .note {
     color: red;
     font-size: .9em;
@@ -334,11 +337,11 @@ nav li {
     text-align: center;
     text-transform: uppercase;
 }
-nav li > a, nav li > a:visited {
+nav li a, nav li a:visited {
     color: #333;
 }
-nav li > a:hover,
-nav li > a.active {
+nav li a:hover,
+nav li a.active {
      color: #333;
      font-weight: bold;
 }
@@ -349,6 +352,9 @@ nav ul ul {
 
 #mini-menu li.account, #mini-menu li.sign-in, #mini-menu li.sign-out, #mini-menu li.sign-up {
     float: right;
+}
+nav .mobile {
+    display:none;
 }
 
 /*
@@ -429,6 +435,9 @@ h3.my-content {
 }
 .filter a:hover, .sub-nav a:hover {
     font-weight: bold;
+}
+.filter > h4, .sub-nav > h4 {
+    display: none;
 }
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
@@ -1019,9 +1028,8 @@ footer {
    These examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
-/* Style until now are shared or for Mobile Two <27 ems */
 
-@media only screen and (min-width: 27em) { /* Mobile One 27–39 ems */
+@media only screen and (max-width: 39em) { /* Mobile One 27–39 ems */
 
     header .logo {
         border: 9px solid #fe0000;
@@ -1041,20 +1049,79 @@ footer {
 	header h2 {
 		font-size: 1em;
 	}
+	h2 {
+    	margin-top: 0;
+	}
 
 	#mini-menu {
 		font-size: .8em;
 	}
+	nav {
+        position: absolute;
+        top: 140px;
+        margin: 0;
+        padding: 1em 1em;
+        height: 100%;
+        width: 130px;
+	}
+	nav .close {
+    	display: inline-block;
+	}
+	nav .desktop {
+        display:none;
+    }
+    nav .mobile {
+        background: url('../img/open-close.png') 120px 1px scroll no-repeat;
+        display:block;
+    }
+    nav ul li {
+        padding: 5% 0;
+        position: static;
+        text-align: left;
+    }
+    nav ul ul {
+        position:absolute;
+        text-align: left;
+        padding: 1em;
+        top: 0;
+        left: 160px;
+        background: #efefef;
+        margin: 0;
+        height: 100%;
+        width: 150px;
+    }
 
 	.show-search {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
 	.sub-nav {
         display: inline-block;
-        min-height: 100px;
-        width: 28%;
+        margin-bottom: .5em;
+        padding: 0;
+        width: 100%;
     }
-
+    .about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
+        margin-top: 0;
+    }
+    .sub-nav:empty {
+        display: none;
+    }
+    .sub-nav > .filter {
+        padding: 0;
+    }
+    .sub-nav > .filter h5 {
+          margin: .25em 0;
+    }
+    .filter h4, .sub-nav > h4 {
+        background: #f9f9f9;
+        border: 1px solid #ccc;
+        display: block;
+        margin: 0 0 .25em;
+        padding: .5em;
+    }
+    .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
+        display: none;
+    }
     footer {
         padding: 1em;
     }

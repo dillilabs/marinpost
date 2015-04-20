@@ -1,11 +1,12 @@
 <main class="single clearfix">
   <div class="sub-nav">
-      <div class="filter">
+    <div class="filter">
+        <h4>About</h4>
     {% block subNav %}
         {{ n.arrowLink('about', 'About Us') }}
         {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
         {{ n.arrowLink('about/advisors', 'Advisors') }}
-          <a href="/about/contributors"><h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}>Contributors</h5></a>
+          <h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}><a href="/about/contributors">Contributors</a></h5>
 <!--
           <ul class="contributors" style="display: none;">
             <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" /> All</li>

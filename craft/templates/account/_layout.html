@@ -1,7 +1,6 @@
 <main class="clearfix">
-  <div class="sub-nav account">
-    {% block subNav %}
-      <ul>
+  <div class="sub-nav account">{% block subNav %}
+      <h4>My Account</h4>
         {{ n.arrowLink('account/information', 'My Account') }}
         {{ n.arrowLink('account/email', 'Email Address') }}
         {{ n.arrowLink('account/password', 'Password') }}
@@ -14,10 +13,8 @@
         {{ n.arrowLink('account/media', 'My Media') }}
         {{ n.arrowLink('account/letters', 'My Letters') }}
         {{ n.arrowLink('account/subscription', 'My Subscription') }}
-
-      </ul>
-    {% endblock %}
-  </div>
+      {% endblock %}
+    </div>
 
   <div class="list-wrapper">
     {% block post %}
