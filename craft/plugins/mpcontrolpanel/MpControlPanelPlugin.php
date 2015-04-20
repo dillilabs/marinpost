@@ -6,7 +6,11 @@ class MpControlPanelPlugin extends BasePlugin
     /**
      * Initialization:
      *
-     *  Inject Javascript into the Control Panel
+     *  Inject Javascript into the Control Panel to:
+     *
+     *    Ensure only a single User group is selected per User 
+     *
+     *    Load JS resources for Redactor Plugins
      */
     public function init()
     {
@@ -17,6 +21,7 @@ class MpControlPanelPlugin extends BasePlugin
         if (craft()->request->isCpRequest())
         {
             $this->_ensureOneUserGroup();
+            $this->_loadRedactorPluginResources();
         }
     }
 
@@ -65,6 +70,18 @@ groups.click(function(e) {
 });
 JS;
         craft()->templates->includeJs($js);
+    }
+
+    /**
+     * Load JS resources for Redactor Plugins
+     */
+    private function _loadRedactorPluginResources()
+    {
+        $plugins = array('fontfamily', 'fontsize', 'fontcolor');
+        foreach ($plugins as $plugin)
+        {
+            craft()->templates->includeJsResource("lib/redactor/plugins/{$plugin}.js");
+        }
     }
 
     // ----------------
