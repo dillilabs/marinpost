@@ -552,31 +552,39 @@ main.single > .post > h3 {
     text-align: center;
     text-transform: uppercase;
 }
-
-.download {
-    background: url('../img/download.png') 0 2px scroll no-repeat;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    margin-bottom: .5em;
-    padding-left: 1em;
+.attachments {
+    border-bottom: 1px solid #C8D4E9;
+    border-top: 1px solid #C8D4E9;
+    padding: 1em 0;
+}
+.download a {
+    background: url('../img/pdf-icon.png') 50% 0 scroll no-repeat;
 }
 .download:hover {
-    background: url('../img/download-hover.png') 0 2px scroll no-repeat;
     cursor: pointer;
 }
+.download a, .video-link a {
+    color: #333;
+    display: block;
+    padding-top: 4em;
+    text-align: center;
+}
 .download a > span {
+    display: none;
     font-size: .8em;
     text-transform: uppercase;
 }
-
-.video-link {
-    background: url('../img/video.png') 0 2px scroll no-repeat;
+.download, .video-link {
     cursor: pointer;
-    font-family: Arial, sans-serif;
-    margin-bottom: .5em;
-    padding-left: 1em;
+    display: inline-block;
+    vertical-align: top;
+    width: 25%;
 }
 
+.video-link a {
+    background: url('../img/video.png') 50% 0 scroll no-repeat;
+    padding-left: .5em;
+}
 
 .whats-new {
 	padding: 0 3%;

@@ -13,13 +13,16 @@
       {{ p.postTitle(entry) }}
       {{ p.postBy(entry) }}
       
-      <p>{{ entry.blogContent }}</p>
+      {{ entry.blogContent }}
 
+      <div class="attachments">
       {{ p.documents(entry.blogDocuments) }}
-
-      {% if entry.webSite %}
-        <p><a href={{ p.externalUrl(entry.webSite) }}" target="_blank">Video Link</a>
-      {% endif %}
+          {% if entry.webSite %}
+            <div class="video-link">
+                <a href={{ p.externalUrl(entry.webSite) }} target="_blank">Video Link</a>
+            </div>
+          {% endif %}
+      </div>
 
       {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
