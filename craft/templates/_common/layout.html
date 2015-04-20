@@ -71,6 +71,7 @@
   </div>
 
   <nav>
+      <span class="close">X</span>
     <ul>
       <li><a href="{{ siteUrl }}" {{ n.classActive('') }}>Home</a></li>
       <li>{{ n.segmentLink('Blog') }}</li>
@@ -80,7 +81,8 @@
       <li>{{ n.segmentLink('Letters') }}</li>
       <li>{{ n.segmentLink('Surveys') }}</li>
       <li class="submit">
-          {{ n.pathLink('Submit', 'submit/blog') }}
+          <span class="desktop">{{ n.pathLink('Submit', 'submit/blog') }}</span>
+          <span class="mobile">Submit</span>
         <ul>
           <li>{{ n.pathLInk('Blog', 'submit/blog') }}</li>
           <li>{{ n.pathLInk('Notice', 'submit/notice') }}</li>
@@ -89,7 +91,9 @@
           <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
         </ul>
       </li>
-      <li>{{ n.segmentLink('About') }}
+      <li>
+       <span class="desktop">{{ n.segmentLink('About') }}</span>
+       <span class="mobile">About</span>
         <ul>
           <li>{{ n.pathLink('About Us', 'about') }}</li>
           <li>{{ n.pathLink('Staff & Volunteers', 'about/staff') }}</li>
@@ -106,7 +110,8 @@
       {% if currentUser %}
         <li class="bottom-only sign-out "><a href="{{ logoutUrl }}">Log out</a></li>
         <li class="account">
-          {{ n.pathLink('My Account', 'account/information') }}
+          <span class="desktop">{{ n.pathLink('My Account', 'account/information') }}</span>
+          <span class="mobile">My Account</span>
           <ul>
             <li>{{ n.pathLInk('My Account', 'account/information') }}</li>
             <li>{{ n.pathLInk('Email Address', 'account/email') }}</li>
