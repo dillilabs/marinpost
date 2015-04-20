@@ -93,10 +93,10 @@
   {% set author = entry.author %}
 
   {% if author.isInGroup('contributor') %}
-    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ author.name }}</a>
+    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ author.name | title }}</a>
 
   {% else %}
-    {{ author.name }}
+    {{ author.name | title }}
 
   {% endif %}
 {% endmacro %}
@@ -225,19 +225,19 @@
   {% from _self import externalUrl, mediaUrl %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
 
     {% case 'media' %}
-      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ entry.title }}</a></h3>
+      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ entry.title | title }}</a></h3>
 
     {% case 'news' %}
-      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ entry.title }}</a></h3>
+      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ entry.title | title }}</a></h3>
 
     {% case 'notices' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
 
     {% default %}
-      <h3>{{ entry.title }}</h3>
+      <h3>{{ entry.title | title }}</h3>
 
   {% endswitch %}
 {% endmacro %}
