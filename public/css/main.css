@@ -183,6 +183,7 @@ h5, h3.my-content {
 img {
     max-width: 100%;
 }
+
 nav > ul,
 ul.tags,
 ul.posts,
@@ -1030,7 +1031,9 @@ footer {
    ========================================================================== */
 
 @media only screen and (max-width: 39em) { /* Mobile One 27–39 ems */
-
+    nav {
+        display: none;
+    }
     header .logo {
         border: 9px solid #fe0000;
     	height: 50px;
@@ -1057,11 +1060,13 @@ footer {
 		font-size: .8em;
 	}
 	nav {
+    	box-shadow: 0 0 5px 0 #ccc;
+        height: 100%;
+        margin: 0;
+        min-height: 500px;
+        padding: 1em 1em;
         position: absolute;
         top: 0;
-        margin: 0;
-        padding: 1em 1em;
-        height: 100%;
         width: 130px;
 	}
 	nav .close {
@@ -1080,6 +1085,7 @@ footer {
         text-align: left;
     }
     nav ul ul {
+    	box-shadow: 2px 0 3px -1px #ccc;
         position:absolute;
         text-align: left;
         padding: 1em;
@@ -1124,9 +1130,14 @@ footer {
     }
     
     #share {
-        margin: 0 auto .75em;
-        max-width: 250px;
-        width: 80%;
+          margin: 2.5em auto .75em;
+          max-width: 280px;
+          width: 70%;
+          display: block;
+    }
+    
+    .image-credit {
+        margin: .25em 0;
     }
     footer {
         padding: 1em;
