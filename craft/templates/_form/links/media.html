@@ -83,6 +83,18 @@
 
 {% set js %}
 $(function() {
+  var srcDocument = $('select.s3direct.mediaLink');
+
+  var populateSelectOptionsFromIndex = function(files) {
+    var selectedId = srcDocument.val();
+    srcDocument.children().remove().end().append('<option value=""></option>');
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'selected' : '';
+      srcDocument.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
+    });
+  };
+
   $('#document-fileupload').s3direct({
     bucket: "{{ s3.bucket }}",
     subfolder: "{{ s3.subfolder }}",
@@ -94,7 +106,7 @@ $(function() {
     acceptFileTypes: /.+\.pdf$/i,
     uploadProgressBarSelector: '.s3direct.document.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.document',
-    selectFilesSelector: 'select.s3direct.upload',
+    onUpdateAssetsIndex: populateSelectOptionsFromIndex,
     debug: true,
   });
 });
