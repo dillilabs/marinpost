@@ -1194,7 +1194,7 @@ footer {
 
     .featured img {
         display: inline-block;
-        float: left;
+/*         float: left; */
         margin: 0;
         width: 325px;
     }
