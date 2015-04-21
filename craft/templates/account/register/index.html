@@ -89,7 +89,7 @@
             {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
               <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
             {% endfor %}
-              <label for="termsOfUse">I agree to the Marin Post <a href="/about/terms">Terms and Conditions</a> and <a href="/about/privacy">Privacy Policy</a>.</label>
+              <label for="termsOfUse">I agree to the Marin Post <a href="/about/terms">Terms of Use</a> and <a href="/about/privacy">Privacy Policy</a>.</label>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('termsOfUse')) }}
               {% endif %}
