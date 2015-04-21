@@ -25,7 +25,7 @@
   {% endif %}
 
   <div class="optional-category-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
-    <label>Secondary Topic</label>
+    <label>Other Topics</label>
     <select name="fields[secondaryTopics][]" class="array">
       <option value="">Select another Topic</option>
     {% for option in craft.categories.group('topics') %}

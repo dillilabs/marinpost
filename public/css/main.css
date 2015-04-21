@@ -844,6 +844,9 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 	margin: 0;
 }
 
+.content-submission a {
+	margin-left: 1em;
+}
 /* * * * * * * * * * * * * * * * * * * * *
         SUPPORT
 * * * * * * * * * * * * * * * * * * * * * */
