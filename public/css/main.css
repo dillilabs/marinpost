@@ -1107,12 +1107,6 @@ footer {
 	.show-search {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
-	.sub-nav {
-        display: inline-block;
-        min-height: 100px;
-        width: 28%;
-    }
-    
     #share {
           margin: 2.5em auto .75em;
           max-width: 280px;
@@ -1146,8 +1140,10 @@ footer {
 	}
 
     .sub-nav {
+        display: block;
   		float: left;
   		padding-top: 2em;
+        width: 28%;
 	}
 
     .about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
