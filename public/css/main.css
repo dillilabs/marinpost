@@ -970,7 +970,9 @@ a.subscribe {
 }
 
 footer {
+    clear: both;
     padding: 1em;
+    width: 100%;
 }
 
 /* ==========================================================================
@@ -1471,7 +1473,7 @@ footer {
         padding: 0;
     }
     main {
-        display: inline-block;
+        float: left;
         width: 70%;
     }
     ul.posts {
