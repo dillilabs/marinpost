@@ -42,34 +42,6 @@
     </div>
   </header>
 
-  <section id="mini-menu">
-    <ul>
-      <li class="show-menu">Main Menu</li>
-      <li class="show-search">Search</li>
-      <div class="clearfix">
-      {% if currentUser %}
-        <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
-      {% else %}
-        <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
-        <li class="sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
-      {% endif %}
-      </div>
-      <li id="search">
-        {% include "_common/search" %}
-      </li>
-    </ul>
-  </section>
-
-  {% include "_common/support" %}
-
-  {% block main %}
-  {% endblock %}
-
-  <div class="sidebar">
-    {% block sidebar %}
-    {% endblock %}
-  </div>
-
   <nav>
       <span class="close">X</span>
     <ul>
@@ -135,6 +107,34 @@
       <li class="bottom-only"><a href="#" class="show-search">Search</a></li>
     </ul>
   </nav>
+
+  <section id="mini-menu">
+    <ul>
+      <li class="show-menu">Main Menu</li>
+      <li class="show-search">Search</li>
+      <div class="clearfix">
+      {% if currentUser %}
+        <li class="sign-out"><a href="{{ logoutUrl }}">Log out</a></li>
+      {% else %}
+        <li class="sign-in"><a href="{{ loginUrl }}">Log in</a></li>
+        <li class="sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
+      {% endif %}
+      </div>
+      <li id="search">
+        {% include "_common/search" %}
+      </li>
+    </ul>
+  </section>
+
+  {% include "_common/support" %}
+
+  {% block main %}
+  {% endblock %}
+
+  <div class="sidebar">
+    {% block sidebar %}
+    {% endblock %}
+  </div>
 
   <footer class="clearfix" id="footer">
     Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.

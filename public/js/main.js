@@ -1,6 +1,5 @@
 function rejigger() {
   if (window.matchMedia("(min-width: 51em)").matches) {
-    $('header').after($('nav'));
     $('.header-wrapper').append($('#mini-menu'));
     $('.sidebar').prepend($('#support'));
     $('#share').after($('#donate'));
