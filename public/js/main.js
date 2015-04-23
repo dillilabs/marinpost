@@ -3,15 +3,12 @@ function rejigger() {
     $('.header-wrapper').append($('#mini-menu'));
     $('.sidebar').prepend($('#support'));
     $('#share').after($('#donate'));
-    $('#donate').after($('.revenue-opportunity'));
-    $('.revenue-opportunity').after($('#subscribe'));
+    $('#donate').after($('#subscribe'));
   } else {
-    $('#mini-menu').after($('nav'));
     $('header').after($('#mini-menu'));
     $('#mini-menu').after($('#support'));
-    $('#share').before($('#donate'));
+    $('#donate').after($('#subscribe'));
     $('#subscribe').after($('#share'));
-    $('.sidebar').prepend($('.revenue-opportunity'));
   };
 };
 
@@ -77,5 +74,4 @@ $(function() {
 
 $(window).on('resize', function(){
   rejigger();
-  
 });
