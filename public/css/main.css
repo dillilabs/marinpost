@@ -326,10 +326,7 @@ nav {
 	box-shadow: 0 0 5px 0 #ccc;
 	display: none;
 	font-size: .95em;
-    height: 100%;
-    margin: 0;
-    min-height: 500px;
-    padding: 1em 1em;
+    margin: 0 0 0 1em;
     position: absolute;
     top: 0;
     width: 130px;
@@ -354,38 +351,48 @@ nav .mobile {
 }
 
 nav li {
-    padding: 2%;
     position: relative;
     text-align: center;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 nav li a, nav li a:visited {
     color: #333;
 }
 nav li a:hover,
 nav li a.active {
-     color: #333;
-     font-weight: bold;
+    color: #333;
+    font-weight: bold;
+    padding: 2%;
 }
 
 nav ul li {
-    padding: 5% 0;
+    border: 1px solid #c0c0c0;
+    border-top: none;
+    padding: 5px 0 5px 5px;
     position: static;
     text-align: left;
 }
 
+nav ul li:first-of-type {
+    border-top: 1px solid #c0c0c0;
+}
+
 nav ul ul {
+    background-color: #fcfeb3;
 	box-shadow: 2px 0 3px -1px #ccc;
     display: none;
     position:absolute;
     text-align: left;
-    padding: 1em;
-    top: 0;
-    left: 160px;
-    background: #efefef;
+    top: 19px;
+    left: 129px;
     margin: 0;
-    height: 100%;
+    padding: 0;
     width: 150px;
+}
+
+nav ul ul li {
+    text-transform: none;
 }
 
 
@@ -1329,13 +1336,18 @@ footer {
     }
     
     nav ul li {
+        border: none;
         display: inline-block;
         padding: 0 1.5% 0 0;
         position: relative;
     }
 
+    nav ul li:first-of-type {
+        border-top:none;
+    }
+    
+    
     nav ul li:hover ul {
-        border: 1px solid #ccc;
         box-shadow: none;
         display: block;
         left: -19px;
@@ -1350,6 +1362,8 @@ footer {
     }
 
 	nav li:hover li {
+    	border: 1px solid #ccc;
+    	border-top: none;
         display: block;
         font-size: 1em;
         list-style: none;
@@ -1358,15 +1372,17 @@ footer {
         text-transform: none;
 	}
 	
-	nav li:hover li > a {
-        background-color: #fcfeb3;
-        display: block;
-        width: 175px;
-        padding: 5px 0 5px 18px;
+	nav li:hover li:first-of-type {
+    	border-top: 1px solid #ccc;
 	}
 	
-	nav li:hover li:not(:last-of-type) > a {
-    	border-bottom: 1px solid #ccc;
+	nav li:hover li > a {
+    	display: block;
+        padding: 5px 0 5px 18px;
+        width: 175px;
+	}
+	
+	nav li:hover li:not(:first-of-type) > a {
 	}
 	
     nav li:last-of-type {
