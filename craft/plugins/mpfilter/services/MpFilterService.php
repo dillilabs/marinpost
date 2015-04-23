@@ -172,12 +172,15 @@ class MpFilterService extends BaseApplicationComponent
 
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
-        if (!empty($entryIds)) $criteria->id = $entryIds;
-        if ($section) $criteria->section = $section;
+        if (!empty($entryIds))
+        {
+            $criteria->id = $entryIds;
+            $criteria->fixedOrder = true;
+        }
 
+        if ($section) $criteria->section = $section;
         $criteria->offset = $offset;
         $criteria->limit = $limit;
-        $criteria->fixedOrder = true;
 
         $this->plugin->logger(array('fixedOrder' => $criteria->fixedOrder, 'presliced entry ids' => $criteria->id));
         return $criteria->find();
