@@ -328,7 +328,7 @@ nav {
 	font-size: .95em;
     margin: 0 0 0 1em;
     position: absolute;
-    top: 0;
+    top: 180px;
     width: 130px;
     z-index: 199;
 }
@@ -384,7 +384,7 @@ nav ul ul {
     display: none;
     position:absolute;
     text-align: left;
-    top: 19px;
+    top: 0;
     left: 129px;
     margin: 0;
     padding: 0;
