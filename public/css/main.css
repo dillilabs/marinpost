@@ -579,7 +579,6 @@ main {
     margin-bottom: 1em;
 }
 main.single {
-    border-bottom: 1px solid #c9c8ac;
     padding-bottom: 1em;
 }
 main.single > .post > h3 {
@@ -970,9 +969,10 @@ a.subscribe {
 }
 
 footer {
+    border-top: 1px solid #c9c8ac;
     clear: both;
     padding: 1em;
-    width: 100%;
+    width: inherit;
 }
 
 /* ==========================================================================
