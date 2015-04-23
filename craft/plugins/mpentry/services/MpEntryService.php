@@ -44,69 +44,62 @@ class MpEntryService extends BaseApplicationComponent
     }
 
     /**
-     * Populate entry's implicit child Locations
-     * from it's explicit primary and secondary Locations.
+     * Use the entry's primary Location to populate implicit child Locations.
      * And update the search index.
      */
     public function synchronizeChildLocations($entry)
     {
-            $locationIds = $this->_impliedLocationIds($entry->id);
+        $locationIds = $this->_impliedLocationIds($entry);
 
-            $field = craft()->fields->getFieldByHandle('childLocations');
+        $field = craft()->fields->getFieldByHandle('childLocations');
+        $savedRelations = craft()->relations->saveRelations($field, $entry, $locationIds);
 
-            $savedRelations = craft()->relations->saveRelations($field, $entry, $locationIds);
+        $entry->setContentFromPost(array(
+            'childLocations' => $locationIds
+        ));
+        $savedElement = craft()->elements->saveElement($entry, false);
 
-            $entry->setContentFromPost(array(
-                'childLocations' => $locationIds
-            ));
+        $this->_updateSearchIndex($entry);
 
-            $savedElement = craft()->elements->saveElement($entry, false);
-
-            $this->_updateSearchIndex($entry);
-
-            $this->plugin->logger("synchronizeChildLocations() entry=$entry [{$entry->id}] saved relations=$savedRelations, saved element=$savedElement, locationIds=".json_encode($locationIds));
+        $this->plugin->logger("synchronizeChildLocations() entry=$entry [{$entry->id}] saved relations=$savedRelations, saved element=$savedElement, locationIds=".json_encode($locationIds));
     }
 
     //------------------
     // Private functions
     //------------------
 
-    private function _impliedLocationIds($entryId)
+    /**
+     * Return array of Location IDs from Locations which are geographical "children" of the Primary Location
+     */
+    private function _impliedLocationIds($entry)
     {
-        $selectedLocationIds = $this->_selectedLocationIds($entryId);
-
-        $impliedLocationIds = array();
-
-        foreach ($selectedLocationIds as $selectedLocationId)
-        {
-            $childLocationIds = $this->_locationIdsFrom($selectedLocationId);
-
-            $impliedLocationIds = array_merge($impliedLocationIds, $childLocationIds);
-        }
-
-        $impliedLocationIds = array_unique($impliedLocationIds);
+        $primaryLocationId = $entry->primaryLocation->first()->id;
+        $impliedLocationIds = $this->_locationIdsFrom($primaryLocationId);
+        $selectedLocationIds = $this->_selectedLocationIds($entry);
 
         return array_values(array_diff(array_unique($impliedLocationIds), $selectedLocationIds));
     }
 
-    private function _selectedLocationIds($entryId)
+    /**
+     * Return array of entry's Primary and Secondary Location IDs
+     */
+    private function _selectedLocationIds($entry)
     {
-        $entry = craft()->entries->getEntryById($entryId);
-
         $locations = $this->_selectedLocations($entry);
-
         $ids = array_map(function($location) { return $location->id; }, $locations);
-
-        sort($ids);
 
         return $ids;
     }
 
+    /**
+     * Return array of entry's Primary and Secondary Locations
+     */
     private function _selectedLocations($entry)
     {
         $selectedLocations = array();
 
-        array_push($selectedLocations, $entry->primaryLocation->first());
+        $primaryLocation = $entry->primaryLocation->first();
+        array_push($selectedLocations, $primaryLocation);
 
         foreach ($entry->secondaryLocations as $location)
         {
@@ -116,28 +109,22 @@ class MpEntryService extends BaseApplicationComponent
         return array_unique($selectedLocations);
     }
 
+    /**
+     * Return array of geographic "child" Location IDs starting from parent Location.
+     */
     private function _locationIdsFrom($rootId)
     {
         $locations = $this->_locationsFrom($rootId);
 
-        $ids = $this->_valuesForKey($locations, 'id');
-
-        if (is_array($ids))
-        {
-            sort($ids);
-        }
-        else
-        {
-            $ids = array($ids);
-        }
-
-        return $ids;
+        return $this->_valuesForKey($locations, 'id');
     }
 
+    /**
+     * Return array of geographic "child" Locations starting from parent Location.
+     */
     private function _locationsFrom($rootId)
     {
         $nodes = array();
-
         $root = craft()->categories->getCategoryById($rootId);
 
         if ($root)
@@ -155,6 +142,15 @@ class MpEntryService extends BaseApplicationComponent
         return $nodes;
     }
 
+    /**
+     * Return array of geographic "child" of Locations of parent Location:
+     *
+     *      array(
+     *          array('id' => 1, 'self' => object1, 'children' => array(...),
+     *          array('id' => 2, 'self' => object2, 'children' => array(...),
+     *          ...
+     *      )
+     */
     private function _childLocationsOf($parent)
     {
         $nodes = array();
@@ -175,6 +171,10 @@ class MpEntryService extends BaseApplicationComponent
         return $nodes;
     }
 
+    /**
+     * Return an array of values drawn from a nested, associative array
+     * but only those of a specific key.
+     */
     private function _valuesForKey(array $input, $key)
     {
         $values = array();
@@ -186,10 +186,12 @@ class MpEntryService extends BaseApplicationComponent
             }
         });
 
-        return count($values) > 1 ? $values : array_pop($values);
+        return $values;
     }
 
     /**
+     * Update Craft search index for entry.
+     *
      * Borrowed from SearchIndexTool#performAction
      */
     private function _updateSearchIndex($element)

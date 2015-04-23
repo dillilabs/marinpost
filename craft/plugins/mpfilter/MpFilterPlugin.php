@@ -30,6 +30,10 @@ class MpFilterPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
+            'countyId' => array(AttributeType::String, 'default' => 755),
+            'regionId' => array(AttributeType::String, 'default' => 39),
+            'stateId' => array(AttributeType::String, 'default' => 40),
+            'countryId' => array(AttributeType::String, 'default' => 41),
             'defaultEntryLimit' => array(AttributeType::String, 'default' => 10),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
@@ -53,7 +57,7 @@ class MpFilterPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.22';
+        return '0.0.23';
     }
 
     public function getDeveloper()

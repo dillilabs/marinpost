@@ -1,0 +1,20 @@
+{% requireLogin %}
+{% requirePermission 'accessCp' %}
+
+{% set entryId = craft.request.param('id') %}
+
+{% if entryId %}
+  {% set entry = craft.entries.id(entryId).first %}
+  {% set entries = [entry] %}
+
+{% else %}
+  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices') %}
+
+{% endif %}
+
+{% for entry in entries %}
+  updating {{ entry }}<br>
+  {% set noop = craft.mpentry.synchronizeChildLocations(entry) %}
+{% endfor %}
+
+<h3>updated {{ entries | length }} entries</h3>

@@ -9,4 +9,9 @@ class MpEntryVariable
     {
         $this->plugin = craft()->plugins->getPlugin('mpentry');
     }
+
+    function synchronizeChildLocations($entry)
+    {
+        return craft()->mpEntry->synchronizeChildLocations($entry);
+    }
 }

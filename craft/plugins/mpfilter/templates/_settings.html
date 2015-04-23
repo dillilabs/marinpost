@@ -1,5 +1,39 @@
 {% import '_includes/forms' as forms %}
 
+<p style="font-weight:bold">Filter Settings</p>
+
+{{ forms.textField({
+	label: "County Location"|t,
+	instructions: "Enter Category ID of the County."|t,
+	id: 'countyId',
+	name: 'countyId',
+	value: settings.countyId,
+}) }}
+
+{{ forms.textField({
+	label: "Region Location"|t,
+	instructions: "Enter Category ID of the Region."|t,
+	id: 'regionId',
+	name: 'regionId',
+	value: settings.regionId,
+}) }}
+
+{{ forms.textField({
+	label: "State Location"|t,
+	instructions: "Enter Category ID of the State."|t,
+	id: 'stateId',
+	name: 'stateId',
+	value: settings.stateId,
+}) }}
+
+{{ forms.textField({
+	label: "Country Location"|t,
+	instructions: "Enter Category ID of the Country."|t,
+	id: 'countryId',
+	name: 'countryId',
+	value: settings.countryId,
+}) }}
+
 <p style="font-weight:bold">Listing Settings</p>
 
 {{ forms.textField({
