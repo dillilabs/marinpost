@@ -324,6 +324,7 @@ header h2 {
 nav {
     background-color: #fff;
 	box-shadow: 0 0 5px 0 #ccc;
+	display: none;
 	font-size: .95em;
     height: 100%;
     margin: 0;
