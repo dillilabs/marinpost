@@ -4,6 +4,7 @@ function rejigger() {
     $('.sidebar').prepend($('#support'));
     $('#share').after($('#donate'));
     $('#donate').after($('#subscribe'));
+    $('.sidebar, #support, #mini-menu').show();
   } else {
     $('header').after($('#mini-menu'));
     $('#mini-menu').after($('#support'));
@@ -42,8 +43,6 @@ $(function() {
   $('.my-content a').click(function() {
   	$(this).toggleClass('active');
   });
-
-  $('.sidebar, #support, #mini-menu').show();
 
   $('.mobile').click(function() {
     var effect = 'slide';
