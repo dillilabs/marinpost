@@ -1112,7 +1112,7 @@ footer {
 	    background: url('../img/search-black.png') 71px 7px no-repeat;
 	}
     #share {
-          margin: 2.5em auto .75em;
+          margin: 0 auto .75em;
           max-width: 280px;
           width: 70%;
           display: block;
@@ -1411,7 +1411,9 @@ footer {
 
     .sidebar {
         display: none;
-        margin: 1em 0 1em .5em;
+        float: right;
+        margin: 1em 0;
+        line-height: 29px;
         padding: 0;
         text-align: left;
         vertical-align: top;
@@ -1495,9 +1497,7 @@ footer {
 }
 
 @media only screen and (min-width: 55em) { /* In case anything needs adjusting on the way to big */
-    .sidebar {
-        float: right;
-    }
+
  }
 
 @media only screen and (min-width: 64em) { /* Extras for big size */
