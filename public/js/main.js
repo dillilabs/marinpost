@@ -1,15 +1,15 @@
 function rejigger() {
   if (window.matchMedia("(min-width: 51em)").matches) {
-    $('.header-wrapper').append($('#mini-menu'));
-    $('.sidebar').prepend($('#support'));
-    $('#share').after($('#donate'));
-    $('#donate').after($('#subscribe'));
-    $('.sidebar, #support, #mini-menu').show();
+    $('.header-wrapper').append($('#mini-menu')); // Move #mini-menu to the end of the header wrapper
+    $('.sidebar').prepend($('#support')); // Move the #support into .sidebar
+    $('#share').after($('#donate')); // Move #donate after #share
+    $('#donate').after($('#subscribe')); // Move #subscribe after #donate
+    $('.sidebar, #support, #mini-menu').show(); // Show these which are hidden until page is loaded
   } else {
-    $('header').after($('#mini-menu'));
-    $('#mini-menu').after($('#support'));
-    $('#donate').after($('#subscribe'));
-    $('#subscribe').after($('#share'));
+    $('header').after($('#mini-menu')); // Move #mini-menu after header
+    $('#mini-menu').after($('#support')); // Move #support after #mini-menu
+    $('#donate').after($('#subscribe')); // Move #subscribe after #donate
+    $('#subscribe').after($('#share')); // Move #share after #subscribe-menu
   };
 };
 
