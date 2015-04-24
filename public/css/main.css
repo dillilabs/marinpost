@@ -178,7 +178,7 @@ h4 {
 }
 h5, h3.my-content {
     font-family: Arial, sans-serif;
-    margin: 1em 0 .5em;
+    margin: 0;
 }
 img {
     max-width: 100%;
@@ -455,10 +455,16 @@ nav ul ul li {
 .sub-nav h5, .my-content > a {
     background: url('../img/right-arrow.png') no-repeat scroll 6px 8px;
     border: 1px solid #ccc;
+    border-bottom: none;
     font-size: .9em;
     font-weight: normal;
     text-transform: uppercase;
 }
+
+.sub-nav h5:last-of-type, .my-content > a:last-of-type {
+    border-bottom: 1px solid #ccc;
+}
+
 h3.my-content {
     font-size: .95em;
 }
@@ -1153,7 +1159,7 @@ footer {
     .sub-nav {
         display: block;
   		float: left;
-  		padding-top: 2em;
+  		padding-top: 3em;
         width: 28%;
 	}
 
