@@ -99,7 +99,9 @@ class MpEntryPlugin extends BasePlugin
             $entry = $event->params['entry'];
 
             // TODO refactor to plugin settings
-            if ($entry->section->handle != 'letters')
+            $sections = array('blog', 'media', 'news', 'notices');
+
+            if (in_array($entry->section->handle, $sections))
             {
                 craft()->mpEntry->synchronizeChildLocations($entry);
             }
