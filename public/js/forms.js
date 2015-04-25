@@ -129,6 +129,26 @@
             });
 
             //-----------------------
+            // Page Unload Handling
+            //-----------------------
+
+            var form_changed = false;
+            var button_clicked = null;
+
+            $('form').on('keyup change', 'input, select, textarea', function(){
+                form_changed = true;
+            });
+
+            $(window).on('beforeunload', function(){
+              var blog_field_not_blank = ($('#blogContent').val().length > 0);
+              var notice_field_not_blank = ($('#noticeContent').val().length > 0);
+
+              if((form_changed || blog_field_not_blank || notice_field_not_blank) && !button_clicked) {
+                return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
+              }
+            });
+
+            //-----------------------
             // Events
             //-----------------------
 
@@ -149,11 +169,13 @@
 
                 case 'save':
                   entryEnabled.val(0);
+                  button_clicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
+                  button_clicked = true;
                   form.submit();
                   break;
 
@@ -180,7 +202,7 @@
                       section = 'media';
                       break;
                   }
-
+                  button_clicked = true;
                   document.location = '/account/'+section;
               }
             });
