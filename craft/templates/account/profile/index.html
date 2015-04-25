@@ -32,7 +32,7 @@
 
         <div class="field">
 	        <label for="titleOrProfession" class="required">Title or Profession</label> <span class="note">* required</span>
-	        <input type="text" id="firstName" name="fields[titleOrProfession]" value="{{ currentUser.titleOrProfession }}" maxlength="64">
+	        <input type="text" id="firstName" name="fields[titleOrProfession]" maxlength="70" value="{{ currentUser.titleOrProfession }}" maxlength="64">
 	        {% if account is defined %}
 	          {{ f.errorList(account.getErrors('titleOrProfession')) }}
 	        {% endif %}
@@ -40,7 +40,7 @@
 
         <div class="field">
 	        <label for="bio">Personal Bio</label> <span class="note">* required</span>
-	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" class="wysiwyg required" >{{ currentUser.bio }}</textarea>
+	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" maxlength="1000" class="wysiwyg required" >{{ currentUser.bio }}</textarea>
         </div>
 
         <div class="field">
