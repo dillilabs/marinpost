@@ -300,15 +300,15 @@
     <span class="event-venue">{{ notice.venue }}</span>
 
     {% if address %}
-      {% if entry.streetAddress %}
+      {% if notice.streetAddress %}
         <br>
-        {{ entry.streetAddress }}
+        {{ notice.streetAddress }}
       {% endif %}
 
-      {% if entry.city or entry.state or entry.zipCode %}
+      {% if notice.city or notice.state or notice.zipCode %}
         <br>
-        {{ [entry.city, entry.state] | join(', ') }}
-        {{ entry.zipCode }}
+        {{ [notice.city, notice.state] | join(', ') }}
+        {{ notice.zipCode }}
       {% endif %}
 
     {% endif %}
