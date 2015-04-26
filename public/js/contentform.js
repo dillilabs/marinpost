@@ -1,5 +1,5 @@
 (function($) {
-    $.fn.forms  = function() {
+    $.fn.contentForm  = function() {
         return this.each(function() {
             var form = $(this);
 
@@ -34,6 +34,11 @@
             // Textarea
             var limitedTextFields = form.find('textarea.limited');
 
+            // Add/remove category links
+            var categoryLinks = form.find('a.optional-category-field');
+            var addCategoryLink = categoryLinks.filter('.add');
+            var removeCategoryLink = categoryLinks.filter('.remove');
+
             // Submit buttons
             var submitButtons = form.find('input[type=button].submit');
 
@@ -45,6 +50,12 @@
             //-----------------------
             // Functions
             //-----------------------
+
+            // Categories
+            var idFromLink = function(link) {
+              return link.attr('id').split('-').splice(1, 2).join('-');
+
+            };
 
             // Update media type input and toggle other affected inputs
             var onChangeMediaLinkType = function(mediaType) {
@@ -188,6 +199,27 @@
             //-----------------------
             // Events
             //-----------------------
+
+            // Add optional category
+            addCategoryLink.click(function(e) {
+              e.preventDefault();
+              var link = $(this);
+              var id = idFromLink(link);
+
+              $('#input-'+id).show();
+              link.nextAll('a.optional-category-field.add:first').show().end()
+                  .hide();
+            });
+
+            // Remove optional category
+            removeCategoryLink.click(function(e) {
+              e.preventDefault();
+              var link = $(this);
+              var id = idFromLink(link);
+
+              link.closest('.optional-category-field.inputs').hide();
+              $('#add-'+id).show();
+            });
 
             // Record change to form content. See also Redactor
             form.on('keyup change', 'input, select, textarea', function() {

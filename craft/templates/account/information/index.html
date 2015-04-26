@@ -9,7 +9,7 @@
       <h2>My Account Information</h2>
       <div class="help">{{ n.siteMessage }}</div>
 
-      <form method="post" accept-charset="utf-8" id="update-information">
+      <form method="post" accept-charset="utf-8" id="update-information" class="user-form">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
@@ -78,3 +78,8 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+  $('form.user-form').userForm();
+{% endset %}
+{% includeJs js %}
