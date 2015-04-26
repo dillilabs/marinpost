@@ -11,19 +11,21 @@ class MpEntryVariable
     }
 
     /**
-     * Convert mono-cased string to ucfirst.
+     * Convert mono-cased string to ucfirst
+     * and always starte with a capital.
      */
     function titleCase($title)
     {
-        return $this->_monocase($title) ? ucfirst(strtolower($title)) : $title;
+        return $this->_monocase($title) ? ucfirst(strtolower($title)) : ucfirst($title);
     }
 
     /**
-     * Convert mono-cased string to ucwords.
+     * Convert mono-cased string to ucwords
+     * and always starte with a capital.
      */
     function nameCase($name)
     {
-        return $this->_monocase($name) ? ucwords(strtolower($name)) : $name;
+        return $this->_monocase($name) ? ucwords(strtolower($name)) : ucfirst($name);
     }
 
     /**
