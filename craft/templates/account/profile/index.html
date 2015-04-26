@@ -40,7 +40,7 @@
 
         <div class="field">
 	        <label for="bio">Personal Bio</label> <span class="note">* required</span>
-	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" maxlength="1000" class="wysiwyg required" >{{ currentUser.bio }}</textarea>
+	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" class="wysiwyg required" data-limit="1000">{{ currentUser.bio }}</textarea>
         </div>
 
         <div class="field">
@@ -55,6 +55,6 @@
 {% endblock %}
 
 {% set js %}
-  $('form.profile-form').formWysiwyg();
+  $('form.profile-form').forms();
 {% endset %}
 {% includeJs js %}

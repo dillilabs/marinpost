@@ -25,10 +25,22 @@
             // Entry status
             var entryEnabled = form.find('input[name=enabled]');
 
+            // Date picker
             var dateFields = form.find('input.date');
+
+            // Redactor
+            var wysiwygFields = form.find('textarea.wysiwyg');
+
+            // Textarea
+            var limitedTextFields = form.find('textarea.limited');
 
             // Submit buttons
             var submitButtons = form.find('input[type=button].submit');
+
+            // Page unload
+            var formChanged = false;
+
+            var buttonClicked = null;
 
             //-----------------------
             // Functions
@@ -120,8 +132,51 @@
 
             };
 
+            // TODO
+            var limitText = function(field, limit, charsLeft) {
+              var text = field.val();
+              var count = text.length;
+              var ok = true;
+
+              if (count > limit) {
+                text = text.substring(0, limit);
+                field.val(text);
+                ok = false;
+              }
+
+              charsLeft.text(limit > count ? limit - count : 0);
+              return ok;
+            };
+
             //-----------------------
-            // Hooks
+            // Redactor
+            //-----------------------
+
+            wysiwygFields.each(function() {
+              var textarea = $(this);
+              var limit = textarea.attr('data-limit');
+
+              textarea.redactor({
+                minHeight: 200,
+                maxHeight: 800,
+                buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','fontsize','fontcolor','fontfamily'],
+                plugins: ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'],
+                toolbarFixed: true,
+                changeCallback: function(e) {
+                  formChanged = true;
+                },
+                codeKeydownCallback: function(e) {
+                  formChanged = true;
+                },
+                counterCallback: function(data) {
+                  // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
+                },
+                limiter: limit,
+              });
+            });
+
+            //-----------------------
+            // Date picker
             //-----------------------
 
             dateFields.datepicker({
@@ -129,30 +184,24 @@
             });
 
             //-----------------------
-            // Page Unload Handling
-            //-----------------------
-
-            var form_changed = false;
-            var button_clicked = null;
-
-            $('form').on('keyup change', 'input, select, textarea', function(){
-                form_changed = true;
-            });
-
-            $(window).on('beforeunload', function(){
-              var blog = $('#blogContent');
-              var notice = $('#noticeContent');
-              var blog_content = blog.length > 0 && blog.val().length > 0;
-              var notice_content = notice.length > 0 && notice.val().length > 0;
-
-              if((form_changed || blog_content || notice_content) && !button_clicked) {
-                return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
-              }
-            });
-
-            //-----------------------
             // Events
             //-----------------------
+
+            // Record change to form content. See also Redactor
+            form.on('keyup change', 'input, select, textarea', function() {
+                formChanged = true;
+            });
+
+            // TODO Enforce limits in textareas
+            limitedTextFields.each(function() {
+              var field = $(this);
+              var limit = field.attr('data-limit');
+              var charsLeft = field.next('.characters-remaining').children('.count');
+
+              field.keypress(function() {
+                limitText(field, limit, charsLeft);
+              });
+            });
 
             // Respond to Media Link type change
             mediaTypeSelect.change(onChangeMediaLinkType);
@@ -171,13 +220,13 @@
 
                 case 'save':
                   entryEnabled.val(0);
-                  button_clicked = true;
+                  buttonClicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
-                  button_clicked = true;
+                  buttonClicked = true;
                   form.submit();
                   break;
 
@@ -204,8 +253,19 @@
                       section = 'media';
                       break;
                   }
-                  button_clicked = true;
+
+                  buttonClicked = true;
                   document.location = '/account/'+section;
+              }
+            });
+
+            // Prevend page unload if form content has changed
+            $(window).on('beforeunload', function(){
+              var richText = $('#blogContent, #noticeContent');
+              var richTextContent = richText.length > 0 && richText.val().length > 0;
+
+              if((formChanged || richTextContent) && !buttonClicked) {
+                return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });
 

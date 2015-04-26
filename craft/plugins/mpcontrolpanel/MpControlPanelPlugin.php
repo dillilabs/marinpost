@@ -4,13 +4,11 @@ namespace Craft;
 class MpControlPanelPlugin extends BasePlugin
 {
     /**
-     * Initialization:
+     * If control panel request:
      *
-     *  Inject Javascript into the Control Panel to:
+     *  Load JS resources for Redactor Plugins.
      *
-     *    Ensure only a single User group is selected per User 
-     *
-     *    Load JS resources for Redactor Plugins
+     *  Inject Javascript to ensure only a single User group is selected per User.
      */
     public function init()
     {
@@ -20,8 +18,9 @@ class MpControlPanelPlugin extends BasePlugin
 
         if (craft()->request->isCpRequest())
         {
-            $this->_ensureOneUserGroup();
             $this->_loadRedactorPluginResources();
+
+            $this->_ensureOneUserGroup();
         }
     }
 
@@ -65,6 +64,7 @@ var groups = $('form#userform input[type=checkbox][name="groups[]"]');
 groups.click(function(e) {
     if (groups.filter(':checked').length > 1) {
         alert('Please select only one User Group.');
+
         return false;
     }
 });
@@ -77,7 +77,8 @@ JS;
      */
     private function _loadRedactorPluginResources()
     {
-        $plugins = array('fontfamily', 'fontsize', 'fontcolor');
+        $plugins = array('counter', 'fontcolor', 'fontfamily', 'fontsize', 'limiter');
+
         foreach ($plugins as $plugin)
         {
             craft()->templates->includeJsResource("lib/redactor/plugins/{$plugin}.js");
@@ -122,7 +123,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.18';
+        return '0.0.19';
     }
 
     public function getDeveloper()

@@ -141,22 +141,26 @@
 
   {% includeJsFile "/js/jquery.min.js" first %}
   {% includeJsFile "/js/jquery-ui.min.js" %}
-  {% includeJsFile "/js/plugins.js" %}
+  {% includeJsFile "/js/console.js" %}
 
   {% includeJsResource "lib/redactor/redactor.js" %}
+  {% includeJsResource "lib/redactor/plugins/counter.js" %}
+  {% includeJsResource "lib/redactor/plugins/fontcolor.js" %}
+  {% includeJsResource "lib/redactor/plugins/fontfamily.js" %}
+  {% includeJsResource "lib/redactor/plugins/fontsize.js" %}
   {% includeJsResource "lib/redactor/plugins/fullscreen.js" %}
+  {% includeJsResource "lib/redactor/plugins/limiter.js" %}
+
   {% includeJsResource "/s3direct/js/jquery.iframe-transport.js" %}
   {% includeJsResource "/s3direct/js/jquery.fileupload.js" %}
   {% includeJsResource "/s3direct/js/jquery.fileupload-process.js" %}
   {% includeJsResource "/s3direct/js/jquery.fileupload-validate.js" %}
-  {% includeJsResource "s3direct/js/s3direct.js" %}
+  {% includeJsResource "/s3direct/js/s3direct.js" %}
 
   {% includeJsFile "/js/main.js" %}
   {% includeJsFile "/js/filters.js" %}
   {% includeJsFile "/js/letters.js" %}
   {% includeJsFile "/js/form-categories.js" %}
-  {% includeJsFile "/js/form-wysiwyg.js" %}
-  {% includeJsFile "/js/form-textarea.js" %}
   {% includeJsFile "/js/forms.js" %}
   {% includeJsFile '/js/tags.js' %}
   {% includeJsFile '/js/contact.js' %}
