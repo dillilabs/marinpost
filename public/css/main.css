@@ -810,6 +810,11 @@ a.optional-category-field {
 .sidebar {
     margin: 0 2em;
 }
+
+.event-venue {
+  font-weight: bold;
+  color: red;
+}
 /* * * * * * * * * * * * * * * * * * * * *
         FORM STYLES
 * * * * * * * * * * * * * * * * * * * * * */
