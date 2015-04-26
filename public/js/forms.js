@@ -140,10 +140,12 @@
             });
 
             $(window).on('beforeunload', function(){
-              var blog_field_not_blank = ($('#blogContent').val().length > 0);
-              var notice_field_not_blank = ($('#noticeContent').val().length > 0);
+              var blog = $('#blogContent');
+              var notice = $('#noticeContent');
+              var blog_content = blog.length > 0 && blog.val().length > 0;
+              var notice_content = notice.length > 0 && notice.val().length > 0;
 
-              if((form_changed || blog_field_not_blank || notice_field_not_blank) && !button_clicked) {
+              if((form_changed || blog_content || notice_content) && !button_clicked) {
                 return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });
