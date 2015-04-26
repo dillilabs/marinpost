@@ -88,15 +88,15 @@
 {% endmacro %}
 
 {% macro authorNameOrLink(entry, class) %}
-  {% from _self import contributorUrl %}
+  {% from _self import contributorUrl, nameCase %}
 
   {% set author = entry.author %}
 
   {% if author.isInGroup('contributor') %}
-    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ author.name | title }}</a>
+    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</a>
 
   {% else %}
-    {{ author.name | title }}
+    {{ nameCase(author.name) }}
 
   {% endif %}
 {% endmacro %}
@@ -222,22 +222,22 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import externalUrl, mediaUrl %}
+  {% from _self import externalUrl, mediaUrl, titleCase %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'media' %}
-      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ entry.title | title }}</a></h3>
+      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'news' %}
-      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ entry.title | title }}</a></h3>
+      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'notices' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ titleCase(entry.title) }}</a></h3>
 
     {% default %}
-      <h3>{{ entry.title | title }}</h3>
+      <h3>{{ titleCase(entry.title) }}</h3>
 
   {% endswitch %}
 {% endmacro %}
@@ -360,6 +360,14 @@
       </li>
 
   {% endswitch %}
+{% endmacro %}
+
+{% macro titleCase(title) %}
+  {{ craft.mpentry.titleCase(title) }}
+{% endmacro %}
+
+{% macro nameCase(name) %}
+  {{ craft.mpentry.nameCase(name) }}
 {% endmacro %}
 
 {% macro documentTitle(file, title) %}
