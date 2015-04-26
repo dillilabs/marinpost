@@ -155,13 +155,16 @@
             wysiwygFields.each(function() {
               var textarea = $(this);
               var limit = textarea.attr('data-limit');
+              var buttons = ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'link', 'alignment', 'horizontalrule', 'fontfamily', 'fontsize', 'fontcolor'];
+              var plugins = ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'];
 
               textarea.redactor({
                 minHeight: 200,
                 maxHeight: 800,
-                buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','fontsize','fontcolor','fontfamily'],
-                plugins: ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'],
+                buttons: buttons,
+                plugins: plugins,
                 toolbarFixed: true,
+                limiter: limit,
                 changeCallback: function(e) {
                   formChanged = true;
                 },
@@ -171,7 +174,6 @@
                 counterCallback: function(data) {
                   // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
                 },
-                limiter: limit,
               });
             });
 
