@@ -32,7 +32,7 @@
             {% endif %}
         
             {% if user.bio %}
-              <p>{{ user.bio }}</p>
+              <p>{{ p.excerpt(user.bio, 200) }}</p>
             {% endif %}
 
             <p><a href="{{ p.contributorUrl(user) }}">more</a></p>

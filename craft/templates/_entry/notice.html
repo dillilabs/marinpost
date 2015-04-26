@@ -30,15 +30,15 @@
         {% endif %}
 
         {% if entry.phoneNumber %}
-          <p>Contact Phone: {{ entry.phoneNumber }}</p>
+          <p>Contact Phone: {{ p.phoneLink(entry.phoneNumber) }}</p>
         {% endif %}
 
         {% if entry.email %}
-          <p>Contact Email: <a href="mailto:{{ entry.email }}">{{ entry.email }}</a></p>
+          <p>Contact Email: {{ p.emailLink(entry.email) }}</p>
         {% endif %}
 
         {% if entry.webSite %}
-          <p>Web Site: <a href="{{ p.externalURL(entry.webSite) }}" target="_blank">{{ entry.webSite }}</a></p>
+          <p>Web Site: {{ p.webLink(entry.webSite) }}</p>
         {% endif %}
       {% endif %}
 

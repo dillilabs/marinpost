@@ -133,6 +133,22 @@
   {{ url matches '~^https?://~' ? url : 'http://'~url }}
 {% endmacro %}
 
+{% macro webLink(url, text) %}
+  {% from _self import externalUrl %}
+  {% set url = externalUrl(url) %}
+  {% set text = text | default(url) %}
+
+  <a href="{{ url }}" target="_blank">{{ text }}</a>
+{% endmacro %}
+
+{% macro emailLink(emailAddress) %}
+  <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+{% endmacro %}
+
+{% macro phoneLink(phoneNumber) %}
+  <a href="tel:{{ phoneNumber }}">{{ phoneNumber }}</a>
+{% endmacro %}
+
 {% macro mediaUrl(entry) %}
   {% from _self import externalUrl %}
 {% spaceless %}
