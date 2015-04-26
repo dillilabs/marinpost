@@ -405,6 +405,7 @@
 
 {% macro excerpt(text, maxLength) %}
   {% set maxLength = maxLength | default(25) %}
+  {% set text = text | striptags %}
 
   {% if (text | length) < maxLength %}
     {{ text }}
