@@ -1271,7 +1271,7 @@ footer {
 /* 		margin-left: 25%; */
 	}
 
-    .notices .tags, .notices h3, .notices .event, .notices .byline {
+    .notices .tags, .notices h3, .notices .event-venue, .notices .event, .notices .byline {
         margin-left: 175px;
     }
 
