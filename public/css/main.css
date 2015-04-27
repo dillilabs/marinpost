@@ -845,7 +845,7 @@ a.optional-category-field {
     margin-top: 1em;
 }
 
-.notices .posts .byline {
+.notices .byline, .notices .posts .byline {
     margin-bottom: 1em;
 }
 

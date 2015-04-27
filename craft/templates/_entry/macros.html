@@ -408,7 +408,7 @@
       </li>
 
     {% default %}
-      <li class="listing">
+      <li class="listing{% if entry.section.handle == 'notices' %} notices{% endif %}">
         <div class="post">
           {{ postImage(entry) }}
           {{ postTags(entry, unfiltered) }}
