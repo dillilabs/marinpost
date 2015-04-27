@@ -66,6 +66,7 @@ $(function() {
     });
     
     $('.filter h4, .sub-nav > h4').click(function() {
+       $(this).toggleClass('open');
        $(this).siblings().slideToggle();
        $('.sub-nav h2').hide();
     });

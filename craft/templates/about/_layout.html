@@ -1,6 +1,5 @@
 <main class="single clearfix">
   <div class="sub-nav">
-    <div class="filter">
         <h4>About</h4>
     {% block subNav %}
         {{ n.arrowLink('about', 'About Us') }}
@@ -23,7 +22,6 @@
         {{ n.arrowLink('about/sponsor', 'Sponsor Us') }}
         {{ n.arrowLink('about/advertise', 'Advertise') }}
     {% endblock %}
-      </div>
   </div>
 
   <div class="{% if craft.request.path == "about/contributors" %}list-wrapper{% else %}post{% endif %}">

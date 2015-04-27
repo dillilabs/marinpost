@@ -465,6 +465,10 @@ nav ul ul li {
     border-bottom: 1px solid #ccc;
 }
 
+.sub-nav h5.closed {
+    border-bottom: none;
+}
+
 h3.my-content {
     font-size: .95em;
 }
@@ -472,6 +476,10 @@ h3.my-content {
     background: url('../img/down-arrow.png') no-repeat scroll 6px 8px;
     font-weight: bold;
     padding: 5px 0 5px 25px;
+}
+
+.sub-nav .filter h5.active {
+    border-bottom: 1px solid #ccc;
 }
 
 .filter a, .sub-nav a, .sub-nav a:visited {
@@ -522,15 +530,20 @@ h3.my-content {
     padding: 0;
 }
 .sub-nav > .filter h5 {
-      margin: .25em 0;
+      margin: 0;
 }
 .filter h4, .sub-nav > h4 {
     background: #f9f9f9;
     border: 1px solid #ccc;
     display: block;
-    margin: 0 0 .25em;
+    margin: 0;
     padding: .5em;
 }
+
+.filter h4.open, .sub-nav > h4.open {
+    border-bottom: none;
+}
+
 .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
     display: none;
 }
@@ -700,6 +713,11 @@ ul.tags > li {
     margin: 0;
     padding: 0 0 .25em .25em;
 }
+
+.filter ul > li:last-of-type {
+    margin-bottom: .5em;
+}
+
 .filter fieldset > h5 {
     cursor: pointer;
 }
@@ -1165,10 +1183,6 @@ footer {
 
     .about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
         margin-top: 1em;
-    }
-
-    .sub-nav > .filter h5 {
-          margin: 1em 0 .5em;
     }
 
     #mini-menu #search {
