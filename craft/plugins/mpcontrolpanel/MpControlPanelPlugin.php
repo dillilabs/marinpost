@@ -77,7 +77,7 @@ JS;
      */
     private function _loadRedactorPluginResources()
     {
-        $plugins = array('counter', 'fontcolor', 'fontfamily', 'fontsize', 'limiter');
+        $plugins = array('counter', 'fontcolor', 'fontfamily', 'fontsize', 'limiter', 'underline');
 
         foreach ($plugins as $plugin)
         {
@@ -123,7 +123,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.19';
+        return '0.0.20';
     }
 
     public function getDeveloper()

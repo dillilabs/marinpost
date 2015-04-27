@@ -48,14 +48,14 @@
             wysiwygFields.each(function() {
               var textarea = $(this);
               var limit = textarea.attr('data-limit');
-              var buttons = ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'link', 'alignment', 'horizontalrule', 'fontfamily', 'fontsize', 'fontcolor'];
-              var plugins = ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'];
+              var plugins = ['fullscreen', 'counter', 'limiter', 'underline'];
+              var buttons = ['bold', 'italic', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent'];
 
               textarea.redactor({
                 minHeight: 200,
                 maxHeight: 800,
-                buttons: buttons,
                 plugins: plugins,
+                buttons: buttons,
                 toolbarFixed: true,
                 limiter: limit,
                 changeCallback: function(e) {

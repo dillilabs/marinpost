@@ -166,14 +166,24 @@
             wysiwygFields.each(function() {
               var textarea = $(this);
               var limit = textarea.attr('data-limit');
-              var buttons = ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'link', 'alignment', 'horizontalrule', 'fontfamily', 'fontsize', 'fontcolor'];
-              var plugins = ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'];
+              var plugins, buttons;
+
+              switch (textarea.attr('name')) {
+                case 'fields[blogContent]':
+                  plugins = ['underline', 'fontsize', 'fullscreen', 'counter', 'limiter'];
+                  buttons = ['bold', 'italic', 'fontsize', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'horizontalrule'];
+                  break;
+                case 'fields[noticeContent]':
+                  plugins = ['underline', 'fontsize', 'fontcolor', 'fontfamily', 'fullscreen', 'counter', 'limiter'];
+                  buttons = ['bold', 'italic', 'fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'alignment', 'horizontalrule'];
+                  break;
+              }
 
               textarea.redactor({
                 minHeight: 200,
                 maxHeight: 800,
-                buttons: buttons,
                 plugins: plugins,
+                buttons: buttons,
                 toolbarFixed: true,
                 limiter: limit,
                 changeCallback: function(e) {

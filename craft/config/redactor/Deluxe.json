@@ -1,5 +1,5 @@
 {
 	buttons: ['html','formatting','bold','italic','unorderedlist','orderedlist','link','image','video','fontfamily','fontsize','fontcolor'],
-	plugins: ['fullscreen','video','fontfamily','fontsize','fontcolor'],
+	plugins: ['fullscreen','video','fontfamily','fontsize','fontcolor','underline'],
 	toolbarFixed: true
 }
