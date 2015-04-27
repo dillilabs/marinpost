@@ -156,6 +156,8 @@ h2.date {
 h3 {
     margin: .5em 0;
 }
+
+
 .posts h3.join {
     color: #38547b;
     border-bottom: 1px solid #ebebeb;
@@ -604,6 +606,13 @@ main {
     border-bottom: 1px solid #DAE4F4;
     margin-bottom: 1em;
 }
+
+.post .image-wrapper p, .posts .image-wrapper p, #featured .image-wrapper p {
+	color: #666;
+	font-family: 'Arial', Arial, sans-serif;
+	font-size: .5em;
+}
+
 main.single {
     padding-bottom: 1em;
 }
@@ -1321,9 +1330,6 @@ footer {
     }
     
 	.post .image-wrapper p, .posts .image-wrapper p, .featured .image-wrapper p {
-		color: #666;
-		font-family: 'Arial', Arial, sans-serif;
-		font-size: .75em;
         margin: 0;
         text-align: right;
 	}
