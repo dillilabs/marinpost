@@ -313,7 +313,7 @@
   {% set address = address | default(false) %}
 
   {% if notice.venue %}
-    <span class="event-venue">{{ notice.venue }}</span>
+    <p class="event"><span class="event-venue">{{ notice.venue }}</span></p>
 
     {% if address %}
       {% if notice.streetAddress %}
