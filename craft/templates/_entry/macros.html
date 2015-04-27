@@ -294,13 +294,13 @@
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">By {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('F j, Y') }}{% endif %}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('F j, Y') }}{% endif %}</div>
 
     {% case 'news' %}
-      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }}</div>
 
     {% default %}
-      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }} {{ commentCount(entry) }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }} {{ commentCount(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}
@@ -317,34 +317,29 @@
 
     {% if address %}
       {% if notice.streetAddress %}
-        <br>
-        {{ notice.streetAddress }}
+    <p class="event">{{ notice.streetAddress }}</p>
       {% endif %}
 
       {% if notice.city or notice.state or notice.zipCode %}
-        <br>
+        <p class="event">
         {{ [notice.city, notice.state] | join(', ') }}
-        {{ notice.zipCode }}
+        {{ notice.zipCode }}</p>
       {% endif %}
 
     {% endif %}
   {% endif %}
 
   {% if notice.startDate %}
-    <br>
-    {{ notice.startDate | date('F j, Y') }}
+    <p class="event">{{ notice.startDate | date('F j, Y') }}</p>
 
     {% if notice.startTime %}
-      <br>
+      <p class="event">
       {{ notice.startTime | date('g:i a') }}
 
       {% if notice.endTime %}
-        to {{ notice.endTime | date('g:i a') }}
-
-        {% if notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}
-          , {{ notice.endDate | date('F j, Y') }}
-        {% endif %}
+        to {{ notice.endTime | date('g:i a') }}{% if notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}, {{ notice.endDate | date('F j, Y') }}{% endif %}
       {% endif %}
+      </p>
     {% endif %}
   {% endif %}
 {% endmacro %}

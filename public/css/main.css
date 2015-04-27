@@ -830,9 +830,27 @@ a.optional-category-field {
 }
 
 .event-venue {
-  font-weight: bold;
-  color: red;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: red;
 }
+
+.notices .event {
+    font-family: Arial, sans-serif;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.notices .byline {
+    margin-top: 1em;
+}
+
+.notices .posts .byline {
+    margin-bottom: 1em;
+}
+
+
+
 /* * * * * * * * * * * * * * * * * * * * *
         FORM STYLES
 * * * * * * * * * * * * * * * * * * * * * */
@@ -1252,6 +1270,10 @@ footer {
 	.blog main > h2, .news main > h2, .notices main > h2,  .media main > h2,  .letters main > h2,  .about main > h2 {
 /* 		margin-left: 25%; */
 	}
+
+    .notices .tags, .notices h3, .notices .event, .notices .byline {
+        margin-left: 175px;
+    }
 
     ul.posts li img, img.profile {
         display:inline-block;

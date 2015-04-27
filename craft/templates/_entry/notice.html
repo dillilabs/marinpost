@@ -22,23 +22,23 @@
         <hr>
 
         {% if entry.organization %}
-          <p>Organization: {{ entry.organization }}</p>
+          <p><strong>Organization:</strong> {{ entry.organization }}</p>
         {% endif %}
 
         {% if entry.contactName %}
-          <p>Contact: {{ entry.contactName }}</p>
+          <p><strong>Contact:</strong> {{ entry.contactName }}</p>
         {% endif %}
 
         {% if entry.phoneNumber %}
-          <p>Contact Phone: {{ p.phoneLink(entry.phoneNumber) }}</p>
+          <p><strong>Contact Phone:</strong> {{ p.phoneLink(entry.phoneNumber) }}</p>
         {% endif %}
 
         {% if entry.email %}
-          <p>Contact Email: {{ p.emailLink(entry.email) }}</p>
+          <p><strong>Contact Email:</strong> {{ p.emailLink(entry.email) }}</p>
         {% endif %}
 
         {% if entry.webSite %}
-          <p>Web Site: {{ p.webLink(entry.webSite) }}</p>
+          <p><strong>Web Site:</strong> {{ p.webLink(entry.webSite) }}</p>
         {% endif %}
       {% endif %}
 
