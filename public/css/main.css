@@ -460,7 +460,7 @@ nav ul ul li {
     text-transform: uppercase;
 }
 
-.sub-nav h5:last-of-type, .my-content > a:last-of-type {
+.sub-nav h5:last-of-type, .my-content:last-of-type > a {
     border-bottom: 1px solid #ccc;
 }
 
@@ -468,16 +468,17 @@ nav ul ul li {
     border-bottom: none;
 }
 
-h3.my-content {
-    font-size: .95em;
+.my-content.active {
+    margin-bottom: 1em;
 }
-.sub-nav h5.active, .my-content a.active {
+
+.sub-nav h5.active, .my-content.active a {
     background: url('../img/down-arrow.png') no-repeat scroll 6px 8px;
     font-weight: bold;
     padding: 5px 0 5px 25px;
 }
 
-.sub-nav .filter h5.active {
+.sub-nav .filter h5.active, .my-content.active a {
     border-bottom: 1px solid #ccc;
 }
 
@@ -608,6 +609,9 @@ main.single {
 }
 main.single > .post > h3 {
     font-size: 1.185em;
+}
+main.single > .post > h3.my-content {
+    font-size: 1em;
 }
 .single iframe {
     width: 100%;

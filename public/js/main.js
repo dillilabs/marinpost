@@ -40,7 +40,7 @@ $(function() {
     $('nav').toggle(effect, options, duration);
   });
 
-  $('.my-content a').click(function() {
+  $('.my-content').click(function() {
   	$(this).toggleClass('active');
   });
 
