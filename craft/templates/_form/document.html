@@ -39,7 +39,7 @@
   </div>
 </div>
 
-<div id="document-modal" title="{{ document ? 'Change' : 'Add' }} Document">
+<div id="document-modal" title="{{ document ? 'Change' : 'Add' }} Document" style="display: none;">
   <div>
     <span class="fileinput-button">
       <span>Upload a Document</span>
@@ -79,6 +79,7 @@
 
 <button id="open-document-modal">{{ document ? 'Replace Document' : 'Upload a Document' }}</button>
 <!-- <div class="note">Upload PDF only</div> -->
+
 {% set js %}
 $(function() {
   var openDocumentModal = $('#open-document-modal');

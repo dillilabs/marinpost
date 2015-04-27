@@ -1,5 +1,5 @@
 (function($) {
-    $.fn.forms  = function() {
+    $.fn.contentForm  = function() {
         return this.each(function() {
             var form = $(this);
 
@@ -25,14 +25,37 @@
             // Entry status
             var entryEnabled = form.find('input[name=enabled]');
 
+            // Date picker
             var dateFields = form.find('input.date');
+
+            // Redactor
+            var wysiwygFields = form.find('textarea.wysiwyg');
+
+            // Textarea
+            var limitedTextFields = form.find('textarea.limited');
+
+            // Add/remove category links
+            var categoryLinks = form.find('a.optional-category-field');
+            var addCategoryLink = categoryLinks.filter('.add');
+            var removeCategoryLink = categoryLinks.filter('.remove');
 
             // Submit buttons
             var submitButtons = form.find('input[type=button].submit');
 
+            // Page unload
+            var formChanged = false;
+
+            var buttonClicked = null;
+
             //-----------------------
             // Functions
             //-----------------------
+
+            // Categories
+            var idFromLink = function(link) {
+              return link.attr('id').split('-').splice(1, 2).join('-');
+
+            };
 
             // Update media type input and toggle other affected inputs
             var onChangeMediaLinkType = function(mediaType) {
@@ -120,8 +143,53 @@
 
             };
 
+            // TODO
+            var limitText = function(field, limit, charsLeft) {
+              var text = field.val();
+              var count = text.length;
+              var ok = true;
+
+              if (count > limit) {
+                text = text.substring(0, limit);
+                field.val(text);
+                ok = false;
+              }
+
+              charsLeft.text(limit > count ? limit - count : 0);
+              return ok;
+            };
+
             //-----------------------
-            // Hooks
+            // Redactor
+            //-----------------------
+
+            wysiwygFields.each(function() {
+              var textarea = $(this);
+              var limit = textarea.attr('data-limit');
+              var buttons = ['html', 'formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'link', 'alignment', 'horizontalrule', 'fontfamily', 'fontsize', 'fontcolor'];
+              var plugins = ['fullscreen','counter','limiter','fontsize','fontcolor','fontfamily'];
+
+              textarea.redactor({
+                minHeight: 200,
+                maxHeight: 800,
+                buttons: buttons,
+                plugins: plugins,
+                toolbarFixed: true,
+                limiter: limit,
+                changeCallback: function(e) {
+                  formChanged = true;
+                },
+                codeKeydownCallback: function(e) {
+                  formChanged = true;
+                },
+                counterCallback: function(data) {
+                  // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
+                },
+              });
+            });
+
+            //-----------------------
+            // Date picker
             //-----------------------
 
             dateFields.datepicker({
@@ -131,6 +199,43 @@
             //-----------------------
             // Events
             //-----------------------
+
+            // Add optional category
+            addCategoryLink.click(function(e) {
+              e.preventDefault();
+              var link = $(this);
+              var id = idFromLink(link);
+
+              $('#input-'+id).show();
+              link.nextAll('a.optional-category-field.add:first').show().end()
+                  .hide();
+            });
+
+            // Remove optional category
+            removeCategoryLink.click(function(e) {
+              e.preventDefault();
+              var link = $(this);
+              var id = idFromLink(link);
+
+              link.closest('.optional-category-field.inputs').hide();
+              $('#add-'+id).show();
+            });
+
+            // Record change to form content. See also Redactor
+            form.on('keyup change', 'input, select, textarea', function() {
+                formChanged = true;
+            });
+
+            // TODO Enforce limits in textareas
+            limitedTextFields.each(function() {
+              var field = $(this);
+              var limit = field.attr('data-limit');
+              var charsLeft = field.next('.characters-remaining').children('.count');
+
+              field.keypress(function() {
+                limitText(field, limit, charsLeft);
+              });
+            });
 
             // Respond to Media Link type change
             mediaTypeSelect.change(onChangeMediaLinkType);
@@ -149,11 +254,13 @@
 
                 case 'save':
                   entryEnabled.val(0);
+                  buttonClicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
+                  buttonClicked = true;
                   form.submit();
                   break;
 
@@ -181,7 +288,18 @@
                       break;
                   }
 
+                  buttonClicked = true;
                   document.location = '/account/'+section;
+              }
+            });
+
+            // Prevend page unload if form content has changed
+            $(window).on('beforeunload', function(){
+              var richText = $('#blogContent, #noticeContent');
+              var richTextContent = richText.length > 0 && richText.val().length > 0;
+
+              if((formChanged || richTextContent) && !buttonClicked) {
+                return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });
 

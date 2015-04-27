@@ -88,15 +88,15 @@
 {% endmacro %}
 
 {% macro authorNameOrLink(entry, class) %}
-  {% from _self import contributorUrl %}
+  {% from _self import contributorUrl, nameCase %}
 
   {% set author = entry.author %}
 
   {% if author.isInGroup('contributor') %}
-    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ author.name | title }}</a>
+    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</a>
 
   {% else %}
-    {{ author.name | title }}
+    {{ nameCase(author.name) }}
 
   {% endif %}
 {% endmacro %}
@@ -131,6 +131,22 @@
 
 {%macro externalUrl(url) %}
   {{ url matches '~^https?://~' ? url : 'http://'~url }}
+{% endmacro %}
+
+{% macro webLink(url, text) %}
+  {% from _self import externalUrl %}
+  {% set url = externalUrl(url) %}
+  {% set text = text | default(url) %}
+
+  <a href="{{ url }}" target="_blank">{{ text }}</a>
+{% endmacro %}
+
+{% macro emailLink(emailAddress) %}
+  <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+{% endmacro %}
+
+{% macro phoneLink(phoneNumber) %}
+  <a href="tel:{{ phoneNumber }}">{{ phoneNumber }}</a>
 {% endmacro %}
 
 {% macro mediaUrl(entry) %}
@@ -222,28 +238,30 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import externalUrl, mediaUrl %}
+  {% from _self import externalUrl, mediaUrl, titleCase %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'media' %}
-      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ entry.title | title }}</a></h3>
+      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'news' %}
-      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ entry.title | title }}</a></h3>
+      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'notices' %}
-      <h3><a href="{{ entry.url }}">{{ entry.title | title }}</a></h3>
+      <h3><a href="{{ entry.url }}">{{ titleCase(entry.title) }}</a></h3>
 
     {% default %}
-      <h3>{{ entry.title | title }}</h3>
+      <h3>{{ titleCase(entry.title) }}</h3>
 
   {% endswitch %}
 {% endmacro %}
 
 {% macro commentCount(entry) %}
-  <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
+  {# TODO
+  - <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
+  #}
 {% endmacro %}
 
 {% macro authorLinks(entry) %}
@@ -282,7 +300,7 @@
       <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }}</div>
 
     {% default %}
-      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }} - {{ commentCount(entry) }}</div>
+      <div class="byline">By {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }} {{ commentCount(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}
@@ -291,15 +309,55 @@
   {{- '/letters/' ~ entry.postDate | date('Y/m/d') -}}
 {% endmacro %}
 
+{% macro noticeEvent(notice, address) %}
+  {% set address = address | default(false) %}
+
+  {% if notice.venue %}
+    <span class="event-venue">{{ notice.venue }}</span>
+
+    {% if address %}
+      {% if notice.streetAddress %}
+        <br>
+        {{ notice.streetAddress }}
+      {% endif %}
+
+      {% if notice.city or notice.state or notice.zipCode %}
+        <br>
+        {{ [notice.city, notice.state] | join(', ') }}
+        {{ notice.zipCode }}
+      {% endif %}
+
+    {% endif %}
+  {% endif %}
+
+  {% if notice.startDate %}
+    <br>
+    {{ notice.startDate | date('F j, Y') }}
+
+    {% if notice.startTime %}
+      <br>
+      {{ notice.startTime | date('g:i a') }}
+
+      {% if notice.endTime %}
+        to {{ notice.endTime | date('g:i a') }}
+
+        {% if notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}
+          , {{ notice.endDate | date('F j, Y') }}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
 {% macro postSummary(entry) %}
-  {% from _self import externalUrl, letterUrl, mainContent, mediaUrl, postBy, postTitle %}
+  {% from _self import excerpt, externalUrl, letterUrl, mainContent, mediaUrl, noticeEvent, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
   {% set maxChars = 200 %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <p>{{ content | striptags | slice(0, maxChars) }} &hellip; <a class="more" href="{{ letterUrl(entry) }}">more »</a></p>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ letterUrl(entry) }}">more »</a></p>
 
     {% case 'media' %}
       {{ postTitle(entry) }}
@@ -311,10 +369,15 @@
       {{ postBy(entry) }}
       <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more »</a></p>
 
+    {% case 'notices' %}
+      {{ postTitle(entry) }}
+      <p class="event">{{ noticeEvent(entry) }}</p>
+      {{ postBy(entry) }}
+
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content | striptags | slice(0, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
 
   {% endswitch %}
 {% endmacro %}
@@ -362,6 +425,14 @@
   {% endswitch %}
 {% endmacro %}
 
+{% macro titleCase(title) %}
+  {{ craft.mpentry.titleCase(title) }}
+{% endmacro %}
+
+{% macro nameCase(name) %}
+  {{ craft.mpentry.nameCase(name) }}
+{% endmacro %}
+
 {% macro documentTitle(file, title) %}
   {{ title | default(file.title) }}
 {% endmacro %}
@@ -396,11 +467,12 @@
 {% endmacro %}
 
 {% macro excerpt(text, maxLength) %}
+  {% set text = text | striptags %}
   {% set maxLength = maxLength | default(25) %}
 
-  {% if (text | length) < maxLength %}
-    {{ text }}
-  {% else %}
+  {% if (text | length) > maxLength %}
     {{ text | slice(0, maxLength) }}...
+  {% else %}
+    {{ text }}
   {% endif %}
 {% endmacro %}

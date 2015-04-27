@@ -24,8 +24,24 @@
         {{ message is defined and message ? f.errorList(message.getErrors('fromEmail')) }}
 
         <label for="subject">Subject <span class="note">* required</span></label>
-        <input id="subject" type="text" name="subject" autocomplete="off" value="{% if message is defined %}{{ message.subject }}{% endif %}">
+        <input id="subject" type="text" name="subject" list="contact-categories" autocomplete="off" value="{% if message is defined %}{{ message.subject }}{% endif %}" placeholder="Choose a Subject">
         {{ message is defined and message ? f.errorList(message.getErrors('subject')) }}
+
+        <!--  Advertise; Donate; General Question; My Account; Privacy Policy; Report Abuse; Sponsorships; Subscribe; Tech Support; Terms of Use; Volunteer; Other -->
+        <datalist id="contact-categories">
+          <option value="Advertise">
+          <option value="Donate">
+          <option value="General Question">
+          <option value="My Account">
+          <option value="Privacy Policy">
+          <option value="Report Abuse">
+          <option value="Sponsorships">
+          <option value="Subscribe">
+          <option value="Tech Support">
+          <option value="Terms of Use">
+          <option value="Volunteer">
+          <option value="Other (just type your own Subject here)">
+        </datalist>
 
         <label for="message">Message <span class="note">* required</span></label>
         <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>

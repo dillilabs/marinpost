@@ -39,7 +39,9 @@
   <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][credit]" {% if credit %}value="{{ credit }}"{% endif %}>
 </div>
 
-<div id="image-modal" title="{{ image ? 'Change' : 'Add' }} Image">
+<a href="#" id="open-image-modal">{{ image ? 'Change' : 'Add' }}</a>
+
+<div id="image-modal" title="{{ image ? 'Change' : 'Add' }} Image" style="display: none;">
   <div>
     <span class="fileinput-button">
       <span>Upload an image</span>
@@ -78,8 +80,6 @@
     </ul>
   </label>
 </div>
-
-<a href="#" id="open-image-modal">{{ image ? 'Change' : 'Add' }}</a>
 
 {% set js %}
 $(function() {

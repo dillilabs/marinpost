@@ -11,45 +11,7 @@
 
       {{ p.postTags(entry, false, true) }}
       {{ p.postTitle(entry) }}
-      
-      {% if entry.venue %}
-        <p class="venue">@ {{ entry.venue }}</p>
-      {% endif %}
-
-      {% if entry.streetAddress %}
-        <p class="streetAddress">{{ entry.streetAddress }}</p>
-      {% endif %}
-
-      {% if entry.city or entry.state or entry.zipCode %}
-        <p class="cityStateZip">
-          {{ [entry.city, entry.state] | join(', ') }}
-          {{ entry.zipCode }}
-        </p>
-      {% endif %}
-
-      {% if entry.startDate %}
-        <p class="time">
-          {{ entry.startDate | date('F j, Y') }}
-
-          {% if entry.startTime %}
-            {{ entry.startTime | date('g:i a') }}
-          {% endif %}
-
-          {% if entry.endDate or entry.endTime %}
-            -
-            {% if entry.endDate %}
-              {% if (entry.endDate | date('Y/m/d')) != (entry.startDate | date('Y/m/d')) %}
-                {{ entry.endDate | date('F j') }}
-              {% endif %}
-            {% endif %}
-
-            {% if entry.endTime %}
-              {{ entry.endTime | date('g:i a') }}
-            {% endif %}
-          {% endif %}
-        </p>
-      {% endif %}
-
+      {{ p.noticeEvent(entry, true) }}
       {{ p.postBy(entry) }}
 
       <hr>
@@ -58,20 +20,25 @@
 
       {% if entry.organization or entry.contactName or entry.phoneNumber or entry.email or entry.webSite %}
         <hr>
+
         {% if entry.organization %}
           <p>Organization: {{ entry.organization }}</p>
         {% endif %}
+
         {% if entry.contactName %}
           <p>Contact: {{ entry.contactName }}</p>
         {% endif %}
+
         {% if entry.phoneNumber %}
-          <p>Contact Phone: {{ entry.phoneNumber }}</p>
+          <p>Contact Phone: {{ p.phoneLink(entry.phoneNumber) }}</p>
         {% endif %}
+
         {% if entry.email %}
-          <p>Contact Email: {{ entry.email }}</p>
+          <p>Contact Email: {{ p.emailLink(entry.email) }}</p>
         {% endif %}
+
         {% if entry.webSite %}
-        <p>Web Site: <a href="{{ p.externalURL(entry.webSite) }}" target="_blank">{{ entry.webSite }}</a></p>
+          <p>Web Site: {{ p.webLink(entry.webSite) }}</p>
         {% endif %}
       {% endif %}
 
