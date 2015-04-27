@@ -486,6 +486,8 @@ nav ul ul li {
 
 .filter a, .sub-nav a, .sub-nav a:visited {
     color: #000;
+    display: block;
+    padding: 5px 0 5px 25px;
 }
 .filter a:hover, .sub-nav a:hover {
     font-weight: bold;
@@ -497,6 +499,12 @@ nav ul ul li {
     color: #000;
     display: block;
     padding: 5px 0 5px 25px;
+}
+.sub-nav h5 {
+    padding: 0;
+}
+.my-content > a {
+    padding-left: 25px;
 }
 .sub-nav h5:hover, .sub-nav .filter h5:hover, .my-content > a:hover {
     font-weight: bold;
