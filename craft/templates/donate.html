@@ -1,29 +1,16 @@
 {% extends "_common/layout" %}
 
-{% set title = "Donate" %}
+{% set title = entry.title %}
 
 {% block main %}
   {% embed "_common/single" %}
-    {% block title %}Donate{% endblock %}
+    {% block title %}{{ entry.title }}{% endblock %}
 
     {% block subNav %}
     {% endblock %}
 
     {% block post %}
-      {{ n.siteMessage }}
-      <p style="text-align: justify;">The Marin Post is a project of <a href="http://www.communityventurepartners.org/" target="_blank">Community Venture Partners, Inc.</a>, a federally registered 501 (c)(3), tax exempt organization. Donations are tax deductible to the extent provided by law.</p>
-
-      <p style="text-align: justify;">The Marin Post depends on donations, grants and other types of philanthropic gifts in order to offer its community serving features free of charge.</p>
-
-      <h1 style="color: #fe0002; font-family: 'Arial'; font-size: 1.5em; margin-bottom: 0; text-align: center;">Support the Marin Post</h1>
-
-      <p style="text-align: center;"><img src="/img/donate.png" alt="donate" width="175" height="75" style="float: none;"/></p>
-
-      <h1 style="font-family: 'Arial'; font-size: 1.5em; margin-bottom: 0; color: #fe0002; text-align: center;">"Monthly Giving"</h1>
-      <p style="font-family: 'Calibri'; margin-top: 0; text-align: center;">Check off the "monthly" box on the PayPal payment page to make an automatic donation every month.</p>
-
-      <p style="margin-top: 0; text-align: justify;">CVP accepts donations in the form of securities, stocks and bonds. Please <a href="contact/">contact us</a> to make special arrangements for delivery. We advise donors to seek financial advice from a qualified tax professional.</p>
-
+      <div class="help">{{ entry.genericContent }}</div>
     {% endblock %}
   {% endembed %}
 {% endblock %}
