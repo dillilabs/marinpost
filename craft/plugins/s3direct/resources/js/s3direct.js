@@ -87,6 +87,9 @@
           $.each(data.files, function(i, e) {
             filenames.push(e.name);
           });
+          setTimeout(function() {
+            uploadProgressBar.css('width', 0);
+          }, 1000);
           if (config.debug) console.log('fileupload() done', data, filenames);
         },
         fail: function(e, data) {

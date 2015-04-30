@@ -1,6 +1,7 @@
 {% set sourceId = 2 %}
 
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set assets = folder ? craft.assets.folderId(folder.id).find : false %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set documentBlock = false %}
@@ -39,7 +40,7 @@
   </div>
 </div>
 
-<div id="document-modal" title="{{ document ? 'Change' : 'Add' }} Document" style="display: none;">
+<div id="document-modal" class="modal" title="{{ document ? 'Change' : 'Add' }} Document" style="display: none;">
   <div>
     <span class="fileinput-button">
       <span>Upload a Document</span>
@@ -47,37 +48,35 @@
       <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
     </span>
 
-    <br class="clear">
-    <br>
+    <br class="clear"><br>
     <div>
       <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
   </div>
 
-  <br class="clear">
-  <label for="document" class="required">
-    Select a Document <span class="note">* required</span>
-    <br>
-    <select id="document-asset-id">
-      <option value=""></option>
-      {% if folder %}
-        {% for asset in craft.assets.folderId(folder.id) %}
-          <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-        {% endfor %}
-      {% endif %}
-    </select>
-  </label>
+  <div class="assets-wrapper" {% if not assets %}style="display: none;"{% endif %}>
+    <br class="clear">
+    <label for="document" class="required">
+      Select a Document <span class="note">* required</span><br>
+      <select id="document-asset-id">
+        <option value=""></option>
+        {% if folder %}
+          {% for asset in assets %}
+            <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
+          {% endfor %}
+        {% endif %}
+      </select>
+    </label>
 
-  <br>
-  <br>
-  <label for="document-title">
-    Document title
-    <br>
-    <input type="text" id="document-title" maxlength="255" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
-  </label>
+    <br><br>
+    <label for="document-title">
+      Document title<br>
+      <input type="text" id="document-title" maxlength="255" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+    </label>
+  </div>
 </div>
 
-<button id="open-document-modal">{{ document ? 'Replace Document' : 'Upload a Document' }}</button>
+<button id="open-document-modal">{{ document ? 'Replace Document' : 'Add Document' }}</button>
 <!-- <div class="note">Upload PDF only</div> -->
 
 {% set js %}
@@ -99,6 +98,8 @@ $(function() {
       var selected = file.id == selectedId ? 'selected' : '';
       srcDocument.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
     });
+
+    documentModal.find('.assets-wrapper').show();
   };
 
   var populateDocumentFromModal = function() {

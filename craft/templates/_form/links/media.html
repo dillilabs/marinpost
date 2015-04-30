@@ -66,11 +66,12 @@
     
     <div class="file upload mediaLink" {%- if mediaType != 'upload' %}style="display: none;"{% endif -%}>
       <span class="fileinput-button">
-          <span>Upload .pdf file</span>
+          <span>Upload a Document</span>
           <input id="document-fileupload" type="file" name="file" accept="application/pdf">
           <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
       </span>
-      <br>
+
+      <br class="clear"><br>
       <div>
           <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
       </div>

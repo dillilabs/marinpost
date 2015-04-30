@@ -3,6 +3,7 @@
 {% set excerptLength = 20 %}
 
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set assets = folder ? craft.assets.folderId(folder.id).find : false %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
 {% set imageBlock = false %}
@@ -49,36 +50,34 @@
       <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
     </span>
 
-    <br class="clear">
-    <br>
+    <br class="clear"><br>
     <div>
       <div class="s3direct image progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
     </div>
   </div>
 
-  <br class="clear">
-  <label for="image-credit" class="required">
-    Image Credit <span class="note">* required</span>
-    <br>
-    <input type="text" id="image-credit" maxlength="255" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
-  </label>
+  <div class="assets-wrapper" {% if not assets %}style="display: none;"{% endif %}>
+    <br class="clear">
+    <label for="image-credit" class="required">
+      Image Credit <span class="note">* required</span><br>
+      <input type="text" id="image-credit" maxlength="255" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
+    </label>
 
-  <br>
-  <br>
-  <label for="image" class="required">
-    Select an Image <span class="note">* required</span>
-
-    <ul id="src-images">
-    {% if folder %}
-      {% for asset in craft.assets.folderId(folder.id) %}
-        <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
-          <div><img src="{{ asset.url(transform) }}" /></div>
-          <span class="title">{{ p.excerpt(asset.filename, excerptLength) }}</span>
-        </li>
-      {% endfor %}
-    {% endif %}
-    </ul>
-  </label>
+    <br><br>
+    <label for="image" class="required">
+      Select an Image <span class="note">* required</span>
+      <ul id="src-images">
+      {% if folder %}
+        {% for asset in assets %}
+          <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
+            <div><img src="{{ asset.url(transform) }}" /></div>
+            <span class="title">{{ p.excerpt(asset.filename, excerptLength) }}</span>
+          </li>
+        {% endfor %}
+      {% endif %}
+      </ul>
+    </label>
+  </div>
 </div>
 
 {% set js %}
@@ -117,6 +116,8 @@ $(function() {
 
       srcImages.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+name+'</span></li>');
     });
+
+    imageModal.find('.assets-wrapper').show();
   };
 
   var updateOkButton = function() {
