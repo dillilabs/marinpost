@@ -330,7 +330,7 @@ nav {
     margin: 0 0 0 1em;
     position: absolute;
     top: 15px;
-    width: 130px;
+    width: 150px;
     z-index: 199;
 }
 
@@ -406,7 +406,7 @@ nav ul ul {
     position:absolute;
     text-align: left;
     top: 0;
-    left: 129px;
+    left: 149px;
     margin: 0;
     padding: 0;
     width: 150px;
