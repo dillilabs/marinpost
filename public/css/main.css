@@ -350,9 +350,13 @@ nav .desktop {
 }
 
 nav .mobile {
-    background: url('../img/open-close.png') 120px 1px scroll no-repeat;
+    background: url('../img/right-arrow.png') no-repeat 95% 50%;
     display:block;
     padding: 5px 0 5px 5px;
+}
+
+nav .mobile.active {
+    background: url('../img/right-arrow-black.png') no-repeat 95% 50%;
 }
 
 nav .mobile:hover {
