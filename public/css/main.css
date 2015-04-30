@@ -359,6 +359,7 @@ nav li {
 }
 nav li a, nav li a:visited {
     color: #333;
+    display: block;
 }
 nav li a:hover,
 nav li a.active {
@@ -881,6 +882,17 @@ form input, form select {
 #search fieldset {
     margin: 1em 0 .5em;
 }
+
+#search label {
+    font-weight: normal;
+}
+
+#search label:hover {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+
 form input[type="text"], form input[type="password"],
 form select, textarea {
     display: block;
@@ -1479,6 +1491,7 @@ footer {
         display: inline-block;
         float: none;
         text-align: right;
+        width: 325px;
     }
 
     #mini-menu #search {

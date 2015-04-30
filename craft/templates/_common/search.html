@@ -1,11 +1,11 @@
 <form action="/search" method="GET">
   <fieldset>
     <input type="search" name="query" autocomplete="off"><br>
-    <input type="radio" name="section" value="" {{ n.searchSection('') }}> All
-    <input type="radio" name="section" value="blog" {{ n.searchSection('blog') }}> Blogs
-    <input type="radio" name="section" value="news" {{ n.searchSection('news') }}> News
-    <input type="radio" name="section" value="notices" {{ n.searchSection('notices') }}> Notices
-    <input type="radio" name="section" value="media" {{ n.searchSection('media') }}> Media
-    <input type="radio" name="section" value="letters" {{ n.searchSection('letters') }}> LTRs
+    <input type="radio" name="section" id="search-all" value="" {{ n.searchSection('') }}> <label for="search-all">All</label>
+    <input type="radio" name="section" id="search-blog" value="blog" {{ n.searchSection('blog') }}> <label for="search-blog">Blog</label>
+    <input type="radio" name="section" id="search-news" value="news" {{ n.searchSection('news') }}> <label for="search-news">News</label>
+    <input type="radio" name="section" id="search-notices" value="notices" {{ n.searchSection('notices') }}> <label for="search-notices">Notices</label>
+    <input type="radio" name="section" id="search-media" value="media" {{ n.searchSection('media') }}> <label for="search-media">Media</label>
+    <input type="radio" name="section" id="search-letters" value="letters" {{ n.searchSection('letters') }}> <label for="search-letters">LTRs</label>
   </fieldset>
 </form>
