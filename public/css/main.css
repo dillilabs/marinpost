@@ -329,14 +329,14 @@ nav {
 	font-size: .95em;
     margin: 0 0 0 1em;
     position: absolute;
-    top: 180px;
+    top: 15px;
     width: 130px;
     z-index: 199;
 }
 
 nav .close, nav .sub-close {
 	display: block;
-    padding: 5px 0 5px 7px;
+    padding: 13px 0 13px 7px;
 }
 
 nav .close:hover, nav .sub-close:hover {
@@ -352,7 +352,7 @@ nav .desktop {
 nav .mobile {
     background: url('../img/right-arrow.png') no-repeat 95% 50%;
     display:block;
-    padding: 5px 0 5px 5px;
+    padding: 13px 0 13px 5px;
 }
 
 nav .mobile.active {
@@ -378,14 +378,14 @@ nav li {
 nav li a, nav li a:visited {
     color: #333;
     display: block;
-    padding: 5px 0 5px 5px;
+    padding: 13px 0 13px 5px;
 }
 
 nav li a:hover,
 nav li a.active {
     color: #333;
     font-weight: bold;
-    padding: 5px 0 5px 5px;
+    padding: 13px 0 13px 5px;
 }
 
 nav ul li {
