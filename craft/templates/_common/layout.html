@@ -107,7 +107,7 @@
         <li class="bottom-only sign-in"><a href="{{ loginUrl }}">Log in</a></li>
         <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
       {% endif %}
-      <li><a href="/donate">Donate</a></li>
+      <li>{{ n.segmentLink('Donate') }}</li>
       <li class="bottom-only"><a href="#" class="show-search">Search</a></li>
     </ul>
   </nav>
