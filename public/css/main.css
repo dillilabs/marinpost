@@ -327,9 +327,9 @@ nav {
 	box-shadow: 0 0 5px 0 #ccc;
 	display: none;
 	font-size: .95em;
-    margin: 0 0 0 1em;
+    margin: 0;
     position: absolute;
-    top: 15px;
+    top: 0;
     width: 150px;
     z-index: 199;
 }
@@ -385,7 +385,6 @@ nav li a:hover,
 nav li a.active {
     color: #333;
     font-weight: bold;
-    padding: 13px 0 13px 5px;
 }
 
 nav ul li {
@@ -1430,7 +1429,7 @@ footer {
     nav ul li {
         border: none;
         display: inline-block;
-        padding: 0 1.5% 1% 0;
+        padding: 0 1.5% 0 0;
         position: relative;
     }
 
@@ -1452,6 +1451,11 @@ footer {
         width: inherit;
         z-index: 100;
     }
+
+    nav li a, nav li a:visited, nav li a:hover {
+        padding: 5px 0;
+    }
+
 
 	nav li:hover li {
     	border: 1px solid #ccc;
