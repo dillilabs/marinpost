@@ -38,6 +38,7 @@ $(function() {
     var duration = 200;
     $('nav ul ul').hide(effect, options, duration);
     $('nav').toggle(effect, options, duration);
+    $('.mobile').removeClass('active');
   });
 
   $('.my-content').click(function() {
