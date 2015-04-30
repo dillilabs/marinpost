@@ -335,7 +335,14 @@ nav {
 }
 
 nav .close {
-	display: inline-block;
+	display: block;
+    padding: 5px 0 5px 7px;
+}
+
+nav .close:hover {
+    cursor: pointer;
+	font-weight: bold;
+	text-decoration: underline;
 }
 
 nav .desktop {
@@ -349,6 +356,7 @@ nav .mobile {
 }
 
 nav .mobile:hover {
+    cursor: pointer;
     font-weight: bold;
     text-decoration: underline;
 }
