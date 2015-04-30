@@ -5,7 +5,7 @@
     {%- if entry is defined %}{{ entry.letterContent }}{% endif -%}
     </textarea>
     
-    <div class="characters-remaining">Characters remaining: <span class="count"></span></div>
+    <div class="counter" style="float: right;"></div><br style="clear: both;">
     
     {% if entry is defined %}
       {{ f.errorList(entry.getErrors('letterContent')) }}

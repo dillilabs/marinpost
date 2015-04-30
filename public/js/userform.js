@@ -11,7 +11,7 @@
             var wysiwygFields = form.find('textarea.wysiwyg');
 
             // Textarea
-            var limitedTextFields = form.find('textarea.limited');
+            var limitedTextareaFields = form.find('textarea.limited');
 
             // Submit buttons
             var submitButtons = form.find('input[type=submit]');
@@ -25,8 +25,8 @@
             // Functions
             //-----------------------
 
-            // TODO
-            var limitText = function(field, limit, charsLeft) {
+            // Limit regular textarea fields
+            var limitTextarea = function(field, limit, counter) {
               var text = field.val();
               var count = text.length;
               var ok = true;
@@ -37,7 +37,7 @@
                 ok = false;
               }
 
-              charsLeft.text(limit > count ? limit - count : 0);
+              counter.text(count + ' of ' + limit + ' characters remaining');
               return ok;
             };
 
@@ -48,6 +48,7 @@
             wysiwygFields.each(function() {
               var textarea = $(this);
               var limit = textarea.attr('data-limit');
+              var counters =textarea.closest('.field').find('.counter');
               var plugins = ['fullscreen', 'counter', 'limiter', 'underline'];
               var buttons = ['bold', 'italic', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent'];
 
@@ -66,6 +67,7 @@
                 },
                 counterCallback: function(data) {
                   // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
+                  counters.text(data.characters + ' of ' + limit + ' characters remaining');
                 },
               });
             });
@@ -79,14 +81,14 @@
                 formChanged = true;
             });
 
-            // TODO Enforce limits in textareas
-            limitedTextFields.each(function() {
+            // Enforce char limits in regular textareas
+            limitedTextareaFields.each(function() {
               var field = $(this);
               var limit = field.attr('data-limit');
-              var charsLeft = field.next('.characters-remaining').children('.count');
+              var counter = field.closest('.field').find('.counter');
 
               field.keypress(function() {
-                limitText(field, limit, charsLeft);
+                limitText(field, limit, counter);
               });
             });
 

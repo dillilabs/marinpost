@@ -1,11 +1,11 @@
 <div class="field">
     <label for="linkComments">Link Comments</label>
     
-    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="8" class="limited" data-limit="180" placeholder="Optional comments about your link (max 180 chars)">
+    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="3" class="limited" data-limit="180" placeholder="Optional comments about your link (max 180 chars)">
     {%- if entry is defined %}{{ entry.linkComments }}{% endif -%}
     </textarea>
-    
-    <div class="characters-remaining">Characters remaining: <span class="count"></span></div>
+
+    <div class="counter" style="float: right;"></div><br style="clear: both;">
     
     {% if entry is defined %}
       {{ f.errorList(entry.getErrors('linkComments')) }}

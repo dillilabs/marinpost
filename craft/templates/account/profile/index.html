@@ -40,12 +40,14 @@
 
         <div class="field">
 	        <label for="bio">Personal Bio</label> <span class="note">* required</span>
-	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" class="wysiwyg required" data-limit="1000">{{ currentUser.bio }}</textarea>
+          <div class="counter" style="float: right;"></div><br style="clear: both;">
+	        <textarea id="bio" name="fields[bio]" cols="60" rows="12" class="wysiwyg required" data-limit="1000" placeholder="Brief biographical sketch (max 1,000 characters)">{{ currentUser.bio }}</textarea>
+          <div class="counter" style="float: right;"></div><br style="clear: both;">
         </div>
 
         <div class="field">
-            <label for="website">My Website</label>
-            <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter website URL address" value="{{ currentUser.webSite }}">
+          <label for="website">My Website</label>
+          <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter website URL address" value="{{ currentUser.webSite }}">
         </div>
 
         <input type="submit" value="Update">

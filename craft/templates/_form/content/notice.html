@@ -1,9 +1,13 @@
 <div class="field">
     <label for="noticeContent" class="required">Notice text <span class="note">* required</span></label>
 
-    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" data-limit="2000" placeholder="Create your notice here (limit 2,000 characters)">
+    <div class="counter" style="float: right;"></div><br style="clear: both;">
+
+    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" data-limit="4000" placeholder="Create your notice here (limit 4,000 characters)">
     {%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
     </textarea>
+
+    <div class="counter" style="float: right;"></div><br style="clear: both;">
     
     {% if entry is defined %}
       {{ f.errorList(entry.getErrors('noticeContent')) }}
