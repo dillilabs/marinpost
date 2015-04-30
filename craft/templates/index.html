@@ -30,7 +30,7 @@
           {% for letter in letters %}
             <li>
               <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ p.titleCase(letter.title) }}</a></h4>
-              <p>{{ letter.letterContent | slice(0, 200) }} &hellip;</p>
+              <p>{{ letter.letterContent | slice(0, 180) }} &hellip;</p>
               {{ p.authorNameOrLink(letter, 'user') }}
             </li>
           {% endfor %}

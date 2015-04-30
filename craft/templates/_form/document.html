@@ -73,7 +73,7 @@
   <label for="document-title">
     Document title
     <br>
-    <input type="text" id="document-title" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+    <input type="text" id="document-title" maxlength="255" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
   </label>
 </div>
 

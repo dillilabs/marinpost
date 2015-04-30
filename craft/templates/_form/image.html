@@ -60,7 +60,7 @@
   <label for="image-credit" class="required">
     Image Credit <span class="note">* required</span>
     <br>
-    <input type="text" id="image-credit" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
+    <input type="text" id="image-credit" maxlength="255" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
   </label>
 
   <br>

@@ -80,12 +80,12 @@
                 <input type="text" name="fields[phoneNumber]" autocomplete="off" maxlength="9" placeholder="" value="{{ entry.phoneNumber }}">
             </div>
             <div class="field">
-                <label for="event-zip">Contact Email</label>
-                <input type="text" name="fields[email]" autocomplete="off" placeholder="" value="{{ entry.email }}">
+                <label for="event-email">Contact Email</label>
+                <input type="text" name="fields[email]" autocomplete="off" maxlength="255" placeholder="" value="{{ entry.email }}">
             </div>
             <div class="field">
                 <label for="website">Web Site</label>
-                <input type="text" name="fields[webSite]" autocomplete="off" placeholder="Enter website URL address" value="{{ entry.webSite }}">
+                <input type="text" name="fields[webSite]" autocomplete="off" maxlength="255" placeholder="Enter website URL address" value="{{ entry.webSite }}">
             </div>
         </fieldset>
     {% endblock %}
