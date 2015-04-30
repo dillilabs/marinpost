@@ -44,14 +44,14 @@ $(function() {
   	$(this).toggleClass('active');
   });
 
-  $('.mobile').click(function() {
+  $('.mobile, .sub-close').click(function() {
     var effect = 'slide';
 
     // Set the options for the effect type chosen
     var options = { direction: 'left' };
 
     // Set the duration (default: 400 milliseconds)
-    var duration = 500;
+    var duration = 200;
     $('nav ul ul').hide(effect, options, duration);
     $(this).next('ul').toggle(effect, options, duration);
   });

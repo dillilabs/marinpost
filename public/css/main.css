@@ -334,12 +334,12 @@ nav {
     z-index: 199;
 }
 
-nav .close {
+nav .close, nav .sub-close {
 	display: block;
     padding: 5px 0 5px 7px;
 }
 
-nav .close:hover {
+nav .close:hover, nav .sub-close:hover {
     cursor: pointer;
 	font-weight: bold;
 	text-decoration: underline;
