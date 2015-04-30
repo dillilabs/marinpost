@@ -1419,7 +1419,7 @@ footer {
         width: inherit;
     }
 
-	nav > .close, nav .mobile {
+	nav > .close, nav .sub-close, nav .mobile {
         display:none;
     }
     
