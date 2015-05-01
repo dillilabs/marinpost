@@ -336,7 +336,8 @@ nav {
 
 nav .close, nav .sub-close {
 	display: block;
-    padding: 13px 0 13px 7px;
+    padding: 13px 10px 13px 7px;
+    text-align: right;
 }
 
 nav .close:hover, nav .sub-close:hover {
@@ -356,7 +357,7 @@ nav .mobile {
 }
 
 nav .mobile.active {
-    background: url('../img/right-arrow-black.png') no-repeat 95% 50%;
+    background: url('../img/down-arrow.png') no-repeat 95% 50%;
 }
 
 nav .mobile:hover {
@@ -402,19 +403,20 @@ nav ul ul {
     background-color: #fcfeb3;
 	box-shadow: 2px 0 3px -1px #ccc;
     display: none;
-    position:absolute;
     text-align: left;
-    top: 0;
-    left: 149px;
     margin: 0;
     padding: 0;
-    width: 150px;
 }
 
 nav ul ul li {
+    border-left: none;
+    border-right: none;
     text-transform: none;
 }
 
+nav ul ul li:last-of-type {
+    border-bottom: none;
+}
 
 #mini-menu li.account, #mini-menu li.sign-in, #mini-menu li.sign-out, #mini-menu li.sign-up {
     float: right;
