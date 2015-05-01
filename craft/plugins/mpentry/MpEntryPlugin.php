@@ -86,7 +86,7 @@ class MpEntryPlugin extends BasePlugin
     /**
      * Respond to entries.onSaveEntry event.
      *
-     * If entry section is NOT letters:
+     * If entry section is blog, media, news or notices:
      *
      *   Then manage the hidden, "child" Locations of the entry's selected Locations.
      *

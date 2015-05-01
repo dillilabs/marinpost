@@ -5,8 +5,8 @@
         return this.each(function() {
             var filteredContent = $(this);
             var toggleFilters = $('#filters fieldset h5');
-            var noFilters = $(':checkbox.all');
             var filters = $(':checkbox.filter');
+            var noFilters = $(':checkbox.all');
             var contentLengthThreshold = 20;
             var scrollPositionThreshold = 0.85;
             var isLoadingContent = false;
@@ -15,7 +15,7 @@
             //----------
             // Functions
             //----------
-          
+
             // TODO refactor
             var filterType = function(e) {
               if (e.is('.location')) {
@@ -30,7 +30,7 @@
             var activeFilters = function(type) {
               return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
             };
-          
+
             var urlFor = function(section) {
               var locations = activeFilters('location');
               var topics = activeFilters('topic');
@@ -39,16 +39,24 @@
               return '/filter?section='+section+'&locations='+locations+'&topics='+topics+'&authors='+authors;
             };
 
-            var refreshViews = function() {
+            var disableFilters = function() {
+              $(filters, noFilters).prop('disabled', true);
+            };
+
+            var enableFilters = function() {
+              $(filters, noFilters).prop('disabled', false);
+            };
+
+            var refreshViewsAndEnableFilters = function() {
               var url = urlFor(section);
 
-              filteredContent.load(url);
+              filteredContent.load(url, enableFilters);
             };
-          
+
             var currentContentLength = function() {
               return $('.listing').length;
             };
-          
+
             var loadMoreContent = function() {
               var url = urlFor(section);
               var offset = currentContentLength();
@@ -69,10 +77,44 @@
               );
             };
 
+            // uncheck any Locations "above" current
+            var deselectParent = function(child) {
+              var id = child.attr('data-parent');
+              var parent;
+
+              if (id) {
+                if (parent = $('input[value='+id+']')) {
+                  parent.prop('checked', false);
+
+                  // recurse
+                  deselectParent(parent);
+                }
+              }
+            }
+
+            // uncheck any Locations "below" current
+            var deselectChildren = function(parent) {
+              var ids = parent.attr('data-children');
+              var children, child;
+
+              if (ids) {
+                children = ids.split(',');
+
+                $.each(children, function(unused, id) {
+                  if (child = $('input[value='+id+']')) {
+                    child.prop('checked', false);
+
+                    // recurse
+                    deselectChildren(child);
+                  }
+                });
+              }
+            }
+
             //-------
             // Events
             //-------
-          
+
             toggleFilters.click(function() {
               var toggle = $(this);
 
@@ -83,34 +125,47 @@
               var filter = $(this);
               var type = filterType(filter);
               var typeFilters;
-          
+
+              disableFilters();
+
               if (filter.is(':checked')) {
                 noFilters.filter(type).prop('checked', false);
+
+                // handle geographically hierarchical Locations
+                if (type == '.location') {
+                  // console.log('parent=' + filter.attr('data-parent'), ', children=' + filter.attr('data-children'));
+                  deselectParent(filter);
+                  deselectChildren(filter);
+                }
+
               } else {
                 typeFilters = filters.filter(type);
                 noFilters.filter(type).prop('checked', !typeFilters.is(':checked'));
+
               }
-          
-              refreshViews();
+
+              refreshViewsAndEnableFilters();
             });
-          
+
             noFilters.click(function() {
               var noFilter = $(this);
               var type = filterType(noFilter);
-          
+
+              disableFilters();
+
               if (noFilter.is(':checked')) {
                 filters.filter(type).prop('checked', false);
               }
-          
-              refreshViews();
+
+              refreshViewsAndEnableFilters();
             });
-          
+
             $(window).scroll(function() {
               var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
               var offset;
-        
+
               if (isLoadingContent || endOfContent) return;
-        
+
               if (currentPosition > scrollPositionThreshold) {
                 loadMoreContent();
               }
