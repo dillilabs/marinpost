@@ -9,7 +9,7 @@
     {% block formFields %}
         <fieldset class="notice">
             <div class="field clearfix">
-              {% include "_form/image" with { imagesAttribute: 'noticeImages' } %}
+              {% include "_form/image" with { imagesAttribute: 'noticeImages', singularSection: 'notice' } %}
             </div>
             {% include "_form/title" %}
             {% include "_form/locations" %}
