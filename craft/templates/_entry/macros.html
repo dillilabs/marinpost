@@ -1,78 +1,58 @@
-{% macro primaryImageCredit(entry) %}
+{% macro singularSection(entry) %}
 {% spaceless %}
-  {% set credit = null %}
-
   {% switch entry.section.handle %}
-    {% case 'blog' %}
-      {% set fieldName = 'blogImages' %}
-
-    {% case 'media' %}
-      {% set fieldName = 'mediaImages' %}
-
-    {% case 'news' %}
-      {% set fieldName = 'newsImages' %}
+    {% case 'letters' %}
+      {% set name = 'letter' %}
 
     {% case 'notices' %}
-      {% set fieldName = 'noticeImages' %}
+      {% set name = 'notice' %}
 
     {% default %}
-      {% set fieldName = null %}
+      {% set name = entry.section.handle %}
 
   {% endswitch %}
 
-  {% if fieldName is not null %}
-    {% set images = attribute(entry, fieldName) %}
+  {{ name }}
+{% endspaceless %}
+{% endmacro %}
 
-    {% if images is defined %}
-      {% for block in images.order('sortOrder asc').limit(1) %}
-        {{ block.credit }}
-      {% endfor %}
-    {% endif %}
+{% macro primaryImageCredit(entry) %}
+{% spaceless %}
+  {% from _self import singularSection %}
+
+  {% set section = singularSection(entry) %}
+  {% set fieldName = section~'Images' %}
+  {% set images = attribute(entry, fieldName) %}
+
+  {% if images is defined %}
+    {% for block in images.order('sortOrder asc').limit(1) %}
+      {{ block.credit }}
+    {% endfor %}
   {% endif %}
 {% endspaceless %}
 {% endmacro %}
 
 {% macro primaryImage(entry, transform) %}
 {% spaceless %}
-  {% set image = null %}
+  {% from _self import singularSection %}
+
   {% set transform = transform | default('list') %}
+  {% set section = singularSection(entry) %}
+  {% set fieldName = section~'Images' %}
+  {% set images = attribute(entry, fieldName) %}
+  {% set image = null %}
 
-  {% switch entry.section.handle %}
-    {% case 'blog' %}
-      {% set fieldName = 'blogImages' %}
+  {% if images is defined %}
+    {% for block in images.order('sortOrder asc').limit(1) %}
+      {% set image = block.image.first %}
+    {% endfor %}
+  {% endif %}
 
-    {% case 'media' %}
-      {% set fieldName = 'mediaImages' %}
+  {% if image is not null %}
+    {{ image.url(transform) }}
 
-    {% case 'news' %}
-      {% set fieldName = 'newsImages' %}
-
-    {% case 'notices' %}
-      {% set fieldName = 'noticeImages' %}
-
-    {% default %}
-      {% set fieldName = null %}
-
-  {% endswitch %}
-
-  {% if fieldName is not null %}
-    {% set images = attribute(entry, fieldName) %}
-
-    {% if images is defined %}
-      {% for block in images.order('sortOrder asc').limit(1) %}
-        {% set image = block.image.first %}
-      {% endfor %}
-    {% endif %}
-
-    {% if image is not null %}
-      {{ image.url(transform) }}
-
-    {% else %}
-      /img/default-{{ transform }}.png
-
-    {% endif %}
   {% else %}
-    /img/default-{{ transform }}.png
+    /img/default/{{ transform }}/{{ section }}.jpg
 
   {% endif %}
 {% endspaceless %}
