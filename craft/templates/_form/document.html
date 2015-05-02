@@ -40,8 +40,10 @@
   </div>
 </div>
 
-<div id="document-modal" class="modal" title="{{ document ? 'Change' : 'Add' }} Document" style="display: none;">
+<div id="document-modal" class="modal" title="My Documents" style="display: none;">
   <div>
+    <div class="help">{{ n.siteMessage('my/documents') }}</div>
+
     <span class="fileinput-button">
       <span>Upload a Document</span>
       <input id="document-fileupload" type="file" name="file" accept="application/pdf">
@@ -58,6 +60,7 @@
     <br class="clear">
     <label for="document" class="required">
       Select a Document <span class="note">* required</span><br>
+
       <select id="document-asset-id">
         <option value=""></option>
         {% if folder %}
