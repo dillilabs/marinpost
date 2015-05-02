@@ -95,6 +95,8 @@ $(function() {
   var targetImageCredit = $('input[type=hidden][name$="[fields][credit]"]');
   var displayImage = $('img.display-image');
   var defaultImageUrl = '/img/default-{{ transform }}.png';
+  var deleteButton = false;
+  var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
   
   var selectedImage = function() {
     return srcImages.children('li.selected:first');
@@ -141,6 +143,29 @@ $(function() {
     targetImageCredit.val(imageCredit());
   };
 
+  var updateDeleteButton = function() {
+    deleteButton.button((selectedImage().length == 1) ? 'enable' : 'disable');
+  };
+
+  var deleteImage = function() {
+    var selectedImage = srcImages.children('li.selected:first');
+    var assetId;
+
+    if (selectedImage.length == 1) {
+      assetId = selectedImage.attr('data-asset-id');
+
+      $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          selectedImage.remove();
+          updateDeleteButton();
+          updateOkButton();
+        }
+      });
+    }
+  };
+
   openImageModal.click(function(e) {
     e.preventDefault();
     imageModal.dialog('open');
@@ -159,12 +184,17 @@ $(function() {
       },
       Cancel: function() {
         imageModal.dialog('close');
+      },
+      Delete: function() {
+        deleteImage();
       }
     },
     open: function(event, ui) {
       var widget = $(this).dialog('widget');
       okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
       updateOkButton();
+      deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
+      updateDeleteButton();
     },
     closeOnEscape: false,
   });
@@ -172,6 +202,7 @@ $(function() {
   srcImages.on('click', 'li', function(e) {
     selectImage($(this));
     updateOkButton();
+    updateDeleteButton();
   });
 
   srcImageCredit.keyup(function(e) {

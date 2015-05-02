@@ -20,9 +20,7 @@ class MpEntryController extends BaseController
         $this->requireLogin();
 
         $entry = $this->_getEntry();
-
         $this->_updateStatus($entry->id, BaseElementModel::ENABLED);
-
         // Updating the status of a never-before published entry
         // does not update either the postDate or the URI slug
         // so we must do it manually.
@@ -39,28 +37,39 @@ class MpEntryController extends BaseController
         $this->requireLogin();
 
         $entry = $this->_getEntry();
-
         $this->_ensureContributor($entry->author);
-
         $this->_updateStatus($entry->id, BaseElementModel::DISABLED);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content unpublished.'));
     }
 
     /**
-     * Just that.
+     * Delete and entry.
      */
     public function actionDeleteEntry()
     {
         $this->requireLogin();
 
         $entry = $this->_getEntry();
-
         $this->_deleteEntry($entry->id);
-
         $this->plugin->logger("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content deleted.'));
+    }
+
+    /**
+     * Delete an Asset and its associated file.
+     */
+    public function actionDeleteAsset()
+    {
+        $this->requireLogin();
+        $this->requireAjaxRequest();
+        
+        $asset = $this->_getAsset();
+        craft()->assets->deleteFiles($asset->id);
+        $this->plugin->logger("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$asset}] ({$asset->id})", LogLevel::Warning);
+
+        $this->returnJson(array('success' => true));
     }
 
     // ----------------
@@ -92,6 +101,35 @@ class MpEntryController extends BaseController
         }
 
         return $entry;
+    }
+
+    /**
+     * Fetch the asset and ensure ownership.
+     */
+    private function _getAsset()
+    {
+        $assetId = craft()->request->getParam('assetId');
+
+        if (!$assetId)
+        {
+            $this->returnErrorJson('File ID is required.');
+        }
+
+        $asset = craft()->assets->getFileById($assetId);
+
+        if (!$asset)
+        {
+            $this->returnErrorJson('File not found.');
+        }
+
+        // TODO verify asset source id
+        if ($asset->folder->name != $this->currentUser->id)
+        {
+            $this->returnErrorJson('You are not authorized to delete this file.');
+        }
+
+        return $asset;
+    
     }
 
     /**
