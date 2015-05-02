@@ -5,7 +5,7 @@
 
   {% set section = craft.request.param('section') %}
 
-  {% set entryIds = craft.mpfilter.search(searchTerms, section) %}
+  {% set entryIds = craft.mpsearch.search(searchTerms, section) %}
 {% endif %}
 
 {% extends "_common/layout" %}

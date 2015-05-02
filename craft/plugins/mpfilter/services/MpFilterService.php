@@ -57,44 +57,6 @@ class MpFilterService extends BaseApplicationComponent
         return $entries;
     }
 
-    /**
-     * Return array of Entry IDs for terms
-     * and optional section.
-     */
-    public function search($searchTerms, $section = null)
-    {
-        $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->search = $searchTerms;
-        if ($section) $criteria->section = $section;
-        $criteria->order = 'score';
-        $entryIds = $criteria->ids();
-        $this->plugin->logger(array('entryIds' => $entryIds));
-
-        $criteria = craft()->elements->getCriteria(ElementType::User);
-        $criteria->search = $searchTerms;
-        $criteria->order = 'score';
-        $authorIds = $criteria->ids();
-        $this->plugin->logger(array('authorIds' => $authorIds));
-
-        if ($authorIds)
-        {
-            $criteria = craft()->elements->getCriteria(ElementType::Entry);
-            $criteria->authorId = $authorIds;
-            if ($section) $criteria->section = $section;
-            $criteria->order = 'score';
-            $authorEntryIds = $criteria->ids();
-            $this->plugin->logger(array('authorEntryIds' => $authorEntryIds));
-
-            if ($authorEntryIds)
-            {
-                $entryIds = array_merge($entryIds, $authorEntryIds);
-            }
-        }
-
-        $this->plugin->logger(array('entryIds' => $entryIds));
-        return $entryIds;
-    }
-
     //------------------
     // Private functions
     //------------------

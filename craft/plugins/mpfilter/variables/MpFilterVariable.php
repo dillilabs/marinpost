@@ -11,8 +11,7 @@ class MpFilterVariable
     }
 
     /**
-     * Return array of Entries optionally filtered
-     * and sliced.
+     * Return array of Entries optionally filtered and sliced.
      */
     public function entries($filters = array(), $slice = array())
     {
@@ -20,20 +19,7 @@ class MpFilterVariable
     }
 
     /**
-     * Return array of Entry IDs for terms
-     * and optional section.
-     */
-    public function search($searchTerms, $section = null)
-    {
-        // {% set query = craft.request.param('query') | replace('/^\\s+$/', '') %}
-        // {% set searchTerms = query | split(' ') | filter | join(' OR ') %}
-        // {% set section = craft.request.param('section') %}
-
-        return craft()->mpFilter->search($searchTerms, $section);
-    }
-
-    /**
-     * Return parent Location ID
+     * Return parent Location ID.
      *
      * @return int
      */
@@ -49,7 +35,7 @@ class MpFilterVariable
     }
 
     /**
-     * Return children Location IDs
+     * Return children Location IDs.
      *
      * @return string -- comma separated Location IDs
      */

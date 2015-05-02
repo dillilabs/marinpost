@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class MpFilterPlugin extends BasePlugin
+class MpSearchPlugin extends BasePlugin
 {
     private $settings;
 
@@ -30,18 +30,13 @@ class MpFilterPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
-            'countyId' => array(AttributeType::String, 'default' => 755),
-            'regionId' => array(AttributeType::String, 'default' => 39),
-            'stateId' => array(AttributeType::String, 'default' => 40),
-            'countryId' => array(AttributeType::String, 'default' => 41),
-            'defaultEntryLimit' => array(AttributeType::String, 'default' => 10),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('mpfilter/_settings', array(
+        return craft()->templates->render('mpsearch/_settings', array(
             'settings' => $this->getSettings(),
         ));
     }
@@ -52,7 +47,7 @@ class MpFilterPlugin extends BasePlugin
 
     public function getName()
     {
-        return 'Marin Post Filter';
+        return 'Marin Post Search';
     }
 
     public function getVersion()
