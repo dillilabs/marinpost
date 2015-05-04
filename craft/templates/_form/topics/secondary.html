@@ -1,3 +1,5 @@
+{% set topics = craft.categories.group('topics').find %}
+
 {% set maxTopics = 5 %}
 {% set topicsAdded = 0 %}
 {% set hideAddLink = false %}
@@ -25,12 +27,14 @@
   {% endif %}
 
   <div class="optional-category-field inputs" id="input-topic-{{ i }}" {%- if not topicId %}style="display: none;"{% endif %}>
-    <label>Other Topics</label>
+    <label>Other Topic</label>
+
     <select name="fields[secondaryTopics][]" class="array">
       <option value="">Select another Topic</option>
-    {% for option in craft.categories.group('topics') %}
-      <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
-    {% endfor %}
+
+      {% for option in topics %}
+        <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
+      {% endfor %}
     </select>
 
     {% if topic %}
