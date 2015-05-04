@@ -162,7 +162,7 @@
   {% switch entry.section.handle %}
     {% case 'media' %}
     <div class="image-wrapper">
-      <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay doc"></span><img src="{{ image }}"></a>
+      <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay"></span><img src="{{ image }}"></a> <!-- please add doc/video/audio class to "overlay" span for images -->
       <p class="image-credit">{{ primaryImageCredit(entry) }}</p>
     </div>
 
