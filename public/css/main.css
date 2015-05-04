@@ -120,7 +120,7 @@ textarea {
 }
 body {
     font-family: Times, Georgia, serif;
-    margin: 0 auto;
+    margin: 0 auto !important;
 }
 ul.tags, nav, h2 {
     font-family: Arial, sans-serif;
@@ -1027,7 +1027,7 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 }
 
 #donate, #subscribe {
-    min-width: 30%;
+    min-width: 45%;
 }
 
 #donate {
@@ -1068,9 +1068,9 @@ a.subscribe {
 
 #share {
 	display: inline-block;
-	margin: 0 auto 1em auto;
+	margin: 0 auto .75em auto;
 	text-align: center;
-   	width: 30%;
+    width: 70%;
 }
 
 #share ul {
@@ -1204,18 +1204,8 @@ footer {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (max-width: 27em) { /* Mobile Two <27 ems */
-    #donate, #subscribe {
-        min-width: 40%;
-    }
-    
-    #share {
-          margin: 0 auto .75em;
-          width: 70%;
-    }
-}
 
-@media only screen and (min-width: 27em) { /* Mobile One 27–39 ems */
+@media only screen and (min-width: 35em) { /* Mobile One 35 ems */
     header .logo {
         border: 9px solid #fe0000;
     	height: 50px;
@@ -1242,6 +1232,9 @@ footer {
 	.show-search {
     	background: url('../img/search-black.png') 54px 5px no-repeat;
 	}
+	#donate, #subscribe {
+        min-width: 25%;
+    }
     #share {
           margin: 0 auto .75em;
           max-width: 280px;
@@ -1291,7 +1284,7 @@ footer {
     #search input[type="submit"] {
         padding: .5em;
     }
-
+    
     #featured {
 	    padding: 0;
     }
