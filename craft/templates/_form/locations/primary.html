@@ -1,3 +1,5 @@
+{% set locations = craft.categories.group('locations').find %}
+
 {% set primaryLocationId = entry is defined ? f.categoryId(entry, "primaryLocation") : 0 %}
 
 <label for="primaryLocation" class="required">Primary Location <span class="note">* required</span></label>
@@ -5,19 +7,19 @@
 <select id="primaryLocation" name="fields[primaryLocation][]" class="required array">
   <option value="" class="first-option">Select one - This Location will be posted on the Home Page</option>
 
-{% set geographicGroup = false %}
+  {% set geographicGroup = false %}
 
-{% for option in craft.categories.group('locations') %}
-  {% if not (option.geographicGroup.label == geographicGroup) %}
-    {% set geographicGroup = option.geographicGroup.label %}
-    <option value="" disabled="disabled"></option>
-    <option value="" disabled="disabled">{{ geographicGroup }}</option>
-    <option value="" disabled="disabled"></option>
-  {% endif %}
+  {% for option in locations %}
+    {% if not (option.geographicGroup.label == geographicGroup) %}
+      {% set geographicGroup = option.geographicGroup.label %}
 
-  <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
-{% endfor %}
+      <option value="" disabled="disabled"></option>
+      <option value="" disabled="disabled">{{ geographicGroup }}</option>
+      <option value="" disabled="disabled"></option>
+    {% endif %}
 
+    <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
+  {% endfor %}
 </select>
 
 {% if entry is defined %}

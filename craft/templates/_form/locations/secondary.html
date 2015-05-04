@@ -1,3 +1,5 @@
+{% set locations = craft.categories.group('locations').find %}
+
 {% set maxLocations = 5 %}
 {% set locationsAdded = 0 %}
 {% set hideAddLink = false %}
@@ -25,21 +27,22 @@
   {% endif %}
 
   <div class="optional-category-field inputs" id="input-location-{{ i }}" {%- if not locationId %}style="display: none;"{% endif %}>
-    <label>Other Locations</label>
+    <label>Other Location</label>
+
     <select name="fields[secondaryLocations][]" class="array">
       <option value="">Select another Location</option>
-    {% set geographicGroup = false %}
+      {% set geographicGroup = false %}
 
-    {% for option in craft.categories.group('locations') %}
-      {% if not (option.geographicGroup.label == geographicGroup) %}
-        {% set geographicGroup = option.geographicGroup.label %}
-        <option value="" disabled="disabled"></option>
-        <option value="" disabled="disabled">{{ geographicGroup }}</option>
-        <option value="" disabled="disabled"></option>
-      {% endif %}
+      {% for option in locations %}
+        {% if not (option.geographicGroup.label == geographicGroup) %}
+          {% set geographicGroup = option.geographicGroup.label %}
+          <option value="" disabled="disabled"></option>
+          <option value="" disabled="disabled">{{ geographicGroup }}</option>
+          <option value="" disabled="disabled"></option>
+        {% endif %}
 
-      <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
-    {% endfor %}
+        <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
+      {% endfor %}
     </select>
 
     {% if location %}
