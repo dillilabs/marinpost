@@ -500,7 +500,7 @@ nav ul ul li:last-of-type {
 .sub-nav h5.active, .my-content.active a {
     background: url('../img/down-arrow.png') no-repeat scroll 6px 50%;
     font-weight: bold;
-    padding: 5px 0 5px 25px;
+    padding: .75em 0 .75em 25px;
 }
 
 .sub-nav .filter h5.active, .my-content.active a {
@@ -510,7 +510,7 @@ nav ul ul li:last-of-type {
 .filter a, .sub-nav a, .sub-nav a:visited {
     color: #000;
     display: block;
-    padding: 5px 0 5px 25px;
+    padding: .75em 0 .75em 25px;
 }
 .filter a:hover, .sub-nav a:hover {
     font-weight: bold;
