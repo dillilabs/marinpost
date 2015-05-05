@@ -6,7 +6,7 @@
         <fieldset class="locations">
           <h5 class="closed">Locations</h5>
           <ul>
-            <li><input type="checkbox" class="location all" value="all" checked="checked" /><label for="location-all">All</label></li>
+            <li><input type="checkbox" class="location all" value="all" checked="checked" id="location-all"/><label for="location-all">All</label></li>
 
             {% set group = null %}
             {% for location in craft.categories.group('locations') %}
@@ -22,7 +22,7 @@
         <fieldset class="topics">
           <h5 class="closed">Topics</h5>
           <ul>
-            <li><input type="checkbox" class="topic all" value="all" checked="checked" /><label>All</label></li>
+            <li><input type="checkbox" class="topic all" value="all" checked="checked" id="topics-all"/><label for="topics-all">All</label></li>
 
             {% for topic in craft.categories.group('topics') %}
               <li><input type="checkbox" class="topic filter" value="{{ topic.id }}" id="{{ topic.id }}" /><label for="{{ topic.id }}">{{ topic.title }}</label></li>
@@ -33,7 +33,7 @@
         <fieldset class="authors">
           <h5>Contributors</h5>
           <ul>
-            <li><input type="checkbox" class="author all" value="all" checked="checked" /><label>All</label></li>
+            <li><input type="checkbox" class="author all" value="all" checked="checked" id="contributors-all"/><label for="contributors-all">All</label></li>
 
             {% for author in craft.users.group('contributor').order('lastName, firstName') %}
               <li><input type="checkbox" class="author filter" value="{{ author.id }}" id="{{ author.id }}" /><label for="{{ author.id }}">{{ p.nameCase(author.name) }}</label></li>
