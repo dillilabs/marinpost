@@ -3,6 +3,14 @@ namespace Craft;
 
 class S3DirectPlugin extends BasePlugin
 {
+    /**
+     * Semi-smart logger.
+     */
+    public function logger($mixed, $level = LogLevel::Info)
+    {
+        self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
+    }
+
     //
     // Settings
     //
@@ -33,7 +41,7 @@ class S3DirectPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.3';
+        return '0.0.14';
     }
 
     public function getDeveloper()

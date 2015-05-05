@@ -10,30 +10,35 @@ class S3DirectController extends BaseController
         $this->pluginSettings = craft()->plugins->getPlugin('s3direct')->getSettings();
     }
 
+    /**
+     * Update Assets index and add/update required metadata for uploaded file(s)
+     * within given Asset source.
+     */
     public function actionUpdateAssetsIndex()
     {
         $this->requirePostRequest();
         $this->requireAjaxRequest();
 
         $sourceId = craft()->request->getParam('sourceid');
-        $fileNames = craft()->request->getParam('filenames');
+        $inputFiles = craft()->request->getParam('files');
         $transform = $this->pluginSettings['imageTransform'];
 
-        if ($sourceId && $fileNames)
+        if ($sourceId && $inputFiles)
         {
-            $updated = craft()->s3Direct->updateAssetIndexForFilenames($sourceId, $fileNames);
+            $updated = craft()->s3Direct->updateAssetIndexForFilenames($sourceId, $inputFiles);
 
             $folder = craft()->s3Direct->s3Folder($sourceId);
             $criteria = array('folderId' => $folder->id);
             $assets = craft()->elements->getCriteria(ElementType::Asset, $criteria);
 
-            $files = array();
+            $outputFiles = array();
             foreach ($assets as $asset)
             {
                 $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, $transform) : $asset->url;
 
-                array_push($files, array(
+                array_push($outputFiles, array(
                     'id' => $asset->id,
+                    'title' => $asset->title,
                     'filename' => $asset->filename,
                     'kind' => $asset->kind,
                     'size' => $asset->size,
@@ -42,9 +47,9 @@ class S3DirectController extends BaseController
             }
 
             $result = array(
-                'filenames' => $fileNames,
+                'files' => $inputFiles,
                 'updated' => $updated,
-                'files' => $files,
+                'files' => $outputFiles,
                 'sourceId' => $sourceId,
                 'folderId' => $folder->id,
             );
@@ -58,6 +63,9 @@ class S3DirectController extends BaseController
         }
     }
 
+    /**
+     * Return URL for Asset and optional transform.
+     */
     public function actionGetAssetUrl()
     {
         $this->requireAjaxRequest();

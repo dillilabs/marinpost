@@ -1,5 +1,6 @@
 (function($) {
   var console = (window.console = window.console || {});
+
   if (!console['log']) {
     console['log'] = function() {};
   }
@@ -22,8 +23,64 @@
         return subfolder + config.currentUserId + '/' + fileName;
       };
 
+      var fileCredits = [];
+
+      var promptForFileCredit = function() {
+        var fileCredit = prompt('Image Credit');
+
+        if (fileCredit) {
+          fileCredit = fileCredit.trim();
+
+          if (fileCredit.length) {
+            fileCredits.push(fileCredit);
+
+            return true;
+          } else {
+            // recurse
+            return promptForFileCredit();
+          }
+        }
+
+        return false;
+      };
+
+      var fileTitles = [];
+
+      var promptForFileTitle = function() {
+        var fileTitle = prompt('Document Title');
+
+        if (fileTitle) {
+          fileTitle = fileTitle.trim();
+
+          if (fileTitle.length) {
+            fileTitles.push(fileTitle);
+
+            return true;
+          } else {
+            // recurse
+            return promptForFileTitle();
+          }
+        }
+
+        return false;
+      };
+
       var fileUploadSubmit = function(e, data) {
         var file = data.files[0];
+        fileCredits = [];
+        fileTitles = [];
+
+        if (config.requireFileCredit) {
+          if (!promptForFileCredit()) {
+            return false;
+          }
+        }
+
+        if (config.requireFileTitle) {
+          if (!promptForFileTitle()) {
+            return false;
+          }
+        }
 
         data.formData = {
           key: keyFor(file.name),
@@ -40,12 +97,17 @@
       var updateAssetsIndex = function(filenames) {
         var data = { 'sourceid': config.assetsSourceId };
 
-        $.each(filenames, function(i, e) {
-          var key = 'filenames['+i+']';
-          data[key] = e;
+        $.each(filenames, function(i, name) {
+          var key = 'files['+i+']';
+
+          data[key] = {
+            name: name,
+            title: fileTitles[0],
+            credit: fileCredits[0]
+          };
         });
 
-        if (config.debug) console.log('updateAssetsIndex()', filenames, data);
+        if (config.debug) console.log('updateAssetsIndex() before', filenames, fileTitles, fileCredits, data);
 
         updateIndexIndicator.show();
 
@@ -56,15 +118,20 @@
           type: 'POST'
         }).done(function(data) {
           if (config.debug) console.log('updateAssetsIndex() done', data);
+
           if (typeof config.onUpdateAssetsIndex == 'function') {
             if (config.debug) console.log('onUpdateAssetsIndex() begin', data.files);
+
             config.onUpdateAssetsIndex(data.files);
+
             if (config.debug) console.log('onUpdateAssetsIndex() end');
           }
         }).fail(function(jqXHR, textStatus, errorThrown) {
           if (config.debug) console.log('updateAssetsIndex() fail', textStatus, errorThrown);
+
         }).always(function() {
           updateIndexIndicator.hide();
+
         });
       };
 
@@ -75,30 +142,37 @@
         acceptFileTypes: config.acceptFileTypes,
         url: 'https://'+config.bucket+'.s3.amazonaws.com',
         dataType: 'json',
+        singleFileUploads: true,
         start: function(e) {
           filenames = [];
+
           if (config.debug) console.log('fileupload() start', filenames);
         },
         progressall: function (e, data) {
           var progress = parseInt(data.loaded / data.total * 100, 10);
+
           uploadProgressBar.css('width', progress + '%');
         },
         done: function(e, data) {
           $.each(data.files, function(i, e) {
             filenames.push(e.name);
           });
+
           setTimeout(function() {
             uploadProgressBar.css('width', 0);
           }, 1000);
+
           if (config.debug) console.log('fileupload() done', data, filenames);
         },
         fail: function(e, data) {
           uploadError = true;
           alert('Error uploading to ' + data.url);
+
           if (config.debug) console.log('fileupload() fail', data);
         },
         stop: function(e) {
           if (config.debug) console.log('fileupload() stop', filenames);
+
           if (!uploadError) {
             updateAssetsIndex(filenames);
           }
@@ -124,6 +198,8 @@
     updateIndexIndicatorSelector: 'img.s3direct',
     acceptFileTypes: undefined,
     onUpdateAssetsIndex: false,
+    requireFileCredit: false,
+    requireFileTitle: false,
     debug: false,
   };
 

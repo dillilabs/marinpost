@@ -1,26 +1,22 @@
 {% set sourceId = 2 %}
-
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
-{% set assets = folder ? craft.assets.folderId(folder.id).find : false %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
-{% set documentBlock = false %}
-{% set document = false %}
-{% set title = false %}
-{% set errors = false %}
-{% set key = 'new' %}
+{% set assets = false %}
+{% if folder %}
+  {% set assets = craft.assets.folderId(folder.id).find %}
+{% endif %}
 
+{% set document = false %}
+{% set errors = false %}
 {% if entry %}
-  {% set documentBlock = attribute(entry, documentsAttribute).first %}
-  {% set document = documentBlock.document.first %}
-  {% set title = documentBlock.documentTitle %}
-  {% set errors = documentBlock.hasErrors %}
-  {% set key = documentBlock.id | default('new') %}
+  {% set document = attribute(entry, documentsAttribute).first %}
+  {% set errors = document.hasErrors %}
 {% endif %}
 
 <div class="field document">
   <label>Document</label>
-  <p class="display-document">{{ document ? p.documentTitle(document, title) : '' }}</p> 
+  <p class="document-title">{{ document ? document.title : '' }}</p> 
 
   {% if errors %}
     {{ f.errorList(documentBlock.allErrors) }}
@@ -29,14 +25,7 @@
   <input type="hidden" name="fields[{{ documentsAttribute }}]">
 
   <div class="document-field inputs">
-    {#
-      These inputs are grouped together to allow them to be removed
-      from the DOM and omitted from the POST if no document is selected.
-    #}
-    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][type]" value="document">
-    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document]">
-    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][document][]" {% if document %}value="{{ document.id }}"{% endif -%}>
-    <input type="hidden" name="fields[{{ documentsAttribute }}][{{ key }}][fields][documentTitle]" {% if title %}value="{{ title }}"{% endif %}>
+    <input type="hidden" name="fields[{{ documentsAttribute }}][]" {% if document %}value="{{ document.id }}"{% endif -%}>
   </div>
 </div>
 
@@ -61,82 +50,136 @@
     <label for="document" class="required">
       Select a Document <span class="note">* required</span><br>
 
-      <select id="document-asset-id">
-        <option value=""></option>
-        {% if folder %}
-          {% for asset in assets %}
-            <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-          {% endfor %}
-        {% endif %}
-      </select>
-    </label>
-
-    <br><br>
-    <label for="document-title">
-      Document title<br>
-      <input type="text" id="document-title" maxlength="255" autocomplete="off" {%- if title %}value="{{ title }}"{% endif %}>
+      <ul id="src-documents">
+      {% if folder %}
+        {% for asset in assets %}
+          <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+            <div><img src="/img/default/list/pdf.jpg" /></div>
+            <span class="title">{{ asset.title }}</span>
+          </li>
+        {% endfor %}
+      {% endif %}
+      </ul>
     </label>
   </div>
 </div>
 
-<button id="open-document-modal">{{ document ? 'Replace Document' : 'Add Document' }}</button>
+<a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
 <!-- <div class="note">Upload PDF only</div> -->
 
 {% set js %}
 $(function() {
-  var openDocumentModal = $('#open-document-modal');
-  var documentModal = $('#document-modal');
-  var documentFileUpload = $('#document-fileupload');
-  var srcDocument = $('select#document-asset-id');
-  var srcDocumentTitle = $('input#document-title');
-  var targetDocumentAssetId = $('input[type=hidden][name$="[fields][document][]"]');
-  var targetDocumentTitle = $('input[type=hidden][name$="[fields][documentTitle]"]');
-  var displayDocument = $('.display-document');
+  var openModal = $('#open-document-modal');
+  var modal = $('#document-modal');
+  var fileInput = $('#document-fileupload');
+  var srcFiles = $('ul#src-documents');
+  var okButton = false;
+  var targetFileId = $('input[type=hidden][name="fields[{{ documentsAttribute }}][]"]');
+  var targetFileTitle = $('.document-title');
+  var deleteButton = false;
+  var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
+  
+  var selectedFile = function() {
+    return srcFiles.children('li.selected:first');
+  }
 
-  var populateSelectOptionsFromIndex = function(files) {
-    var selectedId = srcDocument.val();
-    srcDocument.children().remove().end().append('<option value=""></option>');
+  var selectFile = function(li) {
+    li.parent().children().removeClass('selected');
+    li.addClass('selected');
+  };
 
-    $.each(files, function(index, file) {
-      var selected = file.id == selectedId ? 'selected' : '';
-      srcDocument.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
-    });
-
-    documentModal.find('.assets-wrapper').show();
+  var updateOkButton = function() {
+    okButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
   };
 
   var populateDocumentFromModal = function() {
-    var title = srcDocumentTitle.val();
+    var selectedFile = srcFiles.children('li.selected:first');
 
-    targetDocumentAssetId.val(srcDocument.val());
-    targetDocumentTitle.val(title);
-    displayDocument.text(title || srcDocument.children('option:selected').text());
+    if (selectedFile.length == 1) {
+      targetFileId.val(selectedFile.attr('data-asset-id'));
+      targetFileTitle.text(selectedFile.attr('data-asset-title'));
+    } else {
+      targetFileId.val('');
+      targetFileTitle.text('');
+    }
   };
 
-  documentModal.dialog({
-    autoOpen: false,
+  var updateDeleteButton = function() {
+    deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+  };
+
+  var deleteFile = function() {
+    var selectedFile = srcFiles.children('li.selected:first');
+    var assetId;
+
+    if (selectedFile.length == 1) {
+      assetId = selectedFile.attr('data-asset-id');
+
+      $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          selectedFile.remove();
+          updateDeleteButton();
+          updateOkButton();
+        }
+      });
+    }
+  };
+
+  var populateListFromIndex = function(files) {
+    var selectedId = selectedFile().attr('data-asset-id');
+    srcFiles.children().remove();
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'class="selected"' : '';
+
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+file.title+'</span></li>');
+    });
+
+    modal.find('.assets-wrapper').show();
+  };
+
+  openModal.click(function(e) {
+    e.preventDefault();
+    modal.dialog('open');
+  });
+
+  modal.dialog({
     modal: true,
+    autoOpen: false,
+    height: $(window).height() * 0.75,
+    width: $(window).width() * 0.75,
     dialogClass: 'no-close',
-    height: $(window).height() / 2,
-    width: $(window).width() / 2,
-    closeOnEscape: false,
     buttons: {
       OK: function() {
         populateDocumentFromModal();
-        documentModal.dialog('close');
+        modal.dialog('close');
       },
       Cancel: function() {
-        documentModal.dialog('close');
+        modal.dialog('close');
+      },
+      Delete: function() {
+        deleteDocument();
       }
-    }
+    },
+    open: function(event, ui) {
+      var widget = $(this).dialog('widget');
+      okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
+      updateOkButton();
+      deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
+      updateDeleteButton();
+    },
+    closeOnEscape: false,
   });
 
-  openDocumentModal.click(function(e) {
-    e.preventDefault();
-    documentModal.dialog('open');
+  srcFiles.on('click', 'li', function(e) {
+    selectFile($(this));
+    updateOkButton();
+    updateDeleteButton();
   });
 
-  documentFileUpload.s3direct({
+  fileInput.s3direct({
     bucket: "{{ s3.bucket }}",
     subfolder: "{{ s3.subfolder }}",
     currentUserId: "{{ currentUser.id }}",
@@ -147,7 +190,8 @@ $(function() {
     acceptFileTypes: /.+\.pdf$/i,
     uploadProgressBarSelector: '.s3direct.document.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.document',
-    onUpdateAssetsIndex: populateSelectOptionsFromIndex,
+    onUpdateAssetsIndex: populateListFromIndex,
+    requireFileTitle: true,
     debug: true,
   });
 });
@@ -157,6 +201,22 @@ $(function() {
 {% set css %}
 .clear {
   clear: both;
+}
+
+ul#src-documents {
+  list-style: none;
+}
+ul#src-documents li {
+  height: 160px;
+  width: 160px;
+  margin: 14px 0 0 14px;
+  float: left;
+}
+ul#src-documents li .title {
+  font-size: 12px;
+}
+ul#src-documents li.selected {
+  background: #d5d8dd;
 }
 
 .no-close .ui-dialog-titlebar-close {

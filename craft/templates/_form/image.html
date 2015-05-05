@@ -1,24 +1,21 @@
 {% set sourceId = 3 %}
-{% set transform = 'list' %}
-{% set excerptLength = 20 %}
-
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
-{% set assets = folder ? craft.assets.folderId(folder.id).find : false %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
-{% set imageBlock = false %}
-{% set image = false %}
-{% set credit = false %}
-{% set errors = false %}
-{% set key = 'new' %}
-
-{% if entry %}
-  {% set imageBlock = attribute(entry, imagesAttribute).first %}
-  {% set image = imageBlock.image.first %}
-  {% set credit = imageBlock.credit %}
-  {% set errors = imageBlock.hasErrors %}
-  {% set key = imageBlock.id | default('new') %}
+{% set assets = false %}
+{% if folder %}
+  {% set assets = craft.assets.folderId(folder.id).find %}
 {% endif %}
+
+{% set image = false %}
+{% set errors = false %}
+{% if entry %}
+  {% set image = attribute(entry, imagesAttribute).first %}
+  {% set errors = image.hasErrors %}
+{% endif %}
+
+{% set transform = 'list' %}
+{% set excerptLength = 20 %}
 
 <img src="{{ image ? image.url(transform) : '/img/default/'~transform~'/'~singularSection~'.jpg' }}" class="display-image" />
 <label>Image</label>
@@ -30,17 +27,10 @@
 <input type="hidden" name="fields[{{ imagesAttribute }}]">
 
 <div class="image-field inputs">
-  {#
-    These inputs are grouped together to allow them to be removed
-    from the DOM and omitted from the POST if no image is selected.
-  #}
-  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][type]" value="image">
-  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image]">
-  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][image][]" {% if image %}value="{{ image.id }}"{% endif -%}>
-  <input type="hidden" name="fields[{{ imagesAttribute }}][{{ key }}][fields][credit]" {% if credit %}value="{{ credit }}"{% endif %}>
+  <input type="hidden" name="fields[{{ imagesAttribute }}][]" {% if image %}value="{{ image.id }}"{% endif -%}>
 </div>
 
-<a href="#" id="open-image-modal">{{ image ? 'Change' : 'Add' }}</a>
+<a href="#" id="open-image-modal">{{ image ? 'Replace Image' : 'Add an Image' }}</a>
 
 <div id="image-modal" title="My Images" style="display: none;">
   <div>
@@ -59,13 +49,6 @@
   </div>
 
   <div class="assets-wrapper" {% if not assets %}style="display: none;"{% endif %}>
-    <br class="clear">
-    <label for="image-credit" class="required">
-      Image Credit <span class="note">* required</span><br>
-      <input type="text" id="image-credit" maxlength="255" autocomplete="off" {%- if credit %}value="{{ credit }}"{% endif %}>
-    </label>
-
-    <br><br>
     <label for="image" class="required">
       Select an Image <span class="note">* required</span>
 
@@ -89,10 +72,8 @@ $(function() {
   var imageModal = $('#image-modal');
   var imageFileUpload = $('#image-fileupload');
   var srcImages = $('ul#src-images');
-  var srcImageCredit = $('input#image-credit');
   var okButton = false;
-  var targetImageId = $('input[type=hidden][name$="[fields][image][]"]');
-  var targetImageCredit = $('input[type=hidden][name$="[fields][credit]"]');
+  var targetImageId = $('input[type=hidden][name="fields[{{ imagesAttribute }}][]"]');
   var displayImage = $('img.display-image');
   var defaultImageUrl = '/img/default-{{ transform }}.png';
   var deleteButton = false;
@@ -101,10 +82,6 @@ $(function() {
   var selectedImage = function() {
     return srcImages.children('li.selected:first');
   }
-  
-  var imageCredit = function() {
-    return srcImageCredit.val().trim();
-  };
 
   var selectImage = function(li) {
     li.parent().children().removeClass('selected');
@@ -126,7 +103,7 @@ $(function() {
   };
 
   var updateOkButton = function() {
-    okButton.button((selectedImage().length == 1 && imageCredit().length > 0) ? 'enable' : 'disable');
+    okButton.button((selectedImage().length == 1) ? 'enable' : 'disable');
   };
 
   var populateImageFromModal = function() {
@@ -139,8 +116,6 @@ $(function() {
       targetImageId.val('');
       displayImage.prop('src', defaultImageUrl);
     }
-
-    targetImageCredit.val(imageCredit());
   };
 
   var updateDeleteButton = function() {
@@ -205,10 +180,6 @@ $(function() {
     updateDeleteButton();
   });
 
-  srcImageCredit.keyup(function(e) {
-    updateOkButton();
-  });
-
   imageFileUpload.s3direct({
     bucket: "{{ s3.bucket }}",
     subfolder: "{{ s3.subfolder }}",
@@ -221,6 +192,7 @@ $(function() {
     uploadProgressBarSelector: '.s3direct.image.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.image',
     onUpdateAssetsIndex: populateListFromIndex,
+    requireFileCredit: true,
     debug: true,
   });
 });

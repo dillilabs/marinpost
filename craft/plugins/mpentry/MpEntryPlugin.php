@@ -58,7 +58,7 @@ class MpEntryPlugin extends BasePlugin
         craft()->on('entries.onBeforeSaveEntry', function(Event $event) {
             $entry = $event->params['entry'];
             $isNew = $event->params['isNewEntry'];
-            $this->logger("entries.onBeforeSaveEntry: $entry [ {$entry->id}]");
+            $this->logger("entries.onBeforeSaveEntry BEGIN: $entry [ {$entry->id}]");
 
             if ($entry->status == 'disabled')
             {
@@ -80,6 +80,8 @@ class MpEntryPlugin extends BasePlugin
                     return;
                 }
             }
+
+            $this->logger("entries.onBeforeSaveEntry END: $entry [ {$entry->id}]");
         });
     }
 

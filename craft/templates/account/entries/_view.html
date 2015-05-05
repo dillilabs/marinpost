@@ -24,7 +24,6 @@
           <img src="{{ p.primaryImage(entry, 'hero') }}"/>
           <p>{{ entry.blogContent }}</p>
           {{ p.documents(entry.blogDocuments) }}
-          {{ p.otherImages(entry.blogImages) }}
 
         {% case 'notices' %}
           {{ p.postTags(entry) }}
@@ -33,7 +32,6 @@
           <img src="{{ p.primaryImage(entry, 'hero') }}"/>
           <p>{{ entry.blogContent }}</p>
           {{ p.documents(entry.noticeDocuments) }}
-          {{ p.otherImages(entry.noticeImages) }}
 
         {% case 'letters' %}
           <h3>{{ entry.title }}</h3>

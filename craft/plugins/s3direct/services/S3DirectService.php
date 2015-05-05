@@ -5,11 +5,11 @@ require CRAFT_PLUGINS_PATH.'/s3direct/vendor/autoload.php';
 
 class S3DirectService extends BaseApplicationComponent
 {
-    private $pluginSettings;
+    private $plugin;
 
     function __construct()
     {
-        $this->pluginSettings = craft()->plugins->getPlugin('s3direct')->getSettings();
+        $this->plugin = craft()->plugins->getPlugin('s3direct');
     }
 
     /**
@@ -23,8 +23,8 @@ class S3DirectService extends BaseApplicationComponent
      */
     public function s3UploadForm($assetSourceId)
     {
-        $settings = $this->assetSourceSettings($assetSourceId);
-        $this->_log($settings);
+        $settings = $this->_assetSourceSettings($assetSourceId);
+        $this->plugin->logger($settings);
 
         $s3 = \Aws\S3\S3Client::factory(
             array(
@@ -44,8 +44,10 @@ class S3DirectService extends BaseApplicationComponent
             array(
                 'acl' => 'public-read',
                 'policy_callback' => function($policy) {
-                        array_push($policy['conditions'], array('starts-with', '$Content-Type', ''));
-                        return $policy;
+                    array_push($policy['conditions'],
+                        array('starts-with', '$Content-Type', '')
+                    );
+                    return $policy;
                 }
             )
         );
@@ -72,9 +74,7 @@ class S3DirectService extends BaseApplicationComponent
     }
 
     /**
-     *
      * Return Asset sub folder corresponding to the current user's virtual sub-directory on S3
-     *
      */
     public function s3Folder($assetSourceId)
     {
@@ -92,28 +92,22 @@ class S3DirectService extends BaseApplicationComponent
     }
 
     /**
-     *
-     * Update Asset index for given source and array of filenames
-     *
+     * Update index and add required metadata for given Asset source
+     * and array of uploaded files.
      */
-    public function updateAssetIndexForFilenames($assetSourceId, $filenames = array())
+    public function updateAssetIndexForFilenames($assetSourceId, $files = array())
     {
-        $userId = $this->currentUserId();
-
-        $sessionId = $this->getIndexListForSource($assetSourceId);
-
-        $settings = $this->assetSourceSettings($assetSourceId);
-
+        $sessionId = $this->_getIndexListForSource($assetSourceId);
         $updated = 0;
 
-        foreach ($filenames as $filename) {
-            $uri = $this->s3UriForFilename($filename);
+        foreach ($files as $fileAttributes) {
+            $uri = $this->_s3UriForFilename($fileAttributes['name']);
+            $indexModel = $this->_getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri);
 
-            $model = $this->getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri);
-
-            if ($model)
+            if ($indexModel)
             {
-                $this->processIndexForSource($sessionId, $model->offset, $assetSourceId);
+                $assetId = $this->_updateAssetIndex($sessionId, $indexModel->offset, $assetSourceId);
+                $this->_updateAssetMetadata($assetId, $fileAttributes);
                 $updated += 1;
             }
         }
@@ -137,32 +131,43 @@ class S3DirectService extends BaseApplicationComponent
         return $assetUrl;
     }
 
-    //
+    //------------------
     // Private functions
-    //
+    //------------------
 
-    private function assetSourceSettings($assetSourceId)
+    /**
+     * Return asset (S3) source-specific settings.
+     */
+    private function _assetSourceSettings($assetSourceId)
     {
         return craft()->assetSources->getSourceById($assetSourceId)->settings;
     }
 
-    private function getIndexListForSource($assetSourceId)
+    /**
+     * Prepare for indexing asset(s).
+     */
+    private function _getIndexListForSource($assetSourceId)
     {
         $sessionId = craft()->assetIndexing->getIndexingSessionId();
-
         craft()->assetIndexing->getIndexListForSource($sessionId, $assetSourceId);
 
         return $sessionId;
     }
 
-    private function s3UriForFilename($filename)
+    /**
+     * Return S3 URI for provided filename.
+     */
+    private function _s3UriForFilename($filename)
     {
         $userId = $this->currentUserId();
 
         return "$userId/$filename";
     }
 
-    private function getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri)
+    /**
+     * Return asset index data model for provided S3 URI.
+     */
+    private function _getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri)
     {
         $record = AssetIndexDataRecord::model()->findByAttributes(
             array(
@@ -180,19 +185,46 @@ class S3DirectService extends BaseApplicationComponent
         return false;
     }
 
-    private function processIndexForSource($sessionId, $offset, $assetSourceId)
+    /**
+     * Index the asset.
+     */
+    private function _updateAssetIndex($sessionId, $offset, $assetSourceId)
     {
-        craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
+        return craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
     }
 
-    // ----------------
-    // Helper functions
-    // ----------------
-
-    private function _log($mixed, $level = LogLevel::Info)
+    /**
+     * Add or update Asset attributes:
+     *
+     *    title  -- for a Document asset
+     *
+     *    credit -- for an Image asset
+     */
+    private function _updateAssetMetadata($assetId, $attributes)
     {
-        $message = is_array($mixed) ? json_encode($mixed) : $mixed;
+        $setTitle = array_key_exists('title', $attributes) && !empty($attributes['title']);
+        $setCredit = array_key_exists('credit', $attributes) && !empty($attributes['credit']);
 
-        S3DirectPlugin::log($message, $level, $this->pluginSettings['forceLog']);
+        if ($setTitle or $setCredit)
+        {
+            $asset = craft()->assets->getFileById($assetId);
+            $content = $asset->getContent();
+
+            if ($setTitle)
+            {
+                $content->setAttribute('title', $attributes['title']);
+            }
+
+            if ($setCredit)
+            {
+                $content->setAttribute('credit', $attributes['credit']);
+            }
+
+            craft()->elements->saveElement($asset);
+
+            return true;
+        }
+
+        return false;
     }
 }

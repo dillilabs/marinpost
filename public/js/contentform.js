@@ -7,7 +7,7 @@
             // Selectors
             //-----------------------
 
-            // Select Image, Document, Location and Topic
+            // Select Location and Topic
             var arrayInputSelects = form.find('select.array');
 
             // Containers for optional Locations and Topics
@@ -62,8 +62,8 @@
               var type = this.value;
 
               form.find('input#mediaType').val(type).end()
-                  .find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink').hide().end()
-                  .find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type).show();
+                  .find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, mediaLink.wrapper').hide().end()
+                  .find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type+', .mediaLink.wrapper.'+type).show();
             };
 
             // Munge media link fields
@@ -109,36 +109,20 @@
             };
 
             var removeEmptyImageFields = function() {
-              var image = form.find('input[type=hidden][name$="[fields][image][]"]');
-              var credit = form.find('input[type=hidden][name$="[fields][credit]"]');
+              var image = form.find('input[type=hidden][name$="Images][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
               if (image.length && image.val().length == 0) {
                 image.remove();
-
-                // If all fields are empty then assume no image
-                // and explicitly remove all of the associated fields
-                // else Craft will assume incomplete data and return validation errors.
-                if (credit.length && credit.val().trim().length == 0) {
-                  form.find('.image-field.inputs').remove();
-                }
               }
             };
 
             var removeEmptyDocumentFields = function() {
-              var doc = form.find('input[type=hidden][name$="[fields][document][]"]');
-              var title = form.find('input[type=hidden][name$="[fields][documentTitle]"]');
+              var document = form.find('input[type=hidden][name$="Documents][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
-              if (doc.length && doc.val().length == 0) {
-                doc.remove();
-
-                // If all fields are empty then assume no document
-                // and explicitly remove all of the associated fields
-                // else Craft will assume incomplete data and return validation errors.
-                if (title.length && title.val().trim().length == 0) {
-                  form.find('.document-field.inputs').remove();
-                }
+              if (document.length && document.val().length == 0) {
+                document.remove();
               }
 
             };

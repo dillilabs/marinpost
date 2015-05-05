@@ -22,12 +22,10 @@
 
   {% set section = singularSection(entry) %}
   {% set fieldName = section~'Images' %}
-  {% set images = attribute(entry, fieldName) %}
+  {% set image = attribute(entry, fieldName).first %}
 
-  {% if images is defined %}
-    {% for block in images.order('sortOrder asc').limit(1) %}
-      {{ block.credit }}
-    {% endfor %}
+  {% if image is defined %}
+    {{ image.credit }}
   {% endif %}
 {% endspaceless %}
 {% endmacro %}
@@ -39,14 +37,7 @@
   {% set transform = transform | default('list') %}
   {% set section = singularSection(entry) %}
   {% set fieldName = section~'Images' %}
-  {% set images = attribute(entry, fieldName) %}
-  {% set image = null %}
-
-  {% if images is defined %}
-    {% for block in images.order('sortOrder asc').limit(1) %}
-      {% set image = block.image.first %}
-    {% endfor %}
-  {% endif %}
+  {% set image = attribute(entry, fieldName).first %}
 
   {% if image is not null %}
     {{ image.url(transform) }}
@@ -408,37 +399,12 @@
   {{ craft.mpentry.nameCase(name) }}
 {% endmacro %}
 
-{% macro documentTitle(file, title) %}
-  {{ title | default(file.title) }}
-{% endmacro %}
-
-{% macro documentDownload(file, title) %}
-  {% from _self import documentTitle %}
-
-  <div class="download"><a href="{{ file.url }}">{{ documentTitle(file, title) }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
-{% endmacro %}
-
 {% macro documents(documents) %}
   {% from _self import documentDownload %}
 
-  {% if documents | length %}
-    {% for block in documents %}
-      {% set file = block.document.first %}
-      {{ documentDownload(file, block.documentTitle) }}
-    {% endfor %}
-
-  {% endif %}
-{% endmacro %}
-
-{% macro otherImages(images) %}
-  {% if images | length %}
-    <div class="thumbs">
-    {% for block in images.order('sortOrder asc').offset(1) %}
-      {% set image = block.image.first %}
-      <a href="#"><img src="{{ image.url('thumb') }}"/></a>
-    {% endfor %}
-    </div>
-  {% endif %}
+  {% for file in documents %}
+    <div class="download"><a href="{{ file.url }}">{{ file.title }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
+  {% endfor %}
 {% endmacro %}
 
 {% macro excerpt(text, maxLength) %}

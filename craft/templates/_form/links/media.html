@@ -2,14 +2,17 @@
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 
+{% set assets = false %}
+{% if folder %}
+  {% set assets = craft.assets.folderId(folder.id).find %}
+{% endif %}
+
 {% set mediaType = 'video' %}
 {% set linkBlock = false %}
 
 {% set videoUrl = false %}
 {% set documentUrl = false %}
-
 {% set document = false %}
-{% set documentTitle = false %}
 
 {% set errors = false %}
 {% set key = 'new1' %}
@@ -27,7 +30,7 @@
 
     {% case 'upload' %}
       {% set document = linkBlock.document.first %}
-      {% set documentTitle = linkBlock.documentTitle %}
+
   {% endswitch %}
 
   {% set errors = mediaBlock.hasErrors %}
@@ -52,29 +55,47 @@
     <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" maxlength="255" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
     
     <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
-    <select class="s3direct mediaLink upload required array" name="fields[mediaLink][{{ key }}][fields][document][]" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-      <option value=""></option>
-    {% if folder %}
-      {% for asset in craft.assets.folderId(folder.id) %}
-        <option value="{{ asset.id }}" {% if asset.id == document.id %}selected{% endif %}>{{ asset.filename }}</option>
-      {% endfor %}
-    {% endif %}
-    </select>
-    
-    <label for="documentTitle" class="mediaLink upload" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>Document title</label>
-    <input type="text" name="fields[mediaLink][{{ key }}][fields][documentTitle]" class="mediaLink upload" autocomplete="off" maxlength="255" placeholder="Title of document (optional)" value="{{ documentTitle }}" {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
-    
-    <div class="file upload mediaLink" {%- if mediaType != 'upload' %}style="display: none;"{% endif -%}>
-      <span class="fileinput-button">
-          <span>Upload a Document</span>
-          <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-          <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-      </span>
+    <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document][]" class="mediaLink upload" {% if document %}value="{{ document.id }}"{% endif %} {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>
 
-      <br class="clear"><br>
-      <div>
-          <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+    <div class="mediaLink upload wrapper" {% if mediaType != 'upload' %}style="display: none;"{% endif %}>
+      <p class="document-title">{{ document ? document.title : '' }}</p> 
+
+      <div id="document-modal" class="modal" title="My Documents" style="display: none;">
+        <div>
+          <div class="help">{{ n.siteMessage('my/documents') }}</div>
+
+          <span class="fileinput-button">
+            <span>Upload a Document</span>
+            <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+            <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+          </span>
+
+          <br class="clear"><br>
+          <div>
+            <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+          </div>
+        </div>
+
+        <div class="assets-wrapper" {% if not assets %}style="display: none;"{% endif %}>
+          <br class="clear">
+          <label for="document" class="required">
+            Select a Document <span class="note">* required</span><br>
+
+            <ul id="src-documents">
+            {% if folder %}
+              {% for asset in assets %}
+                <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+                  <div><img src="/img/default/list/pdf.jpg" /></div>
+                  <span class="title">{{ asset.title }}</span>
+                </li>
+              {% endfor %}
+            {% endif %}
+            </ul>
+          </label>
+        </div>
       </div>
+
+      <a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
     </div>
     
     {% if linkBlock %}
@@ -84,19 +105,117 @@
 
 {% set js %}
 $(function() {
-  var srcDocument = $('select.s3direct.mediaLink');
+  var openModal = $('#open-document-modal');
+  var modal = $('#document-modal');
+  var fileInput = $('#document-fileupload');
+  var srcFiles = $('ul#src-documents');
+  var okButton = false;
+  var targetFileId = $('input[type=hidden][name$="[fields][document][]"]');
+  var targetFileTitle = $('.document-title');
+  var deleteButton = false;
+  var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
+  
+  var selectedFile = function() {
+    return srcFiles.children('li.selected:first');
+  }
 
-  var populateSelectOptionsFromIndex = function(files) {
-    var selectedId = srcDocument.val();
-    srcDocument.children().remove().end().append('<option value=""></option>');
-
-    $.each(files, function(index, file) {
-      var selected = file.id == selectedId ? 'selected' : '';
-      srcDocument.append('<option value="'+file.id+'" '+selected+' data-url="'+file.url+'">'+file.filename+'</option>');
-    });
+  var selectFile = function(li) {
+    li.parent().children().removeClass('selected');
+    li.addClass('selected');
   };
 
-  $('#document-fileupload').s3direct({
+  var updateOkButton = function() {
+    okButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+  };
+
+  var populateDocumentFromModal = function() {
+    var selectedFile = srcFiles.children('li.selected:first');
+
+    if (selectedFile.length == 1) {
+      targetFileId.val(selectedFile.attr('data-asset-id'));
+      targetFileTitle.text(selectedFile.attr('data-asset-title'));
+    } else {
+      targetFileId.val('');
+      targetFileTitle.text('');
+    }
+  };
+
+  var updateDeleteButton = function() {
+    deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+  };
+
+  var deleteFile = function() {
+    var selectedFile = srcFiles.children('li.selected:first');
+    var assetId;
+
+    if (selectedFile.length == 1) {
+      assetId = selectedFile.attr('data-asset-id');
+
+      $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          selectedFile.remove();
+          updateDeleteButton();
+          updateOkButton();
+        }
+      });
+    }
+  };
+
+  var populateListFromIndex = function(files) {
+    var selectedId = selectedFile().attr('data-asset-id');
+    srcFiles.children().remove();
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'class="selected"' : '';
+
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+file.title+'</span></li>');
+    });
+
+    modal.find('.assets-wrapper').show();
+  };
+
+  openModal.click(function(e) {
+    e.preventDefault();
+    modal.dialog('open');
+  });
+
+  modal.dialog({
+    modal: true,
+    autoOpen: false,
+    height: $(window).height() * 0.75,
+    width: $(window).width() * 0.75,
+    dialogClass: 'no-close',
+    buttons: {
+      OK: function() {
+        populateDocumentFromModal();
+        modal.dialog('close');
+      },
+      Cancel: function() {
+        modal.dialog('close');
+      },
+      Delete: function() {
+        deleteDocument();
+      }
+    },
+    open: function(event, ui) {
+      var widget = $(this).dialog('widget');
+      okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
+      updateOkButton();
+      deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
+      updateDeleteButton();
+    },
+    closeOnEscape: false,
+  });
+
+  srcFiles.on('click', 'li', function(e) {
+    selectFile($(this));
+    updateOkButton();
+    updateDeleteButton();
+  });
+
+  fileInput.s3direct({
     bucket: "{{ s3.bucket }}",
     subfolder: "{{ s3.subfolder }}",
     currentUserId: "{{ currentUser.id }}",
@@ -107,10 +226,38 @@ $(function() {
     acceptFileTypes: /.+\.pdf$/i,
     uploadProgressBarSelector: '.s3direct.document.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.document',
-    onUpdateAssetsIndex: populateSelectOptionsFromIndex,
+    onUpdateAssetsIndex: populateListFromIndex,
+    requireFileTitle: true,
     debug: true,
   });
 });
 {% endset %}
 
 {% includeJs js %}
+
+{% set css %}
+.clear {
+  clear: both;
+}
+
+ul#src-documents {
+  list-style: none;
+}
+ul#src-documents li {
+  height: 160px;
+  width: 160px;
+  margin: 14px 0 0 14px;
+  float: left;
+}
+ul#src-documents li .title {
+  font-size: 12px;
+}
+ul#src-documents li.selected {
+  background: #d5d8dd;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  visibility: hidden;
+}
+{% endset %}
+{% includeCss css %}
