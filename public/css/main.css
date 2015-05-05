@@ -477,7 +477,7 @@ nav ul ul li:last-of-type {
 }
 
 .sub-nav h5, .my-content > a {
-    background: url('../img/right-arrow.png') no-repeat scroll 6px 8px;
+    background: url('../img/right-arrow.png') no-repeat scroll 6px 50%;
     border: 1px solid #ccc;
     border-bottom: none;
     font-size: .9em;
@@ -498,7 +498,7 @@ nav ul ul li:last-of-type {
 }
 
 .sub-nav h5.active, .my-content.active a {
-    background: url('../img/down-arrow.png') no-repeat scroll 6px 8px;
+    background: url('../img/down-arrow.png') no-repeat scroll 6px 50%;
     font-weight: bold;
     padding: 5px 0 5px 25px;
 }
@@ -521,7 +521,7 @@ nav ul ul li:last-of-type {
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
     display: block;
-    padding: 5px 0 5px 25px;
+    padding: .75em 0 .75em 25px;
 }
 .sub-nav h5 {
     padding: 0;
@@ -552,9 +552,15 @@ nav ul ul li:last-of-type {
 
 }
 .filter ul > li label {
+	display: block;
+	padding: .75em 0;
     vertical-align: middle;
-    width: 90%;
 }
+
+.filter ul > li label:hover {
+	cursor: pointer;
+}
+
 .my-content {
 	margin: 0 0 1em;
 }
@@ -570,7 +576,7 @@ nav ul ul li:last-of-type {
     border: 1px solid #ccc;
     display: block;
     margin: 0;
-    padding: .5em;
+    padding: .75em;
 }
 
 .filter h4.open, .sub-nav > h4.open {
@@ -771,7 +777,7 @@ ul.tags > li {
     border-top: none;
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: .5em 0 .5em .75em;
+    padding: 0 0 0 .75em;
 }
 
 .filter ul > li:last-of-type {
@@ -782,7 +788,8 @@ ul.tags > li {
     cursor: pointer;
 }
 .filter input[type="checkbox"] {
-	margin: 0 .5em 0 0;
+	float: left;
+	margin: 1em .5em 0 0;
 }
 
 .date-divider {
@@ -1615,8 +1622,16 @@ footer {
         width: 66%;
     }
     .filter ul > li {
-        padding: 0 0 .25em .25em;
+        padding: 0 0 0 .25em;
     }
+    
+    .filter ul > li label {
+	    padding: .5em 0;
+    }
+
+	.filter input[type="checkbox"] {
+		margin-top: .75em;
+	}
 
     #comments {
         display: inline-block;
