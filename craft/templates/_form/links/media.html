@@ -64,15 +64,18 @@
         <div>
           <div class="help">{{ n.siteMessage('my/documents') }}</div>
 
-          <span class="fileinput-button">
-            <span>Upload a Document</span>
-            <input id="document-fileupload" type="file" name="file" accept="application/pdf">
-            <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
-          </span>
+          <div class="upload-wrapper">
+            <div class="button-wrapper">
+              <span class="fileinput-button">
+                <span>Upload a Document</span>
+                <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+                <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+              </span>
+            </div>
+          </div>
 
-          <br class="clear"><br>
-          <div>
-            <div class="s3direct document progress-bar progress-bar-success" style="width: 0%; height: 18px; background: green;"></div>
+          <div class="progress-wrapper">
+            <span class="s3direct document progress-bar progress-bar-success"></span>
           </div>
         </div>
 
@@ -236,8 +239,23 @@ $(function() {
 {% includeJs js %}
 
 {% set css %}
-.clear {
-  clear: both;
+.upload-wrapper {
+  width: 100%;
+}
+.button-wrapper {
+  width: 30%;
+  float: left;
+}
+.progress-wrapper {
+  width: 70%;
+  float: right;
+}
+.progress-bar.progress-bar-success {
+  display: block;
+  width: 0%;
+  height: 10px;
+  margin: 10px;
+  background: green;
 }
 
 ul#src-documents {
