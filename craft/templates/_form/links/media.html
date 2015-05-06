@@ -132,10 +132,10 @@ $(function() {
     var selectedFile = srcFiles.children('li.selected:first');
 
     if (selectedFile.length == 1) {
-      targetFileId.val(selectedFile.attr('data-asset-id'));
+      targetFileId.val(selectedFile.attr('data-asset-id')).trigger('change');
       targetFileTitle.text(selectedFile.attr('data-asset-title'));
     } else {
-      targetFileId.val('');
+      targetFileId.val('').trigger('change');
       targetFileTitle.text('');
     }
   };

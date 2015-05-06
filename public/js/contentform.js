@@ -42,10 +42,9 @@
             // Submit buttons
             var submitButtons = form.find('input[type=button].submit');
 
-            // Page unload
+            // Page unload warning
             var formChanged = false;
-
-            var buttonClicked = null;
+            var formButtonClicked = null;
 
             //-----------------------
             // Functions
@@ -110,10 +109,10 @@
             };
 
             var removeEmptyImageFields = function() {
-              // [fields][blogImages][]
-              // [fields][mediaImages][]
-              // [fields][newsImages][]
-              // [fields][noticeImages][]
+              // fields[blogImages][]
+              // fields[mediaImages][]
+              // fields[newsImages][]
+              // fields[noticeImages][]
               var image = form.find('input[type=hidden][name$="Images][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
@@ -123,9 +122,9 @@
             };
 
             var removeEmptyDocumentFields = function() {
-              // [fields][blogDocuments][]
-              // [fields][noticeDocuments][]
-              // [fields][document][]
+              // fields[blogDocuments][]
+              // fields[noticeDocuments][]
+              // fields[mediaLink][???][fields][document][]
               var document = form.find('input[type=hidden][name$="Documents][]"], input[type=hidden][name$="[fields][document][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
@@ -225,11 +224,6 @@
               $('#add-'+id).show();
             });
 
-            // Record change to form content. See also Redactor
-            form.on('keyup change', 'input, select, textarea', function() {
-                formChanged = true;
-            });
-
             // Enforce limits in regular textareas
             limitedTextareaFields.each(function() {
               var field = $(this);
@@ -243,6 +237,11 @@
 
             // Respond to Media Link type change
             mediaTypeSelect.change(onChangeMediaLinkType);
+
+            // Record change to form content. See also Redactor
+            form.on('keyup change', 'input, select, textarea', function() {
+              formChanged = true;
+            });
 
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
@@ -258,13 +257,13 @@
 
                 case 'save':
                   entryEnabled.val(0);
-                  buttonClicked = true;
+                  formButtonClicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
-                  buttonClicked = true;
+                  formButtonClicked = true;
                   form.submit();
                   break;
 
@@ -292,17 +291,17 @@
                       break;
                   }
 
-                  buttonClicked = true;
+                  formButtonClicked = true;
                   document.location = '/account/'+section;
               }
             });
 
             // Prevend page unload if form content has changed
-            $(window).on('beforeunload', function(){
+            $(window).on('beforeunload', function() {
               var richText = $('#blogContent, #noticeContent');
               var richTextContent = richText.length > 0 && richText.val().length > 0;
 
-              if((formChanged || richTextContent) && !buttonClicked) {
+              if((formChanged || richTextContent) && !formButtonClicked) {
                 return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });

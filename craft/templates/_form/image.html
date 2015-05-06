@@ -110,10 +110,10 @@ $(function() {
     var selectedImage = srcImages.children('li.selected:first');
 
     if (selectedImage.length == 1) {
-      targetImageId.val(selectedImage.attr('data-asset-id'));
+      targetImageId.val(selectedImage.attr('data-asset-id')).trigger('change');
       displayImage.prop('src', selectedImage.attr('data-asset-url'));
     } else {
-      targetImageId.val('');
+      targetImageId.val('').trigger('change');
       displayImage.prop('src', defaultImageUrl);
     }
   };
