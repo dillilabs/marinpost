@@ -1,7 +1,9 @@
+{% set limit = n.siteDefault('linkContentLimit') %}
+
 <div class="field">
     <label for="linkComments">Link Comments</label>
     
-    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="3" class="limited" data-limit="180" placeholder="Optional comments about your link (max 180 chars)">
+    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="3" class="limited" data-limit="{{ limit }}" placeholder="Optional comments about your link (max {{ limit }} chars)">
     {%- if entry is defined %}{{ entry.linkComments }}{% endif -%}
     </textarea>
 

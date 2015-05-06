@@ -55,3 +55,10 @@
   {% set message = siteMessages.siteMessages.path(path).first %}
   {{ message ? message.text : null }}
 {% endmacro %}
+
+{% macro siteDefault(key) %}
+{% spaceless %}
+  {% set number = siteDefaults.siteDefaults.key(key).first %}
+  {{ number ? number.number : null }}
+{% endspaceless %}
+{% endmacro %}

@@ -1,9 +1,11 @@
+{% set limit = n.siteDefault('noticeContentLimit') %}
+
 <div class="field">
     <label for="noticeContent" class="required">Notice text <span class="note">* required</span></label>
 
     <div class="counter" style="float: right;"></div><br style="clear: both;">
 
-    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" data-limit="8000" placeholder="Create your notice here (limit 8,000 characters)">
+    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" data-limit="{{ limit }}" placeholder="Create your notice here (limit {{ limit }} characters)">
     {%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
     </textarea>
 

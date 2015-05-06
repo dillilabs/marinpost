@@ -1,10 +1,11 @@
 {% extends "_common/layout" %}
 
-{% set limit = siteDefault.entriesPerPage + 1 %} {# +1 featured entry #}
+{% set entriesPerPage = siteDefaults.siteDefaults.key('entriesPerPage').first.number %}
+{% set limit = entriesPerPage + 1 %} {# +1 featured entry #}
 {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(limit).find %}
 {% set featured = entries | first %}
 
-{% set letters = craft.entries.section('letters').limit(siteDefault.entriesPerPage) %}
+{% set letters = craft.entries.section('letters').limit(entriesPerPage) %}
 
 {% block main %}
   {% embed "_common/home" %}

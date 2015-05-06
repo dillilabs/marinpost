@@ -1,9 +1,11 @@
+{% set limit = n.siteDefault('blogContentLimit') %}
+
 <div class="field">
     <label for="blogContent" class="required">Blog Content<span class="note">* required</span></label>
     
     <div class="counter" style="float: right;"></div><br style="clear: both;">
 
-    <textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="wysiwyg required" data-limit="15000" placeholder="Create your post here (limit 15,000 characters)">
+    <textarea id="blogContent" name="fields[blogContent]" cols="60" rows="12" class="wysiwyg required" data-limit="{{ limit }}" placeholder="Create your post here (limit {{ limit }} characters)">
     {%- if entry is defined %}{{ entry.blogContent }}{% endif -%}
     </textarea>
     

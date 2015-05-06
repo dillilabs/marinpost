@@ -1,11 +1,11 @@
 {% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
 {% spaceless %}
 
-{% set defaultLimit = siteDefault.entriesPerPage %}
+{% set entriesPerPage = siteDefaults.siteDefaults.key('entriesPerPage').first.number %}
 
 {% set offset = craft.request.param('offset') | default(0)  %}
 
-{% set limit = craft.request.param('limit') | default(defaultLimit)  %}
+{% set limit = craft.request.param('limit') | default(entriesPerPage)  %}
 
 {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').offset(offset).limit(limit) %}
 
