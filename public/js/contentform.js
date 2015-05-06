@@ -61,6 +61,7 @@
             var onChangeMediaLinkType = function(mediaType) {
               var type = this.value;
 
+              // TODO wrap multiple elements
               form.find('input#mediaType').val(type).end()
                   .find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, mediaLink.wrapper').hide().end()
                   .find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type+', .mediaLink.wrapper.'+type).show();
@@ -109,6 +110,10 @@
             };
 
             var removeEmptyImageFields = function() {
+              // [fields][blogImages][]
+              // [fields][mediaImages][]
+              // [fields][newsImages][]
+              // [fields][noticeImages][]
               var image = form.find('input[type=hidden][name$="Images][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
@@ -118,7 +123,10 @@
             };
 
             var removeEmptyDocumentFields = function() {
-              var document = form.find('input[type=hidden][name$="Documents][]"]');
+              // [fields][blogDocuments][]
+              // [fields][noticeDocuments][]
+              // [fields][document][]
+              var document = form.find('input[type=hidden][name$="Documents][]"], input[type=hidden][name$="[fields][document][]"]');
 
               // Craft doesn't take kindly to empty multiple fields
               if (document.length && document.val().length == 0) {
