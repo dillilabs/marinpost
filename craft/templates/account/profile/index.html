@@ -25,9 +25,11 @@
 
         <div class="field account-profile clearfix">
 	        <label for="photoUrl">Photo</label>
-	        <img src="{{ currentUser.photoUrl ? currentUser.photoUrl : url('img/user.gif') }}" class="profile"/>
-	        <br>
-	        <input type="file" name="userPhoto" value="{{ (currentUser.photoUrl ? 'Change Photo' : 'Upload') }}">
+          {% if currentUser.photoUrl %}
+	          <img src="{{ currentUser.photoUrl }}" class="profile" />
+	          <br>
+          {% endif %}
+	        <input type="file" name="userPhoto">
         </div>
 
         <div class="field">
