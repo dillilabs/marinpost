@@ -1282,6 +1282,10 @@ footer {
         margin-top: 1em;
     }
 
+	.sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
+	    padding: .45em 0 .45em 25px;
+	}
+
     #mini-menu #search {
         width: 78%;
     }
@@ -1632,11 +1636,11 @@ footer {
     }
     
     .filter ul > li label {
-	    padding: .5em 0;
+	    padding: .25em 0;
     }
 
 	.filter input[type="checkbox"] {
-		margin-top: .75em;
+		margin-top: .5em;
 	}
 
     #comments {
