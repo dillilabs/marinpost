@@ -25,9 +25,15 @@ return array(
     ),
     'dev' => array(
 //      'devMode' => true,
+        'environmentVariables' => array(
+            'baseUrl' => 'http://dev.marinpost.org',
+        ),
         'siteUrl' => 'http://dev.marinpost.org',
     ),
     'live' => array(
+        'environmentVariables' => array(
+            'baseUrl' => 'http://marinpost.org',
+        ),
         'siteUrl' => 'http://marinpost.org',
     ),
 );

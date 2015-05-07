@@ -12,19 +12,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
   <link rel="home" href="{{ siteUrl }}" />
-  <link rel="icon" 
-      type="image/png" 
-      href="http://marinpost.org/img/favicon.ico">
+  <link rel="icon" type="image/png" href="{{ siteUrl }}img/favicon.ico">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {% includeCssFile "/css/normalize.css" %}
-  {% includeCssFile "/css/jquery-ui.min.css" %}
-  {% includeCssFile "/css/jquery-ui.structure.min.css" %}
-  {% includeCssFile "/css/jquery-ui.theme.min.css" %}
-  {% includeCssResource "lib/redactor/redactor.css" %}
-  {% includeCssResource "/s3direct/css/jquery.fileupload.css" %}
-  {% includeCssFile "/css/main.css" %}
+  {% filter minimee %}
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}css/normalize.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}css/jquery-ui.min.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}css/jquery-ui.structure.min.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}css/jquery-ui.theme.min.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}cpresources/lib/redactor/redactor.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}cpresources/s3direct/css/jquery.fileupload.css' />
+    <link rel='stylesheet' type='text/css' href='{{ siteUrl }}css/main.css' />
+  {% endfilter %}
 
 <!--[if lt IE 9]>
   <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -142,36 +142,37 @@
     Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
   </footer>
 
-  {% includeJsFile "/js/jquery.min.js" first %}
-  {% includeJsFile "/js/jquery-ui.min.js" %}
-  {% includeJsFile "/js/console.js" %}
+  {% filter minimee %}
+    <script type='text/javascript' src='{{ siteUrl }}js/jquery.min.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/jquery-ui.min.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/console.js'></script>
 
-  {% includeJsResource "lib/redactor/redactor.js" %}
-  {% includeJsResource "lib/redactor/plugins/counter.js" %}
-  {% includeJsResource "lib/redactor/plugins/fontcolor.js" %}
-  {% includeJsResource "lib/redactor/plugins/fontfamily.js" %}
-  {% includeJsResource "lib/redactor/plugins/fontsize.js" %}
-  {% includeJsResource "lib/redactor/plugins/fullscreen.js" %}
-  {% includeJsResource "lib/redactor/plugins/limiter.js" %}
-  {% includeJsResource "lib/redactor/plugins/underline.js" %}
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/redactor.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/counter.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/fontcolor.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/fontfamily.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/fontsize.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/fullscreen.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/limiter.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}/cpresources/lib/redactor/plugins/underline.js'></script>
 
-  {% includeJsResource "/s3direct/js/jquery.iframe-transport.js" %}
-  {% includeJsResource "/s3direct/js/jquery.fileupload.js" %}
-  {% includeJsResource "/s3direct/js/jquery.fileupload-process.js" %}
-  {% includeJsResource "/s3direct/js/jquery.fileupload-validate.js" %}
-  {% includeJsResource "/s3direct/js/s3direct.js" %}
+    <script type='text/javascript' src='{{ siteUrl }}cpresources/s3direct/js/jquery.iframe-transport.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-process.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-validate.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}cpresources/s3direct/js/s3direct.js'></script>
 
-  {% includeJsFile "/js/filters.js" %}
-  {% includeJsFile "/js/letters.js" %}
-  {% includeJsFile "/js/contentform.js" %}
-  {% includeJsFile '/js/tags.js' %}
-  {% includeJsFile "/js/userform.js" %}
-  {% includeJsFile '/js/contact.js' %}
-  {% includeJsFile '/js/about.js' %}
-  {% includeJsFile '/js/account.js' %}
-  {% includeJsFile '/js/home.js' %}
-  {% includeJsFile "/js/main.js" %}
-
-  {# includeJsFile '/js/ga.js' #}
+    <script type='text/javascript' src='{{ siteUrl }}js/filters.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/letters.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/contentform.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/tags.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/userform.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/contact.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/about.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/account.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/home.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/main.js'></script>
+    <script type='text/javascript' src='{{ siteUrl }}js/ga.js'></script>
+  {% endfilter %}
 </body>
 </html>
