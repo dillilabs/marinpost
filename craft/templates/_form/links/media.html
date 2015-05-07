@@ -37,6 +37,8 @@
   {% set key = mediaBlock.id | default('new1') %}
 {% endif %}
 
+{% set excerptLength = 20 %}
+
 <div class="field">
     <label for="mediaLink" class="required">Media Link <span class="note">* required</span></label>
     
@@ -83,7 +85,7 @@
                 {% for asset in assets %}
                   <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
                     <div><img src="/img/default/list/pdf.jpg" /></div>
-                    <span class="title">{{ asset.title }}</span>
+                    <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
                   </li>
                 {% endfor %}
               {% endif %}
@@ -166,8 +168,9 @@ $(function() {
 
     $.each(files, function(index, file) {
       var selected = file.id == selectedId ? 'class="selected"' : '';
+      var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
 
-      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+file.title+'</span></li>');
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
     });
 
     modal.find('.assets-wrapper').show();

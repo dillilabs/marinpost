@@ -651,6 +651,7 @@ main {
 	font-size: .5em;
 }
 
+/* Disabled for time being
 .overlay {
 	background-position: 50% 50%;
     display: block;
@@ -667,6 +668,7 @@ main {
 .overlay.upload, .overlay.document {
     background-image: url('../img/media-overlay-03.png');
 }
+*/
 
 main.single {
     padding-bottom: 1em;
