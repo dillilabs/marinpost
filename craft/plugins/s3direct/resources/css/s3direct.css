@@ -6,7 +6,7 @@ img.display-image {
   display: block;
   width: 0%;
   height: 10px;
-  margin: 1em 0;
+  margin: .5em 0;
   background: green;
 }
 
@@ -42,15 +42,6 @@ img.display-image {
 
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
-    span.fileinput-button {
-      float: left;
-    }
-
-    .upload-modal .progress-bar.progress-bar-success {
-      float: left;
-      margin-left: 1em;
-    }
-
     .upload-modal ul#src-files li {
       float: left;
       width: 45%;
