@@ -52,13 +52,13 @@
 
 {% macro siteMessage(path) %}
   {% set path = path | default(craft.request.path) %}
-  {% set message = siteMessages.siteMessages.path(path).first %}
+  {% set message = siteMessages.siteMessage.path(path).first %}
   {{ message ? message.text : null }}
 {% endmacro %}
 
 {% macro siteDefault(key) %}
 {% spaceless %}
-  {% set number = siteDefaults.siteDefaults.key(key).first %}
-  {{ number ? number.number : null }}
+  {% set default = siteDefaults.siteDefault.key(key).first %}
+  {{ default ? default.value : null }}
 {% endspaceless %}
 {% endmacro %}
