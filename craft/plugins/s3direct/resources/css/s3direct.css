@@ -1,0 +1,58 @@
+img.display-image {
+  width: 160px;
+}
+
+.upload-modal .upload-wrapper {
+  width: 20%;
+  float: left;
+}
+
+.upload-modal .files-wrapper {
+  width: 80%;
+  float: right;
+}
+
+.upload-modal .progress-bar.progress-bar-success {
+  display: block;
+  width: 0%;
+  height: 10px;
+  margin-top: 10px;
+  background: green;
+}
+
+.upload-modal ul#src-files {
+  list-style: none;
+  padding:0;
+}
+
+.upload-modal ul#src-files li {
+  float: left;
+}
+
+.upload-modal.image ul#src-files li {
+  height: auto;
+  width: 18%;
+  margin: 14px 14px 0 0;
+}
+
+.upload-modal.document ul#src-files li {
+  height: 160px;
+  width: 160px;
+  margin: 14px 0 0 14px;
+}
+
+.upload-modal ul#src-files li .title {
+  font-size: 12px;
+}
+
+.upload-modal ul#src-files li.selected {
+  background: #d5d8dd;
+}
+
+.upload-modal ul#src-files img {
+  max-width: 100%;
+}
+
+.no-close .ui-dialog-titlebar-close {
+  visibility: hidden;
+}

@@ -61,7 +61,7 @@
     <div class="mediaLink upload wrapper" {% if mediaType != 'upload' %}style="display: none;"{% endif %}>
       <p class="document-title">{{ document ? document.title : '' }}</p> 
 
-      <div id="document-modal" class="modal" title="My Documents" style="display: none;">
+      <div id="document-modal" class="upload-modal document" title="My Documents" style="display: none;">
         <div>
           <div class="help">{{ n.siteMessage('my/documents') }}</div>
         </div>
@@ -78,7 +78,7 @@
           </div>
 
           <div class="files-wrapper">
-            <ul id="src-documents"{% if not assets %}style="display: none;"{% endif %}>
+            <ul id="src-files"{% if not assets %}style="display: none;"{% endif %}>
               {% if folder %}
                 {% for asset in assets %}
                   <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
@@ -104,8 +104,8 @@
 $(function() {
   var openModal = $('#open-document-modal');
   var modal = $('#document-modal');
-  var fileInput = $('#document-fileupload');
-  var srcFiles = $('ul#src-documents');
+  var fileInput = modal.find('#document-fileupload');
+  var srcFiles = modal.find('ul#src-files');
   var okButton = false;
   var targetFileId = $('input[type=hidden][name$="[fields][document][]"]');
   var targetFileTitle = $('.document-title');
@@ -229,46 +229,4 @@ $(function() {
   });
 });
 {% endset %}
-
 {% includeJs js %}
-
-{% set css %}
-.upload-wrapper {
-  width: 20%;
-}
-.files-wrapper {
-  width: 100%;
-}
-.progress-bar.progress-bar-success {
-  display: block;
-  width: 0%;
-  height: 10px;
-  margin-top: 10px;
-  background: green;
-}
-
-ul#src-documents {
-  list-style: none;
-  padding:0;
-}
-ul#src-documents li {
-  height: auto;
-  width: 15%;
-  margin: 14px 14px 0 0;
-  float: left;
-}
-ul#src-documents li .title {
-  font-size: 12px;
-}
-ul#src-documents li.selected {
-  background: #d5d8dd;
-}
-ul#src-documents img {
-  max-width: 100%;
-}
-
-.no-close .ui-dialog-titlebar-close {
-  visibility: hidden;
-}
-{% endset %}
-{% includeCss css %}
