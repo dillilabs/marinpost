@@ -235,11 +235,9 @@ $(function() {
 {% set css %}
 .upload-wrapper {
   width: 20%;
-  float: left;
 }
 .files-wrapper {
-  width: 80%;
-  float: right;
+  width: 100%;
 }
 .progress-bar.progress-bar-success {
   display: block;
@@ -251,11 +249,12 @@ $(function() {
 
 ul#src-documents {
   list-style: none;
+  padding:0;
 }
 ul#src-documents li {
-  height: 160px;
-  width: 160px;
-  margin: 14px 0 0 14px;
+  height: auto;
+  width: 15%;
+  margin: 14px 14px 0 0;
   float: left;
 }
 ul#src-documents li .title {
@@ -265,7 +264,7 @@ ul#src-documents li.selected {
   background: #d5d8dd;
 }
 ul#src-documents img {
-  max-width: 115px;
+  max-width: 100%;
 }
 
 .no-close .ui-dialog-titlebar-close {
