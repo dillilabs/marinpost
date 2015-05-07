@@ -664,7 +664,7 @@ main {
 .overlay.audio {
     background-image: url('../img/media-overlay-02.png');
 }
-.overlay.doc {
+.overlay.upload, .overlay.document {
     background-image: url('../img/media-overlay-03.png');
 }
 
