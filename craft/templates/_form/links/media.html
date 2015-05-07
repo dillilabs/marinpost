@@ -50,6 +50,7 @@
     <input type="radio" name="mediaTypeSelect" value="video" {%- if mediaType == 'video' %}checked="checked"{% endif -%}>Link Video
     <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link Document
     <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload Document
+    <input type="radio" name="mediaTypeSelect" value="podcast" {%- if mediaType == 'podcast' %}checked="checked"{% endif -%}>Link Podcast
     
     <input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" maxlength="255" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
     <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" maxlength="255" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
