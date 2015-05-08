@@ -24,25 +24,25 @@ class MpUserPlugin extends BasePlugin
     /**
      * Respond to users.onBeforeSaveUser event.
      *
-     *  If User firstName or lastName is blank:
+     *   If User firstName or lastName is blank:
      *
      *      Then add error(s) and prevent save.
      *
-     *   If is new User:
+     *   If front-end request:
      *
-     *      If honey pot field is populated:
+     *      If is new User:
      *
-     *          Then prevent save.
+     *          If honey pot field is populated:
+     *
+     *              Then prevent save.
      */
     private function _onBeforeSaveUserEvent()
     {
         craft()->on('users.onBeforeSaveUser', function(Event $event) {
             $user = $event->params['user'];
-            $isNewUser = $event->params['isNewUser'];
 
             $firstName = craft()->request->getPost('firstName', $user->firstName);
             $lastName = craft()->request->getPost('lastName', $user->lastName);
-            $honeypot = craft()->request->getPost($this->settings['honeypotField']);
 
             $valid = true;
 
@@ -58,10 +58,16 @@ class MpUserPlugin extends BasePlugin
                 $valid = false;
             }
 
-            if ($isNewUser && !empty($honeypot))
+            if (!craft()->request->isCpRequest() && $event->params['isNewUser'])
             {
-                $user->addError($this->settings['honeypotField'], 'We think you might be a robot.');
-                $valid = false;
+                $honeypot = craft()->request->getPost($this->settings['honeypotField']);
+
+                if (!empty($honeypot))
+                {
+                    $this->_log('User registration form submitted from IP='.craft()->request->ipAddress.', activated honeypot='.$honeypot, LogLevel::Warning);
+                    // $user->addError($this->settings['honeypotField'], 'We think you might be a robot.');
+                    $valid = false;
+                }
             }
 
             if (!$valid)

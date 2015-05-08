@@ -85,6 +85,11 @@
               <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
           </div>
           <div class="field">
+              {% set honeyPot = 'birthdate' %}
+              <label for="{{ honeyPot }}">{{ honeyPot | capitalize }} <span class="note">* required</span></label>
+              <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="32" autocomplete="off">
+          </div>
+          <div class="field">
               <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
               {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
                 <label for="termsOfUse">
@@ -95,11 +100,6 @@
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('termsOfUse')) }}
               {% endif %}
-          </div>
-          <div class="field">
-              {% set honeyPot = 'birthdate' %}
-              <label for="{{ honeyPot }}">{{ honeyPot | capitalize }} <span class="note">* required</span></label>
-              <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="32" autocomplete="off">
           </div>
 
           <br>
