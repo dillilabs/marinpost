@@ -1,0 +1,15 @@
+<div id="message" class="clearfix">
+  {% switch craft.request.path %}
+    {% case '' %}
+      {% set path = 'home/right' %}
+
+    {% case 'donate' %}
+      {% set path = 'donate/right' %}
+
+    {% default %}
+      {% set path = 'other/right' %}
+
+  {% endswitch %}
+
+  <div class="help">{{ n.siteMessage(path) }}</div>
+</div>
