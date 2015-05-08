@@ -1,11 +1,5 @@
 {% requireLogin %}
 
-{% set statuses = ['live', 'disabled'] %}
-
-{% set entryId = craft.request.segment(2) %}
-
-{% set entry = craft.entries.authorId(currentUser.id).status(statuses).id(entryId).first %}
-
 {% if not entry %}
   {% redirect 404 %}
 {% endif %}
@@ -21,7 +15,7 @@
           {{ p.postTags(entry) }}
           {{ p.postTitle(entry) }}
           {{ p.postBy(entry) }}
-          <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+          <img src="{{ p.primaryImage(entry) }}"/>
           <p>{{ entry.blogContent }}</p>
           {{ p.documents(entry.blogDocuments) }}
 
@@ -29,7 +23,7 @@
           {{ p.postTags(entry) }}
           {{ p.postTitle(entry) }}
           {{ p.postBy(entry) }}
-          <img src="{{ p.primaryImage(entry, 'hero') }}"/>
+          <img src="{{ p.primaryImage(entry) }}"/>
           <p>{{ entry.blogContent }}</p>
           {{ p.documents(entry.noticeDocuments) }}
 

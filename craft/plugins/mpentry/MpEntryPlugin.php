@@ -149,7 +149,7 @@ class MpEntryPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.26';
+        return '0.0.27';
     }
 
     public function getDeveloper()

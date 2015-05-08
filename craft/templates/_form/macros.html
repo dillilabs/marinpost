@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% macro inputSubmit(entry) %}
-  <input type="button" class="submit" data-submit="preview" data-url="/view/{{ entry.id }}/{{ entry.slug }}" value="Preview">
+  <input type="button" class="submit" data-submit="preview" value="Preview">
 
   {% if not entry.id %}
     <input type="button" class="submit" data-submit="save" value="Save">

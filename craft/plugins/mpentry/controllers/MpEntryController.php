@@ -72,6 +72,28 @@ class MpEntryController extends BaseController
         $this->returnJson(array('success' => true));
     }
 
+	/**
+	 * Previews an entry.
+	 *
+     * Borrowed and adapted from EntriesController.
+     *
+	 * @throws HttpException
+	 * @return null
+	 */
+	public function actionPreviewEntry()
+	{
+		$this->requirePostRequest();
+
+        $entry = $this->_getEntryModel();
+
+        // Set the language to the user's preferred locale so DateFormatter returns the right format
+        craft()->setLanguage(craft()->getTargetLanguage(true));
+
+        $this->_populateEntryModel($entry);
+
+		$this->_showEntry($entry);
+	}
+
     // ----------------
     // Helper functions
     // ----------------
@@ -220,4 +242,123 @@ class MpEntryController extends BaseController
     {
         return craft()->entries->deleteEntryById($entryId);
     }
+
+    // -----------------
+    // Preview functions
+    // -----------------
+
+	/**
+	 * Fetches or creates an EntryModel.
+	 *
+     * Borrowed and adapted from EntriesController.
+	 *
+	 * @throws Exception
+	 * @return EntryModel
+	 */
+	private function _getEntryModel()
+	{
+        $entry = new EntryModel();
+        $entry->sectionId = craft()->request->getRequiredPost('sectionId');
+
+		return $entry;
+	}
+
+	/**
+	 * Populates an EntryModel with post data.
+	 *
+     * Borrowed and adapted from EntriesController.
+	 *
+	 * @param EntryModel $entry
+	 *
+	 * @return null
+	 */
+	private function _populateEntryModel(EntryModel $entry)
+	{
+		// Set the entry attributes, defaulting to the existing values for whatever is missing from the post data
+		$entry->typeId        = craft()->request->getPost('typeId', $entry->typeId);
+		$entry->slug          = craft()->request->getPost('slug', $entry->slug);
+		$entry->postDate      = (($postDate   = craft()->request->getPost('postDate'))   ? DateTime::createFromString($postDate,   craft()->timezone) : $entry->postDate);
+		$entry->expiryDate    = (($expiryDate = craft()->request->getPost('expiryDate')) ? DateTime::createFromString($expiryDate, craft()->timezone) : null);
+		$entry->enabled       = (bool) craft()->request->getPost('enabled', $entry->enabled);
+		$entry->localeEnabled = (bool) craft()->request->getPost('localeEnabled', $entry->localeEnabled);
+
+		$entry->getContent()->title = craft()->request->getPost('title', $entry->title);
+
+		$fieldsLocation = craft()->request->getParam('fieldsLocation', 'fields');
+		$entry->setContentFromPost($fieldsLocation);
+
+		// Author
+		$authorId = craft()->request->getPost('author', ($entry->authorId ? $entry->authorId : craft()->userSession->getUser()->id));
+
+		if (is_array($authorId))
+		{
+			$authorId = isset($authorId[0]) ? $authorId[0] : null;
+		}
+
+		$entry->authorId = $authorId;
+
+		// Parent
+		$parentId = craft()->request->getPost('parentId');
+
+		if (is_array($parentId))
+		{
+			$parentId = isset($parentId[0]) ? $parentId[0] : null;
+		}
+
+		$entry->parentId = $parentId;
+
+		// Revision notes
+		$entry->revisionNotes = craft()->request->getPost('revisionNotes');
+	}
+
+	/**
+	 * Displays an entry.
+	 *
+     * Borrowed and adapted from EntriesController.
+	 *
+	 * @param EntryModel $entry
+	 *
+	 * @throws HttpException
+	 * @return null
+	 */
+	private function _showEntry(EntryModel $entry)
+	{
+		$section = $entry->getSection();
+		$type = $entry->getType();
+
+		if (!$section || !$type)
+		{
+			Craft::log('Attempting to preview an entry that doesn’t have a section/type', LogLevel::Error);
+			throw new HttpException(404);
+		}
+
+		craft()->setLanguage($entry->locale);
+
+		if (!$entry->postDate)
+		{
+			$entry->postDate = new DateTime();
+		}
+
+		// Have this entry override any freshly queried entries with the same ID/locale
+		craft()->elements->setPlaceholderElement($entry);
+
+		craft()->templates->getTwig()->disableStrictVariables();
+
+        switch ($section->handle)
+        {
+        case 'letters':
+            $template = '_entry/letter';
+            break;
+        case 'media':
+            $template = '_entry/media';
+            break;
+        case 'news':
+            $template = '_entry/news';
+            break;
+        default:
+            $template = $section->template;
+        }
+
+		$this->renderTemplate($template, array('entry' => $entry));
+	}
 }

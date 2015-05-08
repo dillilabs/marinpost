@@ -7,14 +7,8 @@
             // Selectors
             //-----------------------
 
-            // Select Location and Topic
-            var arrayInputSelects = form.find('select.array');
-
-            // Containers for optional Locations and Topics
-            var optionalCategoryContainers = form.find('.optional-category-field.inputs');
-
-            // Link to Media
-            var mediaTypeSelect = form.find('input[type=radio][name=mediaTypeSelect]');
+            // Form action
+            var inputAction = form.find('input[name=action]');
 
             // Section ID
             var sectionId = form.find('input[name=sectionId]');
@@ -24,6 +18,15 @@
 
             // Entry status
             var entryEnabled = form.find('input[name=enabled]');
+
+            // Select Location and Topic
+            var arrayInputSelects = form.find('select.array');
+
+            // Containers for optional Locations and Topics
+            var optionalCategoryContainers = form.find('.optional-category-field.inputs');
+
+            // Link to Media
+            var mediaTypeSelect = form.find('input[type=radio][name=mediaTypeSelect]');
 
             // Date picker
             var dateFields = form.find('input.date');
@@ -151,6 +154,20 @@
             };
 
             //-----------------------
+            // Preview
+            //-----------------------
+
+            var enablePreview = function() {
+              inputAction.val('mpEntry/previewEntry');
+              form.attr('target', '_blank');
+            };
+
+            var disablePreview = function() {
+              inputAction.val('entries/saveEntry');
+              form.removeAttr('target');
+            };
+
+            //-----------------------
             // Redactor
             //-----------------------
 
@@ -250,19 +267,21 @@
 
               switch (submitType) {
                 case 'preview':
-                  // document.location = $(this).attr('data-url');
-                  alert('Coming Soon');
-                  e.preventDefault();
+                  enablePreview();
+                  formButtonClicked = true;
+                  form.submit();
                   break;
 
                 case 'save':
                   entryEnabled.val(0);
+                  disablePreview();
                   formButtonClicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
+                  disablePreview();
                   formButtonClicked = true;
                   form.submit();
                   break;

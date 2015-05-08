@@ -1,0 +1,10 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block title %}News Link{% endblock %}
+    {% block post %}
+      {{ p.post(entry) }}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
