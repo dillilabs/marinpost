@@ -62,3 +62,25 @@
   {{ default ? default.value : null }}
 {% endspaceless %}
 {% endmacro %}
+
+{% macro prevNext(entry) %}
+  {% set criteria = { section: entry.section, order: 'postDate' } %}
+  {% set prev = entry.getPrev(criteria) %}
+  {% set next = entry.getNext(criteria) %}
+
+  {% if prev or next %}
+    <span class="prev-next">
+      {% if prev %}
+        <a href="{{ prev.url }}">&lt; Previous</a>
+
+        {% if next %}
+          |
+        {% endif %}
+      {% endif %}
+
+      {% if next %}
+        <a href="{{ next.url }}">Next &gt;</a>
+      {% endif %}
+    </span>
+  {% endif %}
+{% endmacro %}
