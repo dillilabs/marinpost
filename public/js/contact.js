@@ -9,7 +9,7 @@
 
             var name = form.find('input[name=fromName]');
             var email = form.find('input[name=fromEmail]');
-            var subject = form.find('input[name=subject]');
+            var subject = form.find('select[name=subject]');
             var message = form.find('textarea[name=message]');
 
             //-----------------------
@@ -46,13 +46,16 @@
                 
                 form.find('ul.errors').remove();
 
+                if (!validField(name, 'Name')) validForm = false;
+
                 if (!validField(email, 'Email')) {
                     validForm = false;
                 } else if (!validEmail(email)) {
                     validForm = false;
                 }
-                if (!validField(name, 'Name')) validForm = false;
+
                 if (!validField(subject, 'Subject')) validForm = false;
+
                 if (!validField(message, 'Message')) validForm = false;
 
                 return validForm;
