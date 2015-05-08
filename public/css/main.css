@@ -208,6 +208,12 @@ fieldset > ul,
 .contact .comment-count {
     display: none;
 }
+form.contact label[for=fromTown], form.contact input#fromTown {
+  display: none;
+}
+form#register label[for=birthdate], form#register input#birthdate {
+  display: none;
+}
 .errors > li {
     color: red;
     font-weight: bold;

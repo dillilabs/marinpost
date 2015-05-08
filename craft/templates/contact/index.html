@@ -25,11 +25,11 @@
         <input type="hidden" name="redirect" value="contact/thanks?name={fromName}&email={fromEmail}">
 
         <label for="fromName">Your Name <span class="note">* required</span></label>
-        <input id="fromName" type="text" name="fromName" autocomplete="off" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
+        <input id="fromName" name="fromName" type="text" maxlength="100" autocomplete="off" value="{% if message is defined %}{{ message.fromName }}{% endif %}">
         {{ message is defined and message ? f.errorList(message.getErrors('fromName')) }}
 
         <label for="fromEmail">Your Email <span class="note">* required</span></label>
-        <input id="fromEmail" type="text" name="fromEmail" autocomplete="off" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
+        <input id="fromEmail" name="fromEmail" type="text" maxlength="100" autocomplete="off" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
         {{ message is defined and message ? f.errorList(message.getErrors('fromEmail')) }}
 
         <label for="subject">Subject <span class="note">* required</span></label>
@@ -54,11 +54,19 @@
         <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
         {{ message is defined and message ? f.errorList(message.getErrors('message')) }}
 
+        {% set honeyPot = 'fromTown' %}
+        <label for="{{ honeyPot }}">Your Town <span class="note">* required</span></label>
+        <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="100" autocomplete="off" value="">
+
+        <br>
         <input type="submit" value="Send">
+        <!--div class="g-recaptcha" data-sitekey="6LfclgYTAAAAAHEhhjtX-Go0TsLJ6RsRKcZgtLGO"></div-->
       </form>
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{# includeJsFile 'https://www.google.com/recaptcha/api.js' #}
 
 {% set js %}
   $(function() {

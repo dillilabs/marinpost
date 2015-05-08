@@ -27,27 +27,41 @@ class MpUserPlugin extends BasePlugin
      *  If User firstName or lastName is blank:
      *
      *      Then add error(s) and prevent save.
+     *
+     *   If is new User:
+     *
+     *      If honey pot field is populated:
+     *
+     *          Then prevent save.
      */
     private function _onBeforeSaveUserEvent()
     {
         craft()->on('users.onBeforeSaveUser', function(Event $event) {
             $user = $event->params['user'];
+            $isNewUser = $event->params['isNewUser'];
 
             $firstName = craft()->request->getPost('firstName', $user->firstName);
             $lastName = craft()->request->getPost('lastName', $user->lastName);
+            $honeypot = craft()->request->getPost($this->settings['honeypotField']);
 
             $valid = true;
 
             if (empty(trim($firstName)))
             {
                 $user->addError('firstName', 'First name cannot be blank.');
-                $valid= false;
+                $valid = false;
             }
 
             if (empty(trim($lastName)))
             {
                 $user->addError('lastName', 'Last name cannot be blank.');
-                $valid= false;
+                $valid = false;
+            }
+
+            if ($isNewUser && !empty($honeypot))
+            {
+                $user->addError($this->settings['honeypotField'], 'We think you might be a robot.');
+                $valid = false;
             }
 
             if (!$valid)
@@ -74,6 +88,7 @@ class MpUserPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
+            'honeypotField' => array(AttributeType::String, 'default' => 'birthdate'),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }
@@ -96,7 +111,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.18';
+        return '0.0.19';
     }
 
     public function getDeveloper()

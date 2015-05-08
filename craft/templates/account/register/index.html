@@ -86,15 +86,25 @@
           </div>
           <div class="field">
               <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
-            {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
-              <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
-            {% endfor %}
-              <label for="termsOfUse">I agree to the Marin Post <a href="/about/terms">Terms of Use</a> and <a href="/about/privacy">Privacy Policy</a>.</label>
+              {% for option in craft.fields.getFieldByHandle('termsOfUse').settings.options %}
+                <label for="termsOfUse">
+                  <input type="checkbox" id="termsOfUse" name="fields[termsOfUse][]" value="{{ option.value }}">
+                  I agree to the Marin Post <a href="/about/terms">Terms of Use</a> and <a href="/about/privacy">Privacy Policy</a>.
+                </label>
+              {% endfor %}
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('termsOfUse')) }}
               {% endif %}
           </div>
+          <div class="field">
+              {% set honeyPot = 'birthdate' %}
+              <label for="{{ honeyPot }}">{{ honeyPot | capitalize }} <span class="note">* required</span></label>
+              <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="32" autocomplete="off">
+          </div>
+
+          <br>
           <input type="submit" value="Create Account">
+          <!--div class="g-recaptcha" data-sitekey="6LfclgYTAAAAAHEhhjtX-Go0TsLJ6RsRKcZgtLGO"></div-->
       </form>
 
       <p><a href="{{ loginUrl }}">Already registered?</a></p>
@@ -102,6 +112,8 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
+
+{# includeJsFile 'https://www.google.com/recaptcha/api.js' #}
 
 {% set js %}
   $('form.user-form').userForm();
