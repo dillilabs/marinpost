@@ -359,6 +359,6 @@ class MpEntryController extends BaseController
             $template = $section->template;
         }
 
-		$this->renderTemplate($template, array('entry' => $entry));
+		$this->renderTemplate($template, array('entry' => $entry, 'preview' => true));
 	}
 }

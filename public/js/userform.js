@@ -16,10 +16,9 @@
             // Submit buttons
             var submitButtons = form.find('input[type=submit]');
 
-            // Page unload
-            var formChanged = false;
-
-            var buttonClicked = null;
+            // Page unload warning
+            var contentChanged = false;
+            var submitButtonClicked = null;
 
             //-----------------------
             // Functions
@@ -60,10 +59,10 @@
                 toolbarFixed: true,
                 limiter: limit,
                 changeCallback: function(e) {
-                  formChanged = true;
+                  contentChanged = true;
                 },
                 codeKeydownCallback: function(e) {
-                  formChanged = true;
+                  contentChanged = true;
                 },
                 counterCallback: function(data) {
                   // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
@@ -78,7 +77,7 @@
 
             // Record change to form content. See also Redactor
             form.on('keyup change', 'input, select, textarea', function() {
-                formChanged = true;
+                contentChanged = true;
             });
 
             // Enforce char limits in regular textareas
@@ -94,7 +93,7 @@
 
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
-              buttonClicked = true;
+              submitButtonClicked = true;
               form.submit();
             });
 
@@ -103,7 +102,7 @@
               var richText = $('#blogContent, #noticeContent');
               var richTextContent = richText.length > 0 && richText.val().length > 0;
 
-              if((formChanged || richTextContent) && !buttonClicked) {
+              if((contentChanged || richTextContent) && !submitButtonClicked) {
                 return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });

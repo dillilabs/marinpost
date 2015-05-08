@@ -2,9 +2,21 @@
 
 {% block main %}
   {% embed "_common/single" %}
-    {% block title %}Media Link{% endblock %}
+    {% block title %}
+      {% if preview %}
+        <button class="close-preview-window">Back to Edit</button>
+      {% else %}
+        Media Link
+      {% endif %}
+    {% endblock %}
+
     {% block post %}
-      {{ p.post(entry) }}
+      <div class="post">
+        {{ p.postImage(entry) }}
+        {{ p.postTags(entry, unfiltered) }}
+        {{ p.postSummary(entry) }}
+        {{ p.authorLinks(entry) }}
+      </div>
     {% endblock %}
   {% endembed %}
 {% endblock %}

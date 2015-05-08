@@ -46,8 +46,8 @@
             var submitButtons = form.find('input[type=button].submit');
 
             // Page unload warning
-            var formChanged = false;
-            var formButtonClicked = null;
+            var contentChanged = false;
+            var submitButtonClicked = null;
 
             //-----------------------
             // Functions
@@ -196,10 +196,10 @@
                 toolbarFixed: true,
                 limiter: limit,
                 changeCallback: function(e) {
-                  formChanged = true;
+                  contentChanged = true;
                 },
                 codeKeydownCallback: function(e) {
-                  formChanged = true;
+                  contentChanged = true;
                 },
                 counterCallback: function(data) {
                   // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
@@ -257,32 +257,31 @@
 
             // Record change to form content. See also Redactor
             form.on('keyup change', 'input, select, textarea', function() {
-              formChanged = true;
+              contentChanged = true;
             });
 
             // Set entry enabled based on submit button
             submitButtons.click(function(e) {
               var submitType = $(this).attr('data-submit');
               var section = '';
+              submitButtonClicked = true;
 
               switch (submitType) {
                 case 'preview':
                   enablePreview();
-                  formButtonClicked = true;
                   form.submit();
+                  submitButtonClicked = false;
                   break;
 
                 case 'save':
                   entryEnabled.val(0);
                   disablePreview();
-                  formButtonClicked = true;
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
                   disablePreview();
-                  formButtonClicked = true;
                   form.submit();
                   break;
 
@@ -310,7 +309,6 @@
                       break;
                   }
 
-                  formButtonClicked = true;
                   document.location = '/account/'+section;
               }
             });
@@ -320,7 +318,7 @@
               var richText = $('#blogContent, #noticeContent');
               var richTextContent = richText.length > 0 && richText.val().length > 0;
 
-              if((formChanged || richTextContent) && !formButtonClicked) {
+              if((contentChanged || richTextContent) && !submitButtonClicked) {
                 return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });

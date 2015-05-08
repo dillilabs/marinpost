@@ -1025,6 +1025,20 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 .content-submission a {
 	margin-left: 1em;
 }
+
+button.close-preview-window {
+    background: #ff9669;
+    border: none;
+    border-radius: 25px;
+    color: #000;
+    font-family: Arial, sans-serif;
+    font-size: .85em;
+    font-weight: bold;
+    margin: 0 auto;
+    padding: 5px 30px 3px;
+    text-transform: uppercase;
+}
+
 /* * * * * * * * * * * * * * * * * * * * *
         SUPPORT
 * * * * * * * * * * * * * * * * * * * * * */

@@ -16,6 +16,7 @@ function rejigger() {
 $(function() {
   var htmlBody = $('html, body');
   var searchFieldset = $('#search fieldset');
+  var closePreviewWindow = $('button.close-preview-window');
 
   rejigger();
 
@@ -67,6 +68,9 @@ $(function() {
   	$(this).toggleClass('active');
   });
 
+  closePreviewWindow.click(function() {
+    window.close();
+  });
 });
 
 $(window).on('resize', function(){
