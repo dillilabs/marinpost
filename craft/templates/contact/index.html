@@ -32,6 +32,16 @@
         <input id="fromEmail" name="fromEmail" type="text" maxlength="100" autocomplete="off" value="{% if message is defined %}{{ message.fromEmail }}{% endif %}">
         {{ message is defined and message ? f.errorList(message.getErrors('fromEmail')) }}
 
+        {% set honeypot = craft.mpuser.contactFormHoneypotField | default('disabled') %}
+        <label for="{{ honeypot }}">{{ honeypot | capitalize }} <span class="note">* required</span></label>
+        <input id="{{ honeypot }}" name="{{ honeypot }}" type="text" maxlength="100" autocomplete="off" value="">
+        {% set css %}
+          form.contact label[for={{ honeypot }}], form.contact input[name={{ honeypot }}] {
+            display: none;
+          }
+        {% endset %}
+        {% includeCss css %}
+
         <label for="subject">Subject <span class="note">* required</span></label>
         <select id="subject" name="subject">
           <option value="">Choose a Subject</option>
@@ -53,10 +63,6 @@
         <label for="message">Message <span class="note">* required</span></label>
         <textarea rows="10" cols="40" id="message" name="message">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
         {{ message is defined and message ? f.errorList(message.getErrors('message')) }}
-
-        {% set honeyPot = 'fromTown' %}
-        <label for="{{ honeyPot }}">Your Town <span class="note">* required</span></label>
-        <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="100" autocomplete="off" value="">
 
         <br>
         <input type="submit" value="Send">

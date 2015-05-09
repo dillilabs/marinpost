@@ -27,7 +27,7 @@
               {% endif %}
           </div>
           <div class="field">
-              <label for="organization">Street Address <span class="note">* required</span></label>
+              <label for="streetAddress">Street Address <span class="note">* required</span></label>
               <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="128" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('streetAddress')) }}
@@ -59,8 +59,19 @@
               {% endif %}
           </div>
           <div class="field">
-              <label for="organization">Organization</label> (optional)
+              <label for="organization">Organization <small>(optional)</small></label>
               <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
+          </div>
+          <div class="field">
+              {% set honeypot = craft.mpuser.registerFormHoneypotField | default('disabled') %}
+              <label for="{{ honeypot }}">{{ honeypot | capitalize }} <span class="note">* required</span></label>
+              <input id="{{ honeypot }}" name="{{ honeypot }}" type="text" maxlength="32" autocomplete="off">
+              {% set css %}
+                form#register label[for={{ honeypot }}], form#register input[name={{ honeypot }}] {
+                  display: none;
+                }
+              {% endset %}
+              {% includeCss css %}
           </div>
           <div class="field">
               <label for="email">Email Address <span class="note">* required</span></label>
@@ -83,11 +94,6 @@
           <div class="field">
               <label for="confirmPassword">Re-enter Password <span class="note">* required</span></label>
               <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
-          </div>
-          <div class="field">
-              {% set honeyPot = 'birthdate' %}
-              <label for="{{ honeyPot }}">{{ honeyPot | capitalize }} <span class="note">* required</span></label>
-              <input id="{{ honeyPot }}" name="{{ honeyPot }}" type="text" maxlength="32" autocomplete="off">
           </div>
           <div class="field">
               <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">
