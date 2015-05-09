@@ -113,7 +113,8 @@
 {% endmacro %}
 
 {% macro emailLink(emailAddress) %}
-  <a href="mailto:{{ emailAddress }}">{{ emailAddress }}</a>
+  {% set email = '<a href="mailto:'~emailAddress~'">'~emailAddress~'</a>' %}
+  {{ email | rot13 }}
 {% endmacro %}
 
 {% macro phoneLink(phoneNumber) %}
