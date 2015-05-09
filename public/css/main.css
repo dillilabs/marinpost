@@ -1026,17 +1026,11 @@ fieldset.image, fieldset.document, .add-topic, .add-location {
 	margin-left: 1em;
 }
 
-button.close-preview-window {
-    background: #ff9669;
-    border: none;
-    border-radius: 25px;
-    color: #000;
-    font-family: Arial, sans-serif;
-    font-size: .85em;
-    font-weight: bold;
-    margin: 0 auto;
-    padding: 5px 30px 3px;
-    text-transform: uppercase;
+h2 span.preview {
+  line-height: inherit;
+}
+h2 span.preview button.close {
+    color: blue;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *

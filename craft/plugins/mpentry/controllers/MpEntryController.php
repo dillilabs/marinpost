@@ -347,18 +347,19 @@ class MpEntryController extends BaseController
         switch ($section->handle)
         {
         case 'letters':
-            $template = '_entry/letter';
+            $template = 'letter';
             break;
         case 'media':
-            $template = '_entry/media';
-            break;
         case 'news':
-            $template = '_entry/news';
+            $template = 'link';
+            break;
+        case 'notices':
+            $template = 'notice';
             break;
         default:
-            $template = $section->template;
+            $template = $section->handle;
         }
 
-		$this->renderTemplate($template, array('entry' => $entry, 'preview' => true));
+		$this->renderTemplate('submit/_preview/'.$template, array('entry' => $entry, 'preview' => true));
 	}
 }

@@ -16,7 +16,7 @@ function rejigger() {
 $(function() {
   var htmlBody = $('html, body');
   var searchFieldset = $('#search fieldset');
-  var closePreviewWindow = $('button.close-preview-window');
+  var closePreviewWindow = $('.preview button.close');
 
   rejigger();
 

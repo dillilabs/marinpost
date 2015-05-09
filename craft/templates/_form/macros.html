@@ -145,3 +145,7 @@
     {{ timeOption(time, time == selected) }}
   {% endfor %}
 {% endmacro %}
+
+{% macro closePreview() %}
+  <span class="preview"><button class="close">&lt; Go Back to Edit</button></span>
+{% endmacro %}
