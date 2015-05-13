@@ -1617,6 +1617,10 @@ footer {
         margin-top: 1em;
     }
 
+    .help p {
+        line-height: 1.4;
+    }
+
     .notices-box {
         margin-top: 1em;
     }
