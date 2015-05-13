@@ -12,7 +12,9 @@
             {% for location in craft.categories.group('locations') %}
               {% if location.geographicGroup != group %}
                 {% set group = location.geographicGroup %}
+                    {% if group.label != 'Outside Marin' %}
                 <li class="group-label">{{ group.label }}</li>
+                    {% endif %}
               {% endif %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}" id="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" /><label for="{{ location.id }}">{{ location.title }}</label></li>
             {% endfor %}
