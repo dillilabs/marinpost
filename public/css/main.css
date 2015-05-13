@@ -1265,6 +1265,11 @@ footer {
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
 
+}
+
+
+@media only screen and (min-width: 51em) { /* Laptop View >51 ems */
+/*********** Begining of formerly tablet styles. Upon approval will need to be integrated in to this media query ***********/
     header .headline-wrapper {
         margin-top: 16px;
     }
@@ -1317,14 +1322,12 @@ footer {
 
     .featured img {
         display: inline-block;
-/*         float: left; */
         margin: 0;
         width: 325px;
     }
 
     .filter {
         padding: 0;
-/*         margin-top: 29px; */
     }
 
 
@@ -1358,7 +1361,6 @@ footer {
 	}
 	
 	.blog main > h2, .news main > h2, .notices main > h2,  .media main > h2,  .letters main > h2,  .about main > h2 {
-/* 		margin-left: 25%; */
 	}
 
     .notices .tags, .notices h3, .notices .event, .notices .byline {
@@ -1441,10 +1443,9 @@ footer {
         padding: 0;
         width: 100%;
     }
-}
+/*********** End of formerly tablet styles ***********/
 
 
-@media only screen and (min-width: 51em) { /* Laptop View >51 ems */
     body {
         padding: 0 1em;
         max-width: 1158px;
