@@ -687,10 +687,12 @@ main.single > .post > h3.my-content {
     color: #676158;
     font-family: Arial, sans-serif;
     margin-bottom: 1em;
+    padding: 1em 0;
 }
 
 .help p {
     text-align: justify;
+    margin: 0;
 }
 
 .coming-soon {
