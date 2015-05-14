@@ -1523,13 +1523,14 @@ footer {
     	border-top: 1px solid #ccc;
 	}
 	
+    nav ul ul li:last-of-type {
+        border-bottom: 1px solid #ccc;
+    }
+
 	nav li:hover li > a {
     	display: block;
         padding: 5px 0 5px 18px;
         width: 175px;
-	}
-	
-	nav li:hover li:not(:first-of-type) > a {
 	}
 	
     nav li:last-of-type {
