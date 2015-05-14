@@ -261,6 +261,9 @@ header h2 {
 	font-size: .85em;
     padding: 3%;
 }
+#mini-menu ul {
+    position: relative;
+}
 .show-menu {
     cursor: pointer;
     font-family: Arial, sans-serif;
@@ -268,6 +271,7 @@ header h2 {
     padding: 0 0 0 3em;
     text-transform: uppercase;
     padding-top: 4px;
+    z-index: 30;
 }
 .show-menu:before {
     content: "";
@@ -290,6 +294,7 @@ header h2 {
     right: 0;
     text-align: center;
     text-transform: uppercase;
+    z-index: 20;
 }
 .bottom-only {
     display: none;
@@ -319,7 +324,9 @@ header h2 {
 }
 
 #mini-menu div {
-    float: right;
+    position:absolute;
+    right: 0;
+    top:0;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -421,12 +428,17 @@ nav ul ul li:last-of-type {
     border-bottom: none;
 }
 
+#mini-menu div {
+    z-index: 35;
+}
+
 #mini-menu li.account, #mini-menu li.sign-in, #mini-menu li.sign-out, #mini-menu li.sign-up {
     float: right;
 }
 
 #mini-menu li.sign-in, #mini-menu li.sign-out {
     margin-right: .5em;
+    z-index: 35;
 }
 #mini-menu #search fieldset {
     display: none;
