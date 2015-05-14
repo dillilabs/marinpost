@@ -265,7 +265,7 @@ header h2 {
     cursor: pointer;
     font-family: Arial, sans-serif;
     position: relative;
-    padding: 0 3em;
+    padding: 0 0 0 3em;
     text-transform: uppercase;
     padding-top: 4px;
 }
@@ -280,14 +280,15 @@ header h2 {
     top: 0;
 }
 .show-search {
-    background: url('../img/search-black.png') 60px 7px no-repeat;
     cursor: pointer;
     font-family: Arial, sans-serif;
-    left: 45%;
+    left: 0;
     margin: 0 auto;
     padding-top: 4px;
     padding-right: 1.5em;
     position: absolute;
+    right: 0;
+    text-align: center;
     text-transform: uppercase;
 }
 .bottom-only {
@@ -1249,9 +1250,6 @@ footer {
 		font-size: 1em;
 	}
 	
-	.show-search {
-    	background: url('../img/search-black.png') 58px 5px no-repeat;
-	}
 	#donate, #subscribe {
         min-width: 25%;
     }
