@@ -1708,6 +1708,7 @@ footer {
         text-decoration: underline;
     }
 
+/* commented out by request
     a[href]:after {
         content: " (" attr(href) ")";
     }
@@ -1715,6 +1716,7 @@ footer {
     abbr[title]:after {
         content: " (" attr(title) ")";
     }
+*/
 
     /*
      * Don't show links for images, or javascript/internal links
