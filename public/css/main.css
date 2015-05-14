@@ -687,11 +687,19 @@ main.single > .post > h3.my-content {
     color: #676158;
     font-family: Arial, sans-serif;
     margin-bottom: 1em;
-    padding: 1em 0;
 }
 
 .help p {
     text-align: justify;
+}
+
+.message {
+	border-bottom: 1px solid #C8D4E9;
+	font-family: Arial, sans-serif;
+    padding: 1em 0;
+}
+
+.message p {
     margin: 0;
 }
 
@@ -1620,7 +1628,7 @@ footer {
         margin-top: 1em;
     }
 
-    .help p {
+    .message p {
         line-height: 1.4;
     }
 
