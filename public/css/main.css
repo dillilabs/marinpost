@@ -1563,6 +1563,7 @@ footer {
 
     #mini-menu div {
         float: none;
+        position:relative;
     }
 
     #mini-menu .show-menu, #mini-menu .show-search {
