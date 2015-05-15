@@ -28,6 +28,9 @@
         {% endif %}
       </div>
 
+      <br class="clear">
+      <h2>Preview {{ f.closePreview }}</h2>
+
       {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
   {% endembed %}
