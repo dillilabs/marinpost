@@ -131,6 +131,9 @@
     {% case 'video' %}
       {% set mediaUrl = externalUrl(media.videoUrl) %}
 
+    {% case 'audio' %}
+      {% set mediaUrl = externalUrl(media.audioUrl) %}
+
     {% case 'document' %}
       {% set mediaUrl = externalUrl(media.documentUrl) %}
 
