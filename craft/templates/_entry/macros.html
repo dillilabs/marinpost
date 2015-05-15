@@ -310,8 +310,16 @@
 
       {% if notice.endTime %}
         to {{ notice.endTime | date('g:i a') }}{% if notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}, {{ notice.endDate | date('F j, Y') }}{% endif %}
+
+      {% elseif notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}
+        to {{ notice.endDate | date('F j, Y') }}
+
       {% endif %}
       </p>
+
+    {% elseif notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}
+      <p class="event">to {{ notice.endDate | date('F j, Y') }}</p>
+
     {% endif %}
   {% endif %}
 {% endmacro %}
