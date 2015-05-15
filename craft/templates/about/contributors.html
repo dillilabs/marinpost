@@ -7,14 +7,12 @@
       <h2>Contributors</h2>
       <div class="help">{{ n.siteMessage }}</div>
 
-      {% set imageSize = 200 %}
-
       <ul class="posts">
         {% for user in craft.users.group('contributor').order('lastName, firstName') %}
           <li class="listing">
-            {% if user.photoUrl %}
+            {% if user.userImage.first %}
             <div class="image-wrapper">
-              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.photoUrl(imageSize) }}" /></a>
+              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('list') }}" /></a>
             </div>
             {% endif %}
 

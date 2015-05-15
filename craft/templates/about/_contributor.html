@@ -4,17 +4,15 @@
   {% redirect "404" %}
 {% endif %}
 
-{% set imageSize = 200 %}
-
 {% extends "_common/layout" %}
 
 {% block main %}
   {% embed "about/_layout" %}
     {% block post %}
       <h2>Contributor Profile</h2>
-      {% if user.photoUrl %}
+      {% if user.userImage.first %}
         <div class="image-wrapper">
-	        <img src="{{ user.photoUrl(imageSize) }}" />
+	        <img src="{{ user.userImage.first.url('list') }}" />
         </div>
       {% endif %}
 
