@@ -7,8 +7,10 @@
   {% set assets = craft.assets.folderId(folder.id).find %}
 {% endif %}
 
+{% set entry = userProfile ? currentUser : entry %}
 {% set image = false %}
 {% set errors = false %}
+
 {% if entry %}
   {% set image = attribute(entry, imagesAttribute).first %}
   {% set errors = image.hasErrors %}
@@ -17,7 +19,8 @@
 {% set transform = 'list' %}
 {% set excerptLength = 20 %}
 
-<img src="{{ image ? image.url(transform) : '/img/default/'~transform~'/'~singularSection~'.jpg' }}" class="display-image" />
+{% set defaultImage = userProfile ? 'user.gif' : singularSection~'.jpg' %}
+<img src="{{ image ? image.url(transform) : '/img/default/'~transform~'/'~defaultImage }}" class="display-image" />
 <label>Image</label>
 
 {% if errors %}

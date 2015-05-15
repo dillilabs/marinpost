@@ -13,7 +13,7 @@
       <h2>My Personal Profile</h2>
       <div class="help">{{ n.siteMessage }}</div>
 
-      <form method="post" accept-charset="utf-8" enctype="multipart/form-data" class="profile-form">
+      <form method="post" accept-charset="utf-8" class="profile-form">
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="users/saveUser">
         <input type="hidden" name="userId" value="{{ currentUser.id }}">
@@ -24,12 +24,7 @@
         {% endif %}
 
         <div class="field account-profile clearfix">
-	        <label for="photoUrl">Photo</label>
-          {% if currentUser.photoUrl %}
-	          <img src="{{ currentUser.photoUrl }}" class="profile" />
-	          <br>
-          {% endif %}
-	        <input type="file" name="userPhoto">
+          {% include "_form/image" with { imagesAttribute: 'userImage', userProfile: true } %}
         </div>
 
         <div class="field">
