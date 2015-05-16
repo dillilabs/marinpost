@@ -12,7 +12,7 @@
           <li class="listing">
             {% if user.userImage.first %}
             <div class="image-wrapper">
-              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('list') }}" /></a>
+              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('profile') }}" /></a>
             </div>
             {% endif %}
 

@@ -16,11 +16,12 @@
   {% set errors = image.hasErrors %}
 {% endif %}
 
-{% set transform = 'list' %}
+{% set transform = userProfile ? 'profile' : 'list' %}
 {% set excerptLength = 20 %}
 
 {% set defaultImage = userProfile ? 'user.gif' : singularSection~'.jpg' %}
-<img src="{{ image ? image.url(transform) : '/img/default/'~transform~'/'~defaultImage }}" class="display-image" />
+{% set defaultImagePath = '/img/default/'~transform~'/'~defaultImage %}
+<img src="{{ image ? image.url(transform) : defaultImagePath }}" class="display-image" />
 <label>Image</label>
 
 {% if errors %}
@@ -75,7 +76,7 @@ $(function() {
   var okButton = false;
   var targetFileId = $('input[type=hidden][name="fields[{{ imagesAttribute }}][]"]');
   var targetImage = $('img.display-image');
-  var defaultImageUrl = '/img/default-{{ transform }}.png';
+  var defaultImagePath = '{{ defaultImagePath }}';
   var deleteButton = false;
   var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
   
@@ -114,7 +115,7 @@ $(function() {
       targetImage.prop('src', selectedImage.attr('data-asset-url'));
     } else {
       targetFileId.val('').trigger('change');
-      targetImage.prop('src', defaultImageUrl);
+      targetImage.prop('src', defaultImagePath);
     }
   };
 

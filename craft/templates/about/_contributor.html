@@ -12,7 +12,7 @@
       <h2>Contributor Profile</h2>
       {% if user.userImage.first %}
         <div class="image-wrapper">
-	        <img src="{{ user.userImage.first.url('list') }}" />
+	        <img src="{{ user.userImage.first.url('profile') }}" />
         </div>
       {% endif %}
 
