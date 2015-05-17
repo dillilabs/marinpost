@@ -78,11 +78,10 @@ class MpUserPlugin extends BasePlugin
         });
     }
 
-    // ----------------
-    // Helper functions
-    // ----------------
-
-    private function _log($mixed, $level = LogLevel::Info)
+    /**
+     * Semi-smart logger.
+     */
+    public function logger($mixed, $level = LogLevel::Info)
     {
         self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
@@ -117,7 +116,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.20';
+        return '0.0.21';
     }
 
     public function getDeveloper()

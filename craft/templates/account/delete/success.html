@@ -1,0 +1,12 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+
+      <h2>Your Account has been Deleted</h2>
+      <p class="result-message">Good bye!</p>
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

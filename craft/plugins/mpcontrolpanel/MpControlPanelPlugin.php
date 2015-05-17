@@ -24,6 +24,19 @@ class MpControlPanelPlugin extends BasePlugin
         }
     }
 
+    public function hasCpSection()
+    {
+        return true;
+    }
+
+    /**
+     * Semi-smart logger.
+     */
+    public function logger($mixed, $level = LogLevel::Info)
+    {
+        self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
+    }
+
     //----------------------
     // Hook functions
     //----------------------
@@ -83,15 +96,6 @@ JS;
         {
             craft()->templates->includeJsResource("lib/redactor/plugins/{$plugin}.js");
         }
-    }
-
-    // ----------------
-    // Helper functions
-    // ----------------
-
-    private function _log($mixed, $level = LogLevel::Info)
-    {
-        self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
 
     //---------

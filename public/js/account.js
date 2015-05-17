@@ -2,6 +2,7 @@ $(function() {
   var registerForm = $('form#register');
   var emailForm = $('form#update-email');
   var passwordForm = $('form#update-password');
+  var deleteForm = $('form#delete-account');
   var deleteEntryLinks = $('a.delete-entry');
 
   var clearErrors = function(field) {
@@ -143,6 +144,12 @@ $(function() {
 
     if (isBlank(currentPassword)) {
       addError(currentPassword, 'Current Password is required for security.');
+      e.preventDefault();
+    }
+  });
+
+  deleteForm.submit(function(e) {
+    if (!confirm('Are you sure?')) {
       e.preventDefault();
     }
   });

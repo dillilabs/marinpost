@@ -44,6 +44,105 @@ class MpEntryService extends BaseApplicationComponent
     }
 
     /**
+     * Update the status of an Entry.
+     */
+    public function updateStatus($entryId, $status)
+    {
+        $elementIds = array($entryId);
+        $locale = 'en_us';
+        $criteria = craft()->elements->getCriteria(
+            ElementType::Entry,
+            array('id' => $elementIds, 'locale' => $locale)
+        );
+
+        // The remainder of this function is borrowed from
+        // SetStatusElementAction::performAction()
+
+        // Figure out which element IDs we need to update
+        if ($status == BaseElementModel::ENABLED)
+        {
+            $sqlNewStatus = '1';
+        }
+        else
+        {
+            $sqlNewStatus = '0';
+        }
+
+        // Update their statuses
+        craft()->db->createCommand()->update(
+            'elements',
+            array('enabled' => $sqlNewStatus),
+            array('in', 'id', $elementIds)
+        );
+
+        if ($status == BaseElementModel::ENABLED)
+        {
+            // Enable their locale as well
+            craft()->db->createCommand()->update(
+                'elements_i18n',
+                array('enabled' => $sqlNewStatus),
+                array('and', array('in', 'elementId', $elementIds), 'locale = :locale'),
+                array(':locale' => $criteria->locale)
+            );
+        }
+
+        // Clear their template caches
+        craft()->templateCache->deleteCachesByElementId($elementIds);
+
+        // Fire an 'onSetStatus' event
+        $event = new Event($this, array(
+            'criteria'   => $criteria,
+            'elementIds' => $elementIds,
+            'status'     => $status,
+        ));
+
+        $this->raiseEvent('onSetStatus', $event);
+    }
+
+    /**
+     * Set post date and URL slug of never-before published Entry.
+     */
+    public function setPostDateAndSlug($entryId)
+    {
+        $entryRecord = EntryRecord::model()->findById($entryId);
+        if (!$entryRecord->postDate)
+        {
+            $entryRecord->saveAttributes(array('postDate' => DateTimeHelper::currentTimeForDb()));
+        }
+
+        $entry = craft()->entries->getEntryById($entryId);
+        craft()->elements->updateElementSlugAndUri($entry);
+    }
+
+    /**
+     * Archive an entry...in lieu of actually deleting it.
+     */
+    public function archiveEntry($entry)
+    {
+        $record = ElementRecord::model()->findByAttributes(array(
+            'id'   => $entry->id,
+            'type' => $entry->getElementType()
+        ));
+        $record->archived = true;
+
+        return $record->save(false);
+    }
+
+    /**
+     * Un-archive an entry.
+     */
+    public function unarchiveEntry($entry)
+    {
+        $record = ElementRecord::model()->findByAttributes(array(
+            'id'   => $entry->id,
+            'type' => $entry->getElementType()
+        ));
+        $record->archived = false;
+
+        return $record->save(false);
+    }
+
+    /**
      * Use the entry's primary Location to populate implicit child Locations.
      * And update the search index.
      */

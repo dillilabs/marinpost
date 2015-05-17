@@ -1,0 +1,19 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+
+      <h2>Delete My Account</h2>
+
+      <form method="post" accept-charset="utf-8" id="delete-account">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="mpUser/deleteAccount">
+        <input type="hidden" name="redirect" value="account/delete/success">
+        <input type="submit" value="Delete My Account">
+      </form>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

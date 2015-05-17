@@ -13,6 +13,8 @@ class MpEntryController extends BaseController
     }
 
     /**
+     * Front-end
+     *
      * Publish an entry directly by setting the status.
      */
     public function actionPublishEntry()
@@ -20,16 +22,18 @@ class MpEntryController extends BaseController
         $this->requireLogin();
 
         $entry = $this->_getEntry();
-        $this->_updateStatus($entry->id, BaseElementModel::ENABLED);
+        craft()->mpEntry->updateStatus($entry->id, BaseElementModel::ENABLED);
         // Updating the status of a never-before published entry
         // does not update either the postDate or the URI slug
         // so we must do it manually.
-        $this->_setPostDateAndSlug($entry->id);
+        craft()->mpEntry->setPostDateAndSlug($entry->id);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content published.'));
     }
 
     /**
+     * Front-end
+     *
      * Unpublish an entry directly by setting the status.
      */
     public function actionUnpublishEntry()
@@ -38,26 +42,50 @@ class MpEntryController extends BaseController
 
         $entry = $this->_getEntry();
         $this->_ensureContributor($entry->author);
-        $this->_updateStatus($entry->id, BaseElementModel::DISABLED);
+        craft()->mpEntry->updateStatus($entry->id, BaseElementModel::DISABLED);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content unpublished.'));
     }
 
     /**
-     * Delete and entry.
+     * Front-end
+     *
+     * Delete an entry...but not really; just toggle it to "archived".
      */
     public function actionDeleteEntry()
     {
         $this->requireLogin();
 
         $entry = $this->_getEntry();
-        $this->_deleteEntry($entry->id);
+        craft()->mpEntry->archiveEntry($entry);
         $this->plugin->logger("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
 
         $this->renderTemplate('account/entries/_update', array('success' => 'Content deleted.'));
     }
 
     /**
+     * Control panel (admin only)
+     *
+     * Restore an Entry to it's state prior to being archived (ie "deleted").
+     */
+    public function actionRestoreEntry()
+    {
+        $this->requireAdmin();
+
+        $entryId = craft()->request->getParam('id');
+        $criteria = craft()->elements->getCriteria(ElementType::Entry, array(
+            'id'       => $entryId,
+            'archived' => true,
+        ));
+        $entry = $criteria->first();
+        craft()->mpEntry->unarchiveEntry($entry);
+
+        $this->renderTemplate('mpControlPanel/archived', array('success' => 'Archived entry restored.'));
+    }
+
+    /**
+     * Front-end
+     *
      * Delete an Asset and its associated file.
      */
     public function actionDeleteAsset()
@@ -73,7 +101,9 @@ class MpEntryController extends BaseController
     }
 
 	/**
-	 * Previews an entry.
+     * Front-end
+     *
+	 * Preview an entry from the edit page.
 	 *
      * Borrowed and adapted from EntriesController.
      *
@@ -162,85 +192,7 @@ class MpEntryController extends BaseController
         if (!$user->isInGroup('contributor'))
         {
             $this->renderTemplate('account/entries/_update', array('error' => 'You are not authorized to un-publish content.'));
-            return false;
         }
-
-        return true;
-    }
-
-    /**
-     * Update the status already.
-     */
-    private function _updateStatus($entryId, $status)
-    {
-        $elementIds = array($entryId);
-        $locale = 'en_us';
-        $criteria = craft()->elements->getCriteria(
-            ElementType::Entry,
-            array('id' => $elementIds, 'locale' => $locale)
-        );
-
-        // The remainder of this function is borrowed from
-        // SetStatusElementAction::performAction()
-
-        // Figure out which element IDs we need to update
-        if ($status == BaseElementModel::ENABLED)
-        {
-            $sqlNewStatus = '1';
-        }
-        else
-        {
-            $sqlNewStatus = '0';
-        }
-
-        // Update their statuses
-        craft()->db->createCommand()->update(
-            'elements',
-            array('enabled' => $sqlNewStatus),
-            array('in', 'id', $elementIds)
-        );
-
-        if ($status == BaseElementModel::ENABLED)
-        {
-            // Enable their locale as well
-            craft()->db->createCommand()->update(
-                'elements_i18n',
-                array('enabled' => $sqlNewStatus),
-                array('and', array('in', 'elementId', $elementIds), 'locale = :locale'),
-                array(':locale' => $criteria->locale)
-            );
-        }
-
-        // Clear their template caches
-        craft()->templateCache->deleteCachesByElementId($elementIds);
-
-        // Fire an 'onSetStatus' event
-        $event = new Event($this, array(
-            'criteria'   => $criteria,
-            'elementIds' => $elementIds,
-            'status'     => $status,
-        ));
-
-        $this->raiseEvent('onSetStatus', $event);
-    }
-
-    private function _setPostDateAndSlug($entryId)
-    {
-        $entryRecord = EntryRecord::model()->findById($entryId);
-
-        if (!$entryRecord->postDate)
-        {
-            $entryRecord->saveAttributes(array('postDate' => DateTimeHelper::currentTimeForDb()));
-        }
-
-        $entry = craft()->entries->getEntryById($entryId);
-
-        craft()->elements->updateElementSlugAndUri($entry);
-    }
-
-    private function _deleteEntry($entryId)
-    {
-        return craft()->entries->deleteEntryById($entryId);
     }
 
     // -----------------
