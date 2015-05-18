@@ -1,6 +1,7 @@
 <main class="single clearfix">
   <div class="sub-nav">
     {% if craft.request.segment(1) == 'submit' %}
+    <h4>Submit</h4>
       {% block subNav %}
         {{ n.arrowLink('submit/blog', 'Create a Blog') }}
         {{ n.arrowLink('submit/notice', 'Post a Notice') }}
