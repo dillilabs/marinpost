@@ -4,6 +4,7 @@
 <!--         <a href="#"><h3>Save My Settings</h3></a> -->
         <h4>Filters</h4>
         <fieldset class="locations">
+          <span class="reset"><a href="#" style="display:none;">Reset</a></span><br class="clear">
           <h5 class="closed">Locations</h5>
           <ul>
             <li><input type="checkbox" class="location all" value="all" checked="checked" id="location-all"/><label for="location-all">All</label></li>
@@ -12,9 +13,9 @@
             {% for location in craft.categories.group('locations') %}
               {% if location.geographicGroup != group %}
                 {% set group = location.geographicGroup %}
-                    {% if group.label != 'Outside Marin' %}
-                <li class="group-label">{{ group.label }}</li>
-                    {% endif %}
+                  {% if group.label != 'Outside Marin' %}
+                    <li class="group-label">{{ group.label }}</li>
+                  {% endif %}
               {% endif %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}" id="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" /><label for="{{ location.id }}">{{ location.title }}</label></li>
             {% endfor %}
