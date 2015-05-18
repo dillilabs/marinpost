@@ -941,16 +941,16 @@ a.optional-category-field {
     color: #A52A2A;
 }
 
-.notices .event {
+.notices .event, .submit p.event {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.notices .byline {
+.notices .byline, .submit .byline {
     margin-top: 1em;
 }
 
-.notices .byline, .notices .posts .byline {
+.notices .byline, .notices .posts .byline, .submit .byline {
     margin-bottom: 1em;
 }
 
