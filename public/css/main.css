@@ -531,6 +531,18 @@ nav ul ul li:last-of-type {
 .filter > h4, .sub-nav > h4 {
     display: none;
 }
+.filter a.reset {
+  display: inline-block;
+  font-weight: normal;
+  color: #004eff;
+  text-transform: none;
+}
+.filter a.reset a:hover {
+  text-decoration: underline;
+}
+.filter a.reset a:visited {
+  color: #004eff;
+}
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
     display: block;
