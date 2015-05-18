@@ -4,10 +4,9 @@
 
         return this.each(function() {
             var filteredContent = $(this);
-            var toggleFilters = $('#filters fieldset h5 .toggle');
+            var toggleFilters = $('#filters fieldset h5');
             var filters = $(':checkbox.filter');
             var noFilters = $(':checkbox.all');
-            var resetLinks = $('a.reset');
             var contentLengthThreshold = 20;
             var scrollPositionThreshold = 0.85;
             var isLoadingContent = false;
@@ -42,12 +41,10 @@
 
             var disableFilters = function() {
               $(filters, noFilters).prop('disabled', true);
-              resetLinks.addClass('disabled');
             };
 
             var enableFilters = function() {
               $(filters, noFilters).prop('disabled', false);
-              resetLinks.removeClass('disabled');
             };
 
             var refreshViewsAndEnableFilters = function() {
@@ -121,7 +118,7 @@
             toggleFilters.click(function() {
               var toggle = $(this);
 
-              toggle.toggleClass('active').parent().siblings('ul').slideToggle();
+              toggle.toggleClass('active').siblings('ul').slideToggle();
             });
 
             filters.click(function() {
@@ -141,12 +138,9 @@
                   deselectChildren(filter);
                 }
 
-                resetLinks.filter(type).show();
-
               } else {
                 typeFilters = filters.filter(type);
                 noFilters.filter(type).prop('checked', !typeFilters.is(':checked'));
-                resetLinks.filter(type).hide();
 
               }
 
@@ -161,21 +155,9 @@
 
               if (noFilter.is(':checked')) {
                 filters.filter(type).prop('checked', false);
-                resetLinks.filter(type).hide();
               }
 
               refreshViewsAndEnableFilters();
-            });
-
-            resetLinks.click(function(e) {
-              var link = $(this);
-              var type = filterType(link);
-
-              if (!link.hasClass('disabled')) {
-                noFilters.filter(type).click();
-              }
-
-              e.preventDefault();
             });
 
             $(window).scroll(function() {

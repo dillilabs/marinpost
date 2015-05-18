@@ -4,18 +4,17 @@
 <!--         <a href="#"><h3>Save My Settings</h3></a> -->
         <h4>Filters</h4>
         <fieldset class="locations">
-          <h5 class="closed"><span class="toggle">Locations</span> <a href="#" class="reset location" style="display: none;">Reset</a></h5>
+          <h5 class="closed">Locations</h5>
           <ul>
             <li><input type="checkbox" class="location all" value="all" checked="checked" id="location-all"/><label for="location-all">All</label></li>
 
             {% set group = null %}
             {% for location in craft.categories.group('locations') %}
               {% if location.geographicGroup != group %}
-                {# display Marin County region #}
                 {% set group = location.geographicGroup %}
-                  {% if group.label != 'Outside Marin' %}
-                    <li class="group-label">{{ group.label }}</li>
-                  {% endif %}
+                    {% if group.label != 'Outside Marin' %}
+                <li class="group-label">{{ group.label }}</li>
+                    {% endif %}
               {% endif %}
               <li><input type="checkbox" class="location filter" value="{{ location.id }}" id="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" /><label for="{{ location.id }}">{{ location.title }}</label></li>
             {% endfor %}
@@ -23,7 +22,7 @@
         </fieldset>
 
         <fieldset class="topics">
-          <h5 class="closed"><span class="toggle">Topics</span> <a href="#" class="reset topic" style="display: none;">Reset</a></h5>
+          <h5 class="closed">Topics</h5>
           <ul>
             <li><input type="checkbox" class="topic all" value="all" checked="checked" id="topics-all"/><label for="topics-all">All</label></li>
 
@@ -34,7 +33,7 @@
         </fieldset>
 
         <fieldset class="authors">
-          <h5><span class="toggle">Contributors</span> <a href="#" class="reset author" style="display: none;">Reset</a></h5>
+          <h5>Contributors</h5>
           <ul>
             <li><input type="checkbox" class="author all" value="all" checked="checked" id="contributors-all"/><label for="contributors-all">All</label></li>
 
@@ -77,6 +76,7 @@
     }
   });
 {% endset %}
+
 {% includeJs js %}
 
 {% include "_common/disqus_count.html" %}
