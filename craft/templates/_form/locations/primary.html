@@ -13,9 +13,7 @@
     {% if not (option.geographicGroup.label == geographicGroup) %}
       {% set geographicGroup = option.geographicGroup.label %}
 
-      <option value="" disabled="disabled"></option>
       <option value="" disabled="disabled">{{ geographicGroup }}</option>
-      <option value="" disabled="disabled"></option>
     {% endif %}
 
     <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>

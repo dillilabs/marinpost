@@ -930,7 +930,6 @@ a.optional-category-field {
 }
 
 .notices .event {
-    font-family: Arial, sans-serif;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -1381,13 +1380,13 @@ footer {
 	.blog main > h2, .news main > h2, .notices main > h2,  .media main > h2,  .letters main > h2,  .about main > h2 {
 	}
 
-    .notices .tags, .notices h3, .notices .event, .notices .byline {
-        margin-left: 175px;
-    }
-
     ul.posts li img, img.profile {
         display:inline-block;
         width: 160px;
+    }
+    
+    .notices .event, .notices .byline, .submit p.event, .submit .byline {
+        margin-left: 175px;
     }
 
     img.profile {

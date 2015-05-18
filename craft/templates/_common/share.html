@@ -5,6 +5,6 @@
 		<li><a href="https://twitter.com/share" target="_blank"><img src="/img/social-twitter-01.png" alt="social-facebook-01" /></a></li>
 		<li><a href="https://plus.google.com/share" target="_blank"><img src="/img/social-gplus-01.png" alt="social-facebook-01" /></a></li>
 		<li><a href="javascript:window.print()"><img src="/img/social-print-01.png" alt="social-facebook-01" /></a></li>
-		<li><a href="mailto:"><img src="/img/social-email-01.png" alt="social-facebook-01" /></a></li>
+		<li><a href="mailto:?subject={% if entry.title is defined %}{{ entry.title|e('url') }}%20-%20{% endif %}{{ siteName|e('url') }}&body=%0A%0ARead More:%0A{{ craft.request.url }}"><img src="/img/social-email-01.png" alt="social-facebook-01" /></a></li>
 	</ul>
 </div>

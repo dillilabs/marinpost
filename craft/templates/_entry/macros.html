@@ -288,27 +288,25 @@
   {% set address = address | default(false) %}
 
   {% if notice.venue %}
-    <p class="event"><span class="event-venue">{{ notice.venue }}</span></p>
+    <p class="event"><span class="event-venue">{{ notice.venue }}</span><br>
 
     {% if address %}
       {% if notice.streetAddress %}
-    <p class="event">{{ notice.streetAddress }}</p>
+        {{ notice.streetAddress }}<br>
       {% endif %}
 
       {% if notice.city or notice.state or notice.zipCode %}
-        <p class="event">
         {{ [notice.city, notice.state] | join(', ') }}
-        {{ notice.zipCode }}</p>
+        {{ notice.zipCode }}
       {% endif %}
-
     {% endif %}
+    </p>
   {% endif %}
 
   {% if notice.startDate %}
-    <p class="event">{{ notice.startDate | date('F j, Y') }}</p>
+    <p class="event">{{ notice.startDate | date('F j, Y') }}
 
     {% if notice.startTime %}
-      <p class="event">
       {{ notice.startTime | date('g:i a') }}
 
       {% if notice.endTime %}
@@ -318,12 +316,12 @@
         to {{ notice.endDate | date('F j, Y') }}
 
       {% endif %}
-      </p>
 
     {% elseif notice.endDate and (notice.endDate | date('Ymd') != notice.startDate | date('Ymd')) %}
-      <p class="event">to {{ notice.endDate | date('F j, Y') }}</p>
+     to {{ notice.endDate | date('F j, Y') }}
 
     {% endif %}
+    </p>
   {% endif %}
 {% endmacro %}
 
@@ -349,13 +347,13 @@
 
     {% case 'notices' %}
       {{ postTitle(entry) }}
-      <p class="event">{{ noticeEvent(entry) }}</p>
+      {{ noticeEvent(entry) }}
       {{ postBy(entry) }}
 
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
+      {{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a>
 
   {% endswitch %}
 {% endmacro %}
