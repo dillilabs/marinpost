@@ -4,10 +4,10 @@
 
         return this.each(function() {
             var filteredContent = $(this);
-            var toggleFilters = $('#filters fieldset h5 .toggle');
+            var toggleFilters = $('#filters fieldset h5');
             var filters = $(':checkbox.filter');
             var noFilters = $(':checkbox.all');
-            var resetLinks = $('a.reset');
+            var resetLink = $('.reset a');
             var contentLengthThreshold = 20;
             var scrollPositionThreshold = 0.85;
             var isLoadingContent = false;
@@ -28,32 +28,43 @@
               }
             };
 
-            var activeFilters = function(type) {
+            var activeFiltersFor = function(type) {
               return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
             };
 
-            var urlFor = function(section) {
-              var locations = activeFilters('location');
-              var topics = activeFilters('topic');
-              var authors = activeFilters('author');
+            var activeFilters = function() {
+              return {
+                location: activeFiltersFor('location'),
+                topic: activeFiltersFor('topic'),
+                author: activeFiltersFor('author'),
+              };
+            };
 
-              return '/filter?section='+section+'&locations='+locations+'&topics='+topics+'&authors='+authors;
+            var urlFor = function(section, filters) {
+              return '/filter?section='+section+'&locations='+filters.location+'&topics='+filters.topic+'&authors='+filters.author;
             };
 
             var disableFilters = function() {
               $(filters, noFilters).prop('disabled', true);
-              resetLinks.addClass('disabled');
+              resetLink.addClass('disabled');
             };
 
             var enableFilters = function() {
               $(filters, noFilters).prop('disabled', false);
-              resetLinks.removeClass('disabled');
+              resetLink.removeClass('disabled');
             };
 
             var refreshViewsAndEnableFilters = function() {
-              var url = urlFor(section);
+              var filters = activeFilters();
+              var url = urlFor(section, filters);
 
               filteredContent.load(url, enableFilters);
+
+              if (filters.location.length || filters.topic.length || filters.author.length) {
+                resetLink.show();
+              } else {
+                resetLink.hide();
+              }
             };
 
             var currentContentLength = function() {
@@ -61,7 +72,8 @@
             };
 
             var loadMoreContent = function() {
-              var url = urlFor(section);
+              var filters = activeFilters();
+              var url = urlFor(section, filters);
               var offset = currentContentLength();
 
               isLoadingContent = true;
@@ -121,7 +133,7 @@
             toggleFilters.click(function() {
               var toggle = $(this);
 
-              toggle.toggleClass('active').parent().siblings('ul').slideToggle();
+              toggle.toggleClass('active').siblings('ul').slideToggle();
             });
 
             filters.click(function() {
@@ -141,12 +153,9 @@
                   deselectChildren(filter);
                 }
 
-                resetLinks.filter(type).show();
-
               } else {
                 typeFilters = filters.filter(type);
                 noFilters.filter(type).prop('checked', !typeFilters.is(':checked'));
-                resetLinks.filter(type).hide();
 
               }
 
@@ -161,18 +170,17 @@
 
               if (noFilter.is(':checked')) {
                 filters.filter(type).prop('checked', false);
-                resetLinks.filter(type).hide();
               }
 
               refreshViewsAndEnableFilters();
             });
 
-            resetLinks.click(function(e) {
+            resetLink.click(function(e) {
               var link = $(this);
-              var type = filterType(link);
 
               if (!link.hasClass('disabled')) {
-                noFilters.filter(type).click();
+                // FIXME
+                noFilters.click();
               }
 
               e.preventDefault();
