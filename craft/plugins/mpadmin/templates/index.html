@@ -1,0 +1,14 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Marin Post Admin"|t %}
+
+{% set tabs = {
+  home: { label: "Home"|t, url: url('mpadmin') },
+  block: { label: "Block User"|t, url: url('mpadmin/block') },
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') }
+} %}
+
+{% set selectedTab = 'home' %}
+
+{% set content %}
+{% endset %}

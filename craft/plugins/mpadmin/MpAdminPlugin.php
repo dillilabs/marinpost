@@ -1,7 +1,7 @@
 <?php
 namespace Craft;
 
-class MpControlPanelPlugin extends BasePlugin
+class MpAdminPlugin extends BasePlugin
 {
     /**
      * If control panel request:
@@ -66,8 +66,8 @@ class MpControlPanelPlugin extends BasePlugin
     //----------------------
 
     /**
-     * Inject Javascript into the Control Panel to ensure that
-     * only one User Group is selected for a User.
+     * Inject Javascript into the Control Panel
+     * to ensure that only one User Group is selected for a User.
      */
     private function _ensureOneUserGroup()
     {
@@ -111,7 +111,7 @@ JS;
 
     public function getSettingsHtml()
     {
-        return craft()->templates->render('mpcontrolpanel/_settings', array(
+        return craft()->templates->render('mpadmin/_settings', array(
             'settings' => $this->getSettings(),
         ));
     }
@@ -122,12 +122,12 @@ JS;
 
     public function getName()
     {
-        return 'Marin Post Control Panel';
+        return 'Marin Post Admin';
     }
 
     public function getVersion()
     {
-        return '0.0.20';
+        return '0.0.21';
     }
 
     public function getDeveloper()

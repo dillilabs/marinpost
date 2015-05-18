@@ -80,7 +80,7 @@ class MpEntryController extends BaseController
         $entry = $criteria->first();
         craft()->mpEntry->unarchiveEntry($entry);
 
-        $this->renderTemplate('mpControlPanel/archived', array('success' => 'Archived entry restored.'));
+        $this->renderTemplate('mpAdmin/archived', array('success' => 'Archived entry restored.'));
     }
 
     /**

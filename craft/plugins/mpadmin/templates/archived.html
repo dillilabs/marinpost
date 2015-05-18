@@ -3,31 +3,32 @@
 {% set title = "Archived Entries"|t %}
 
 {% set tabs = {
-  home: { label: "Home"|t, url: url('mpcontrolpanel') },
-  block: { label: "Block User"|t, url: url('mpcontrolpanel/block') },
-  archived: { label: "Archived Entries"|t, url: url('mpcontrolpanel/archived') }
+  home: { label: "Home"|t, url: url('mpadmin') },
+  block: { label: "Block User"|t, url: url('mpadmin/block') },
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') }
 } %}
+
 {% set selectedTab = 'archived' %}
+
+{% set archivedEntries = craft.entries.archived(true) %}
 
 {% set content %}
   <div class="elements">
-    {% set archivedEntries = craft.entries.archived(true) %}
-
     {% if archivedEntries | length %}
       <div class="tableview">
         <table class="data fullwidth">
           <tr>
-            <th>User</th>
-            <th>Section</th>
             <th>Entry</th>
+            <th>Section</th>
+            <th>User</th>
             <th></th>
           </tr>
 
           {% for entry in archivedEntries %}
             <tr>
-              <td>{{ entry.author }}</td>
-              <td>{{ entry.section }}</td>
               <td>{{ entry.title }}</td>
+              <td>{{ entry.section }}</td>
+              <td>{{ entry.author }}</td>
               <td><a href="{{ actionUrl('mpEntry/restoreEntry', { id: entry.id }) }}">Restore</a></td>
             </tr>
           {% endfor %}

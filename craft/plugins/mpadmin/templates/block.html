@@ -3,16 +3,17 @@
 {% set title = "Block User"|t %}
 
 {% set tabs = {
-  home: { label: "Home"|t, url: url('mpcontrolpanel') },
-  block: { label: "Block User"|t, url: url('mpcontrolpanel/block') },
-  archived: { label: "Archived Entries"|t, url: url('mpcontrolpanel/archived') }
+  home: { label: "Home"|t, url: url('mpadmin') },
+  block: { label: "Block User"|t, url: url('mpadmin/block') },
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') }
 } %}
-{% set selectedTab = 'blocked' %}
+
+{% set selectedTab = 'block' %}
+
+{% set users = craft.users.admin('not 1') %}
 
 {% set content %}
   <div class="elements">
-    {% set users = craft.users | without(currentUser) %}
-
     <form class="block-user">
       <input type="hidden" name="action" value="mpUser/blockUser">
       <select name="id">

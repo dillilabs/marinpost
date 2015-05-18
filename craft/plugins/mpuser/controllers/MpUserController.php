@@ -40,6 +40,7 @@ class MpUserController extends BaseController
      *      suspend User
      *      assign User to Blocked group
      *      unpublish User entries
+     *      archive User entries
      */
     public function actionBlockUser()
     {
@@ -49,7 +50,7 @@ class MpUserController extends BaseController
 
         $this->_suspendUser($user);
         $this->_assignUserToGroup($user, 'blocked');
-        $this->_unpublishUserEntries($user);
+        $this->_unpublishAndArchiveUserEntries($user);
 
         $this->redirectToPostedUrl();
     }
@@ -69,16 +70,17 @@ class MpUserController extends BaseController
         craft()->userGroups->assignUserToGroups($user->id, $deletedGroup->id);
     }
 
-    private function _unpublishUserEntries($user)
+    private function _unpublishAndArchiveUserEntries($user)
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->authorIds = $user->id;
+        $criteria->authorId = $user->id;
         $criteria->status = BaseElementModel::ENABLED;
         $entries = $criteria->find();
 
         foreach ($entries as $entry)
         {
             craft()->mpEntry->updateStatus($entry->id, BaseElementModel::DISABLED);
+            craft()->mpEntry->archiveEntry($entry);
         }
     }
 
