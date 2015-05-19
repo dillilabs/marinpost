@@ -531,6 +531,7 @@ nav ul ul li:last-of-type {
 .filter > h4, .sub-nav > h4 {
     display: none;
 }
+
 .filter .reset a {
   display: inline-block;
   float: right;
@@ -544,6 +545,7 @@ nav ul ul li:last-of-type {
 .filter .reset a:visited {
   color: #004eff;
 }
+
 .date-picker {
   font-size: .75em;
 }

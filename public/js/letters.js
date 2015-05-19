@@ -2,6 +2,7 @@ $(function() {
   var selectDate = $('div#select-letter-date');
   var baseUrl = '/letters/';
   var dateFromUrl = document.location.pathname.match(/\/(\d{4}\/\d{2}\/\d{2})/);
+  var resetLink = $('.reset a');
 
   selectDate.datepicker({
     dateFormat: 'yy/mm/dd',
@@ -11,4 +12,7 @@ $(function() {
     }
   });
 
+  resetLink.click(function() {
+    document.location = baseUrl;
+  });
 });

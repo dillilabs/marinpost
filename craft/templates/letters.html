@@ -5,7 +5,11 @@
 {% block main %}
   {% embed "_common/unfiltered_list" %}
     {% block subNav %}
-      <h2>Date</h2>
+      <h2 class="filter">Date 
+        <span class="reset" {% if craft.request.segments | length < 2 %}style="display:none;"{% endif %}>
+          <a href="#">Reset</a>
+        </span>
+      </h2>
       <h4 class="letters-filter">Filter by date</h4>
       <div class="archive">
           <div id="select-letter-date" class="date-picker"></div>
