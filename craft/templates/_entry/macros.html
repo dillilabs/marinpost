@@ -269,13 +269,15 @@
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('F j, Y') }}{% endif %}</div>
+      <div class="byline">
+        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('F j, Y g:i A') }}{% endif %}
+      </div>
 
     {% case 'news' %}
-      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y g:i A') }}</div>
 
     {% default %}
-      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y') }} {{ commentCount(entry) }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y g:i A') }} {{ commentCount(entry) }}</div>
 
   {% endswitch %}
 {% endmacro %}
