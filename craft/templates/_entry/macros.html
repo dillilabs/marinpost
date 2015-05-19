@@ -265,21 +265,25 @@
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import authorNameOrLink, commentCount %}
+  {% from _self import authorNameOrLink, commentCount, formatDateTime %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
       <div class="byline">
-        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ entry.postDate | date('F j, Y g:i A') }}{% endif %}
+        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ formatDateTime(entry.postDate) }}{% endif %}
       </div>
 
     {% case 'news' %}
-      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y g:i A') }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ formatDateTime(entry.postDate) }}</div>
 
     {% default %}
-      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ entry.postDate | date('F j, Y g:i A') }} {{ commentCount(entry) }}</div>
+      <div class="byline">Posted by: {{ authorNameOrLink(entry) }} - {{ formatDateTime(entry.postDate) }} {{ commentCount(entry) }}</div>
 
   {% endswitch %}
+{% endmacro %}
+
+{% macro formatDateTime(date) %}
+  {{ date | date('F j, Y') }} &nbsp; {{ date | date('g:i A') }}
 {% endmacro %}
 
 {% macro letterUrl(entry) %}
