@@ -7,7 +7,7 @@
     {% block subNav %}
       <h2 class="filter">Date 
         <span class="reset" {% if craft.request.segments | length < 2 %}style="display:none;"{% endif %}>
-          <a href="#">Reset</a>
+          <a href="#" id="reset-letter-filter">Reset</a>
         </span>
       </h2>
       <h4 class="letters-filter">Filter by date</h4>
