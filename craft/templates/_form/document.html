@@ -147,8 +147,8 @@ $(function() {
   modal.dialog({
     modal: true,
     autoOpen: false,
-    height: $(window).height() * 0.75,
-    width: $(window).width() * 0.75,
+    height: window.matchMedia("(min-width: 51em)").matches ? $(window).height() * 0.75 : $(window).height(),
+    width: window.matchMedia("(min-width: 51em)").matches ? $(window).width() * 0.75 : $(window).width(),
     dialogClass: 'no-close',
     buttons: {
       OK: function() {
