@@ -8,6 +8,8 @@
             var filters = $(':checkbox.filter');
             var noFilters = $(':checkbox.all');
             var resetLink = $('.reset a');
+            var dateFilterElement = $('div#date-filter');
+            var dateFilter = '';
             var contentLengthThreshold = 20;
             var scrollPositionThreshold = 0.85;
             var isLoadingContent = false;
@@ -37,20 +39,23 @@
                 location: activeFiltersFor('location'),
                 topic: activeFiltersFor('topic'),
                 author: activeFiltersFor('author'),
+                date: dateFilter,
               };
             };
 
             var urlFor = function(section, filters) {
-              return '/filter?section='+section+'&locations='+filters.location+'&topics='+filters.topic+'&authors='+filters.author;
+              return '/filter?section='+section+'&locations='+filters.location+'&topics='+filters.topic+'&authors='+filters.author+'&date='+filters.date;
             };
 
             var disableFilters = function() {
               $(filters, noFilters).prop('disabled', true);
+              dateFilterElement.datepicker('option', 'disabled', true);
               resetLink.addClass('disabled');
             };
 
             var enableFilters = function() {
               $(filters, noFilters).prop('disabled', false);
+              dateFilterElement.datepicker('option', 'disabled', false);
               resetLink.removeClass('disabled');
             };
 
@@ -60,7 +65,7 @@
 
               filteredContent.load(url, enableFilters);
 
-              if (filters.location.length || filters.topic.length || filters.author.length) {
+              if (filters.location.length || filters.topic.length || filters.author.length || filters.date.length) {
                 resetLink.show();
               } else {
                 resetLink.hide();
@@ -126,14 +131,31 @@
               }
             }
 
-            //-------
+            var resetDateFilter = function() {
+              dateFilter = '';
+              dateFilterElement.datepicker('setDate');
+            };
+
+            // -----------
+            // Date picker
+            // -----------
+
+            dateFilterElement.datepicker({
+              dateFormat: 'yy-mm-dd',
+              onSelect: function() {
+                dateFilter = this.value;
+                refreshViewsAndEnableFilters();
+              }
+            });
+
+            // ------
             // Events
-            //-------
+            // ------
 
             toggleFilters.click(function() {
               var toggle = $(this);
 
-              toggle.toggleClass('active').siblings('ul').slideToggle();
+              toggle.toggleClass('active').siblings('ul, .date-picker').slideToggle();
             });
 
             filters.click(function() {
@@ -179,8 +201,10 @@
               var link = $(this);
 
               if (!link.hasClass('disabled')) {
-                // FIXME
-                noFilters.click();
+                filters.prop('checked', false);
+                noFilters.prop('checked', true);
+                resetDateFilter();
+                refreshViewsAndEnableFilters();
               }
 
               e.preventDefault();
