@@ -43,6 +43,11 @@
             {% endfor %}
           </ul>
         </fieldset>
+
+        <fieldset class="date">
+          <h5>Date</h5>
+          <div id="date-filter" class="date-picker"></div>
+        </fieldset>
       </div>
 {% endblock %}</div>
 
@@ -77,7 +82,6 @@
     }
   });
 {% endset %}
-
 {% includeJs js %}
 
 {% include "_common/disqus_count.html" %}

@@ -544,6 +544,9 @@ nav ul ul li:last-of-type {
 .filter .reset a:visited {
   color: #004eff;
 }
+.date-picker {
+  font-size: .75em;
+}
 
 .sub-nav h5, .sub-nav .filter h5, .my-content > a {
     color: #000;
@@ -819,17 +822,18 @@ ul.tags > li {
     margin: 0;
     padding: 0 0 0 .75em;
 }
-
 .filter ul > li:last-of-type {
     margin-bottom: .5em;
 }
-
 .filter fieldset > h5 {
     cursor: pointer;
 }
 .filter input[type="checkbox"] {
 	float: left;
 	margin: 1em .5em 0 0;
+}
+.filter .date-picker {
+  display: none;
 }
 
 .date-divider {

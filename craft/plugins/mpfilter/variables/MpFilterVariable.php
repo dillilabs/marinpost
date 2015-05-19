@@ -28,7 +28,7 @@ class MpFilterVariable
         $criteria = craft()->elements->getCriteria(ElementType::Category);
         $criteria->relatedTo = array(
             'targetElement' => $location,
-            'field' => 'geographicChildren'
+            'field'         => 'geographicChildren'
         );
 
         return ($ids = $criteria->ids()) ? $ids[0] : null;
@@ -44,7 +44,7 @@ class MpFilterVariable
         $criteria = craft()->elements->getCriteria(ElementType::Category);
         $criteria->relatedTo = array(
             'sourceElement' => $location,
-            'field' => 'geographicChildren'
+            'field'         => 'geographicChildren'
         );
 
         return implode(',', $criteria->ids());

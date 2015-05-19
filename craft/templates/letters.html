@@ -8,7 +8,7 @@
       <h2>Date</h2>
       <h4 class="letters-filter">Filter by date</h4>
       <div class="archive">
-          <div id="select-letter-date"></div>
+          <div id="select-letter-date" class="date-picker"></div>
           <div class="note">Click date to view previous letters</div>
       </div>
     {% endblock %}
@@ -58,10 +58,3 @@
     {% endblock %}
   {% endembed %}
 {% endblock %}
-
-{% set css %}
-#select-letter-date {
-  font-size: .75em;
-}
-{% endset %}
-{% includeCss css %}

@@ -9,7 +9,9 @@
 
 {% set authors = craft.request.param('authors') | split(',') %}
 
-{% set filters = { 'locations': locations, 'topics': topics, 'authors': authors, 'section': section } %}
+{% set date = craft.request.param('date') %}
+
+{% set filters = { 'locations': locations, 'topics': topics, 'authors': authors, 'date': date, 'section': section } %}
 
 {% set offset = craft.request.param('offset') | default(0)  %}
 
