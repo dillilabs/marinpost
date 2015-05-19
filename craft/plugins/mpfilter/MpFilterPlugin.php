@@ -57,7 +57,7 @@ class MpFilterPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.24';
+        return '0.0.25';
     }
 
     public function getDeveloper()

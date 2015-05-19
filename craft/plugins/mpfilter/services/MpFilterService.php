@@ -190,7 +190,13 @@ class MpFilterService extends BaseApplicationComponent
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
         if ($section) $criteria->section = $section;
-        if ($date) $criteria->after = $date;
+
+        if ($date) {
+            $criteria->after = $date;
+            $beforeDate = date_create_from_format('Y-m-d', $date);
+            $beforeDate->add(new DateInterval('P1D'));
+            $criteria->before = date_format($beforeDate, 'Y-m-d');
+        }
 
         return $criteria->ids();
     }
