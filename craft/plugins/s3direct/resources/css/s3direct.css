@@ -17,11 +17,15 @@ img.display-image {
 }
 
 .upload-modal.image ul#src-files li {
+  float: left;
   margin: 0 14px 14px 0;
+  width: 45%;
 }
 
 .upload-modal.document ul#src-files li {
+  float: left;
   margin: 0 14px 14px 0;
+  width: 45%;
 }
 
 .upload-modal ul#src-files li .title {
@@ -41,16 +45,35 @@ img.display-image {
 }
 
 
-@media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
-    .upload-modal ul#src-files li {
-      float: left;
-      width: 45%;
+@media only screen and (min-width: 35em) { /* Mobile One 35 ems */
+    .upload-modal.image ul#src-files li {
+      width: 30%;
+    }
+    
+    .upload-modal.document ul#src-files li {
+      width: 30%;
     }
     
 }
 
+@media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
+    .upload-modal.image ul#src-files li {
+        float: left;
+/*       width: 45%; */
+    }
+    
+    .upload-modal.document ul#src-files li {
+/*       width: 45%; */
+    }
+        
+}
+
 @media only screen and (min-width: 51em) { /* Laptop View >51 ems */
-    .upload-modal ul#src-files li {
+    .upload-modal.image ul#src-files li {
+      width: 18%;
+    }
+    
+    .upload-modal.document ul#src-files li {
       width: 18%;
     }
     
