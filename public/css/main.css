@@ -532,6 +532,10 @@ nav ul ul li:last-of-type {
     display: none;
 }
 
+.filter .reset {
+  font-size: .75em;
+  line-height: 2em;
+}
 .filter .reset a {
   display: inline-block;
   float: right;
