@@ -536,6 +536,7 @@ nav ul ul li:last-of-type {
   font-size: .75em;
   line-height: 2em;
 }
+
 .filter .reset a {
   display: inline-block;
   float: right;
@@ -719,6 +720,13 @@ main.single > .post > h3 {
 main.single > .post > h3.my-content {
     font-size: 1em;
 }
+
+main.single > .post p, .letters p {
+    color: #000;
+    font-size: 1.1em;
+    line-height: 1.5em;
+}
+
 .single iframe {
     width: 100%;
 }
@@ -1430,9 +1438,6 @@ footer {
     	width: 100%;
 	}
 	
-	.blog main > h2, .news main > h2, .notices main > h2,  .media main > h2,  .letters main > h2,  .about main > h2 {
-	}
-
     ul.posts li img, img.profile {
         display:inline-block;
         width: 160px;
