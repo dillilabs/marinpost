@@ -294,7 +294,7 @@
   {% set address = address | default(false) %}
 
   {% if notice.venue %}
-    <p class="event"><span class="event-venue">{{ notice.venue }}</span><br>
+    <div class="event"><span class="event-venue">{{ notice.venue }}</span><br>
 
     {% if address %}
       {% if notice.streetAddress %}
@@ -306,11 +306,11 @@
         {{ notice.zipCode }}
       {% endif %}
     {% endif %}
-    </p>
+    </div>
   {% endif %}
 
   {% if notice.startDate %}
-    <p class="event">{{ notice.startDate | date('F j, Y') }}
+    <div class="event">{{ notice.startDate | date('F j, Y') }}
 
     {% if notice.startTime %}
       {{ notice.startTime | date('g:i a') }}
@@ -327,7 +327,7 @@
      to {{ notice.endDate | date('F j, Y') }}
 
     {% endif %}
-    </p>
+    </div>
   {% endif %}
 {% endmacro %}
 
