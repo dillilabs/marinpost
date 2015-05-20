@@ -433,3 +433,9 @@
     {{ text }}
   {% endif %}
 {% endmacro %}
+
+{% macro genericTags(entry) %}
+  {% for tag in entry.genericTags %}
+    <span>{{ tag }}</span>{% if not loop.last %}, {% endif %}
+  {% endfor %}
+{% endmacro %}

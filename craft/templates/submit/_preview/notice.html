@@ -50,6 +50,13 @@
         {{ p.documents(entry.noticeDocuments) }}
       {% endif %}
 
+      {% if entry.genericTags | length %}
+        <div class="generic-tags">
+          <h4>Tags</h4>
+          {{ p.genericTags(entry) }}
+        </div>
+      {% endif %}
+
       <br class="clear">
       <h2>Preview {{ f.closePreview }}</h2>
 

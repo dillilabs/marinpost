@@ -10,22 +10,6 @@ class MpEntryVariable
         $this->plugin = craft()->plugins->getPlugin('mpentry');
     }
 
-    public function searchTags($groupId, $title, $entry = false)
-    {
-        $criteria = craft()->elements->getCriteria(ElementType::Tag);
-        $criteria->groupId = $groupId;
-        $criteria->title   = $title;
-        if ($entry)
-        {
-            $criteria->relatedTo = array(
-                'sourceElement' => $entry,
-                'field'         => 'genericTags'
-            );
-        }
-        $tags = $criteria->find();
-        return $tags;
-    }
-
     /**
      * Convert mono-cased string to ucfirst
      * and always start with a capital.

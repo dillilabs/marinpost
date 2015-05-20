@@ -53,9 +53,7 @@
       {% if entry.genericTags | length %}
         <div class="generic-tags">
           <h4>Tags</h4>
-          {% for tag in entry.genericTags %}
-            <span>{{ tag }}</span>{% if not loop.last %}, {% endif %}
-          {% endfor %}
+          {{ p.genericTags(entry) }}
         </div>
       {% endif %}
 
