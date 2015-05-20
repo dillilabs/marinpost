@@ -1393,12 +1393,11 @@ footer {
     .filter h4 {
 	    background: none;
 	    border: none;
-	    padding-left: 0;
-    }
-
-     .letters .filter h4 {
 	    border-bottom: 1px solid #C8D4E9;
-	    margin-bottom: 1em;
+	    font-size: 1.25em;
+	    font-weight: normal;
+	    margin: 0.5em 0 .75em;
+	    padding: 0.25em 0;
     }
 
    .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
