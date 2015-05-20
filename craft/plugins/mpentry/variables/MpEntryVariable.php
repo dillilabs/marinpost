@@ -10,20 +10,36 @@ class MpEntryVariable
         $this->plugin = craft()->plugins->getPlugin('mpentry');
     }
 
+    public function searchTags($groupId, $title, $entry = false)
+    {
+        $criteria = craft()->elements->getCriteria(ElementType::Tag);
+        $criteria->groupId = $groupId;
+        $criteria->title   = $title;
+        if ($entry)
+        {
+            $criteria->relatedTo = array(
+                'sourceElement' => $entry,
+                'field'         => 'genericTags'
+            );
+        }
+        $tags = $criteria->find();
+        return $tags;
+    }
+
     /**
      * Convert mono-cased string to ucfirst
-     * and always starte with a capital.
+     * and always start with a capital.
      */
-    function titleCase($title)
+    public function titleCase($title)
     {
         return $this->_monocase($title) ? ucfirst(strtolower($title)) : ucfirst($title);
     }
 
     /**
      * Convert mono-cased string to ucwords
-     * and always starte with a capital.
+     * and always start with a capital.
      */
-    function nameCase($name)
+    public function nameCase($name)
     {
         return $this->_monocase($name) ? ucwords(strtolower($name)) : ucfirst($name);
     }
@@ -31,7 +47,7 @@ class MpEntryVariable
     /**
      * Recreate child locations of entry.
      */
-    function synchronizeChildLocations($entry)
+    public function synchronizeChildLocations($entry)
     {
         return craft()->mpEntry->synchronizeChildLocations($entry);
     }
@@ -40,7 +56,7 @@ class MpEntryVariable
     // Private functions
     //--------------------
 
-    function _monocase($string)
+    private function _monocase($string)
     {
         $monocase = array(
             strtolower($string),

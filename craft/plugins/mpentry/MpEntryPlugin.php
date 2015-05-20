@@ -90,10 +90,13 @@ class MpEntryPlugin extends BasePlugin
      *
      * If entry section is blog, media, news or notices:
      *
-     *   Then manage the hidden, "child" Locations of the entry's selected Locations.
+     *   Then:
      *
-     * Note this is required to maintain geographically hierarchical Locations
-     * for filtering and searching purposes.
+     *      manage the hidden, "child" Locations of the entry's selected Locations
+     *
+     *      manage the Tags from the tag string
+     *
+     *      update the Craft search index
      */
     private function _onSaveEntryEvent()
     {
@@ -106,6 +109,8 @@ class MpEntryPlugin extends BasePlugin
             if (in_array($entry->section->handle, $sections))
             {
                 craft()->mpEntry->synchronizeChildLocations($entry);
+                craft()->mpEntry->synchronizeTags($entry);
+                craft()->mpEntry->updateSearchIndex($entry);
             }
         });
     }
@@ -149,7 +154,7 @@ class MpEntryPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.30';
+        return '0.0.31';
     }
 
     public function getDeveloper()

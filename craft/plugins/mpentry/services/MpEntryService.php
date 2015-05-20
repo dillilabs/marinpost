@@ -144,7 +144,8 @@ class MpEntryService extends BaseApplicationComponent
 
     /**
      * Use the entry's primary Location to populate implicit child Locations.
-     * And update the search index.
+     *
+     * This is required to maintain geographically hierarchical Locations for filtering and searching purposes.
      */
     public function synchronizeChildLocations($entry)
     {
@@ -158,9 +159,113 @@ class MpEntryService extends BaseApplicationComponent
         ));
         $savedElement = craft()->elements->saveElement($entry, false);
 
-        $this->_updateSearchIndex($entry);
-
         $this->plugin->logger("synchronizeChildLocations() entry=$entry [{$entry->id}] saved relations=$savedRelations, saved element=$savedElement, locationIds=".json_encode($locationIds));
+    }
+
+    /**
+     * Create/delete individual Tags from form input string.
+     */
+    public function synchronizeTags($entry)
+    {
+        $tagTitles = explode(',', $entry->tags);
+        $tagIds = array();
+        $tagGroupId = 1;
+        $tagField = 'genericTags';
+
+        foreach ($tagTitles as $tagTitle)
+        {
+            $tagTitle = trim($tagTitle);
+
+            if (!empty($tagTitle))
+            {
+                $tag = $this->_entryTag($entry, $tagTitle, $tagGroupId, $tagField);
+
+                if (!$tag)
+                {
+                    $tag = new TagModel();
+                    $tag->groupId = $tagGroupId;
+                    $tag->getContent()->title = $tagTitle;
+                    craft()->tags->saveTag($tag);
+                }
+            }
+
+            array_push($tagIds, $tag->id);
+        }
+
+        $field = craft()->fields->getFieldByHandle($tagField);
+        $savedRelations = craft()->relations->saveRelations($field, $entry, $tagIds);
+
+        $entry->setContentFromPost(array(
+            $tagField => $tagIds
+        ));
+        $savedElement = craft()->elements->saveElement($entry, false);
+
+        $this->plugin->logger("synchronizeTags() entry=$entry [{$entry->id}] saved relations=$savedRelations, saved element=$savedElement, tagIds=".json_encode($tagIds));
+    }
+
+    /**
+     * Update Craft search index for Entry.
+     *
+     * Borrowed from SearchIndexTool#performAction
+     */
+    public function updateSearchIndex($element)
+    {
+        $elementType = craft()->elements->getElementType($element->elementType);
+
+        if ($elementType->isLocalized())
+        {
+            $localeIds = craft()->i18n->getSiteLocaleIds();
+        }
+        else
+        {
+            $localeIds = array(craft()->i18n->getPrimarySiteLocaleId());
+        }
+
+        $criteria = craft()->elements->getCriteria($element->elementType, array(
+            'id'            => array($element->id),
+            'status'        => null,
+            'localeEnabled' => null,
+        ));
+
+        foreach ($localeIds as $localeId)
+        {
+            $criteria->locale = $localeId;
+            $element = $criteria->first();
+
+            if ($element)
+            {
+                craft()->search->indexElementAttributes($element);
+
+                if ($elementType->hasContent())
+                {
+                    $fieldLayout = $element->getFieldLayout();
+                    $keywords = array();
+
+                    foreach ($fieldLayout->getFields() as $fieldLayoutField)
+                    {
+                        $field = $fieldLayoutField->getField();
+
+                        if ($field)
+                        {
+                            $fieldType = $field->getFieldType();
+
+                            if ($fieldType)
+                            {
+                                $fieldType->element = $element;
+
+                                $handle = $field->handle;
+
+                                // Set the keywords for the content's locale
+                                $fieldSearchKeywords = $fieldType->getSearchKeywords($element->getFieldValue($handle));
+                                $keywords[$field->id] = $fieldSearchKeywords;
+                            }
+                        }
+                    }
+
+                    craft()->search->indexElementFields($element->id, $localeId, $keywords);
+                }
+            }
+        }
     }
 
     //------------------
@@ -271,6 +376,23 @@ class MpEntryService extends BaseApplicationComponent
     }
 
     /**
+     * Return Tag related to Entry with given title, if exists.
+     */
+    public function _entryTag($entry, $tagTitle, $tagGroupId, $tagField)
+    {
+        $criteria = craft()->elements->getCriteria(ElementType::Tag);
+
+        $criteria->groupId = $tagGroupId;
+        $criteria->title   = strtolower($tagTitle);
+        $criteria->relatedTo = array(
+            'sourceElement' => $entry,
+            'field'         => $tagField
+        );
+
+        return $criteria->first();
+    }
+
+    /**
      * Return an array of values drawn from a nested, associative array
      * but only those of a specific key.
      */
@@ -286,70 +408,5 @@ class MpEntryService extends BaseApplicationComponent
         });
 
         return $values;
-    }
-
-    /**
-     * Update Craft search index for entry.
-     *
-     * Borrowed from SearchIndexTool#performAction
-     */
-    private function _updateSearchIndex($element)
-    {
-        $elementType = craft()->elements->getElementType($element->elementType);
-
-        if ($elementType->isLocalized())
-        {
-            $localeIds = craft()->i18n->getSiteLocaleIds();
-        }
-        else
-        {
-            $localeIds = array(craft()->i18n->getPrimarySiteLocaleId());
-        }
-
-        $criteria = craft()->elements->getCriteria($element->elementType, array(
-            'id'            => array($element->id),
-            'status'        => null,
-            'localeEnabled' => null,
-        ));
-
-        foreach ($localeIds as $localeId)
-        {
-            $criteria->locale = $localeId;
-            $element = $criteria->first();
-
-            if ($element)
-            {
-                craft()->search->indexElementAttributes($element);
-
-                if ($elementType->hasContent())
-                {
-                    $fieldLayout = $element->getFieldLayout();
-                    $keywords = array();
-
-                    foreach ($fieldLayout->getFields() as $fieldLayoutField)
-                    {
-                        $field = $fieldLayoutField->getField();
-
-                        if ($field)
-                        {
-                            $fieldType = $field->getFieldType();
-
-                            if ($fieldType)
-                            {
-                                $fieldType->element = $element;
-
-                                $handle = $field->handle;
-
-                                // Set the keywords for the content's locale
-                                $fieldSearchKeywords = $fieldType->getSearchKeywords($element->getFieldValue($handle));
-                                $keywords[$field->id] = $fieldSearchKeywords;
-                            }
-                        }
-                    }
-
-                    craft()->search->indexElementFields($element->id, $localeId, $keywords);
-                }
-            }
-        }
     }
 }
