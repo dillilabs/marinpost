@@ -5,16 +5,17 @@
 {% block main %}
   {% embed "_common/unfiltered_list" %}
     {% block subNav %}
-      <h2 class="filter">Date 
+    <div class="filter" id="filter">
+      <h4 class="letters-filter">Filter by date 
         <span class="reset" {% if craft.request.segments | length < 2 %}style="display:none;"{% endif %}>
-          <a href="#" id="reset-letter-filter">Reset</a>
+            <a href="#" id="reset-letter-filter">Reset</a>
         </span>
-      </h2>
-      <h4 class="letters-filter">Filter by date</h4>
+      </h4>
       <div class="archive">
           <div id="select-letter-date" class="date-picker"></div>
           <div class="note">Click date to view previous letters</div>
       </div>
+    </div>
     {% endblock %}
 
     {% block h2 %}

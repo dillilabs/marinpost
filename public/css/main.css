@@ -845,6 +845,9 @@ ul.tags > li {
 .filter .date-picker {
   display: none;
 }
+.letters .date-picker {
+  display: block;
+}
 
 .date-divider {
     background-color: #e5e5cd;
@@ -1342,6 +1345,10 @@ footer {
 
     .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
         padding-top: 0;
+    }
+
+    .letters .sub-nav {
+        padding-top: 1em;
     }
 
 	.sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
