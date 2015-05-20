@@ -750,6 +750,10 @@ main.single > .post > h3.my-content {
     border-top: 1px solid #C8D4E9;
     padding: 1em 0;
 }
+.generic-tags {
+    border-bottom: 1px solid #C8D4E9;
+    padding: 1em 0;
+}
 .download a {
     background: url('../img/pdf-icon.png') 50% 0 scroll no-repeat;
 }

@@ -50,6 +50,15 @@
         {{ p.documents(entry.noticeDocuments) }}
       {% endif %}
 
+      {% if entry.genericTags | length %}
+        <div class="generic-tags">
+          <h4>Tags</h4>
+          {% for tag in entry.genericTags %}
+            <span>{{ tag }}</span>{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
       {% include "_common/disqus_embed" with { identifier: entry.id } only %}
     {% endblock %}
   {% endembed %}
