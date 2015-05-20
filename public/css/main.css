@@ -1397,7 +1397,12 @@ footer {
 	    padding-left: 0;
     }
 
-    .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
+     .letters .filter h4 {
+	    border-bottom: 1px solid #C8D4E9;
+	    margin-bottom: 1em;
+    }
+
+   .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
         display: block;
     }
 
