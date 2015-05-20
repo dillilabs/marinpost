@@ -721,7 +721,7 @@ main.single > .post > h3.my-content {
     font-size: 1em;
 }
 
-main.single > .post p, .letters p {
+main.single > .post p:not(.event, .image-credit), .letters p {
     color: #000;
     font-size: 1.1em;
     line-height: 1.5em;
@@ -1443,7 +1443,11 @@ footer {
         width: 160px;
     }
     
-    .notices .event, .notices .byline, .submit p.event, .submit .byline {
+    .featured ul.tags, .featured h3, .featured .event, .featured .byline {
+        margin-left: 340px;
+    }
+
+    .whats-new ul.tags, .whats-new h3, .whats-new .event, .whats-new .byline, .blog ul.tags, .blog h3, .blog .event, .blog .byline, .notices ul.tags, .notices h3, .notices .event, .notices .byline, .news ul.tags, .news h3, .news .event, .news .byline, .media ul.tags, .media h3, .media .event, .media .byline, .submit p.event, .submit .byline {
         margin-left: 175px;
     }
 
