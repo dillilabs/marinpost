@@ -58,11 +58,13 @@ $(function() {
       }
     });
     
-    $('.filter h4, .sub-nav > h4').click(function() {
-       $(this).toggleClass('open');
-       $(this).siblings().slideToggle();
-       $('.sub-nav h2').hide();
-    });
+  if (window.matchMedia("(max-width: 51em)").matches) {
+	    $('.filter h4, .sub-nav > h4').click(function() {
+	       $(this).toggleClass('open');
+	       $(this).siblings().slideToggle();
+	       $('.sub-nav h2').hide();
+	    });
+	}
 
   $('.my-content').click(function() {
   	$(this).toggleClass('active');

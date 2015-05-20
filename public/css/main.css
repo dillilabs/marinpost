@@ -604,15 +604,19 @@ nav ul ul li:last-of-type {
       margin: 0;
 }
 .filter h4, .sub-nav > h4 {
-    background: url('../img/right-arrow.png') #f9f9f9 no-repeat 95% 50%;
+    background: url('../img/right-arrow.png') #f9f9f9 no-repeat 2% 50%;
     border: 1px solid #ccc;
     display: block;
     margin: 0;
-    padding: .75em;
+    padding: .75em .75em .75em 5%;
+}
+
+.filter h4 a {
+    padding: 0;
 }
 
 .filter h4.open, .sub-nav > h4.open {
-    background: url('../img/down-arrow.png') #f9f9f9 no-repeat 95% 50%;
+    background: url('../img/down-arrow.png') #f9f9f9 no-repeat 2% 50%;
     border-bottom: none;
 }
 
@@ -1336,6 +1340,10 @@ footer {
         margin-top: 1em;
     }
 
+    .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
+        padding-top: 0;
+    }
+
 	.sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
 	    padding: .45em 0 .45em 25px;
 	}
@@ -1372,9 +1380,16 @@ footer {
     }
 
 
-    .filter h4, .sub-nav > h4 {
+    .sub-nav > h4 {
         display: none;
     }
+    
+    .filter h4 {
+	    background: none;
+	    border: none;
+	    padding-left: 0;
+    }
+
     .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
         display: block;
     }
