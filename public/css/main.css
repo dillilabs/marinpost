@@ -727,6 +727,10 @@ main.single > .post > h3.my-content {
     line-height: 1.5em;
 }
 
+.list-wrapper p, .post p, .list-wrapper li, .post li {
+	text-align: justify;
+}
+	
 .single iframe {
     width: 100%;
 }
@@ -1424,10 +1428,6 @@ footer {
 	.form-wrapper {
     	float: right;
     	width: 68%;
-	}
-	
-	.list-wrapper p, .post p, .list-wrapper li, .post li {
-    	text-align: justify;
 	}
 	
 	.result-message {
