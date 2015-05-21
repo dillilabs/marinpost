@@ -70,8 +70,10 @@ $(function() {
   $('.reset').click(function() {
   	$('.filter h5').not(':last-of-type').addClass('closed');
   	$('.filter h5').removeClass('active');
-  	$('.filter h5').hide();
   	$('.filter ul').slideUp('fast');
+    if (window.matchMedia("(max-width: 51em)").matches) {
+      	$('.filter h5').hide();
+    }
   });
 
   $('.my-content').click(function() {
