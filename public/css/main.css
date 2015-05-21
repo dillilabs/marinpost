@@ -498,7 +498,7 @@ nav ul ul li:last-of-type {
     text-transform: uppercase;
 }
 
-fieldset:last-of-type h5, .my-content:last-of-type > a {
+fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:last-of-type, .account .sub-nav h5:last-of-type, .my-content:last-of-type > a {
     border-bottom: 1px solid #ccc;
 }
 
