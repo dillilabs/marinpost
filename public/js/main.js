@@ -66,6 +66,12 @@ $(function() {
 	    });
 	}
 
+  $('.reset').click(function() {
+  	$('.filter h5').not(':last-of-type').addClass('closed');
+  	$('.filter h5').removeClass('active');
+  	$('.filter ul').slideUp('fast');
+  });
+
   $('.my-content').click(function() {
   	$(this).toggleClass('active');
   });
