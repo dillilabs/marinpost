@@ -619,6 +619,10 @@ fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:l
     padding: .75em .75em .75em 25px;
 }
 
+.filter h4:hover, .sub-nav > h4:hover {
+    cursor: pointer;
+}
+
 .filter h4 a {
     padding: 0;
 }
