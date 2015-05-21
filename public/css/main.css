@@ -528,18 +528,25 @@ nav ul ul li:last-of-type {
 .filter a:hover, .sub-nav a:hover {
     font-weight: bold;
 }
+
+.filter-wrapper {
+	position: relative;
+}
+
 .filter > h4, .sub-nav > h4 {
     display: none;
 }
 
 .filter .reset {
-  font-size: .75em;
-  line-height: 2em;
+  font-size: 1em;
+  position: absolute;
+  right: 12px;
+  top: 1px;
 }
 
 .filter .reset a {
   display: inline-block;
-  float: right;
+  font-family: Arial, sans-serif;
   font-weight: normal;
   color: #004eff;
   text-transform: none;
@@ -609,11 +616,11 @@ nav ul ul li:last-of-type {
       margin: 0;
 }
 .filter h4, .sub-nav > h4 {
-    background: url('../img/right-arrow.png') #f9f9f9 no-repeat 2% 50%;
+    background: url('../img/right-arrow.png') #f9f9f9 no-repeat 6px 50%;
     border: 1px solid #ccc;
     display: block;
     margin: 0;
-    padding: .75em .75em .75em 5%;
+    padding: .75em .75em .75em 25px;
 }
 
 .filter h4 a {
@@ -1355,16 +1362,12 @@ footer {
         width: 28%;
 	}
 
-    .about .sub-nav, .account .sub-nav, .submit .sub-nav, .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
+    .about .sub-nav, .account .sub-nav, .submit .sub-nav {
         margin-top: 1em;
     }
 
     .blog .sub-nav, .notices .sub-nav, .news .sub-nav, .media .sub-nav {
         padding-top: 0;
-    }
-
-    .letters .sub-nav {
-        padding-top: 1em;
     }
 
 	.sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
@@ -1411,9 +1414,13 @@ footer {
 	    border: none;
 	    font-size: 1.25em;
 	    font-weight: normal;
-	    margin: 0.3em 0 0;
-	    padding: 0.25em 0;
+		margin: 1.25em 0 0;
+		padding: 0.25em 0;
     }
+
+	.filter .reset {
+	  right: 0;
+	}
 
    .filter > fieldset, .sub-nav .filter > h5, .sub-nav > h5, .sub-nav h2, .archive {
         display: block;

@@ -60,8 +60,9 @@ $(function() {
     
   if (window.matchMedia("(max-width: 51em)").matches) {
 	    $('.filter h4, .sub-nav > h4').click(function() {
-	       $(this).toggleClass('open');
-	       $(this).siblings().slideToggle();
+		    $('.filter h5').show();
+	       $(this).parent().toggleClass('open');
+	       $(this).parent().siblings().slideToggle();
 	       $('.sub-nav h2').hide();
 	    });
 	}
@@ -69,6 +70,7 @@ $(function() {
   $('.reset').click(function() {
   	$('.filter h5').not(':last-of-type').addClass('closed');
   	$('.filter h5').removeClass('active');
+  	$('.filter h5').hide();
   	$('.filter ul').slideUp('fast');
   });
 
