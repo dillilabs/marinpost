@@ -187,9 +187,9 @@ class MpEntryService extends BaseApplicationComponent
                     $tag->getContent()->title = $tagTitle;
                     craft()->tags->saveTag($tag);
                 }
-            }
 
-            array_push($tagIds, $tag->id);
+                array_push($tagIds, $tag->id);
+            }
         }
 
         $field = craft()->fields->getFieldByHandle($tagField);
