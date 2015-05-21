@@ -498,12 +498,8 @@ nav ul ul li:last-of-type {
     text-transform: uppercase;
 }
 
-.sub-nav h5:last-of-type, .my-content:last-of-type > a {
+fieldset:last-of-type h5, .my-content:last-of-type > a {
     border-bottom: 1px solid #ccc;
-}
-
-.sub-nav h5.closed {
-    border-bottom: none;
 }
 
 .my-content.active {
@@ -628,7 +624,7 @@ nav ul ul li:last-of-type {
 }
 
 .filter h4.open, .sub-nav > h4.open {
-    background: url('../img/down-arrow.png') #f9f9f9 no-repeat 2% 50%;
+    background: url('../img/down-arrow.png') #f9f9f9 no-repeat 6px 50%;
     border-bottom: none;
 }
 
