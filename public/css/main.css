@@ -1409,10 +1409,9 @@ footer {
     .filter h4 {
 	    background: none;
 	    border: none;
-	    border-bottom: 1px solid #C8D4E9;
 	    font-size: 1.25em;
 	    font-weight: normal;
-	    margin: 0.5em 0 .75em;
+	    margin: 0.3em 0 0;
 	    padding: 0.25em 0;
     }
 
