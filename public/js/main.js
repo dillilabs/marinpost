@@ -78,7 +78,7 @@ $(function() {
   	$('.filter h5').removeClass('active');
   	$('.filter ul, .filter .date-picker').slideUp('fast');
     if (window.matchMedia("(max-width: 51em)").matches) {
-      	$('.filter h5').hide();
+      	$('.filter fieldset').hide();
     }
   });
 
