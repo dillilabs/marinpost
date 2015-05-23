@@ -16,7 +16,7 @@
             </div>
             {% endif %}
 
-            <h3 class="contributor"><a href="{{ p.contributorUrl(user) }}">{{ user.name }}</a></h3>
+            <h3 class="contributor"><a href="{{ p.contributorUrl(user) }}">{{ p.nameCase(user.name) }}</a></h3>
             <div class="profession">
                 {% if user.titleOrProfession %}
                 {{ user.titleOrProfession }}<br>
