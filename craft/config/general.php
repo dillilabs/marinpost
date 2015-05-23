@@ -7,33 +7,35 @@
  * You can see a list of the default settings in craft/app/etc/config/defaults/general.php
  */
 
+define('URI_SCHEME', isset($_SERVER['HTTPS']) ? 'https://' : 'http://');
+define('SITE_URL', URI_SCHEME . $_SERVER['SERVER_NAME'] . '/');
+
 return array(
     '*' => array(
-        'activateAccountFailurePath' => 'account/register/error',
-        'activateAccountSuccessPath' => 'account/register/welcome',
+        'activateAccountFailurePath'      => 'account/register/error',
+        'activateAccountSuccessPath'      => 'account/register/welcome',
         'autoLoginAfterAccountActivation' => true,
-        'invalidUserTokenPath' => 'account/login/error',
-        'loginPath' => 'account/login',
-        'logoutPath' => 'account/logout',
-        'maxUploadFileSize' => 4194304,
-        'omitScriptNameInUrls' => true,
-        'setPasswordPath' => 'account/password/reset',
-        'setPasswordSuccessPath' => 'account/login',
-        'siteName' => 'The Marin Post',
-        'timezone' => 'America/Los_Angeles',
-        'useEmailAsUsername' => true,
+        'invalidUserTokenPath'            => 'account/login/error',
+        'loginPath'                       => 'account/login',
+        'logoutPath'                      => 'account/logout',
+        'maxUploadFileSize'               => 4194304, // 4mb
+        'omitScriptNameInUrls'            => true,
+        'setPasswordPath'                 => 'account/password/reset',
+        'setPasswordSuccessPath'          => 'account/login',
+        'siteName'                        => 'The Marin Post',
+        'siteUrl'                         => SITE_URL, // Include URI scheme
+        'timezone'                        => 'America/Los_Angeles',
+        'useEmailAsUsername'              => true,
+
+        // Not actually environment-specific
+        'environmentVariables' => array(
+            // But required for the Minimee plugin's "Cache Url" configuration
+            'baseUrl' => SITE_URL,
+        ),
     ),
     'dev' => array(
-//      'devMode' => true,
-        'environmentVariables' => array(
-            'baseUrl' => 'http://dev.marinpost.org',
-        ),
-        'siteUrl' => 'http://dev.marinpost.org',
+        // 'devMode' => true,
     ),
     'live' => array(
-        'environmentVariables' => array(
-            'baseUrl' => 'http://marinpost.org',
-        ),
-        'siteUrl' => 'http://marinpost.org',
     ),
 );
