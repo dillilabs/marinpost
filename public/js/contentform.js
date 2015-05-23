@@ -53,12 +53,6 @@
             // Functions
             //-----------------------
 
-            // Categories
-            var idFromLink = function(link) {
-              return link.attr('id').split('-').splice(1, 2).join('-');
-
-            };
-
             // Update media type input and toggle other affected inputs
             var onChangeMediaLinkType = function(mediaType) {
               var type = this.value;
@@ -222,23 +216,24 @@
 
             // Add optional category
             addCategoryLink.click(function(e) {
-              e.preventDefault();
               var link = $(this);
-              var id = idFromLink(link);
+              var id = link.attr('data-id');
 
-              $('#input-'+id).show();
-              link.nextAll('a.optional-category-field.add:first').show().end()
-                  .hide();
+              $('#'+id).show();
+              link.nextAll('a.optional-category-field.add:first').show();
+              link.hide();
+              e.preventDefault();
             });
 
             // Remove optional category
             removeCategoryLink.click(function(e) {
-              e.preventDefault();
               var link = $(this);
-              var id = idFromLink(link);
+              var id = link.attr('data-id');
+              var input = link.closest('.optional-category-field.inputs');
 
-              link.closest('.optional-category-field.inputs').hide();
-              $('#add-'+id).show();
+              input.hide().next('.add').hide();
+              input.hide().prev('.add').show();
+              e.preventDefault();
             });
 
             // Enforce limits in regular textareas
@@ -313,7 +308,7 @@
               }
             });
 
-            // Prevend page unload if form content has changed
+            // Prevent page unload if form content has changed
             $(window).on('beforeunload', function() {
               var richText = $('#blogContent, #noticeContent');
               var richTextContent = richText.length > 0 && richText.val().length > 0;
