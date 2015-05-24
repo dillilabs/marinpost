@@ -1,5 +1,7 @@
 {% extends "_common/layout" %}
 
+{% block bodyClass %}notices{% endblock %}
+
 {% block main %}
   {% embed "_common/single" %}
     {% block title %}
@@ -50,10 +52,10 @@
         {{ p.documents(entry.noticeDocuments) }}
       {% endif %}
 
-      {% if entry.genericTags | length %}
+      {% if entry.tags | length %}
         <div class="generic-tags">
           <h4>Tags</h4>
-          {{ p.genericTags(entry) }}
+          {{ entry.tags }}
         </div>
       {% endif %}
 
