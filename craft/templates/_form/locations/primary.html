@@ -14,7 +14,7 @@
       {% set geographicGroup = option.geographicGroup.label %}
 
       {% if geographicGroup != 'Outside Marin' %}
-        <option value="" disabled="disabled">{{ geographicGroup }}</option>
+        <optgroup label="{{ geographicGroup }}">
       {% endif %}
 
     {% endif %}
