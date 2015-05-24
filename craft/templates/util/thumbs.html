@@ -13,15 +13,17 @@
 
 {% import _self as m %}
 
-<h3>Thumbs</h3>
+<h3>Generating Image Transforms</h3>
+
 {% set images = craft.assets.sourceId(sourceId) %}
+
 <ul>
-{% for image in images %}
-<li data-id="{{ image.id }}" data-folder-id="{{ image.folderId }}">
-      <div class="thumb"><img src="{{ image.url('thumb') }}"></div>
+  {% for image in images %}
+    <li data-id="{{ image.id }}" data-folder-id="{{ image.folderId }}">
+      <div class="thumb"><img src="{{ image.url('list') }}"></div>
       <div>{{ m.excerpt(image.filename) }}</div>
     </li>
-{% endfor %}
+  {% endfor %}
 </ul>
 
 {% set css %}

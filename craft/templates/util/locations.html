@@ -12,9 +12,13 @@
 
 {% endif %}
 
+<h3>Updating "child" Locations of all Blog, Media, News and Notice entries</h3>
+
+<ul>
 {% for entry in entries %}
-  updating {{ entry }}<br>
+  <li>Updating {{ entry }}
+
   {% set noop = craft.mpentry.synchronizeChildLocations(entry) %}
 {% endfor %}
 
-<h3>updated {{ entries | length }} entries</h3>
+<h3>Updated locations of {{ entries | length }} entries</h3>
