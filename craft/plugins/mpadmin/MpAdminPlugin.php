@@ -4,11 +4,17 @@ namespace Craft;
 class MpAdminPlugin extends BasePlugin
 {
     /**
-     * If control panel request:
+     *  If CP request:
      *
-     *  Load JS resources for Redactor Plugins.
+     *      Load JS resources for Redactor Plugins.
      *
-     *  Inject Javascript to ensure only a single User group is selected per User.
+     *      Inject Javascript to ensure only a single User group is selected per User.
+     *
+     *  Else:
+     *
+     *      Listen to onSaveEntry event.
+     *
+     *      Listen to onSaveUser event.
      */
     public function init()
     {
@@ -19,8 +25,12 @@ class MpAdminPlugin extends BasePlugin
         if (craft()->request->isCpRequest())
         {
             $this->_loadRedactorPluginResources();
-
             $this->_ensureOneUserGroup();
+        }
+        else
+        {
+            $this->_onSaveEntryEvent();
+            $this->_onSaveUserEvent();
         }
     }
 
@@ -59,6 +69,69 @@ class MpAdminPlugin extends BasePlugin
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
         // $attributes['author'] = Craft::t('Author');
+    }
+
+    //----------------------
+    // Event functions
+    //----------------------
+
+    /**
+     * Respond to entries.onSaveEntry event.
+     *
+     *  If entry is published:
+     *
+     *      If entry section is blog, letters, media, news or notices:
+     *
+     *          If content appears to contain offensive language:
+     *
+     *                  Notify the moderator.
+     */
+    private function _onSaveEntryEvent()
+    {
+        craft()->on('entries.onSaveEntry', function(Event $event) {
+            $entry = $event->params['entry'];
+
+            if ($entry->enabled)
+            {
+                $sections = array('blog', 'letters', 'media', 'news', 'notices');
+
+                if (in_array($entry->section->handle, $sections))
+                {
+                    $text = craft()->mpAdmin->entryText($entry);
+
+                    if (craft()->mpAdmin->containsTriggerWords($text))
+                    {
+                        craft()->mpAdmin->notifyModerator($entry);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Respond to users.onSaveUser event.
+     *
+     *  If user is a contributor:
+     *
+     *      If bio appears to contain offensive language:
+     *
+     *              Notify the moderator.
+     */
+    private function _onSaveUserEvent()
+    {
+        craft()->on('users.onSaveUser', function(Event $event) {
+            $user = $event->params['user'];
+
+            if ($user->isInGroup('contributor'))
+            {
+                $text = craft()->mpAdmin->userText($user);
+
+                if (craft()->mpAdmin->containsTriggerWords($text))
+                {
+                    craft()->mpAdmin->notifyModerator($user);
+                }
+            }
+        });
     }
 
     //----------------------
@@ -105,6 +178,7 @@ JS;
     protected function defineSettings()
     {
         return array(
+            'triggerWords' => array(AttributeType::String, 'default' => ''),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }
@@ -127,7 +201,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.21';
+        return '0.0.22';
     }
 
     public function getDeveloper()

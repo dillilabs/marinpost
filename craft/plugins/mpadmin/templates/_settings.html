@@ -1,5 +1,15 @@
 {% import '_includes/forms' as forms %}
 
+<p style="font-weight:bold">Moderator Settings</p>
+
+{{ forms.textareaField({
+	label: "Trigger Words"|t,
+	instructions: "Enter words, separated by commas, which should trigger the notification of a moderator."|t,
+	id: 'triggerWords',
+	name: 'triggerWords',
+	value: settings.triggerWords,
+}) }}
+
 <p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
