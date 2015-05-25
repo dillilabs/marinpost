@@ -32,6 +32,8 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
 		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
 		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
+		$settings['prependUrlEnabled'] = (bool) $settings['prependUrlEnabled'];
+		$settings['prependPathEnabled'] = (bool) $settings['prependPathEnabled'];
 		
 		return $settings;
 	}
@@ -92,7 +94,9 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
 			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
-			'returnType'		=> array(AttributeType::String, 'default' => 'url')
+			'returnType'		=> array(AttributeType::String, 'default' => 'url'),
+			'prependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true),
+			'prependPathEnabled' => array(AttributeType::Bool, 'default' => true)
 		);
 	}
 

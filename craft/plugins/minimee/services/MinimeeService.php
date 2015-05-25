@@ -610,9 +610,14 @@ class MinimeeService extends BaseApplicationComponent
 			
 			case MinimeeType::Css:
 
-				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
+				$contents = $asset->contents;
+				
+				if($this->settings->prependUrlEnabled)
+				{
+					$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 
-				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
+					$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
+				}
 
 				if($this->settings->minifyCssEnabled)
 				{
@@ -677,7 +682,7 @@ class MinimeeService extends BaseApplicationComponent
 				$model = array(
 					'filename' => $asset,
 					'filenameUrl' => $this->settings->baseUrl . $asset,
-					'filenamePath' => $this->settings->filesystemPath . $asset
+					'filenamePath' => ($this->settings->prependPathEnabled ? $this->settings->filesystemPath : '') . $asset
 				);
 
 				$this->_assets[] = minimee()->makeLocalAssetModel($model);
