@@ -143,7 +143,7 @@
                 ok = false;
               }
 
-              counter.text(count + ' of ' + limit + ' characters remaining');
+              counter.text(count + ' of ' + limit + ' characters used');
               return ok;
             };
 
@@ -197,7 +197,7 @@
                 },
                 counterCallback: function(data) {
                   // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
-                  counters.text(data.characters + ' of ' + limit + ' characters remaining');
+                  counters.text(data.characters + ' of ' + limit + ' characters used');
                 },
               });
             });
