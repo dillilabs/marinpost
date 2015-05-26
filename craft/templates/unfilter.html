@@ -7,7 +7,9 @@
 {% set entriesPerPage = default ? default.value : 10 %}
 {% set limit = craft.request.param('limit') | default(entriesPerPage)  %}
 
-{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').offset(offset).limit(limit) %}
+{% set featured = craft.entries.section('home').first.featuredPost.first %}
+{# omit featured from list of entries #}
+{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).offset(offset).limit(limit) %}
 
 {% import "_entry/macros" as m %}
 
