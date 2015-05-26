@@ -201,7 +201,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.22';
+        return '0.0.23';
     }
 
     public function getDeveloper()

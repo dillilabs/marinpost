@@ -16,18 +16,34 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {{ craft.minimee.css([
-      '/var/www/marinpost.org/public/css/normalize.css',
-      '/var/www/marinpost.org/public/css/normalize.css',
-      '/var/www/marinpost.org/public/css/jquery-ui.min.css',
-      '/var/www/marinpost.org/public/css/jquery-ui.structure.min.css',
-      '/var/www/marinpost.org/public/css/jquery-ui.theme.min.css',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/redactor.css',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/jquery.fileupload.css',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/s3direct.css',
-      '/var/www/marinpost.org/public/css/main.css',
-    ])
-  }}
+  {% if craft.mpadmin.minimeeEnabled %} {# Minimee requires a local filesystem path #}
+
+    {{ craft.minimee.css([
+        '/var/www/marinpost.org/public/css/normalize.css',
+        '/var/www/marinpost.org/public/css/normalize.css',
+        '/var/www/marinpost.org/public/css/jquery-ui.min.css',
+        '/var/www/marinpost.org/public/css/jquery-ui.structure.min.css',
+        '/var/www/marinpost.org/public/css/jquery-ui.theme.min.css',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/redactor.css',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/jquery.fileupload.css',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/s3direct.css',
+        '/var/www/marinpost.org/public/css/main.css',
+      ])
+    }}
+
+  {% else %} {# This must be kept in sync with the IF clause #}
+
+    <link rel="stylesheet" href="{{ siteUrl }}css/normalize.css">
+    <link rel="stylesheet" href="{{ siteUrl }}css/normalize.css">
+    <link rel="stylesheet" href="{{ siteUrl }}css/jquery-ui.min.css">
+    <link rel="stylesheet" href="{{ siteUrl }}css/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="{{ siteUrl }}css/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="{{ siteUrl }}cpresources/lib/redactor/redactor.css">
+    <link rel="stylesheet" href="{{ siteUrl }}cpresources/s3direct/css/jquery.fileupload.css">
+    <link rel="stylesheet" href="{{ siteUrl }}cpresources/s3direct/css/s3direct.css">
+    <link rel="stylesheet" href="{{ siteUrl }}css/main.css">
+
+  {% endif %}
 
 <!--[if lt IE 9]>
   <script src="{{ siteUrl }}js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -146,34 +162,66 @@
     Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
   </footer>
 
-  {{ craft.minimee.js([
-      '/var/www/marinpost.org/public/js/jquery.min.js',
-      '/var/www/marinpost.org/public/js/jquery-ui.min.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/redactor.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/counter.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontcolor.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontfamily.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontsize.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fullscreen.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/limiter.js',
-      '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/underline.js',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.iframe-transport.js',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload.js',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-process.js',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-validate.js',
-      '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/s3direct.js',
-      '/var/www/marinpost.org/public/js/console.js',
-      '/var/www/marinpost.org/public/js/home.js',
-      '/var/www/marinpost.org/public/js/about.js',
-      '/var/www/marinpost.org/public/js/filters.js',
-      '/var/www/marinpost.org/public/js/letters.js',
-      '/var/www/marinpost.org/public/js/account.js',
-      '/var/www/marinpost.org/public/js/userform.js',
-      '/var/www/marinpost.org/public/js/contentform.js',
-      '/var/www/marinpost.org/public/js/contact.js',
-      '/var/www/marinpost.org/public/js/main.js',
-      '/var/www/marinpost.org/public/js/ga.js',
-    ])
-  }}
+  {% if craft.mpadmin.minimeeEnabled %} {# Minimee requires a local filesystem path #}
+
+    {{ craft.minimee.js([
+        '/var/www/marinpost.org/public/js/jquery.min.js',
+        '/var/www/marinpost.org/public/js/jquery-ui.min.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/redactor.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/counter.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontcolor.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontfamily.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fontsize.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/fullscreen.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/limiter.js',
+        '/var/www/marinpost.org/craft/app/resources/lib/redactor/plugins/underline.js',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.iframe-transport.js',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload.js',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-process.js',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-validate.js',
+        '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/s3direct.js',
+        '/var/www/marinpost.org/public/js/console.js',
+        '/var/www/marinpost.org/public/js/home.js',
+        '/var/www/marinpost.org/public/js/about.js',
+        '/var/www/marinpost.org/public/js/filters.js',
+        '/var/www/marinpost.org/public/js/letters.js',
+        '/var/www/marinpost.org/public/js/account.js',
+        '/var/www/marinpost.org/public/js/userform.js',
+        '/var/www/marinpost.org/public/js/contentform.js',
+        '/var/www/marinpost.org/public/js/contact.js',
+        '/var/www/marinpost.org/public/js/main.js',
+        '/var/www/marinpost.org/public/js/ga.js',
+      ])
+    }}
+
+  {% else %} {# This must be kept in sync with the IF clause #}
+
+    <script src="{{ siteUrl }}js/jquery.min.js"></script>
+    <script src="{{ siteUrl }}js/jquery-ui.min.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/redactor.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/counter.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/fontcolor.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/fontfamily.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/fontsize.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/fullscreen.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/limiter.js"></script>
+    <script src="{{ siteUrl }}cpresources/lib/redactor/plugins/underline.js"></script>
+    <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.iframe-transport.js"></script>
+    <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload.js"></script>
+    <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-process.js"></script>
+    <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-validate.js"></script>
+    <script src="{{ siteUrl }}cpresources/s3direct/js/s3direct.js"></script>
+    <script src="{{ siteUrl }}js/console.js"></script>
+    <script src="{{ siteUrl }}js/home.js"></script>
+    <script src="{{ siteUrl }}js/about.js"></script>
+    <script src="{{ siteUrl }}js/filters.js"></script>
+    <script src="{{ siteUrl }}js/letters.js"></script>
+    <script src="{{ siteUrl }}js/account.js"></script>
+    <script src="{{ siteUrl }}js/userform.js"></script>
+    <script src="{{ siteUrl }}js/contentform.js"></script>
+    <script src="{{ siteUrl }}js/contact.js"></script>
+    <script src="{{ siteUrl }}js/main.js"></script>
+    <script src="{{ siteUrl }}js/ga.js"></script>
+  {% endif %}
 </body>
 </html>
