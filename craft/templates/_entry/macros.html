@@ -309,51 +309,25 @@
     </div>
   {% endif %}
 
-  {# TODO refactor this to a plugin #}
   {% if notice.startDate %}
-    <div class="event">{{ notice.startDate | date('F j, Y') }}
+    <div class="event">
+      {{ notice.startDate | date('F j, Y') }}
+
+    {% if notice.endDate and (notice.endDate | date('Ymd')) != (notice.startDate | date('Ymd')) %}
+
+      to {{ notice.endDate | date('F j, Y') }}
+
+    {% endif %}
 
     {% if notice.startTime %}
-      <br>{{ notice.startTime | date('g:i a') }}
-
-      {% if notice.endDate %}
-        {% if (notice.endDate | date('Ymd')) == (notice.startDate | date('Ymd')) %}
-
-          {% if notice.endTime %}
-            - {{ notice.endTime | date('g:i a') }}
-          {% endif %}
-
-        {% else %}
-
-          <br>To {{ notice.endDate | date('F j, Y') }}
-
-          {% if notice.endTime %}
-            <br>{{ notice.endTime | date('g:i a') }}
-          {% endif %}
-
-        {% endif %}
-
-      {% else %}
-          {% if notice.endTime %}
-            - {{ notice.endTime | date('g:i a') }}
-          {% endif %}
-
-      {% endif %}
-
-    {% else %}
-
-      {% if notice.endDate %}
-
-        {% if (notice.endDate | date('Ymd')) != (notice.startDate | date('Ymd')) %}
-          <br>To {{ notice.endDate | date('F j, Y') }}
-        {% endif %}
-
-      {% endif %}
+      <br>
+      {{ notice.startTime | date('g:i a') }}
 
       {% if notice.endTime %}
-        <br>{{ notice.endTime | date('g:i a') }}
-      {% endif %}
 
+        - {{ notice.endTime | date('g:i a') }}
+
+      {% endif %}
     {% endif %}
     </div>
   {% endif %}
