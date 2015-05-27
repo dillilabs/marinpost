@@ -1350,6 +1350,7 @@ footer {
 }
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
+/*
     .whats-new ul.posts {
         float: left;
         margin: 0px;
@@ -1362,6 +1363,7 @@ footer {
 		padding: 0;
         width: 30%;
     }
+*/
 }
 
 
