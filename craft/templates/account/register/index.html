@@ -43,9 +43,11 @@
           <div class="field">
               <label for="state">State <span class="note">* required</span></label>
               <select id="state" name="fields[state]">
-              {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-                <option value="{{ option.value }}" {%- if account is defined and option.value == account.state.value %}selected{% endif %}>{{ option.label }}</option>
-              {% endfor %}
+                <optgroup label="">
+                  {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+                    <option value="{{ option.value }}" {%- if account is defined and option.value == account.state.value %}selected{% endif %}>{{ option.label }}</option>
+                  {% endfor %}
+                </optgroup>
               </select>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('state')) }}

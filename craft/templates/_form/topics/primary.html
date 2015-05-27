@@ -5,8 +5,8 @@
 {% set primaryTopicId = entry is defined ? f.categoryId(entry, "primaryTopic") : 0 %}
 
 <select id="primaryTopic" name="fields[primaryTopic][]" class="required array">
-  <option value="" class="first-option">Select one - This Topic will be posted on the Home Page</option>
   <optgroup label="">
+  <option value="" class="first-option">Select one - This Topic will be posted on the Home Page</option>
   {% for option in topics %}
     <option value="{{ option.id }}" {%- if option.id == primaryTopicId %}selected{% endif %}>{{ option.title }}</option>
   {% endfor %}

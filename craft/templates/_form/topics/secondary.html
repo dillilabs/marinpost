@@ -30,11 +30,12 @@
     <label>Other Topic</label>
 
     <select name="fields[secondaryTopics][]" class="array">
+  <optgroup label="">
       <option value="">Select another Topic</option>
-
       {% for option in topics %}
         <option value="{{ option.id }}" {%- if option.id == topicId %}selected{% endif %}>{{ option.title }}</option>
       {% endfor %}
+  </optgroup>
     </select>
 
     {% if topic %}

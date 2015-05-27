@@ -58,9 +58,11 @@
               {% set selectedState = account.state %}
             {% endif %}
             <select id="state" name="fields[state]">
-            {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-              <option value="{{ option.value }}" {%- if option.value == selectedState.value %}selected{% endif %}>{{ option.label }}</option>
-            {% endfor %}
+                <optgroup label="">
+                    {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+                      <option value="{{ option.value }}" {%- if option.value == selectedState.value %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </optgroup>
             </select>
             {% if account is defined %}
               {{ f.errorList(account.getErrors('state')) }}

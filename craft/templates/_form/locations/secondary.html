@@ -36,11 +36,16 @@
       {% for option in locations %}
         {% if not (option.geographicGroup.label == geographicGroup) %}
           {% set geographicGroup = option.geographicGroup.label %}
-          <optgroup label="{{ geographicGroup }}">
+      {% if geographicGroup != 'Outside Marin' %}
+        <optgroup label="{{ geographicGroup }}">
+      {% endif %}
         {% endif %}
 
         <option value="{{ option.id }}" {%- if option.id == locationId %}selected{% endif %}>{{ option.title }}</option>
       {% endfor %}
+      {% if geographicGroup != 'Outside Marin' %}
+          </optgroup>
+      {% endif %}
     </select>
 
     {% if location %}

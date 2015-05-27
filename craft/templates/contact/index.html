@@ -44,19 +44,21 @@
 
         <label for="subject">Subject <span class="note">* required</span></label>
         <select id="subject" name="subject">
-          <option value="">Choose a Subject</option>
-          {{ c.option('Advertise') }}
-          {{ c.option('Donate') }}
-          {{ c.option('General Question') }}
-          {{ c.option('My Account') }}
-          {{ c.option('Privacy Policy') }}
-          {{ c.option('Report Abuse') }}
-          {{ c.option('Sponsorships') }}
-          {{ c.option('Subscribe') }}
-          {{ c.option('Tech Support') }}
-          {{ c.option('Terms of Use') }}
-          {{ c.option('Volunteer') }}
-          {{ c.option('Other') }}
+            <optgroup label="">
+              <option value="">Choose a Subject</option>
+              {{ c.option('Advertise') }}
+              {{ c.option('Donate') }}
+              {{ c.option('General Question') }}
+              {{ c.option('My Account') }}
+              {{ c.option('Privacy Policy') }}
+              {{ c.option('Report Abuse') }}
+              {{ c.option('Sponsorships') }}
+              {{ c.option('Subscribe') }}
+              {{ c.option('Tech Support') }}
+              {{ c.option('Terms of Use') }}
+              {{ c.option('Volunteer') }}
+              {{ c.option('Other') }}
+            </optgroup>
         </select>
         {{ message is defined and message ? f.errorList(message.getErrors('subject')) }}
 

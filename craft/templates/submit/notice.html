@@ -31,13 +31,13 @@
             <div class="field date">
                 <label for="event-start-time">Start Time</label>
                 <select name="fields[startTime][time]">
-                {{ f.timeOptions(entry.startTime) }}
+                <optgroup label="">{{ f.timeOptions(entry.startTime) }}</optgroup>
                 </select>
             </div>
             <div class="field date">
                 <label for="event-end-time">End Time</label>
                 <select name="fields[endTime][time]">
-                {{ f.timeOptions(entry.endTime) }}
+                <optgroup label="">{{ f.timeOptions(entry.endTime) }}</optgroup>
                 </select>
             </div>
             <div class="field">
@@ -55,10 +55,12 @@
             <div class="field statezip">
                 <label for="event-state">State</label>
                 <select name="fields[state]">
-                <option>Select -</option>
-                {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-                  <option value="{{ option.value }}" {%- if option.value == entry.state %}selected{% endif %}>{{ option.label }}</option>
-                {% endfor %}
+                <optgroup label="">
+                    <option>Select -</option>
+                    {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+                      <option value="{{ option.value }}" {%- if option.value == entry.state %}selected{% endif %}>{{ option.label }}</option>
+                    {% endfor %}
+                </optgroup>
                 </select>
             </div>
             <div class="field statezip">
