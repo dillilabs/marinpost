@@ -820,12 +820,15 @@ main.single > .post > h3.my-content {
     padding: 0 20px;
 }
 
+.whats-new aside {
+    display: none;
+}
+
 .whats-new aside > h2 {
     border-bottom: none;
     margin: 0;
     padding: 0 1em .1em;
 }
-
 
 #comments li > p {
     font-size: .9em;
@@ -1335,7 +1338,18 @@ footer {
 }
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
+    .whats-new ul.posts {
+        float: left;
+        margin: 0px;
+        width: 65%;
+    }
 
+    .whats-new aside {
+	    display: inline-block;
+	    float: right;
+		padding: 0;
+        width: 30%;
+    }
 }
 
 
@@ -1748,12 +1762,6 @@ footer {
         vertical-align: top;
     }
 
-    .whats-new aside {
-	    display: inline-block;
-	    float: right;
-		padding: 0;
-        width: 30%;
-    }
 }
 
 @media only screen and (min-width: 55em) { /* In case anything needs adjusting on the way to big */
