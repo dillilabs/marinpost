@@ -1338,6 +1338,21 @@ footer {
     .whats-new ul.posts {
         float: left;
         margin: 0px;
+        width: 58%;
+    }
+
+    .whats-new aside {
+	    display: inline-block;
+	    float: right;
+		padding: 0;
+        width: 37%;
+    }
+}
+
+@media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
+    .whats-new ul.posts {
+        float: left;
+        margin: 0px;
         width: 65%;
     }
 
@@ -1347,9 +1362,6 @@ footer {
 		padding: 0;
         width: 30%;
     }
-}
-
-@media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
 }
 
 
