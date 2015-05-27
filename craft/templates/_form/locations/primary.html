@@ -20,10 +20,10 @@
     {% endif %}
 
     <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
+  {% endfor %}
       {% if geographicGroup != 'Outside Marin' %}
         </optgroup>
       {% endif %}
-  {% endfor %}
 </select>
 
 {% if entry is defined %}
