@@ -20,6 +20,7 @@
     {% endif %}
 
     <option value="{{ option.id }}" {%- if option.id == primaryLocationId %}selected{% endif %}>{{ option.title }}</option>
+        </optgroup>
   {% endfor %}
 </select>
 
