@@ -26,6 +26,7 @@
                 {{ f.errorList(account.getErrors('lastName')) }}
               {% endif %}
           </div>
+{#
           <div class="field">
               <label for="streetAddress">Street Address <span class="note">* required</span></label>
               <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="128" {%- if account is defined %} value="{{ account.streetAddress }}"{% endif %}>
@@ -33,6 +34,7 @@
                 {{ f.errorList(account.getErrors('streetAddress')) }}
               {% endif %}
           </div>
+#}
           <div class="field">
               <label for="city">City <span class="note">* required</span></label>
               <input type="text" id="city" name="fields[city]" maxlength="30" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
