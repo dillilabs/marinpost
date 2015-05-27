@@ -37,6 +37,7 @@
             <label for="organization">Organization</label>
             <input type="text" id="organization" name="fields[organization]" maxlength="70" value="{{ currentUser.organization }}" maxlength="128">
         </div>
+{#
         <div class="field">
             <label for="organization">Street Address</label>
             <input type="text" id="streetAddress" name="fields[streetAddress]" maxlength="70" value="{{ currentUser.streetAddress }}" maxlength="128">
@@ -44,6 +45,7 @@
               {{ f.errorList(account.getErrors('streetAddress')) }}
             {% endif %}
         </div>
+#}
         <div class="field">
             <label for="city">City</label>
             <input type="text" id="city" name="fields[city]" maxlength="60" value="{{ currentUser.city }}" maxlength="30">

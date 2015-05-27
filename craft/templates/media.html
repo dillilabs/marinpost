@@ -9,9 +9,11 @@
     {% endblock %}
 
     {% block posts %}
-      {% for entry in craft.entries.section('media').limit(entriesPerPage).find %}
-        {{ p.post(entry) }}
-      {% endfor %}
+      {% cache unless craft.config.cacheTagDisabled %}
+        {% for entry in craft.entries.section('media').limit(entriesPerPage).find %}
+          {{ p.post(entry) }}
+        {% endfor %}
+      {% endcache %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
