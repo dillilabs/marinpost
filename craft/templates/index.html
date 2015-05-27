@@ -1,43 +1,47 @@
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% set featured = entry.featuredPost.first %}
-  {# omit featured from list of what's new #}
-  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).limit(entriesPerPage).find %}
-  {% set letters = craft.entries.section('letters').limit(entriesPerPage) %}
+  {% cache %}
+    {% set featured = entry.featuredPost.first %}
 
-  {% embed "_common/home" %}
-    {% block featured %}
-      {% if featured %}
-        {{ p.featuredPost(featured) }}
-      {% endif %}
-    {% endblock %}
+    {# omit featured from list of what's new #}
+    {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).limit(entriesPerPage).find %}
 
-    {% block whatsNew %}
-      <h2>What's New</h2>
+    {% set letters = craft.entries.section('letters').limit(entriesPerPage) %}
 
-      <ul class="posts">
-      {% for entry in entries | without(featured) %}
-        {{ p.post(entry, true) }}
-      {% endfor %}
-      </ul>
+    {% embed "_common/home" %}
+      {% block featured %}
+        {% if featured %}
+          {{ p.featuredPost(featured) }}
+        {% endif %}
+      {% endblock %}
 
-      <aside>
-        <h2>Letters</h2>
-        <div id="comments">
-          <ul>
-          {% for letter in letters %}
-            <li>
-              <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ p.titleCase(letter.title) }}</a></h4>
-              <p>{{ letter.letterContent | slice(0, 180) }} &hellip;</p>
-              {{ p.authorNameOrLink(letter, 'user') }}
-            </li>
-          {% endfor %}
-          </ul>
-        </div>
-      </aside>
-    {% endblock %}
-  {% endembed %}
+      {% block whatsNew %}
+        <h2>What's New</h2>
+
+        <ul class="posts">
+        {% for entry in entries | without(featured) %}
+          {{ p.post(entry, true) }}
+        {% endfor %}
+        </ul>
+
+        <aside>
+          <h2>Letters</h2>
+          <div id="comments">
+            <ul>
+            {% for letter in letters %}
+              <li>
+                <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ p.titleCase(letter.title) }}</a></h4>
+                <p>{{ letter.letterContent | slice(0, 180) }} &hellip;</p>
+                {{ p.authorNameOrLink(letter, 'user') }}
+              </li>
+            {% endfor %}
+            </ul>
+          </div>
+        </aside>
+      {% endblock %}
+    {% endembed %}
+  {% endcache %}
 {% endblock %}
 
 {% set js %}
@@ -45,5 +49,4 @@
     $('ul.posts').scrollingContent();
   });
 {% endset %}
-
 {% includeJs js %}
