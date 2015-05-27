@@ -21,7 +21,7 @@
 
 {% set defaultImage = userProfile ? 'user.gif' : singularSection~'.jpg' %}
 {% set defaultImagePath = '/img/default/'~transform~'/'~defaultImage %}
-<img src="{{ image ? image.url(transform) : defaultImagePath }}" class="display-image" />
+<img src="{{ image ? image.url(transform) : defaultImagePath }}" class="display-image {% if userProfile %}profile{% endif %}" />
 <label>Image</label>
 
 {% if errors %}
@@ -199,10 +199,3 @@ $(function() {
 });
 {% endset %}
 {% includeJs js %}
-
-{% set css %}
-img.display-image {
-  width: 160px;
-}
-{% endset %}
-{% includeCss css %}

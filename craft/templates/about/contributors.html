@@ -11,8 +11,8 @@
         {% for user in craft.users.group('contributor').order('lastName, firstName') %}
           <li class="listing">
             {% if user.userImage.first %}
-            <div class="image-wrapper">
-              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('profile') }}" /></a>
+            <div class="image-wrapper profile">
+              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('profile') }}" class="profile" /></a>
             </div>
             {% endif %}
 
