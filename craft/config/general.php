@@ -32,6 +32,9 @@ return array(
             // But required for the Minimee plugin's "Cache Url" configuration
             'baseUrl' => SITE_URL,
         ),
+
+        // Custom
+        'cacheTagDisabled' => false,
     ),
     'dev' => array(
         // 'devMode' => true,

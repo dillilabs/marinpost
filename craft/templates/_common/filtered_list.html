@@ -1,5 +1,7 @@
 <main class="clearfix">
-  <div class="sub-nav">{% block subNav %}
+  <div class="sub-nav">
+    {% block subNav %}
+      {% cache unless craft.config.cacheTagDisabled %}
       <div class="filter" id="filters">
 <!--         <a href="#"><h3>Save My Settings</h3></a> -->
 		    <div class="filter-wrapper">
@@ -52,7 +54,9 @@
           <div id="date-filter" class="date-picker"></div>
         </fieldset>
       </div>
-{% endblock %}</div>
+      {% endcache %}
+    {% endblock %}
+  </div>
 
   <div class="list-wrapper">
     <h2>

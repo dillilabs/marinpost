@@ -1,7 +1,7 @@
 {% extends "_common/layout" %}
 
 {% block main %}
-  {% cache %}
+  {% cache unless craft.config.cacheTagDisabled %}
     {% set featured = entry.featuredPost.first %}
 
     {# omit featured from list of what's new #}
