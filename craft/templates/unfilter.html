@@ -8,8 +8,15 @@
 {% set limit = craft.request.param('limit') | default(entriesPerPage)  %}
 
 {% set featured = craft.entries.section('home').first.featuredPost.first %}
-{# omit featured from list of entries #}
-{% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).offset(offset).limit(limit) %}
+
+{% if featured | length %}
+  {# omit featured from list of entries #}
+  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).offset(offset).limit(limit) %}
+
+{% else %}
+  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').offset(offset).limit(limit) %}
+
+{% endif %}
 
 {% import "_entry/macros" as m %}
 
