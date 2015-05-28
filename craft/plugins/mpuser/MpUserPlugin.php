@@ -7,6 +7,11 @@ class MpUserPlugin extends BasePlugin
      * Initialization:
      *
      *  Listen to users.onBeforeSaveUser event
+     *
+     *  IF not CP request:
+     *
+     *      Listen to users.onSaveUser event
+     *      Listen to users.onSetPassword event
      */
     public function init()
     {
@@ -15,6 +20,12 @@ class MpUserPlugin extends BasePlugin
         $this->settings = $this->getSettings();
 
         $this->_onBeforeSaveUserEvent();
+
+        if (!craft()->request->isCpRequest())
+        {
+            $this->_onSaveUserEvent();
+            $this->_onSetPasswordEvent();
+        }
     }
 
     //----------------------
@@ -64,7 +75,7 @@ class MpUserPlugin extends BasePlugin
 
                 if (!empty($honeypot))
                 {
-                    $this->_log('User registration form submitted from IP='.craft()->request->ipAddress.', activated honeypot='.$honeypot, LogLevel::Warning);
+                    $this->logger('User registration form submitted from IP='.craft()->request->ipAddress.', activated honeypot='.$honeypot, LogLevel::Warning);
                     // $user->addError($this->settings['honeypotField'], 'We think you might be a robot.');
                     $valid = false;
                 }
@@ -72,9 +83,80 @@ class MpUserPlugin extends BasePlugin
 
             if (!$valid)
             {
-                $this->_log('Invalid user: '.$user->username);
+                $this->logger('Invalid user: '.$user->username);
                 $event->performAction = false;
             }
+        });
+    }
+
+    /**
+     * Respond to users.onSaveUser event.
+     *
+     *  IF not CP request:
+     *
+     *      IF not new User:
+     *
+     *          IF "email" POST param exists:
+     *
+     *              Notify user.
+     */
+    private function _onSaveUserEvent()
+    {
+        craft()->on('users.onBeforeSaveUser', function(Event $event) {
+            $user = $event->params['user'];
+            $isNewUser = $event->params['isNewUser'];
+
+            if (!$isNewUser)
+            {
+                $emailPostParam = craft()->request->getPost('email');
+
+                if ($emailPostParam)
+                {
+                    $email = new EmailModel();
+                    $emailSettings = craft()->email->getSettings();
+                    $message = "The email address for your account on The Marin Post has been changed.";
+
+                    $email->fromEmail = $emailSettings['emailAddress'];
+                    $email->replyTo   = $emailSettings['emailAddress'];
+                    $email->sender    = $emailSettings['emailAddress'];
+                    $email->fromName  = $emailSettings['senderName'];
+                    $email->toEmail   = $user->email;
+                    $email->subject   = "Your Marin Post email address has been changed";
+                    $email->body      = $message;
+
+                    craft()->email->sendEmail($email);
+                    $this->logger("{$user->fullName} ({$user->email}) has changed their email address.", LogLevel::Warning);
+                }
+            }
+        });
+    }
+
+    /**
+     * Respond to users.onSetPassword event.
+     *
+     *  IF not CP request:
+     *
+     *      Notify user.
+     */
+    private function _onSetPasswordEvent()
+    {
+        craft()->on('users.onSetPassword', function(Event $event) {
+            $user = $event->params['user'];
+
+            $email = new EmailModel();
+            $emailSettings = craft()->email->getSettings();
+            $message = "The password for your account on The Marin Post has been changed.\n\nIf you did not do this, please contact us by replying to this email.";
+
+            $email->fromEmail = $emailSettings['emailAddress'];
+            $email->replyTo   = $emailSettings['emailAddress'];
+            $email->sender    = $emailSettings['emailAddress'];
+            $email->fromName  = $emailSettings['senderName'];
+            $email->toEmail   = $user->email;
+            $email->subject   = "Your Marin Post password has been changed";
+            $email->body      = $message;
+
+            craft()->email->sendEmail($email);
+            $this->logger("{$user->fullName} ({$user->email}) has changed their password.", LogLevel::Warning);
         });
     }
 
@@ -116,7 +198,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.21';
+        return '0.0.23';
     }
 
     public function getDeveloper()
