@@ -34,7 +34,7 @@ return array(
         ),
 
         // Custom
-        'cacheTagDisabled' => false,
+        'cacheTagDisabled' => true,
     ),
     'dev' => array(
         // 'devMode' => true,
