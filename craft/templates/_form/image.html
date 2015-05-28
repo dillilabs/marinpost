@@ -190,6 +190,7 @@ $(function() {
     accessKey: "{{ s3.keyId }}",
     assetsSourceId: {{ sourceId }},
     acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
+    imageTransform: '{{ transform }}',
     uploadProgressBarSelector: '.s3direct.image.progress-bar',
     updateIndexIndicatorSelector: 'img.s3direct.image',
     onUpdateAssetsIndex: populateListFromIndex,

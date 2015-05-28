@@ -19,9 +19,9 @@ class S3DirectController extends BaseController
         $this->requirePostRequest();
         $this->requireAjaxRequest();
 
-        $sourceId = craft()->request->getParam('sourceid');
+        $sourceId = craft()->request->getParam('sourceId');
         $inputFiles = craft()->request->getParam('files');
-        $transform = $this->pluginSettings['imageTransform'];
+        $transform = craft()->request->getParam('imageTransform', $this->pluginSettings['defaultImageTransform']);
 
         if ($sourceId && $inputFiles)
         {

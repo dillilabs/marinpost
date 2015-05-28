@@ -18,7 +18,7 @@ class S3DirectPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
-            'imageTransform' => array(AttributeType::String, 'default' => 'list', 'required' => true),
+            'defaultImageTransform' => array(AttributeType::String, 'default' => 'list', 'required' => true),
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }
@@ -41,7 +41,7 @@ class S3DirectPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.14';
+        return '0.0.15';
     }
 
     public function getDeveloper()

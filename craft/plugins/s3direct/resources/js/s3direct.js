@@ -95,7 +95,7 @@
       };
 
       var updateAssetsIndex = function(filenames) {
-        var data = { 'sourceid': config.assetsSourceId };
+        var data = { 'sourceId': config.assetsSourceId, 'imageTransform': config.imageTransform };
 
         $.each(filenames, function(i, name) {
           var key = 'files['+i+']';
@@ -197,6 +197,7 @@
     uploadProgressBarSelector: '.progress-bar.s3direct',
     updateIndexIndicatorSelector: 'img.s3direct',
     acceptFileTypes: undefined,
+    imageTransform: 'list',
     onUpdateAssetsIndex: false,
     requireFileCredit: false,
     requireFileTitle: false,

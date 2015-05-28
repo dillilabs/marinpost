@@ -4,13 +4,13 @@
 
 {{ forms.textField({
 	first:        true,
-	label:        "Image Transform"|t,
-	id:           'imageTransform',
-	name:         'imageTransform',
-	instructions: "Auto-generate transform for uploaded image."|t,
-	value:        settings.imageTransform,
+	label:        "Default Image Transform"|t,
+	id:           'defaultImageTransform',
+	name:         'defaultImageTransform',
+	instructions: "Auto-generate this transform for uploaded images by default."|t,
+	value:        settings.defaultImageTransform,
 	autofocus:    true,
-	errors:       settings.getErrors('imageTransform')
+	errors:       settings.getErrors('defaultImageTransform')
 }) }}
 
 <p style="font-weight:bold">Log Settings</p>
