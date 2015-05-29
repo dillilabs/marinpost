@@ -830,6 +830,10 @@ main.single > .post > h3.my-content {
     padding: 0 1em .1em;
 }
 
+.whats-new aside p {
+    color: #000;
+}
+
 #comments li > p {
     font-size: .9em;
     margin: .5em 0;
