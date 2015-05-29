@@ -283,7 +283,7 @@
 {% endmacro %}
 
 {% macro formatDateTime(date) %}
-  {{ date | date('F j, Y') }} &nbsp; {{ date | date('g:i A') }}
+  {{ date | date('F j, Y') }} - {{ date | date('g:ia') }}
 {% endmacro %}
 
 {% macro letterUrl(entry) %}
