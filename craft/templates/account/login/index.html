@@ -10,11 +10,10 @@
         <input type="hidden" name="action" value="users/login">
 
         <label for="loginName">Email Address</label>
-        <input id="loginName" type="text" name="loginName"
-        value="{{ craft.session.rememberedUsername }}">
+        <input id="loginName" type="text" name="loginName" value="{{ craft.session.rememberedUsername }}" maxlength="255">
 
         <label for="password">Password</label>
-        <input id="password" type="password" name="password">
+        <input id="password" type="password" name="password" maxlength="50">
 
         <label>
           <input type="checkbox" name="rememberMe" value="1">

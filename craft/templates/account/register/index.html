@@ -14,14 +14,14 @@
 
           <div class="field">
               <label for="firstName">First Name <span class="note">* required</span></label>
-              <input type="text" id="firstName" name="firstName" maxlength="30" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
+              <input type="text" id="firstName" name="firstName" maxlength="25" {%- if account is defined %} value="{{ account.firstName }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('firstName')) }}
               {% endif %}
           </div>
           <div class="field">
               <label for="lastName">Last Name <span class="note">* required</span></label>
-              <input type="text" id="lastName" name="lastName" maxlength="30" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
+              <input type="text" id="lastName" name="lastName" maxlength="35" {%- if account is defined %} value="{{ account.lastName }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('lastName')) }}
               {% endif %}
@@ -37,7 +37,7 @@
 #}
           <div class="field">
               <label for="city">City <span class="note">* required</span></label>
-              <input type="text" id="city" name="fields[city]" maxlength="30" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
+              <input type="text" id="city" name="fields[city]" maxlength="20" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('city')) }}
               {% endif %}
@@ -64,12 +64,12 @@
           </div>
           <div class="field">
               <label for="organization">Organization <small>(optional)</small></label>
-              <input type="text" id="organization" name="fields[organization]" maxlength="128" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
+              <input type="text" id="organization" name="fields[organization]" maxlength="70" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
           </div>
           <div class="field">
               {% set honeypot = craft.mpuser.registerFormHoneypotField | default('disabled') %}
               <label for="{{ honeypot }}">{{ honeypot | capitalize }} <span class="note">* required</span></label>
-              <input id="{{ honeypot }}" name="{{ honeypot }}" type="text" maxlength="32" autocomplete="off">
+              <input id="{{ honeypot }}" name="{{ honeypot }}" type="text" maxlength="30" autocomplete="off">
               {% set css %}
                 form#register label[for={{ honeypot }}], form#register input[name={{ honeypot }}] {
                   display: none;
@@ -79,25 +79,25 @@
           </div>
           <div class="field">
               <label for="email">Email Address <span class="note">* required</span></label>
-              <input id="email" type="text" name="email" maxlength="64" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
+              <input id="email" type="text" name="email" maxlength="255" {%- if account is defined %} value="{{ account.email }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('email')) }}
               {% endif %}
           </div>
           <div class="field">
               <label for="confirmEmail">Re-enter Email Address <span class="note">* required</span></label>
-              <input id="confirmEmail" type="text" maxlength="64" autocomplete="off">
+              <input id="confirmEmail" type="text" autocomplete="off">
           </div>
           <div class="field">
               <label for="password">Password <span class="note">* required</span></label>
-              <input id="password" type="password" name="password" maxlength="32" autocomplete="off" placeholder="Password must be at least 8 letters, numbers or characters.">
+              <input id="password" type="password" name="password" maxlength="50" autocomplete="off" placeholder="Password must be at least 8 letters, numbers or characters.">
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('password')) }}
               {% endif %}
           </div>
           <div class="field">
               <label for="confirmPassword">Re-enter Password <span class="note">* required</span></label>
-              <input id="confirmPassword" type="password" maxlength="32" autocomplete="off">
+              <input id="confirmPassword" type="password" autocomplete="off">
           </div>
           <div class="field">
               <input type="hidden" id="defaultTermsOfUse" name="fields[termsOfUse]" value="">

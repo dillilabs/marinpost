@@ -27,11 +27,11 @@
         </div>
         <div class="field">
             <label for="confirmEmail" class="required">Re-enter New Email Address</label>
-            <input type="text" id="confirmEmail" autocomplete="off" maxlength="255" class="required">
+            <input type="text" id="confirmEmail" autocomplete="off" class="required">
         </div>
         <div class="field">
             <label for="password" class="required">Current Password <small>for security</small></label>
-            <input type="password" id="password" name="password" autocomplete="off" maxlength="255" class="required">
+            <input type="password" id="password" name="password" autocomplete="off" maxlength="50" class="required">
             {% if account is defined %}
               {{ f.errorList(account.getErrors('password')) }}
             {% endif %}

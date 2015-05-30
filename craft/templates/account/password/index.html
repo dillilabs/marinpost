@@ -20,18 +20,18 @@
 
         <div class="field">
             <label for="newPassword">New Password</label>
-            <input type="password" id="newPassword" name="newPassword" autocomplete="off" maxlength="255" class="required">
+            <input type="password" id="newPassword" name="newPassword" autocomplete="off" maxlength="50" class="required">
             {% if account is defined %}
               {{ f.errorList(account.getErrors('newPassword')) }}
             {% endif %}
         </div>
         <div class="field">
             <label for="confirmPassword" class="required">Re-enter New Password</label>
-            <input type="password" id="confirmPassword" autocomplete="off" maxlength="255" class="required">
+            <input type="password" id="confirmPassword" autocomplete="off" class="required">
         </div>
         <div class="field">
             <label for="password" class="required">Current Password <small>for security</small></label>
-            <input type="password" id="password" name="password" autocomplete="off" maxlength="255" class="required">
+            <input type="password" id="password" name="password" autocomplete="off" maxlength="50" class="required">
             {% if account is defined %}
               {{ f.errorList(account.getErrors('password')) }}
             {% endif %}

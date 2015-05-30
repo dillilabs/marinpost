@@ -12,7 +12,7 @@
 
         <div class="field">
             <label for="loginName">Email</label>
-            <input id="loginName" type="text" name="loginName" value="{% if loginName is defined %}{{ loginName }}{% else %}{{ craft.session.rememberedUsername }}{% endif %}" autocompete="off">
+            <input id="loginName" type="text" name="loginName" maxlength="255" autocompete="off" value="{% if loginName is defined %}{{ loginName }}{% else %}{{ craft.session.rememberedUsername }}{% endif %}">
         </div>
 
         {% if errors is defined %}
@@ -25,7 +25,6 @@
 
         <input type="submit" value="Submit">
       </form>
-
     {% endblock %}
   {% endembed%}
 {% endblock %}
