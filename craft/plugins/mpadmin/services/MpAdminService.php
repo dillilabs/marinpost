@@ -105,14 +105,14 @@ class MpAdminService extends BaseApplicationComponent
     {
 
         $body = "Server Error Message: $errorMessage";
-        $body .= "\nURL: ".craft()->request->url;
-        $body .= "\nReferrer: ".craft()->request->urlReferrer;
-        $body .= "\nUser Agent: ".craft()->request->userAgent;
-        $body .= "\nUser IP Address: ".craft()->request->ipAddress;
+        $body .= "\n\nURL: ".craft()->request->url;
+        $body .= "\n\nReferrer: ".craft()->request->urlReferrer;
+        $body .= "\n\nUser Agent: ".craft()->request->userAgent;
+        $body .= "\n\nUser IP Address: ".craft()->request->ipAddress;
         if ($user = craft()->userSession->user)
         {
-            $body .= "\nUser Name: {$user->fullName}";
-            $body .= "\nUser Email Address: {$user->email}";
+            $body .= "\n\nUser Name: {$user->fullName}";
+            $body .= "\n\nUser Email Address: {$user->email}";
         }
 
         $email = new EmailModel();
