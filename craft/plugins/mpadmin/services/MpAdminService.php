@@ -82,7 +82,38 @@ class MpAdminService extends BaseApplicationComponent
         }
         $message .= ' appears to contain offensive language.';
 
-        $host = craft()->request->hostName;
+        $email = new EmailModel();
+        $emailSettings = craft()->email->getSettings();
+
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        $email->toEmail   = $emailSettings['emailAddress'];
+        $email->subject   = "Apparently offensive language warning on ".craft()->request->hostName;
+        $email->body      = $message;
+
+        craft()->email->sendEmail($email);
+
+        $this->plugin->logger($message, LogLevel::Warning);
+    }
+
+    /**
+     * Email admin on server error.
+     */
+    public function notifyAdminOfServerError($errorMessage)
+    {
+
+        $body = "Server Error Message: $errorMessage";
+        $body .= "\nURL: ".craft()->request->url;
+        $body .= "\nReferrer: ".craft()->request->urlReferrer;
+        $body .= "\nUser Agent: ".craft()->request->userAgent;
+        $body .= "\nUser IP Address: ".craft()->request->ipAddress;
+        if ($user = craft()->userSession->user)
+        {
+            $body .= "\nUser Name: {$user->fullName}";
+            $body .= "\nUser Email Address: {$user->email}";
+        }
 
         $email = new EmailModel();
         $emailSettings = craft()->email->getSettings();
@@ -92,11 +123,11 @@ class MpAdminService extends BaseApplicationComponent
         $email->sender    = $emailSettings['emailAddress'];
         $email->fromName  = $emailSettings['senderName'];
         $email->toEmail   = $emailSettings['emailAddress'];
-        $email->subject   = "Apparently offensive language warning on $host";
-        $email->body      = $message;
+        $email->subject   = "Server Error on ".craft()->request->hostName;
+        $email->body      = $body;
 
         craft()->email->sendEmail($email);
 
-        $this->plugin->logger($message, LogLevel::Warning);
+        $this->plugin->logger($body, LogLevel::Warning);
     }
 }

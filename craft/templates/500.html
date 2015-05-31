@@ -3,13 +3,15 @@
 {% set title = "Server Error" %}
 
 {% block main %}
-	<h1>{{ title }}</h1>
+	<h1>Oops, Sorry. Server Error</h1>
 
-  Sorry, but there's been an error.
+  We'll try to fix this asap.
   <br>
-  <br>
-  We hope to fix it very soon.
-  <br>
-  <br>
+  We've already been notified, but feel free to <a href='/contact'>Contact Us</a>.
+  <br> <br>
   <i>Thanks for your patience!</i>
+
+  {% if message %}
+    {% set notified = craft.mpadmin.notifyAdminOfServerError(message) %}
+  {% endif %}
 {% endblock %}
