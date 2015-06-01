@@ -370,7 +370,7 @@
 {% macro featuredPost(entry) %}
   {% from _self import postImage, postSummary, postTags %}
 
-  <div class="featured">
+  <div class="{% if entry.section.handle == "notices" %}notice {% endif %} featured">
     {{ postImage(entry, 'hero') }}
     {{ postTags(entry, true) }}
     {{ postSummary(entry) }}

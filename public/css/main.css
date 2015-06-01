@@ -665,6 +665,10 @@ ul.tags {
     padding-right: 3%;
 }
 
+#featured .notice p {
+    margin: .25em 0;
+}
+
 h3.contributor {
     margin-bottom: 0;
 }
@@ -728,7 +732,7 @@ main.single > .post > h3.my-content {
     font-size: 1em;
 }
 
-.single .blog p, .notices p, .letters p {
+.blog .single p:not(.image-credit), .notices .single p:not(.image-credit), .letters p {
     color: #000;
     font-size: 1.1em;
     line-height: 1.5em;
