@@ -30,7 +30,9 @@
             {% endif %}
         
             {% if user.bio %}
-              <p>{{ p.excerpt(user.bio, 200) }}&nbsp;<a href="{{ p.contributorUrl(user) }}">more</a></p>
+              <p>{{ p.excerpt(user.bio, 200) }}&nbsp;<a href="{{ p.contributorUrl(user) }}">more »</a></p>
+            {% else %}
+              <p></p>
             {% endif %}
           </li>
         {% endfor %}
