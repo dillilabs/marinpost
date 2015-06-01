@@ -361,7 +361,7 @@
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      {{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ entry.url }}">more »</a></p>
 
   {% endswitch %}
 {% endmacro %}

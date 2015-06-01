@@ -728,7 +728,7 @@ main.single > .post > h3.my-content {
     font-size: 1em;
 }
 
-.blog p, .notices p, .letters p {
+.single .blog p, .notices p, .letters p {
     color: #000;
     font-size: 1.1em;
     line-height: 1.5em;
