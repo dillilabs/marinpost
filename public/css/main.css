@@ -1494,7 +1494,7 @@ footer {
         margin-left: 340px;
     }
 
-    .whats-new ul.tags, .whats-new h3, .whats-new .event, .whats-new .byline, .blog ul.tags, .blog h3, .blog .event, .blog .byline, .notices ul.tags, .notices h3, .notices .event, .notices .byline, .news ul.tags, .news h3, .news .event, .news .byline, .media ul.tags, .media h3, .media .event, .media .byline, .submit p.event, .submit .byline {
+    .whats-new ul.tags, .whats-new h3, .whats-new .event, .whats-new .byline, .blog ul.tags, .blog h3, .blog .event, .blog .byline, .notices ul.tags, .notices h3, .notices .event, .notices .byline, .posts .notices p, .news ul.tags, .news h3, .news .event, .news .byline, .media ul.tags, .media h3, .media .event, .media .byline, .submit p.event, .submit .byline {
         margin-left: 175px;
     }
 
