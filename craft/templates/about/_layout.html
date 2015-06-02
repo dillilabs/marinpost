@@ -1,30 +1,21 @@
 <main class="single clearfix">
   <div class="sub-nav">
-        <h4>About</h4>
+    <h4>About</h4>
     {% block subNav %}
-        {{ n.arrowLink('about', 'About Us') }}
-        {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
-        {{ n.arrowLink('about/advisors', 'Advisors') }}
-          <h5 {% if craft.request.path == "about/contributors" %}class="active"{% endif %}><a href="/about/contributors">Contributors</a></h5>
-<!--
-          <ul class="contributors" style="display: none;">
-            <li><input type="radio" name="author" value="{{ url('about/contributors') }}" checked="checked" /> All</li>
-            {% for author in craft.users.group('contributor').order('lastName, firstName') %}
-              <li>
-                <input type="radio" name="author" id="{{ author.firstName }} {{ author.lastName }}" value="{{ p.contributorUrl(author) }}"/> <label for='{{ author.firstName }} {{ author.lastName }}'>{{ author.name }}</label>
-              </li>
-            {% endfor %}
-          </ul>
--->
-        {{ n.arrowLink('about/terms', 'Terms of Use') }}
-        {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
-        {{ n.arrowLink('about/subscribe', 'Subscribe') }}
-        {{ n.arrowLink('about/sponsor', 'Sponsor Us') }}
-        {{ n.arrowLink('about/advertise', 'Advertise') }}
+      {{ n.arrowLink('about', 'About Us') }}
+      {{ n.arrowLink('about/staff', 'Staff & Volunteers') }}
+      {{ n.arrowLink('about/advisors', 'Advisors') }}
+      {{ n.arrowLink('about/contributors', 'Contributors') }}
+      {{ n.arrowLink('about/guests', 'Guest Writers') }}
+      {{ n.arrowLink('about/terms', 'Terms of Use') }}
+      {{ n.arrowLink('about/privacy', 'Privacy Policy') }}
+      {{ n.arrowLink('about/subscribe', 'Subscribe') }}
+      {{ n.arrowLink('about/sponsor', 'Sponsor Us') }}
+      {{ n.arrowLink('about/advertise', 'Advertise') }}
     {% endblock %}
   </div>
 
-  <div class="{% if craft.request.path == "about/contributors" %}list-wrapper{% else %}post{% endif %}">
+  <div class="{{ craft.request.segment(2) in ['contributors', 'guests'] ? 'list-wrapper' : 'post' }}">
     {% block post %}
     {% endblock %}
   </div>

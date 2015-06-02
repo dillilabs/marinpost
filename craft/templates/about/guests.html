@@ -1,0 +1,26 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "about/_layout" %}
+
+    {% block post %}
+      <h2>Guest Writers</h2>
+      <div class="help">{{ n.siteMessage }}</div>
+      <ul class="posts">
+        {% for user in craft.users.group('guest').hideFromView('not 1').order('lastName, firstName') %}
+          <li class="listing">
+            <h3 class="contributor">{{ p.nameCase(user.name) }}</h3>
+            <div class="profession">
+              {% if user.titleOrProfession %}
+                {{ user.titleOrProfession }}<br>
+              {% endif %}
+                
+              {{ user.city }}, {{ user.state }}
+            </div>
+            <p></p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

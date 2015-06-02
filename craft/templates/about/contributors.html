@@ -8,7 +8,7 @@
       <div class="help">{{ n.siteMessage }}</div>
 
       <ul class="posts">
-        {% for user in craft.users.group('contributor').order('lastName, firstName') %}
+        {% for user in craft.users.group('contributor').hideFromView('not 1').order('lastName, firstName') %}
           <li class="listing">
             {% if user.userImage.first %}
             <div class="image-wrapper profile">
@@ -18,11 +18,11 @@
 
             <h3 class="contributor"><a href="{{ p.contributorUrl(user) }}">{{ p.nameCase(user.name) }}</a></h3>
             <div class="profession">
-                {% if user.titleOrProfession %}
+              {% if user.titleOrProfession %}
                 {{ user.titleOrProfession }}<br>
-                {% endif %}
+              {% endif %}
                 
-                {{ user.city }}, {{ user.state }}
+              {{ user.city }}, {{ user.state }}
             </div>
 
             {% if user.webSite %}
