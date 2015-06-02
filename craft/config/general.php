@@ -15,6 +15,7 @@ return array(
         'activateAccountFailurePath'      => 'account/register/error',
         'activateAccountSuccessPath'      => 'account/register/welcome',
         'autoLoginAfterAccountActivation' => true,
+        'filenameWordSeparator'           => null,
         'invalidUserTokenPath'            => 'account/login/error',
         'loginPath'                       => 'account/login',
         'logoutPath'                      => 'account/logout',
