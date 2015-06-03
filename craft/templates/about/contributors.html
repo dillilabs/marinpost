@@ -4,35 +4,38 @@
   {% embed "about/_layout" %}
 
     {% block post %}
+      {% set contributors = craft.users.group('contributor').order('lastName, firstName') %}
+
       <h2>Contributors</h2>
+
       <div class="help">{{ n.siteMessage }}</div>
 
       <ul class="posts">
-        {% for user in craft.users.group('contributor').hideFromView('not 1').order('lastName, firstName') %}
+        {% for contributor in contributors %}
           <li class="listing">
-            {% if user.userImage.first %}
+            {% if contributor.userImage.first %}
             <div class="image-wrapper profile">
-              <a href="{{ p.contributorUrl(user) }}"><img src="{{ user.userImage.first.url('profile') }}" class="profile" /></a>
+              <a href="{{ p.contributorUrl(contributor) }}"><img src="{{ contributor.userImage.first.url('profile') }}" class="profile" /></a>
             </div>
             {% endif %}
 
-            <h3 class="contributor"><a href="{{ p.contributorUrl(user) }}">{{ p.nameCase(user.name) }}</a></h3>
+            <h3 class="contributor"><a href="{{ p.contributorUrl(contributor) }}">{{ p.nameCase(contributor.name) }}</a></h3>
             <div class="profession">
-              {% if user.titleOrProfession %}
-                {{ user.titleOrProfession }}<br>
+              {% if contributor.titleOrProfession %}
+                {{ contributor.titleOrProfession }}<br>
               {% endif %}
                 
-              {{ user.city }}, {{ user.state }}
+              {{ contributor.city }}, {{ contributor.state }}
             </div>
 
-            {% if user.webSite %}
-              <p class="my-web-site"><a href="{{ p.externalUrl(user.webSite) }}" target="_blank">My Web Site</a></p>
+            {% if contributor.webSite %}
+              <p class="my-web-site"><a href="{{ p.externalUrl(contributor.webSite) }}" target="_blank">My Web Site</a></p>
             {% endif %}
         
-            {% if user.bio %}
-              <p>{{ p.excerpt(user.bio, 200) }}&nbsp;<a href="{{ p.contributorUrl(user) }}">more »</a></p>
+            {% if contributor.bio %}
+              <p>{{ p.excerpt(contributor.bio, 200) }}&nbsp;<a href="{{ p.contributorUrl(contributor) }}">more »</a></p>
             {% else %}
-              <p></p>
+             <p></p>
             {% endif %}
           </li>
         {% endfor %}
