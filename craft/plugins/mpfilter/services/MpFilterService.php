@@ -111,7 +111,6 @@ class MpFilterService extends BaseApplicationComponent
 
         if (!empty($locations))
         {
-            // $entriesFilteredBy['location'] = $this->_relatedEntries($locations, $section);
             $entriesFilteredBy['location'] = $this->_locationEntries($locations, $section);
             $this->plugin->logger(array('entries filtered by location' => $entriesFilteredBy['location']));
         }
@@ -120,7 +119,7 @@ class MpFilterService extends BaseApplicationComponent
 
         if (!empty($topics))
         {
-            $entriesFilteredBy['topic'] = $this->_relatedEntries($topics, $section);
+            $entriesFilteredBy['topic'] = $this->_topicEntries($topics, $section);
             $this->plugin->logger(array('entries filtered by topic' => $entriesFilteredBy['topic']));
         }
 
@@ -157,19 +156,6 @@ class MpFilterService extends BaseApplicationComponent
 
         $this->plugin->logger(array('filtered entries' => $entries));
         return $entries;
-    }
-
-    /**
-     * Return entries related to Topic(s) and optional Section.
-     */
-    private function _relatedEntries($entryIds = false, $section = false)
-    {
-        $criteria = craft()->elements->getCriteria(ElementType::Entry);
-
-        if ($section) $criteria->section = $section;
-        if ($entryIds) $criteria->relatedTo = $entryIds;
-
-        return $criteria->ids();
     }
 
     /**
@@ -318,6 +304,44 @@ class MpFilterService extends BaseApplicationComponent
             $this->plugin->logger(array('quaternary' => $quaternary));
 
             $entryIds = array_unique(array_merge($primary, $secondary, $tertiary, $quaternary));
+        }
+        else
+        {
+            $entryIds = $criteria->ids();
+        }
+
+        return $entryIds;
+    }
+
+    /**
+     * Return entries related to Topic(s) and optional Section.
+     */
+    private function _topicEntries($topicIds = false, $section = false)
+    {
+        $criteria = craft()->elements->getCriteria(ElementType::Entry);
+
+        if ($section) $criteria->section = $section;
+
+        if ($topicIds)
+        {
+            // First find entries directly associated via their Primary Topic
+            $criteria->relatedTo = array(
+                'targetElement' => $topicIds,
+                'field' => 'primaryTopic',
+            );
+            $primary = $criteria->ids();
+
+            // Next find entries directly associated via a Secondary Topic
+            $criteria->relatedTo = array(
+                'targetElement' => $topicIds,
+                'field' => 'secondaryTopics',
+            );
+            $secondary = $criteria->ids();
+
+            $this->plugin->logger(array('primary' => $primary));
+            $this->plugin->logger(array('secondary' => $secondary));
+
+            $entryIds = array_unique(array_merge($primary, $secondary));
         }
         else
         {
