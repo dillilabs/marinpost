@@ -103,14 +103,15 @@ class S3DirectService extends BaseApplicationComponent
         foreach ($files as $fileAttributes) {
             $uri = $this->_s3UriForFilename($fileAttributes['name']);
             $indexModel = $this->_getAssetIndexDataModelByUri($assetSourceId, $sessionId, $uri);
-            $this->plugin->logger("updateAssetIndexForFilenames() uri=$uri, indexModel uri={$indexModel->uri}, indexModel offset={$indexModel->offset}");
 
             if ($indexModel)
             {
                 $assetId = $this->_updateAssetIndex($sessionId, $indexModel->offset, $assetSourceId);
-                $this->plugin->logger("updateAssetIndexForFilenames() assetId=".json_encode($assetId));
-                $this->_updateAssetMetadata($assetId, $fileAttributes);
-                $updated += 1;
+                if ($assetId)
+                {
+                    $this->_updateAssetMetadata($assetId, $fileAttributes);
+                    $updated += 1;
+                }
             }
         }
 
@@ -192,7 +193,8 @@ class S3DirectService extends BaseApplicationComponent
      */
     private function _updateAssetIndex($sessionId, $offset, $assetSourceId)
     {
-        return craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
+        $array = craft()->assetIndexing->processIndexForSource($sessionId, $offset, $assetSourceId);
+        return $array['result'];
     }
 
     /**

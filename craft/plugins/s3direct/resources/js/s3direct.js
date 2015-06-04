@@ -17,57 +17,37 @@
     });
 
     return this.each(function() {
-      var fileGuids = [];
+      var files = { names: [], titles: [], credits: [] };
 
-      var guid = function() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-          return v.toString(16);
-        })
+      var kebabNameFor = function(originalFileName) {
+        var fileParts = originalFileName.split('.');
+        var fileExt = fileParts.length > 1 ? fileParts.pop() : false;
+        var fileName = fileParts.join();
+
+        fileName = fileName.replace(/\W+/g, '-');
+
+        return fileExt ? fileName+'.'+fileExt : fileName;
       };
 
-      var s3KeyFor = function(guid) {
+      var s3KeyFor = function(fileName) {
         var subfolder = config.subfolder.length > 0 ? config.subfolder + '/' : '';
 
-        return subfolder + config.currentUserId + '/' + guid;
+        return subfolder + config.currentUserId + '/' + fileName;
       };
 
-      var fileCredits = [];
+      var promptForString = function(strings, message) {
+        var string = prompt(message);
 
-      var promptForFileCredit = function() {
-        var fileCredit = prompt('Image Credit');
+        if (string) {
+          string = string.trim();
 
-        if (fileCredit) {
-          fileCredit = fileCredit.trim();
-
-          if (fileCredit.length) {
-            fileCredits.push(fileCredit);
+          if (string.length) {
+            strings.push(string);
 
             return true;
           } else {
             // recurse
-            return promptForFileCredit();
-          }
-        }
-
-        return false;
-      };
-
-      var fileTitles = [];
-
-      var promptForFileTitle = function() {
-        var fileTitle = prompt('Document Title');
-
-        if (fileTitle) {
-          fileTitle = fileTitle.trim();
-
-          if (fileTitle.length) {
-            fileTitles.push(fileTitle);
-
-            return true;
-          } else {
-            // recurse
-            return promptForFileTitle();
+            return promptForString();
           }
         }
 
@@ -77,25 +57,28 @@
       var fileUploadSubmit = function(e, data) {
         var file = data.files[0];
 
-        fileCredits = [];
+        files.names = [];
+        files.names.push(kebabNameFor(file.name));
+
+        files.credits = [];
         if (config.requireFileCredit) {
-          if (!promptForFileCredit()) {
+          if (!promptForString(files.credits, 'Image Credit')) {
             return false;
           }
         }
 
-        fileTitles = [];
+        files.titles = [];
         if (config.requireFileTitle) {
-          if (!promptForFileTitle()) {
+          if (!promptForString(files.titles, 'Document Title')) {
             return false;
           }
+        } else {
+          // Preserve original file name
+          files.titles.push(file.name);
         }
-
-        fileGuids = [];
-        fileGuids.push(guid());
 
         data.formData = {
-          key: s3KeyFor(fileGuids[0]),
+          key: s3KeyFor(files.names[0]),
           acl: 'public-read',
           policy: config.policy,
           signature: config.signature,
@@ -106,20 +89,20 @@
         if (config.debug) console.log('fileUploadSubmit()', data);
       };
 
-      var updateAssetsIndex = function(filenames) {
+      var updateAssetsIndex = function(originalFileNames) {
         var data = { 'sourceId': config.assetsSourceId, 'imageTransform': config.imageTransform };
 
-        $.each(filenames, function(i, name) {
+        $.each(originalFileNames, function(i, name) {
           var key = 'files['+i+']';
 
           data[key] = {
-            name: fileGuids[0],
-            title: fileTitles[0],
-            credit: fileCredits[0]
+            name: files.names[0],
+            title: files.titles[0],
+            credit: files.credits[0]
           };
         });
 
-        if (config.debug) console.log('updateAssetsIndex() before', filenames, fileGuids, fileTitles, fileCredits, data);
+        if (config.debug) console.log('updateAssetsIndex() before', originalFileNames, files, data);
 
         updateIndexIndicator.show();
 
@@ -147,7 +130,7 @@
         });
       };
 
-      var filenames = [];
+      var originalFileNames = [];
       var uploadError = false;
 
       var fileUpload = $(this).fileupload({
@@ -156,9 +139,9 @@
         dataType: 'json',
         singleFileUploads: true,
         start: function(e) {
-          filenames = [];
+          originalFileNames = [];
 
-          if (config.debug) console.log('fileupload() start', filenames);
+          if (config.debug) console.log('fileupload() start', originalFileNames);
         },
         progressall: function (e, data) {
           var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -167,14 +150,14 @@
         },
         done: function(e, data) {
           $.each(data.files, function(i, e) {
-            filenames.push(e.name);
+            originalFileNames.push(e.name);
           });
 
           setTimeout(function() {
             uploadProgressBar.css('width', 0);
           }, 1000);
 
-          if (config.debug) console.log('fileupload() done', data, filenames);
+          if (config.debug) console.log('fileupload() done', data, originalFileNames);
         },
         fail: function(e, data) {
           uploadError = true;
@@ -183,10 +166,10 @@
           if (config.debug) console.log('fileupload() fail', data);
         },
         stop: function(e) {
-          if (config.debug) console.log('fileupload() stop', filenames);
+          if (config.debug) console.log('fileupload() stop', originalFileNames);
 
           if (!uploadError) {
-            updateAssetsIndex(filenames);
+            updateAssetsIndex(originalFileNames);
           }
         }
       });

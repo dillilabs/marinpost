@@ -58,7 +58,7 @@
           {% for asset in assets %}
             <li data-asset-id="{{ asset.id }}"  data-asset-url="{{ asset.url(transform) }}" {% if asset.id == image.id %}class="selected"{% endif %}>
               <div><img src="{{ asset.url(transform) }}" /></div>
-              <span class="title">{{ p.excerpt(asset.filename, excerptLength) }}</span>
+              <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
             </li>
           {% endfor %}
         {% endif %}
@@ -95,9 +95,9 @@ $(function() {
 
     $.each(files, function(index, file) {
       var selected = file.id == selectedId ? 'class="selected"' : '';
-      var name = file.filename.length > {{ excerptLength }} ? file.filename.slice(0, {{ excerptLength }})+'...' : file.filename;
+      var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
 
-      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+name+'</span></li>');
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
     });
 
     srcFiles.show();
