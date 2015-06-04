@@ -17,10 +17,19 @@
     });
 
     return this.each(function() {
-      var keyFor = function(fileName) {
+      var fileGuids = [];
+
+      var guid = function() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+        })
+      };
+
+      var s3KeyFor = function(guid) {
         var subfolder = config.subfolder.length > 0 ? config.subfolder + '/' : '';
 
-        return subfolder + config.currentUserId + '/' + fileName;
+        return subfolder + config.currentUserId + '/' + guid;
       };
 
       var fileCredits = [];
@@ -67,28 +76,31 @@
 
       var fileUploadSubmit = function(e, data) {
         var file = data.files[0];
-        fileCredits = [];
-        fileTitles = [];
 
+        fileCredits = [];
         if (config.requireFileCredit) {
           if (!promptForFileCredit()) {
             return false;
           }
         }
 
+        fileTitles = [];
         if (config.requireFileTitle) {
           if (!promptForFileTitle()) {
             return false;
           }
         }
 
+        fileGuids = [];
+        fileGuids.push(guid());
+
         data.formData = {
-          key: keyFor(file.name),
-           acl: 'public-read',
-           policy: config.policy,
-           signature: config.signature,
-           AWSAccessKeyId: config.accessKey,
-           'Content-Type': file.type,
+          key: s3KeyFor(fileGuids[0]),
+          acl: 'public-read',
+          policy: config.policy,
+          signature: config.signature,
+          AWSAccessKeyId: config.accessKey,
+          'Content-Type': file.type,
         };
 
         if (config.debug) console.log('fileUploadSubmit()', data);
@@ -101,13 +113,13 @@
           var key = 'files['+i+']';
 
           data[key] = {
-            name: name,
+            name: fileGuids[0],
             title: fileTitles[0],
             credit: fileCredits[0]
           };
         });
 
-        if (config.debug) console.log('updateAssetsIndex() before', filenames, fileTitles, fileCredits, data);
+        if (config.debug) console.log('updateAssetsIndex() before', filenames, fileGuids, fileTitles, fileCredits, data);
 
         updateIndexIndicator.show();
 
