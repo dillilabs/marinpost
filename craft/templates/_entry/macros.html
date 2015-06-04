@@ -177,7 +177,7 @@
 {% endmacro %}
 
 {% macro filterLink(section, category) %}
-  <a href="/{{ section.handle }}?filter={{ category.group.handle }}&id={{ category.id }}">{{ category }}</a>
+  <a href="/{{ section.handle }}?{{ category.group.handle }}={{ category.id }}">{{ category }}</a>
 {% endmacro %}
 
 {% macro postTags(entry, unfiltered, secondary) %}

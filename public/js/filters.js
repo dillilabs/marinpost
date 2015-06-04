@@ -1,5 +1,6 @@
 (function($) {
-    $.fn.filters  = function() {
+    $.fn.filters  = function(options) {
+        var config = $.extend({}, $.fn.filters.defaults, options);
         var section = document.location.pathname.split('/')[1];
 
         return this.each(function() {
@@ -18,6 +19,16 @@
             //----------
             // Functions
             //----------
+
+            var initializeWithFilters = function(filterType) {
+              var ids = config[filterType].split(',');
+              var fieldset = $('#filters fieldset.'+filterType);
+              fieldset.find('h5').click();
+              fieldset.find('li > input#'+filterType+'-all').prop('checked', '');
+              $.each(ids, function(_i, id) {
+                fieldset.find('li > input#'+id).prop('checked', 'checked');
+              });
+            };
 
             // TODO refactor
             var filterType = function(e) {
@@ -220,6 +231,24 @@
                 loadMoreContent();
               }
             });
+
+            // Initialize filters on page load
+            if (config.locations.length || config.topics.length) {
+                if (config.locations.length) {
+                    initializeWithFilters('locations');
+                }
+
+                if (config.topics.length) {
+                    initializeWithFilters('topics');
+                }
+
+                refreshViewsAndEnableFilters();
+            }
         });
+    };
+
+    $.fn.filters.defaults = {
+        locations: '',
+        topics: '',
     };
 }(jQuery));
