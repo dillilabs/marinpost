@@ -221,6 +221,17 @@
               e.preventDefault();
             });
 
+            // append current filters to log and notice detail urls
+            if (section == 'blog' || section == 'notices') {
+              filteredContent.on('click', 'a.post-detail', function(e) {
+                var filters = activeFilters();
+                var url = this.href + '?locations='+filters.location+'&topics='+filters.topic;
+
+                e.preventDefault();
+                document.location = url;
+              });
+            }
+
             $(window).scroll(function() {
               var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
               var offset;
