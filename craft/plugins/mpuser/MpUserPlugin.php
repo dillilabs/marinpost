@@ -112,19 +112,13 @@ class MpUserPlugin extends BasePlugin
 
                 if ($emailPostParam)
                 {
-                    $email = new EmailModel();
-                    $emailSettings = craft()->email->getSettings();
-                    $message = "The email address for your account on The Marin Post has been changed.";
 
-                    $email->fromEmail = $emailSettings['emailAddress'];
-                    $email->replyTo   = $emailSettings['emailAddress'];
-                    $email->sender    = $emailSettings['emailAddress'];
-                    $email->fromName  = $emailSettings['senderName'];
-                    $email->toEmail   = $user->email;
-                    $email->subject   = "Your Marin Post email address has been changed";
-                    $email->body      = $message;
+                    $this->_notifyUser(
+                        $user->email,
+                        "Your Marin Post email address has been changed",
+                        "The email address for your account on The Marin Post has been changed."
+                    );
 
-                    craft()->email->sendEmail($email);
                     $this->logger("{$user->fullName} ({$user->email}) has changed their email address.", LogLevel::Warning);
                 }
             }
@@ -134,28 +128,27 @@ class MpUserPlugin extends BasePlugin
     /**
      * Respond to users.onSetPassword event.
      *
-     *  IF not CP request:
+     *  IF NOT CP request:
      *
-     *      Notify user.
+     *      IF User status is active:
+     *
+     *          Notify User.
      */
     private function _onSetPasswordEvent()
     {
         craft()->on('users.onSetPassword', function(Event $event) {
             $user = $event->params['user'];
 
-            $email = new EmailModel();
-            $emailSettings = craft()->email->getSettings();
-            $message = "The password for your account on The Marin Post has been changed.\n\nIf you did not do this, please contact us by replying to this email.";
+            if ($user->status != UserStatus::Active) {
+              return;
+            }
 
-            $email->fromEmail = $emailSettings['emailAddress'];
-            $email->replyTo   = $emailSettings['emailAddress'];
-            $email->sender    = $emailSettings['emailAddress'];
-            $email->fromName  = $emailSettings['senderName'];
-            $email->toEmail   = $user->email;
-            $email->subject   = "Your Marin Post password has been changed";
-            $email->body      = $message;
+            $this->_notifyUser(
+                $user->email,
+                "Your Marin Post password has been changed",
+                "The password for your account on The Marin Post has been changed.\n\nIf you did not do this, please contact us by replying to this email."
+            );
 
-            craft()->email->sendEmail($email);
             $this->logger("{$user->fullName} ({$user->email}) has changed their password.", LogLevel::Warning);
         });
     }
@@ -168,6 +161,26 @@ class MpUserPlugin extends BasePlugin
         self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
 
+    // -----------------
+    // Private functions
+    // -----------------
+
+    private function _notifyUser($to, $subject, $body)
+    {
+            $emailSettings = craft()->email->getSettings();
+
+            $email = new EmailModel();
+            $email->fromEmail = $emailSettings['emailAddress'];
+            $email->replyTo   = $emailSettings['emailAddress'];
+            $email->sender    = $emailSettings['emailAddress'];
+            $email->fromName  = $emailSettings['senderName'];
+            $email->toEmail   = $to;
+            $email->subject   = $subject;
+            $email->body      = $body;
+
+            craft()->email->sendEmail($email);
+    }
+
     // --------
     // Settings
     // --------
@@ -176,7 +189,7 @@ class MpUserPlugin extends BasePlugin
     {
         return array(
             'honeypotField' => array(AttributeType::String, 'default' => 'birthdate'),
-            'forceLog' => array(AttributeType::Bool, 'default' => false),
+            'forceLog'      => array(AttributeType::Bool,   'default' => false),
         );
     }
 
@@ -198,7 +211,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.23';
+        return '0.0.24';
     }
 
     public function getDeveloper()
