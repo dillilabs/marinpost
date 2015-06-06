@@ -76,6 +76,7 @@
     $('ul.posts').filters({
       locations: '{{ craft.request.query("locations") }}',
       topics: '{{ craft.request.query("topics") }}',
+      date: '{{ craft.request.query("date") }}',
     });
   });
 {% endset %}

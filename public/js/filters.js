@@ -21,41 +21,60 @@
             //----------
 
             var initializeWithFilters = function(filterType) {
-              var ids = config[filterType].split(',');
               var fieldset = $('#filters fieldset.'+filterType);
+              var filters;
+
               fieldset.find('h5').click();
-              fieldset.find('li > input#'+filterType+'-all').prop('checked', '');
-              $.each(ids, function(_i, id) {
-                fieldset.find('li > input#'+id).prop('checked', 'checked');
-              });
+
+              if (filterType == 'date') {
+                dateFilterElement.datepicker('setDate', config[filterType]);
+                dateFilter = config[filterType];
+              } else {
+                fieldset.find('li > input#'+filterType+'-all').prop('checked', '');
+
+                var filters = config[filterType].split(',');
+
+                $.each(filters, function(_i, catId) {
+                  fieldset.find('li > input#'+catId).prop('checked', 'checked');
+                });
+              }
             };
 
-            // TODO refactor
             var filterType = function(e) {
               if (e.is('.location')) {
                 return '.location';
               } else if (e.is('.topic')) {
                 return '.topic';
-              } else if (e.is('.author')) {
-                return '.author';
+            //} else if (e.is('.author')) {
+            //  return '.author';
               }
             };
 
-            var activeFiltersFor = function(type) {
+            var activeFiltersOf = function(type) {
               return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
             };
 
             var activeFilters = function() {
               return {
-                location: activeFiltersFor('location'),
-                topic: activeFiltersFor('topic'),
-                author: activeFiltersFor('author'),
+                locations: activeFiltersOf('location'),
+                topics: activeFiltersOf('topic'),
+              //authors: activeFiltersOf('author'),
                 date: dateFilter,
               };
             };
 
-            var urlFor = function(section, filters) {
-              return '/filter?section='+section+'&locations='+filters.location+'&topics='+filters.topic+'&authors='+filters.author+'&date='+filters.date;
+            var anyActiveFilters = function(selected) {
+            //return (selected.locations.length || selected.topics.length || selected.authors.length || selected.date.length);
+              return (selected.locations.length || selected.topics.length || selected.date.length);
+            };
+
+            var activeFilterUrlParams = function(selected) {
+            //return 'locations='+selected.locations+'&topics='+selected.topics+'&authors='+selected.authors+'&date='+selected.date;
+              return 'locations='+selected.locations+'&topics='+selected.topics+'&date='+selected.date;
+            };
+
+            var urlFor = function(section, activeFilters) {
+              return '/filter?section=' + section + '&' + activeFilterUrlParams(activeFilters);
             };
 
             var disableFilters = function() {
@@ -71,12 +90,12 @@
             };
 
             var refreshViewsAndEnableFilters = function() {
-              var filters = activeFilters();
-              var url = urlFor(section, filters);
+              var selected = activeFilters();
+              var url = urlFor(section, selected);
 
               filteredContent.load(url, enableFilters);
 
-              if (filters.location.length || filters.topic.length || filters.author.length || filters.date.length) {
+              if (anyActiveFilters(selected)) {
                 resetLink.show();
               } else {
                 resetLink.hide();
@@ -88,14 +107,14 @@
             };
 
             var loadMoreContent = function() {
-              var filters = activeFilters();
-              var url = urlFor(section, filters);
+              var selected = activeFilters();
+              var url = urlFor(section, selected);
               var offset = currentContentLength();
 
               isLoadingContent = true;
 
               $.get(
-                url+'&offset='+offset,
+                url + '&offset=' + offset,
                 function(data) {
                   if (data.length > contentLengthThreshold) {
                     filteredContent.append(data);
@@ -221,14 +240,14 @@
               e.preventDefault();
             });
 
-            // append current filters to log and notice detail urls
+            // append current filters to blog and notice detail links
             if (section == 'blog' || section == 'notices') {
-              filteredContent.on('click', 'a.post-detail', function(e) {
-                var filters = activeFilters();
-                var url = this.href + '?locations='+filters.location+'&topics='+filters.topic;
+              filteredContent.on('click', 'a.detail', function(e) {
+                var selected = activeFilters();
 
-                e.preventDefault();
-                document.location = url;
+                if (anyActiveFilters(selected)) {
+                  document.location = this.href + '?' + activeFilterUrlParams(selected);
+                }
               });
             }
 
@@ -244,13 +263,17 @@
             });
 
             // Initialize filters on page load
-            if (config.locations.length || config.topics.length) {
+            if (config.locations.length || config.topics.length || config.date.length) {
                 if (config.locations.length) {
-                    initializeWithFilters('locations');
+                  initializeWithFilters('locations');
                 }
 
                 if (config.topics.length) {
-                    initializeWithFilters('topics');
+                  initializeWithFilters('topics');
+                }
+
+                if (config.date.length) {
+                  initializeWithFilters('date');
                 }
 
                 refreshViewsAndEnableFilters();
@@ -261,5 +284,6 @@
     $.fn.filters.defaults = {
         locations: '',
         topics: '',
+        date: '',
     };
 }(jQuery));

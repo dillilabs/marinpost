@@ -169,7 +169,7 @@
 
     {% default %}
     <div class="image-wrapper">
-      <a href="{{ entry.url }}" class="post-detail"><img src="{{ image }}"></a>
+      <a href="{{ entry.url }}" class="detail"><img src="{{ image }}"></a>
       <p class="image-credit">{{ primaryImageCredit(entry) }}</p>
     </div>
 
@@ -216,7 +216,7 @@
   {% from _self import externalUrl, mediaUrl, titleCase %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
-      <h3><a href="{{ entry.url }}" class="post-detail">{{ titleCase(entry.title) }}</a></h3>
+      <h3><a href="{{ entry.url }}" class="detail">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'media' %}
       <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
@@ -225,7 +225,7 @@
       <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'notices' %}
-      <h3><a href="{{ entry.url }}" class="post-detail">{{ titleCase(entry.title) }}</a></h3>
+      <h3><a href="{{ entry.url }}" class="detail">{{ titleCase(entry.title) }}</a></h3>
 
     {% default %}
       <h3>{{ titleCase(entry.title) }}</h3>
@@ -357,12 +357,12 @@
       {{ postTitle(entry) }}
       {{ noticeEvent(entry) }}
       {{ postBy(entry) }}
-      <p><a class="more post-detail" href="{{ entry.url }}">more »</a></p>
+      <p><a class="more detail" href="{{ entry.url }}">more »</a></p>
 
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more post-detail" href="{{ entry.url }}">more »</a></p>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more detail" href="{{ entry.url }}">more »</a></p>
 
   {% endswitch %}
 {% endmacro %}
