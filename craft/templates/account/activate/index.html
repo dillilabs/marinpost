@@ -1,0 +1,28 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block title %}Resend My Account Activation Email{% endblock %}
+
+    {% block post %}
+      <form method="post" accept-charset="UTF-8">
+        {{ getCsrfInput() }}
+        <input type="hidden" name="action" value="mpUser/sendActivationEmail">
+        <input type="hidden" name="redirect" value="account/activate/success">
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="text" name="email" maxlength="255" autocompete="off">
+        </div>
+
+        {% if error is defined %}
+          <ul class="errors">
+            <li>{{ error }}</li>
+          </ul>
+        {% endif %}
+
+        <input type="submit" value="Submit">
+      </form>
+    {% endblock %}
+  {% endembed%}
+{% endblock %}

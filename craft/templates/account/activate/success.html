@@ -1,0 +1,11 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block title %}Account activation email resent{% endblock %}
+
+    {% block post %}
+      <p>Please check your email for account activation instructions.</p>
+    {% endblock %}
+  {% endembed%}
+{% endblock %}
