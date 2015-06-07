@@ -12,7 +12,7 @@
         <fieldset class="locations">
           <h5>Locations</h5>
           <ul>
-            <li><input type="checkbox" class="location all" value="all" checked="checked" id="location-all"/><label for="location-all">All</label></li>
+            <li><input type="checkbox" class="location all" value="all" checked="checked" id="locations-all"/><label for="locations-all">All</label></li>
 
             {% set group = null %}
             {% for location in craft.categories.group('locations') %}
@@ -71,22 +71,13 @@
   </div>
 </main>
 
-{% set filter = craft.request.query('filter') %}
-{% set id = craft.request.query('id') %}
-
 {% set js %}
   $(function() {
-    var filter = '{{ filter }}';
-    var id = '{{ id }}';
-    var fieldset;
-
-    $('ul.posts').filters();
-
-    if (filter.length > 0 && id.length > 0) {
-      fieldset = $('#filters fieldset.'+filter);
-      fieldset.find('h5').click();
-      fieldset.find('li > input[value='+id+']').click();
-    }
+    $('ul.posts').filters({
+      locations: '{{ craft.request.query("locations") }}',
+      topics: '{{ craft.request.query("topics") }}',
+      date: '{{ craft.request.query("date") }}',
+    });
   });
 {% endset %}
 {% includeJs js %}

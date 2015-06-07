@@ -1,5 +1,6 @@
 (function($) {
-    $.fn.filters  = function() {
+    $.fn.filters  = function(options) {
+        var config = $.extend({}, $.fn.filters.defaults, options);
         var section = document.location.pathname.split('/')[1];
 
         return this.each(function() {
@@ -19,32 +20,61 @@
             // Functions
             //----------
 
-            // TODO refactor
+            var initializeWithFilters = function(filterType) {
+              var fieldset = $('#filters fieldset.'+filterType);
+              var filters;
+
+              fieldset.find('h5').click();
+
+              if (filterType == 'date') {
+                dateFilterElement.datepicker('setDate', config[filterType]);
+                dateFilter = config[filterType];
+              } else {
+                fieldset.find('li > input#'+filterType+'-all').prop('checked', '');
+
+                var filters = config[filterType].split(',');
+
+                $.each(filters, function(_i, catId) {
+                  fieldset.find('li > input#'+catId).prop('checked', 'checked');
+                });
+              }
+            };
+
             var filterType = function(e) {
               if (e.is('.location')) {
                 return '.location';
               } else if (e.is('.topic')) {
                 return '.topic';
-              } else if (e.is('.author')) {
-                return '.author';
+            //} else if (e.is('.author')) {
+            //  return '.author';
               }
             };
 
-            var activeFiltersFor = function(type) {
+            var activeFiltersOf = function(type) {
               return filters.filter('.'+type+':checked').map(function() { return this.value; }).get().join();
             };
 
             var activeFilters = function() {
               return {
-                location: activeFiltersFor('location'),
-                topic: activeFiltersFor('topic'),
-                author: activeFiltersFor('author'),
+                locations: activeFiltersOf('location'),
+                topics: activeFiltersOf('topic'),
+              //authors: activeFiltersOf('author'),
                 date: dateFilter,
               };
             };
 
-            var urlFor = function(section, filters) {
-              return '/filter?section='+section+'&locations='+filters.location+'&topics='+filters.topic+'&authors='+filters.author+'&date='+filters.date;
+            var anyActiveFilters = function(selected) {
+            //return (selected.locations.length || selected.topics.length || selected.authors.length || selected.date.length);
+              return (selected.locations.length || selected.topics.length || selected.date.length);
+            };
+
+            var activeFilterUrlParams = function(selected) {
+            //return 'locations='+selected.locations+'&topics='+selected.topics+'&authors='+selected.authors+'&date='+selected.date;
+              return 'locations='+selected.locations+'&topics='+selected.topics+'&date='+selected.date;
+            };
+
+            var urlFor = function(section, activeFilters) {
+              return '/filter?section=' + section + '&' + activeFilterUrlParams(activeFilters);
             };
 
             var disableFilters = function() {
@@ -60,12 +90,12 @@
             };
 
             var refreshViewsAndEnableFilters = function() {
-              var filters = activeFilters();
-              var url = urlFor(section, filters);
+              var selected = activeFilters();
+              var url = urlFor(section, selected);
 
               filteredContent.load(url, enableFilters);
 
-              if (filters.location.length || filters.topic.length || filters.author.length || filters.date.length) {
+              if (anyActiveFilters(selected)) {
                 resetLink.show();
               } else {
                 resetLink.hide();
@@ -77,14 +107,14 @@
             };
 
             var loadMoreContent = function() {
-              var filters = activeFilters();
-              var url = urlFor(section, filters);
+              var selected = activeFilters();
+              var url = urlFor(section, selected);
               var offset = currentContentLength();
 
               isLoadingContent = true;
 
               $.get(
-                url+'&offset='+offset,
+                url + '&offset=' + offset,
                 function(data) {
                   if (data.length > contentLengthThreshold) {
                     filteredContent.append(data);
@@ -210,6 +240,18 @@
               e.preventDefault();
             });
 
+            // append current filters to blog and notice detail links
+            if (section == 'blog' || section == 'notices') {
+              filteredContent.on('click', 'a.detail', function(e) {
+                var selected = activeFilters();
+
+                if (anyActiveFilters(selected)) {
+                  e.preventDefault();
+                  document.location = this.href + '?' + activeFilterUrlParams(selected);
+                }
+              });
+            }
+
             $(window).scroll(function() {
               var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
               var offset;
@@ -220,6 +262,29 @@
                 loadMoreContent();
               }
             });
+
+            // Initialize filters on page load
+            if (config.locations.length || config.topics.length || config.date.length) {
+                if (config.locations.length) {
+                  initializeWithFilters('locations');
+                }
+
+                if (config.topics.length) {
+                  initializeWithFilters('topics');
+                }
+
+                if (config.date.length) {
+                  initializeWithFilters('date');
+                }
+
+                refreshViewsAndEnableFilters();
+            }
         });
+    };
+
+    $.fn.filters.defaults = {
+        locations: '',
+        topics: '',
+        date: '',
     };
 }(jQuery));
