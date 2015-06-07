@@ -246,6 +246,7 @@
                 var selected = activeFilters();
 
                 if (anyActiveFilters(selected)) {
+                  e.preventDefault();
                   document.location = this.href + '?' + activeFilterUrlParams(selected);
                 }
               });
