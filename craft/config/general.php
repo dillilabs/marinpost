@@ -19,7 +19,7 @@ return array(
         'invalidUserTokenPath'            => 'account/login/error',
         'loginPath'                       => 'account/login',
         'logoutPath'                      => 'account/logout',
-        'maxUploadFileSize'               => 4194304, // 4mb
+        'maxUploadFileSize'               => 16777216, // 16mb
         'omitScriptNameInUrls'            => true,
         'setPasswordPath'                 => 'account/password/reset',
         'setPasswordSuccessPath'          => 'account/login',

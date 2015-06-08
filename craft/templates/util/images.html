@@ -2,6 +2,7 @@
 {% requirePermission 'accessCp' %}
 
 {% set sourceId = 3 %}
+{% set transform = craft.request.param('transform') | default('list') %}
 
 {% macro excerpt(text) %}
   {% if (text | length) < 9 %}
@@ -15,12 +16,12 @@
 
 <h3>Generating Image Transforms</h3>
 
-{% set images = craft.assets.sourceId(sourceId) %}
+{% set images = craft.assets.sourceId(sourceId).limit(null) %}
 
 <ul>
   {% for image in images %}
     <li data-id="{{ image.id }}" data-folder-id="{{ image.folderId }}">
-      <div class="thumb"><img src="{{ image.url('list') }}"></div>
+      <div class="thumb"><img src="{{ image.url(transform) }}"></div>
       <div>{{ m.excerpt(image.filename) }}</div>
     </li>
   {% endfor %}

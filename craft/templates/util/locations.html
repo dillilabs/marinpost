@@ -8,7 +8,7 @@
   {% set entries = [entry] %}
 
 {% else %}
-  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices') %}
+  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(null) %}
 
 {% endif %}
 
