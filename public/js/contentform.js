@@ -176,6 +176,10 @@
                   plugins = ['underline', 'fontsize', 'fullscreen', 'counter', 'limiter'];
                   buttons = ['bold', 'italic', 'fontsize', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'horizontalrule'];
                   break;
+                case 'fields[letterContent]':
+                  plugins = ['underline', 'fullscreen', 'counter', 'limiter'];
+                  buttons = ['bold', 'italic', 'link'];
+                  break;
                 case 'fields[noticeContent]':
                   plugins = ['underline', 'fontsize', 'fontcolor', 'fontfamily', 'fullscreen', 'counter', 'limiter'];
                   buttons = ['bold', 'italic', 'fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'alignment', 'horizontalrule'];
