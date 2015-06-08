@@ -37,7 +37,7 @@
 #}
           <div class="field">
               <label for="city">City <span class="note">* required</span></label>
-              <input type="text" id="city" name="fields[city]" maxlength="20" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
+              <input type="text" id="city" name="fields[city]" maxlength="{{ p.fieldMaxLength('city') }}" {%- if account is defined %} value="{{ account.city }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('city')) }}
               {% endif %}
@@ -57,14 +57,14 @@
           </div>
           <div class="field">
               <label for="zipCode">Zip Code <span class="note">* required</span></label>
-              <input type="text" id="zipCode" name="fields[zipCode]" maxlength="5" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
+              <input type="text" id="zipCode" name="fields[zipCode]" maxlength="{{ p.fieldMaxLength('zipCode') }}" {%- if account is defined %} value="{{ account.zipCode }}"{% endif %}>
               {% if account is defined %}
                 {{ f.errorList(account.getErrors('zipCode')) }}
               {% endif %}
           </div>
           <div class="field">
               <label for="organization">Organization <small>(optional)</small></label>
-              <input type="text" id="organization" name="fields[organization]" maxlength="70" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
+              <input type="text" id="organization" name="fields[organization]" maxlength="{{ p.fieldMaxLength('organization') }}" {%- if account is defined %} value="{{ account.organization }}"{% endif %}>
           </div>
           <div class="field">
               {% set honeypot = craft.mpuser.registerFormHoneypotField | default('disabled') %}

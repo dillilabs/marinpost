@@ -1,7 +1,7 @@
 <div class="field">
     <label for="newsLink" class="required">News Link <span class="note">* required</span></label>
     
-    <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" maxlength="255" placeholder="http://example.com/news" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
+    <input id="newsLink" type="text" name="fields[newsLink]" autocomplete="off" maxlength="{{ p.fieldMaxLength('newsLink') }}" placeholder="http://example.com/news" {%- if entry is defined %} value="{{ entry.newsLink }}"{% endif -%} class="required">
     
     {% if entry is defined %}
       {{ f.errorList(entry.getErrors('newsLink')) }}

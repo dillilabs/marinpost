@@ -35,7 +35,7 @@
         </div>
         <div class="field">
             <label for="organization">Organization</label>
-            <input type="text" id="organization" name="fields[organization]" maxlength="70" value="{{ currentUser.organization }}" >
+            <input type="text" id="organization" name="fields[organization]" maxlength="{{ p.fieldMaxLength('organization') }}" value="{{ currentUser.organization }}" >
         </div>
 {#
         <div class="field">
@@ -48,7 +48,7 @@
 #}
         <div class="field">
             <label for="city">City</label>
-            <input type="text" id="city" name="fields[city]" maxlength="20" value="{{ currentUser.city }}" >
+            <input type="text" id="city" name="fields[city]" maxlength="{{ p.fieldMaxLength('city') }}" value="{{ currentUser.city }}" >
             {% if account is defined %}
               {{ f.errorList(account.getErrors('city')) }}
             {% endif %}
@@ -72,7 +72,7 @@
         </div>
         <div class="field">
             <label for="zipCode">Zip Code</label>
-            <input type="text" id="zipCode" name="fields[zipCode]" maxlength="5" value="{{ currentUser.zipCode }}" >
+            <input type="text" id="zipCode" name="fields[zipCode]" maxlength="{{ p.fieldMaxLength('zipCode') }}" value="{{ currentUser.zipCode }}" >
             {% if account is defined %}
               {{ f.errorList(account.getErrors('zipCode')) }}
             {% endif %}
