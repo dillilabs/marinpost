@@ -57,10 +57,9 @@
             var onChangeMediaLinkType = function(mediaType) {
               var type = this.value;
 
-              // TODO wrap multiple elements
-              form.find('input#mediaType').val(type).end()
-                  .find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, mediaLink.wrapper').hide().end()
-                  .find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type+', .mediaLink.wrapper.'+type).show();
+              form.find('input#mediaType').val(type);
+              form.find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, .mediaLink.wrapper').hide().end();
+              form.find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type+', .mediaLink.wrapper.'+type).show();
             };
 
             // Munge media link fields
@@ -169,18 +168,21 @@
               var textarea = $(this);
               var limit = textarea.attr('data-limit');
               var counters =textarea.closest('.field').find('.counter');
-              var plugins, buttons;
+              var plugins = ['underline', 'counter', 'limiter'];
+              var buttons = ['bold', 'italic', 'link'];
 
               switch (textarea.attr('name')) {
                 case 'fields[blogContent]':
-                  plugins = ['underline', 'fontsize', 'fullscreen', 'counter', 'limiter'];
-                  buttons = ['bold', 'italic', 'fontsize', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'horizontalrule'];
+                  plugins = plugins.concat(['fontsize']);
+                  buttons = buttons.concat(['fontsize', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'horizontalrule']);
                   break;
                 case 'fields[noticeContent]':
-                  plugins = ['underline', 'fontsize', 'fontcolor', 'fontfamily', 'fullscreen', 'counter', 'limiter'];
-                  buttons = ['bold', 'italic', 'fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent', 'alignment', 'horizontalrule'];
+                  plugins = plugins.concat(['fontsize', 'fontcolor', 'fontfamily']);
+                  buttons = buttons.concat(['fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'alignment', 'horizontalrule']);
                   break;
               }
+
+              plugins = plugins.concat('fullscreen'); // rightmost button
 
               textarea.redactor({
                 minHeight: 200,
