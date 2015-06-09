@@ -1,6 +1,6 @@
 <div class="field">
   <label for="tags">Tags</label>
-    <input type="text" name="fields[tags]" autocomplete="off" maxlength="255" {%- if entry is defined %} value="{{ entry.tags }}"{% endif -%} placeholder="Enter one or more, separated by commas">
+  <input type="text" name="fields[tags]" autocomplete="off" maxlength="{{ p.fieldMaxLength('tags') }}" {%- if entry is defined %} value="{{ entry.tags }}"{% endif -%} placeholder="Enter one or more, separated by commas">
 {% if entry is defined %}
   {{ f.errorList(entry.getErrors('tags')) }}
 {% endif %}

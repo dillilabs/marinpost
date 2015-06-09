@@ -58,9 +58,9 @@
     <input type="radio" name="mediaTypeSelect" value="document" {%- if mediaType == 'document' %}checked="checked"{% endif -%}>Link Document
     <input type="radio" name="mediaTypeSelect" value="upload" {%- if mediaType == 'upload' %}checked="checked"{% endif -%}>Upload Document
     
-    <input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" maxlength="255" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
-    <input type="text" name="fields[mediaLink][{{ key }}][fields][audioUrl]" class="mediaLink audio required" autocomplete="off" maxlength="255" value="{{ audioUrl }}" placeholder="http://example.com/audio" {%- if mediaType != 'audio' %}style="display:none;"{% endif -%}>
-    <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" maxlength="255" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][videoUrl]" class="mediaLink video required" autocomplete="off" maxlength="{{ p.matrixFieldMaxLength('mediaLink', 'video', 'videoUrl') }}" value="{{ videoUrl }}" placeholder="http://example.com/video" {%- if mediaType != 'video' %}style="display:none;"{% endif -%}>
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][audioUrl]" class="mediaLink audio required" autocomplete="off" maxlength="{{ p.matrixFieldMaxLength('mediaLink', 'audio', 'audioUrl') }}" value="{{ audioUrl }}" placeholder="http://example.com/audio" {%- if mediaType != 'audio' %}style="display:none;"{% endif -%}>
+    <input type="text" name="fields[mediaLink][{{ key }}][fields][documentUrl]" class="mediaLink document required" autocomplete="off" maxlength="{{ p.matrixFieldMaxLength('mediaLink', 'document', 'documentUrl') }}" value="{{ documentUrl }}" placeholder="http://example.com/document.pdf" {%- if mediaType != 'document' %}style="display:none;"{% endif -%}>
     
     <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document]" class="mediaLink upload">
     <input type="hidden" name="fields[mediaLink][{{ key }}][fields][document][]" class="mediaLink upload" {% if document %}value="{{ document.id }}"{% endif %} {%- if mediaType != 'upload' %}style="display:none;"{% endif -%}>

@@ -442,3 +442,35 @@
     <span>{{ tag }}</span>{% if not loop.last %}, {% endif %}
   {% endfor %}
 {% endmacro %}
+
+{% macro fieldMaxLength(fieldHandle) %}
+{% spaceless %}
+  {% set field = craft.fields.getFieldByHandle(fieldHandle) %}
+
+  {{ field ? field.settings.maxLength : 255 }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro matrixFieldMaxLength(fieldHandle, blockHandle, blockFieldHandle) %}
+{% spaceless %}
+  {% set field = craft.fields.getFieldByHandle(fieldHandle) %}
+  {% set block = null %}
+  {% set blockField = null %}
+
+  {% for blockType in field.fieldType.settings.blockTypes %}
+    {% if blockType.handle == blockHandle %}
+      {% set block = blockType %}
+    {% endif %}
+  {% endfor %}
+
+  {% if blockType %}
+    {% for field in blockType.fields %}
+      {% if field.handle == blockFieldHandle %}
+        {% set blockField = field %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+
+  {{ blockField ? blockField.settings.maxLength : 255 }}
+{% endspaceless %}
+{% endmacro %}
