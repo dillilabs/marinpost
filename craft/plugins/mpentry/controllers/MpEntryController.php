@@ -28,7 +28,7 @@ class MpEntryController extends BaseController
         // so we must do it manually.
         craft()->mpEntry->setPostDateAndSlug($entry->id);
 
-        $this->renderTemplate('account/entries/_update', array('success' => 'Content published.'));
+        $this->redirect('/account/'.$entry->section->handle);
     }
 
     /**
@@ -44,7 +44,7 @@ class MpEntryController extends BaseController
         $this->_ensureContributor($entry->author);
         craft()->mpEntry->updateStatus($entry->id, BaseElementModel::DISABLED);
 
-        $this->renderTemplate('account/entries/_update', array('success' => 'Content unpublished.'));
+        $this->redirect('/account/'.$entry->section->handle);
     }
 
     /**
@@ -60,7 +60,7 @@ class MpEntryController extends BaseController
         craft()->mpEntry->archiveEntry($entry);
         $this->plugin->logger("[{$this->currentUser}] ({$this->currentUser->id}) deleted [{$entry}] ({$entry->id}) from {$entry->section}", LogLevel::Warning);
 
-        $this->renderTemplate('account/entries/_update', array('success' => 'Content deleted.'));
+        $this->redirect('/account/'.$entry->section->handle);
     }
 
     /**
@@ -80,6 +80,7 @@ class MpEntryController extends BaseController
         $entry = $criteria->first();
         craft()->mpEntry->unarchiveEntry($entry);
 
+        // TODO LoD violation
         $this->renderTemplate('mpAdmin/archived', array('success' => 'Archived entry restored.'));
     }
 
@@ -137,19 +138,19 @@ class MpEntryController extends BaseController
 
         if (!$entryId)
         {
-            $this->renderTemplate('account/entries/_update', array('error' => 'Content ID is required.'));
+            $this->renderTemplate('account/entries/error', array('error' => 'Content ID is required.'));
         }
 
         $entry = craft()->entries->getEntryById($entryId);
 
         if (!$entry)
         {
-            $this->renderTemplate('account/entries/_update', array('error' => 'Content not found.'));
+            $this->renderTemplate('account/entries/error', array('error' => 'Content not found.'));
         }
 
         if ($entry->author->id != $this->currentUser->id)
         {
-            $this->renderTemplate('account/entries/_update', array('error' => 'You are not authorized to update this content.'));
+            $this->renderTemplate('account/entries/error', array('error' => 'You are not authorized to update this content.'));
         }
 
         return $entry;
@@ -191,7 +192,7 @@ class MpEntryController extends BaseController
     {
         if (!$user->isInGroup('contributor'))
         {
-            $this->renderTemplate('account/entries/_update', array('error' => 'You are not authorized to un-publish content.'));
+            $this->renderTemplate('account/entries/error', array('error' => 'You are not authorized to un-publish content.'));
         }
     }
 
