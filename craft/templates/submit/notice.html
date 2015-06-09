@@ -22,22 +22,22 @@
         <fieldset class="event">
             <div class="field date">
                 <label for="event-start-date">Start Date</label>
-                <input type="text" name="fields[startDate][date]" value="{{ entry.startDate | date('m/d/Y') }}" class="date">
+                <input type="text" name="fields[startDate][date]" class="date" {% if entry.startDate %}value="{{ entry.startDate | date('m/d/Y') }}"{% endif %}>
             </div>
             <div class="field date">
                 <label for="event-end-date">End Date</label>
-                <input type="text" name="fields[endDate][date]" value="{{ entry.endDate | date('m/d/Y') }}" class="date">
+                <input type="text" name="fields[endDate][date]" class="date" {% if entry.endDate %}value="{{ entry.endDate | date('m/d/Y') }}"{% endif %}>
             </div>
             <div class="field date">
                 <label for="event-start-time">Start Time</label>
                 <select name="fields[startTime][time]">
-                <optgroup label="">{{ f.timeOptions(entry.startTime) }}</optgroup>
+                  <optgroup label="">{{ f.timeOptions(entry.startTime) }}</optgroup>
                 </select>
             </div>
             <div class="field date">
                 <label for="event-end-time">End Time</label>
                 <select name="fields[endTime][time]">
-                <optgroup label="">{{ f.timeOptions(entry.endTime) }}</optgroup>
+                  <optgroup label="">{{ f.timeOptions(entry.endTime) }}</optgroup>
                 </select>
             </div>
             <div class="field">

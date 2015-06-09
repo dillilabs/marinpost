@@ -290,21 +290,25 @@
   {{- '/letters/' ~ entry.postDate | date('Y/m/d') -}}
 {% endmacro %}
 
-{% macro noticeEvent(notice, address) %}
-  {% set address = address | default(false) %}
+{% macro noticeEvent(notice, displayAddress) %}
+  {% set displayAddress = displayAddress | default(false) %}
 
   {% if notice.venue %}
     <div class="event"><span class="event-venue">{{ notice.venue }}</span><br>
 
-    {% if address %}
+    {% if displayAddress %}
       {% if notice.streetAddress %}
         {{ notice.streetAddress }}<br>
       {% endif %}
 
-      {% if notice.city or notice.state or notice.zipCode %}
+      {% if (notice.city is not empty) and (notice.state is not empty) %}
         {{ [notice.city, notice.state] | join(', ') }}
-        {{ notice.zipCode }}
+      {% else %}
+        {{ notice.city }}
+        {{ notice.state }}
       {% endif %}
+
+      {{ notice.zipCode }}
     {% endif %}
     </div>
   {% endif %}
