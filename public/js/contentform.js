@@ -58,7 +58,7 @@
               var type = this.value;
 
               form.find('input#mediaType').val(type);
-              form.find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, .mediaLink.wrapper').hide().end()
+              form.find('input.mediaLink, label.mediaLink, select.mediaLink, .file.mediaLink, .mediaLink.wrapper').hide().end();
               form.find('input.mediaLink.'+type+', label.mediaLink.'+type+', select.mediaLink.'+type+', .file.mediaLink.'+type+', .mediaLink.wrapper.'+type).show();
             };
 
