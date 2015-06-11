@@ -22,7 +22,7 @@
                   {{ guest.titleOrProfession }}<br>
                 {% endif %}
 
-                {{ guest.city }}, {{ guest.state }}
+                {{ p.nameCase(guest.city) }}, {{ guest.state }}
               </div>
               <p></p>
             </li>

@@ -22,7 +22,7 @@
             {{ user.titleOrProfession }}<br>
           {% endif %}
     
-          {{ user.city }}, {{ user.state }}
+          {{ p.nameCase(user.city) }}, {{ user.state }}
       </div>
 
       {% if user.webSite %}

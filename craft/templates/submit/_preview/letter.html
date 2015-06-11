@@ -10,7 +10,7 @@
       <h2 class="date">{{ entry.postDate | date('F j, Y') }}</h2>
       <h3>{{ p.titleCase(entry.title) }}</h3>
       <div class="byline">
-        {{ p.authorNameOrLink(entry) }} &mdash; {{ entry.author.city }}
+        {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}
         <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
       </div>
       <p>{{ entry.letterContent }}</p>

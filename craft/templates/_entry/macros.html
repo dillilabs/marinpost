@@ -265,12 +265,12 @@
 {% endmacro %}
 
 {% macro postBy(entry) %}
-  {% from _self import authorNameOrLink, commentCount, formatDateTime %}
+  {% from _self import authorNameOrLink, commentCount, formatDateTime, nameCase %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
       <div class="byline">
-        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ entry.author.city }}{% else %}{{ formatDateTime(entry.postDate) }}{% endif %}
+        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ nameCase(entry.author.city) }}{% else %}{{ formatDateTime(entry.postDate) }}{% endif %}
       </div>
 
     {% case 'news' %}

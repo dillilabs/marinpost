@@ -29,7 +29,7 @@
 
         {% case 'letters' %}
           <h3>{{ entry.title }}</h3>
-          {{ p.authorNameOrLink(entry) }} &mdash; {{ entry.author.city }}<br>
+          {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}<br>
           {{ entry.postDate | date('g:i A') }} <br>
           <p>{{ entry.letterContent }}</p>
 

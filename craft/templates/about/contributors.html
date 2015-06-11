@@ -25,7 +25,7 @@
                 {{ contributor.titleOrProfession }}<br>
               {% endif %}
                 
-              {{ contributor.city }}, {{ contributor.state }}
+              {{ p.nameCase(contributor.city) }}, {{ contributor.state }}
             </div>
 
             {% if contributor.webSite %}
