@@ -68,7 +68,7 @@ class MpAdminPlugin extends BasePlugin
     public function modifyEntrySortableAttributes(&$attributes)
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
-        // $attributes['author'] = Craft::t('Author');
+        $attributes['authorId'] = Craft::t('Author');
     }
 
     //----------------------
