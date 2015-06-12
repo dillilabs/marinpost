@@ -312,10 +312,7 @@
 
             // Prevent page unload if form content has changed
             $(window).on('beforeunload', function() {
-              var richText = $('#blogContent, #noticeContent');
-              var richTextContent = richText.length > 0 && richText.val().length > 0;
-
-              if((contentChanged || richTextContent) && !submitButtonClicked) {
+              if(contentChanged && !submitButtonClicked) {
                 return 'WARNING: Your content has not been saved. Please save your content or it will be lost.';
               }
             });

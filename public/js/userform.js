@@ -86,7 +86,7 @@
 
             // Record change to form content. See also Redactor
             form.on('keyup change', 'input, select, textarea', function() {
-                contentChanged = true;
+              contentChanged = true;
             });
 
             // Enforce char limits in regular textareas
