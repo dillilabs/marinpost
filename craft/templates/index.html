@@ -7,6 +7,7 @@
     {% if featured | length %}
       {# omit featured from list of entries #}
       {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).limit(entriesPerPage).find %}
+      {% set hasFeatured = true %}
 
     {% else %}
       {# featured is pulled from top of entries, so add an extra one #}
@@ -17,6 +18,7 @@
       {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(limit).find %}
       {% set featured = entries | first %}
       {% set entries = entries | without(featured) %}
+      {% set hasFeatured = false %}
 
     {% endif %}
 
@@ -53,11 +55,13 @@
       {% endblock %}
     {% endembed %}
   {% endcache %}
-{% endblock %}
 
-{% set js %}
-  $(function() {
-    $('ul.posts').scrollingContent();
-  });
-{% endset %}
-{% includeJs js %}
+  {% set js %}
+    $(function() {
+    $('ul.posts').scrollingContent({
+      hasFeaturedPost: {{ hasFeatured ? 'true' : 'false' }},
+    });
+    });
+  {% endset %}
+  {% includeJs js %}
+{% endblock %}

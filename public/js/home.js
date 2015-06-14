@@ -1,5 +1,7 @@
 (function($) {
-    $.fn.scrollingContent  = function() {
+    $.fn.scrollingContent  = function(options) {
+        var config = $.extend({}, $.fn.scrollingContent.defaults, options);
+
         return this.each(function() {
             var content = $(this);
             var scrollPositionThreshold = 0.85;
@@ -16,8 +18,13 @@
             };
           
             var loadMoreContent = function() {
-              // +1 to exclude featured entry
-              var offset = currentContentLength() + 1;
+              var offset = currentContentLength();
+
+              console.log('hasFeaturedPost', config.hasFeaturedPost);
+              if (!config.hasFeaturedPost) {
+                // featured entry is simply the first entry, so skip it
+                offset += 1;
+              }
 
               isLoadingContent = true;
 
@@ -49,5 +56,9 @@
               }
             });
         });
+    };
+
+    $.fn.scrollingContent.defaults = {
+        hasFeaturedPost: false,
     };
 }(jQuery));
