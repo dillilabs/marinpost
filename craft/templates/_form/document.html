@@ -63,7 +63,7 @@
 </div>
 
 <a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
-<!-- <div class="note">Upload PDF only</div> -->
+<span class="note"> &nbsp; *PDF documents only</span>
 
 {% set js %}
 $(function() {
@@ -106,7 +106,7 @@ $(function() {
     deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
   };
 
-  var deleteFile = function() {
+  var deleteDocument = function() {
     var selectedFile = srcFiles.children('li.selected:first');
     var assetId;
 

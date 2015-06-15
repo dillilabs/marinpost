@@ -426,7 +426,7 @@
   {% from _self import documentDownload %}
 
   {% for file in documents %}
-    <div class="download"><a href="{{ file.url }}">{{ file.title }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
+    <div class="download"><a href="{{ file.url }}" target="_blank">{{ file.title }} <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span></a></div>
   {% endfor %}
 {% endmacro %}
 
