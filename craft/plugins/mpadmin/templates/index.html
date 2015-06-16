@@ -4,11 +4,42 @@
 
 {% set tabs = {
   home: { label: "Home"|t, url: url('mpadmin') },
-  block: { label: "Block User"|t, url: url('mpadmin/block') },
-  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') }
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
+  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
+  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
 } %}
 
 {% set selectedTab = 'home' %}
 
 {% set content %}
+<form class="export-email">
+  <input type="hidden" name="action" value="mpAdmin/exportEmailAddresses">
+
+  <select name="group">
+    <option></option>
+    <option>contributor</option>
+    <option>guest</option>
+  </select>
+
+  <select name="format">
+    <option></option>
+    <option>csv</option>
+    <option>tab</option>
+  </select>
+
+  <input type="submit" value="Export Email Addresses" disabled>
+</form>
 {% endset %}
+
+{% set js %}
+var form = $('form.export-email');
+var select = form.find('select');
+var group = select.filter('[name=group]');
+var format = select.filter('[name=format]');
+var submit = form.find('input[type=submit]');
+
+select.change(function() {
+  submit.prop('disabled', (!group.val().length || !format.val().length));
+});
+{% endset %}
+{% includeJs js %}

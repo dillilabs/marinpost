@@ -211,7 +211,7 @@ class MpUserPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.25';
+        return '0.0.26';
     }
 
     public function getDeveloper()

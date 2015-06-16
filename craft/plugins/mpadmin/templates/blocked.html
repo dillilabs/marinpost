@@ -1,0 +1,73 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Blocked Users"|t %}
+
+{% set tabs = {
+  home: { label: "Home"|t, url: url('mpadmin') },
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
+  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
+  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
+} %}
+
+{% set selectedTab = 'blocked' %}
+
+{% set blockedUsers = craft.users.status(null).group('blocked').order('lastName, firstName') %}
+{% set usersToBlock = craft.users.status(null).group('not blocked').admin('not 1').order('lastName, firstName') %}
+
+{% set content %}
+  <div class="elements">
+    <div class="tableview">
+      <table class="data fullwidth">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Join Date</th>
+          <th>Last Login</th>
+        </tr>
+
+        {% for user in blockedUsers %}
+          <tr>
+            <td><a href="/admin/users/{{ user.id }}">{{ user.fullName }}</a></td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.dateCreated | date('m/d/y') }}</td>
+            <td>{{ user.lastLoginDate | date('m/d/y') }}</td>
+          </tr>
+        {% endfor %}
+
+        <tr>
+          <td colspan="2">
+            <form class="block-user">
+              <input type="hidden" name="action" value="mpAdmin/blockUser">
+              <select name="id">
+                <option></option>
+                {% for user in usersToBlock %}
+                  <option value="{{ user.id }}">{{ user.fullName }} ({{ user }})</option>
+                {% endfor %}
+              </select>
+              <input type="submit" value="Block" disabled>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+{% endset %}
+
+{% set js %}
+var form = $('form.block-user');
+var select = form.find('select[name=id]');
+var submit = form.find('input[type=submit]');
+
+select.change(function() {
+  submit.prop('disabled', !this.value.length);
+});
+
+form.submit(function(e) {
+  var user = $(this).find('select > option:selected').text();
+
+  if (!confirm('Block ' + user + '?')) {
+    e.preventDefault();
+  }
+});
+{% endset %}
+{% includeJs js %}

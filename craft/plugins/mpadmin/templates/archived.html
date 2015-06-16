@@ -4,8 +4,9 @@
 
 {% set tabs = {
   home: { label: "Home"|t, url: url('mpadmin') },
-  block: { label: "Block User"|t, url: url('mpadmin/block') },
-  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') }
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
+  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
+  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
 } %}
 
 {% set selectedTab = 'archived' %}
@@ -18,7 +19,7 @@
       <div class="tableview">
         <table class="data fullwidth">
           <tr>
-            <th>Entry</th>
+            <th>Title</th>
             <th>Section</th>
             <th>User</th>
             <th></th>
@@ -28,8 +29,8 @@
             <tr>
               <td>{{ entry.title }}</td>
               <td>{{ entry.section }}</td>
-              <td>{{ entry.author }}</td>
-              <td><a href="{{ actionUrl('mpEntry/restoreEntry', { id: entry.id }) }}">Restore</a></td>
+              <td><a href="/admin/users/{{ entry.author.id }}">{{ entry.author.fullName }} ({{ entry.author.email }})</a></td>
+              <td><a href="{{ actionUrl('mpAdmin/restoreEntry', { id: entry.id }) }}">Restore</a></td>
             </tr>
           {% endfor %}
         </table>

@@ -64,27 +64,6 @@ class MpEntryController extends BaseController
     }
 
     /**
-     * Control panel (admin only)
-     *
-     * Restore an Entry to it's state prior to being archived (ie "deleted").
-     */
-    public function actionRestoreEntry()
-    {
-        $this->requireAdmin();
-
-        $entryId = craft()->request->getParam('id');
-        $criteria = craft()->elements->getCriteria(ElementType::Entry, array(
-            'id'       => $entryId,
-            'archived' => true,
-        ));
-        $entry = $criteria->first();
-        craft()->mpEntry->unarchiveEntry($entry);
-
-        // TODO LoD violation
-        $this->renderTemplate('mpAdmin/archived', array('success' => 'Archived entry restored.'));
-    }
-
-    /**
      * Front-end
      *
      * Delete an Asset and its associated file.

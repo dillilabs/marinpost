@@ -1,0 +1,94 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "User Entries"|t %}
+
+{% set tabs = {
+  home: { label: "Home"|t, url: url('mpadmin') },
+  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
+  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
+  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
+} %}
+
+{% set selectedTab = 'entries' %}
+
+{% set users = craft.users.status(null).order('lastName, firstName') %}
+
+{% set content %}
+  <div class="elements">
+    <div>
+      <form class="user-entries">
+        <input type="hidden" name="action" value="mpAdmin/userEntries">
+        <select name="id">
+          <option></option>
+          {% for u in users %}
+          <option value="{{ u.id }}" {% if selectedUser and selectedUser.id == u.id %}selected{% endif %}>
+            {{ u.fullName }} ({{ u.email }})
+            </option>
+          {% endfor %}
+        </select>
+        <input type="submit" value="Entries">
+      </form>
+    </div>
+
+    {% if selectedUser | length %}
+      <h2>
+        Entries of <a href="/admin/users/{{ selectedUser.id }}">{{ selectedUser.fullName }}</a> &middot; <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
+      </h2>
+
+      {% if entries | length %}
+        <div class="tableview">
+          <table class="data fullwidth">
+            <tr>
+              <th>Title</th>
+              <th>Section</th>
+              <th>Post Date</th>
+              <th>Created Date</th>
+              <th>Status</th>
+              <th></th>
+              <th></th>
+            </tr>
+
+            {% for entry in entries %}
+              <tr>
+                <td>{{ entry.title }}</td>
+                <td>{{ entry.section }}</td>
+                <td>{{ entry.postDate | date('m/d/y') }}</td>
+                <td>{{ entry.dateCreated | date('m/d/y') }}</td>
+                <td>{{ entry.status }}</td>
+                <td>
+                  {% if not entry.archived %}
+                    <a href="/admin/entries/{{ entry.section.handle }}/{{ entry.id }}">Edit</a>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if entry.section.handle in ['blog', 'notices'] and entry.enabled %}
+                    <a href="{{ entry.url }}">View</a>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      {% else %}
+        <p>None found</p>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endset %}
+
+{% set js %}
+var form = $('form.user-entries');
+var select = form.find('select[name=id]');
+var submit = form.find('input[type=submit]');
+
+var conditionallyDisableSubmit = function() {
+  submit.prop('disabled', !select.val().length);
+};
+
+select.change(function() {
+  conditionallyDisableSubmit();
+});
+
+conditionallyDisableSubmit();
+{% endset %}
+{% includeJs js %}
