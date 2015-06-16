@@ -273,12 +273,14 @@
                 case 'save':
                   entryEnabled.val(0);
                   disablePreview();
+                  $(this).prop('disabled', true).val('Saving...');
                   form.submit();
                   break;
 
                 case 'publish':
                   entryEnabled.val(1);
                   disablePreview();
+                  $(this).prop('disabled', true).val('Publishing...');
                   form.submit();
                   break;
 
