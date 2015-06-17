@@ -1,0 +1,42 @@
+{% extends "mpadmin/_layout" %}
+
+{% set title = "Email Lists"|t %}
+{% set selectedTab = 'export' %}
+
+{% set content %}
+  <div class="note">
+    Export User email addresses in .csv or .tab format for import into a Thunderbird address book.
+    <br><br>Select a User type, a file format and press <b>Export</b>.
+  </div>
+
+  <form class="export-email">
+    <input type="hidden" name="action" value="mpAdmin/exportEmailAddresses">
+
+    <select name="group">
+      <option></option>
+      <option value='contributor'>Contributors</option>
+      <option value='guest'>Guests</option>
+    </select>
+
+    <select name="format">
+      <option></option>
+      <option value='csv'>CSV</option>
+      <option value='tab'>TAB</option>
+    </select>
+
+    <input type="submit" value="Export" disabled>
+  </form>
+{% endset %}
+
+{% set js %}
+  var form = $('form.export-email');
+  var select = form.find('select');
+  var group = select.filter('[name=group]');
+  var format = select.filter('[name=format]');
+  var submit = form.find('input[type=submit]');
+
+  select.change(function() {
+    submit.prop('disabled', (!group.val().length || !format.val().length));
+  });
+{% endset %}
+{% includeJs js %}

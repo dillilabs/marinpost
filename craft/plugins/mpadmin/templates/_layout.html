@@ -1,0 +1,16 @@
+{% extends "_layouts/cp" %}
+
+{% set tabs = {
+  home:     { label: "Index"|t,                  url: url('mpadmin') },
+  archived: { label: "Archived Entries"|t,       url: url('mpadmin/archived') },
+  blocked:  { label: "Blocked Users"|t,          url: url('mpadmin/blocked') },
+  export:   { label: "Email Lists"|t,            url: url('mpadmin/export') },
+  entries:  { label: "User Entries and Email"|t, url: url('mpadmin/entries') },
+} %}
+
+{% set css %}
+  .note {
+    padding-bottom: 16px;
+  }
+{% endset %}
+{% includeCss css %}

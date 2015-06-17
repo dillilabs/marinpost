@@ -1,19 +1,16 @@
-{% extends "_layouts/cp" %}
+{% extends "mpadmin/_layout" %}
 
-{% set title = "User Entries"|t %}
-
-{% set tabs = {
-  home: { label: "Home"|t, url: url('mpadmin') },
-  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
-  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
-  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
-} %}
-
+{% set title = "User Entries and Email"|t %}
 {% set selectedTab = 'entries' %}
 
 {% set users = craft.users.status(null).order('lastName, firstName') %}
 
 {% set content %}
+  <div class="note">
+    View a list of all Entries created by a User, together with a clickable link to send the User a customized email message.
+    <br></br>Select a User and press <b>View</b>.
+  </div>
+
   <div class="elements">
     <div>
       <form class="user-entries">
@@ -26,13 +23,14 @@
             </option>
           {% endfor %}
         </select>
-        <input type="submit" value="Entries">
+        <input type="submit" value="View">
       </form>
     </div>
 
     {% if selectedUser | length %}
       <h2>
-        Entries of <a href="/admin/users/{{ selectedUser.id }}">{{ selectedUser.fullName }}</a> &middot; <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
+        User: <a href="/admin/users/{{ selectedUser.id }}">{{ selectedUser.fullName }}</a>
+        <br>Email: <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
       </h2>
 
       {% if entries | length %}
@@ -70,25 +68,25 @@
           </table>
         </div>
       {% else %}
-        <p>None found</p>
+        <p>No entries found</p>
       {% endif %}
     {% endif %}
   </div>
 {% endset %}
 
 {% set js %}
-var form = $('form.user-entries');
-var select = form.find('select[name=id]');
-var submit = form.find('input[type=submit]');
+  var form = $('form.user-entries');
+  var select = form.find('select[name=id]');
+  var submit = form.find('input[type=submit]');
 
-var conditionallyDisableSubmit = function() {
-  submit.prop('disabled', !select.val().length);
-};
+  var conditionallyDisableSubmit = function() {
+    submit.prop('disabled', !select.val().length);
+  };
 
-select.change(function() {
+  select.change(function() {
+    conditionallyDisableSubmit();
+  });
+
   conditionallyDisableSubmit();
-});
-
-conditionallyDisableSubmit();
 {% endset %}
 {% includeJs js %}

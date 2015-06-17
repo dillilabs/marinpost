@@ -1,19 +1,17 @@
-{% extends "_layouts/cp" %}
+{% extends "mpadmin/_layout" %}
 
 {% set title = "Archived Entries"|t %}
-
-{% set tabs = {
-  home: { label: "Home"|t, url: url('mpadmin') },
-  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
-  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
-  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
-} %}
-
 {% set selectedTab = 'archived' %}
 
 {% set archivedEntries = craft.entries.archived(true) %}
 
 {% set content %}
+  <div class="note">
+    The following Entries have been deleted by their authors
+    <br>and are no longer visible in the public site, nor in the admin dashboard view.
+    <br><br>Click <b>Restore</b> to restore an Entry to it's original state.
+  </div>
+
   <div class="elements">
     {% if archivedEntries | length %}
       <div class="tableview">

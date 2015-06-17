@@ -1,20 +1,17 @@
-{% extends "_layouts/cp" %}
+{% extends "mpadmin/_layout" %}
 
 {% set title = "Blocked Users"|t %}
-
-{% set tabs = {
-  home: { label: "Home"|t, url: url('mpadmin') },
-  archived: { label: "Archived Entries"|t, url: url('mpadmin/archived') },
-  blocked: { label: "Blocked Users"|t, url: url('mpadmin/blocked') },
-  entries: { label: "User Entries"|t, url: url('mpadmin/entries') }
-} %}
-
 {% set selectedTab = 'blocked' %}
 
 {% set blockedUsers = craft.users.status(null).group('blocked').order('lastName, firstName') %}
 {% set usersToBlock = craft.users.status(null).group('not blocked').admin('not 1').order('lastName, firstName') %}
 
 {% set content %}
+  <div class="note">
+    The following Users have been blocked from logging into their accounts.
+    <br><br>Select a User and press <b>Block</b>.
+  </div>
+
   <div class="elements">
     <div class="tableview">
       <table class="data fullwidth">
@@ -54,20 +51,20 @@
 {% endset %}
 
 {% set js %}
-var form = $('form.block-user');
-var select = form.find('select[name=id]');
-var submit = form.find('input[type=submit]');
+  var form = $('form.block-user');
+  var select = form.find('select[name=id]');
+  var submit = form.find('input[type=submit]');
 
-select.change(function() {
-  submit.prop('disabled', !this.value.length);
-});
+  select.change(function() {
+    submit.prop('disabled', !this.value.length);
+  });
 
-form.submit(function(e) {
-  var user = $(this).find('select > option:selected').text();
+  form.submit(function(e) {
+    var user = $(this).find('select > option:selected').text();
 
-  if (!confirm('Block ' + user + '?')) {
-    e.preventDefault();
-  }
-});
+    if (!confirm('Block ' + user + '?')) {
+      e.preventDefault();
+    }
+  });
 {% endset %}
 {% includeJs js %}
