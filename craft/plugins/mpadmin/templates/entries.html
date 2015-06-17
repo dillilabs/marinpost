@@ -7,7 +7,8 @@
 
 {% set content %}
   <div class="note">
-    View a list of all Entries created by a User, together with a clickable link to send the User a customized email message.
+    View a list of all Entries created by a User, together with a clickable link
+    <br>to send the User a customized email message.
     <br></br>Select a User and press <b>View</b>.
   </div>
 
@@ -30,7 +31,8 @@
     {% if selectedUser | length %}
       <h2>
         User: <a href="/admin/users/{{ selectedUser.id }}">{{ selectedUser.fullName }}</a>
-        <br>Email: <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
+        <br><br>Email: <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
+        <br><br>Entries:
       </h2>
 
       {% if entries | length %}
@@ -59,7 +61,7 @@
                   {% endif %}
                 </td>
                 <td>
-                  {% if entry.section.handle in ['blog', 'notices'] and entry.enabled %}
+                  {% if not entry.archived and entry.enabled and entry.section.handle in ['blog', 'notices'] %}
                     <a href="{{ entry.url }}">View</a>
                   {% endif %}
                 </td>
