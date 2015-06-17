@@ -1,18 +1,27 @@
-$(function() {
-  var selectDate = $('div#select-letter-date');
-  var resetLink = $('a#reset-letter-filter');
-  var baseUrl = '/letters/';
-  var dateFromUrl = document.location.pathname.match(/\/(\d{4}\/\d{2}\/\d{2})/);
+(function($) {
+  $.fn.letters  = function(options) {
+    var config = $.extend({}, $.fn.letters.defaults, options);
 
-  selectDate.datepicker({
-    dateFormat: 'yy/mm/dd',
-    defaultDate: dateFromUrl ? dateFromUrl[1] : 0,
-    onSelect: function() {
-      document.location = baseUrl + this.value;
-    }
-  });
+    return this.each(function() {
+      var selectDate = $('div#select-letter-date');
+      var resetLink = $('a#reset-letter-filter');
+      var baseUrl = '/letters/';
 
-  resetLink.click(function() {
-    document.location = baseUrl;
-  });
-});
+      selectDate.datepicker({
+        dateFormat: 'yy/mm/dd',
+        defaultDate: config.date,
+        onSelect: function() {
+          document.location = baseUrl + this.value;
+        }
+      });
+
+      resetLink.click(function() {
+        document.location = baseUrl;
+      });
+    });
+  };
+
+  $.fn.letters.defaults = {
+    date: null,
+  };
+}(jQuery));

@@ -29,9 +29,13 @@
         {% set month = craft.request.segment(3) %}
         {% set day = craft.request.segment(4) %}
         {% set ymd = year~'-'~month~'-'~day %}
+
       {% else %}
-        {% set ymd = date() | date('Y-m-d') %}
+        {% set mostRecentLetter = craft.entries.section('letters').first %}
+        {% set ymd = mostRecentLetter.postDate | date('Y-m-d') %}
+
       {% endif %}
+
       {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
       {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
 
@@ -61,6 +65,15 @@
 
       {% endif %}
       </div>
+
+      {% set js %}
+        $(function() {
+          $('body').letters({
+            date: '{{ ymd | date('Y/m/d') }}',
+          });
+        });
+      {% endset %}
+      {% includeJs js %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
