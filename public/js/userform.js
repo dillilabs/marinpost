@@ -49,6 +49,15 @@
               }
             };
 
+            var temporarilyDisableSubmit = function(btn) {
+              var label = btn.val();
+              btn.prop('disabled', true).val('Submitting...');
+
+              window.setTimeout(function(btn) {
+                btn.prop('disabled', false).val(label);
+              }, 1500, btn, label);
+            };
+
             //-----------------------
             // Redactor
             //-----------------------
@@ -104,6 +113,7 @@
             submitButtons.click(function(e) {
               removeEmptyImageFields();
               submitButtonClicked = true;
+              temporarilyDisableSubmit($(this));
               form.submit();
             });
 
