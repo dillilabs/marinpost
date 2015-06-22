@@ -130,20 +130,33 @@
 
             };
 
+            var countableCharacter = function(event) {
+              var key = event.which;
+              var ctrl = event.ctrlKey || event.metaKey;
+
+              if (key == 8 || key == 46 || key == 27 || key == 16 || (ctrl && key == 65) || (ctrl && key == 82) || (ctrl && key == 116)) {
+                // bs, del, esc, shift, ctrl-a, ctrl-r, ctrl-f5
+                return false;
+              }
+
+              return true;
+            };
+
             // Limit chars of regular textarea field.
             var limitTextarea = function(field, limit, counter) {
               var text = field.val();
               var count = text.length;
-              var ok = true;
 
-              if (count > limit) {
-                text = text.substring(0, limit);
+              if (count >= limit) {
+                text = text.substring(0, limit-1);
                 field.val(text);
-                ok = false;
               }
+            };
 
+            // Count chars of regular textarea field.
+            var countTextarea = function(field, limit, counter) {
+              var count = field.val().length;
               counter.text(count + ' of ' + limit + ' characters used');
-              return ok;
             };
 
             //-----------------------
@@ -244,8 +257,14 @@
               var limit = field.attr('data-limit');
               var counter = field.closest('.field').find('.counter');
 
-              field.keypress(function() {
-                limitTextarea(field, limit, counter);
+              field.keydown(function(e) {
+                if (countableCharacter(e)) {
+                  limitTextarea(field, limit, counter);
+                }
+              }).keyup(function(e) {
+                if (countableCharacter(e)) {
+                  countTextarea(field, limit, counter);
+                }
               });
             });
 

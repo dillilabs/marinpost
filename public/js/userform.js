@@ -10,9 +10,6 @@
             // Redactor
             var wysiwygFields = form.find('textarea.wysiwyg');
 
-            // Textarea
-            var limitedTextareaFields = form.find('textarea.limited');
-
             // Submit buttons
             var submitButtons = form.find('input[type=submit]');
 
@@ -24,22 +21,6 @@
             // Functions
             //-----------------------
 
-            // Limit regular textarea fields
-            var limitTextarea = function(field, limit, counter) {
-              var text = field.val();
-              var count = text.length;
-              var ok = true;
-
-              if (count > limit) {
-                text = text.substring(0, limit);
-                field.val(text);
-                ok = false;
-              }
-
-              counter.text(count + ' of ' + limit + ' characters used');
-              return ok;
-            };
-
             var removeEmptyImageFields = function() {
               var image = form.find('input[type=hidden][name="fields[userImage][]"]');
 
@@ -49,13 +30,13 @@
               }
             };
 
-            var temporarilyDisableSubmit = function(btn) {
-              var label = btn.val();
-              btn.prop('disabled', true).val('Submitting...');
+            var temporarilyDisableSubmit = function(button) {
+              var label = button.val();
+              button.prop('disabled', true).val('Processing...');
 
-              window.setTimeout(function(btn) {
-                btn.prop('disabled', false).val(label);
-              }, 1500, btn, label);
+              window.setTimeout(function(button) {
+                button.prop('disabled', false).val(label);
+              }, 2000, button, label);
             };
 
             //-----------------------
@@ -96,17 +77,6 @@
             // Record change to form content. See also Redactor
             form.on('keyup change', 'input, select, textarea', function() {
               contentChanged = true;
-            });
-
-            // Enforce char limits in regular textareas
-            limitedTextareaFields.each(function() {
-              var field = $(this);
-              var limit = field.attr('data-limit');
-              var counter = field.closest('.field').find('.counter');
-
-              field.keypress(function() {
-                limitText(field, limit, counter);
-              });
             });
 
             // Submit

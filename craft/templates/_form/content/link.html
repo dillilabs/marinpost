@@ -3,7 +3,7 @@
 <div class="field">
     <label for="linkComments">Link Comments</label>
     
-    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="3" class="limited" data-limit="{{ limit }}" placeholder="Optional comments about your link (max {{ limit }} chars)">
+    <textarea id="linkComments" name="fields[linkComments]" cols="60" rows="4" class="limited" data-limit="{{ limit }}" placeholder="Optional comments about your link (max {{ limit }} chars)">
     {%- if entry is defined %}{{ entry.linkComments }}{% endif -%}
     </textarea>
 
