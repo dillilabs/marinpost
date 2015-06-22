@@ -568,6 +568,7 @@ fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:l
 }
 .my-content > a {
     padding-left: 25px;
+    font-size: .8em;
 }
 .sub-nav h5:hover, .sub-nav .filter h5:hover, .my-content > a:hover {
     font-weight: bold;
