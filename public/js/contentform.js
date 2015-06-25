@@ -147,7 +147,7 @@
               var text = field.val();
               var count = text.length;
 
-              if (count >= limit) {
+              if (count > limit) {
                 text = text.substring(0, limit-1);
                 field.val(text);
               }
@@ -257,12 +257,9 @@
               var limit = field.attr('data-limit');
               var counter = field.closest('.field').find('.counter');
 
-              field.keydown(function(e) {
+              field.keyup(function(e) {
                 if (countableCharacter(e)) {
                   limitTextarea(field, limit, counter);
-                }
-              }).keyup(function(e) {
-                if (countableCharacter(e)) {
                   countTextarea(field, limit, counter);
                 }
               });
