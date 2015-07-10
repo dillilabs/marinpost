@@ -14,19 +14,19 @@
                 <title>{{ entry.title }}</title>
                 <link>{{ entry.url }}</link>
                 <pubDate>{{ entry.postDate.rss }}</pubDate>
-                <author>{{ entry.author }}</author>
+                <author>{{ entry.author.name }}</author>
                 <guid>{{ entry.url }}</guid>
                 <description><![CDATA[
-                    {% switch entry.section.handle %}
-                      {% case 'blog' %}
-                        {{ entry.blogContent }}
-                      {% case 'letters' %}
-                        {{ entry.letterContent }}
-                      {% case 'notices' %}
-                        {{ entry.noticeContent }}
-                      {% default %}
-                        {{ entry.linkComments }}
-                    {% endswitch %}
+                  {% switch entry.section.handle %}
+                    {% case 'blog' %}
+                      {{ entry.blogContent }}
+                    {% case 'letters' %}
+                      {{ entry.letterContent }}
+                    {% case 'notices' %}
+                      {{ entry.noticeContent }}
+                    {% default %}
+                      {{ entry.linkComments }}
+                  {% endswitch %}
                 ]]></description>
             </item>
         {% endfor %}
