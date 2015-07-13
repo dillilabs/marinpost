@@ -19,6 +19,13 @@
       {{ entry.blogContent }}
 
       <div class="attachments">
+        {% if entry.otherWebSite %}
+          <div>
+            <a href={{ p.externalUrl(entry.otherWebSite) }} target="_blank">{{ entry.otherWebSite }}</a>
+          </div>
+          <br>
+        {% endif %}
+
         {{ p.documents(entry.blogDocuments) }}
 
         {% if entry.webSite %}
