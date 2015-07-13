@@ -18,14 +18,14 @@
       
       {{ entry.blogContent }}
 
-      <div class="attachments">
-        {% if entry.otherWebSite %}
-          <div>
-            <a href={{ p.externalUrl(entry.otherWebSite) }} target="_blank">{{ entry.otherWebSite }}</a>
-          </div>
-          <br>
-        {% endif %}
+      {% if entry.otherWebSite %}
+        <div class="website-link">
+          <b>Web Link</b><br>
+          <a href={{ p.externalUrl(entry.otherWebSite) }} target="_blank">{{ entry.otherWebSite }}</a>
+        </div>
+      {% endif %}
 
+      <div class="attachments">
         {{ p.documents(entry.blogDocuments) }}
 
         {% if entry.webSite %}

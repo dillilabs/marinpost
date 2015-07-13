@@ -777,6 +777,10 @@ main.single > .post > h3.my-content {
     text-align: center;
     text-transform: uppercase;
 }
+.website-link {
+    border-top: 1px solid #C8D4E9;
+    padding: 1em 0;
+}
 .attachments {
     border-bottom: 1px solid #C8D4E9;
     border-top: 1px solid #C8D4E9;
