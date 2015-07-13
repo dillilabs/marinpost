@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
     <channel>
         <title>{{ siteName }}</title>
         <link>{{ siteUrl }}</link>
@@ -14,7 +14,7 @@
                 <title>{{ entry.title }}</title>
                 <link>{{ entry.url }}</link>
                 <pubDate>{{ entry.postDate.rss }}</pubDate>
-                <author>{{ entry.author.name }}</author>
+                <dc:creator>{{ entry.author.name }}</dc:creator>
                 <guid>{{ entry.url }}</guid>
                 <description><![CDATA[
                   {% switch entry.section.handle %}
