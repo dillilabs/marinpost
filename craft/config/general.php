@@ -21,6 +21,7 @@ return array(
         'logoutPath'                      => 'account/logout',
         'maxUploadFileSize'               => 16777216, // 16mb
         'omitScriptNameInUrls'            => true,
+        'purgePendingUsersDuration'       => false,
         'setPasswordPath'                 => 'account/password/reset',
         'setPasswordSuccessPath'          => 'account/login',
         'siteName'                        => 'The Marin Post',
