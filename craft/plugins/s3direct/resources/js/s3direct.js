@@ -24,7 +24,13 @@
         var fileExt = fileParts.length > 1 ? fileParts.pop() : false;
         var fileName = fileParts.join();
 
+        // replace non-word chars with hyphens
         fileName = fileName.replace(/\W+/g, '-');
+
+        if (fileName.length > 1 && fileName[fileName.length - 1] == '-') {
+          // remove terminal hyphen
+          fileName = fileName.slice(0, -1);
+        }
 
         return fileExt ? fileName+'.'+fileExt : fileName;
       };

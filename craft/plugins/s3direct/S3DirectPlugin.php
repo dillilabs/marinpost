@@ -41,7 +41,7 @@ class S3DirectPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.16';
+        return '0.0.17';
     }
 
     public function getDeveloper()
