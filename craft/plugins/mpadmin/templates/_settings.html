@@ -4,10 +4,28 @@
 
 {{ forms.textareaField({
 	label: "Trigger Words"|t,
-	instructions: "Enter words, separated by commas, which should trigger the notification of a moderator."|t,
+	instructions: "Enter words, separated by commas, which should trigger the notification of a Moderator."|t,
 	id: 'triggerWords',
 	name: 'triggerWords',
 	value: settings.triggerWords,
+}) }}
+
+{{ forms.textField({
+	label: "Email Address"|t,
+	instructions: "Optional email address of Moderator to be CC'd in the event of seemingly offensive language."|t,
+	id: 'moderatorEmail',
+	name: 'moderatorEmail',
+	value: settings.moderatorEmail,
+}) }}
+
+<p style="font-weight:bold">Server Error Settings</p>
+
+{{ forms.textField({
+	label: "Email Address"|t,
+	instructions: "Optional email address of Admin to be CC'd in the event of a server error."|t,
+	id: 'adminEmail',
+	name: 'adminEmail',
+	value: settings.adminEmail,
 }) }}
 
 <p style="font-weight:bold">Logging Settings</p>

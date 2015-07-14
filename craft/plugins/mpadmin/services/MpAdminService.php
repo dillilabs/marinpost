@@ -90,6 +90,10 @@ class MpAdminService extends BaseApplicationComponent
         $email->sender    = $emailSettings['emailAddress'];
         $email->fromName  = $emailSettings['senderName'];
         $email->toEmail   = $emailSettings['emailAddress'];
+        if (!empty($this->plugin->settings->moderatorEmail))
+        {
+            $email->cc    = array(array('name' => 'Marin Post Moderator', 'email' => $this->plugin->settings->moderatorEmail));
+        }
         $email->subject   = "Apparently offensive language warning on ".craft()->request->hostName;
         $email->body      = $message;
 
@@ -105,8 +109,11 @@ class MpAdminService extends BaseApplicationComponent
     {
 
         $body = "Server Error Message: $errorMessage";
-        $body .= "\n\nURL: ".craft()->request->url;
-        $body .= "\n\nReferrer: ".craft()->request->urlReferrer;
+        $body .= "\n\nURL: ".craft()->request->url.' ['.craft()->request->requestType.']';
+        if (!empty(craft()->request->urlReferrer))
+        {
+            $body .= "\n\nReferrer: ".craft()->request->urlReferrer;
+        }
         $body .= "\n\nUser Agent: ".craft()->request->userAgent;
         $body .= "\n\nUser IP Address: ".craft()->request->ipAddress;
         if ($user = craft()->userSession->user)
@@ -123,7 +130,11 @@ class MpAdminService extends BaseApplicationComponent
         $email->sender    = $emailSettings['emailAddress'];
         $email->fromName  = $emailSettings['senderName'];
         $email->toEmail   = $emailSettings['emailAddress'];
-        $email->subject   = "Server Error on ".craft()->request->hostName;
+        if (!empty($this->plugin->settings->adminEmail))
+        {
+            $email->cc    = array(array('name' => 'Marin Post Admin', 'email' => $this->plugin->settings->adminEmail));
+        }
+        $email->subject   = 'Server Error on '.craft()->request->hostName;
         $email->body      = $body;
 
         craft()->email->sendEmail($email);

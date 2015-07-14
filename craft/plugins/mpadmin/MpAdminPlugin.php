@@ -178,8 +178,10 @@ JS;
     protected function defineSettings()
     {
         return array(
-            'triggerWords' => array(AttributeType::String, 'default' => ''),
-            'forceLog' => array(AttributeType::Bool, 'default' => false),
+            'adminEmail'     => array(AttributeType::String, 'default' => ''),
+            'forceLog'       => array(AttributeType::Bool,   'default' => false),
+            'moderatorEmail' => array(AttributeType::String, 'default' => ''),
+            'triggerWords'   => array(AttributeType::String, 'default' => ''),
         );
     }
 
@@ -201,7 +203,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.26';
+        return '0.0.27';
     }
 
     public function getDeveloper()

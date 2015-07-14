@@ -4,7 +4,7 @@
 
 {% block main %}
 
- {% if currentUser and currentUser.admin %}
+  {% if currentUser and currentUser.admin %}
 
     <h1>Server Error</h1>
 
@@ -14,7 +14,7 @@
       <p>Note: you're seeing these details only because you're an admin.</p>
     {% endif %}
 
- {% else %}
+  {% else %}
 
     <h1>Oops, Sorry. Server Error</h1>
 
