@@ -7,7 +7,7 @@
 {% set entriesPerPage = default ? default.value : 10 %}
 {% set limit = craft.request.param('limit') | default(entriesPerPage)  %}
 
-{% set featured = craft.entries.section('home').first.featuredPost.first %}
+{% set featured = craft.entries.section('home').first.featuredPosts.first %}
 
 {% if featured | length %}
   {# omit featured from list of entries #}

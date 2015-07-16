@@ -2,11 +2,25 @@
 
 {% block main %}
   {% cache unless craft.config.cacheTagDisabled %}
-    {% set featured = entry.featuredPost.first %}
+    {% set featuredPosts = entry.featuredPosts %}
 
-    {% if featured | length %}
-      {# omit featured from list of entries #}
-      {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).limit(entriesPerPage).find %}
+    {% if featuredPosts | length %}
+      {# omit featured posts from list of entries #}
+
+      {% set idClause = ['and'] %}
+
+      {% for featured in featuredPosts %}
+        {% set idClause = idClause | merge(['not '~featured.id]) %}
+      {% endfor %}
+
+      {# entriesPerPage results in ERROR: Object of class Twig_Markup could not be converted to int #}
+
+      {% set entries = craft.entries({
+        section: ['blog', 'media', 'news', 'notices'],
+        id: idClause,
+        limit: entriesPerPage.__toString
+      }) %}
+
       {% set hasFeatured = true %}
 
     {% else %}
@@ -26,7 +40,11 @@
 
     {% embed "_common/home" %}
       {% block featured %}
-        {{ p.featuredPost(featured) }}
+        <div class="featured-posts" style="display: none;">
+          {% for post in featuredPosts %}
+            {{ p.featuredPost(post) }}
+          {% endfor %}
+        </div>
       {% endblock %}
 
       {% block whatsNew %}
@@ -58,9 +76,9 @@
 
   {% set js %}
     $(function() {
-    $('ul.posts').scrollingContent({
-      hasFeaturedPost: {{ hasFeatured ? 'true' : 'false' }},
-    });
+      $('ul.posts').scrollingContent({
+        hasFeaturedPost: {{ hasFeatured ? 'true' : 'false' }},
+      });
     });
   {% endset %}
   {% includeJs js %}

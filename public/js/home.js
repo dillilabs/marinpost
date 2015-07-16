@@ -8,6 +8,7 @@
             var isLoadingContent = false;
             var contentLengthThreshold = 20;
             var endOfContent = false;
+            var featuredPosts = $('.featured-posts');
 
             //----------
             // Functions
@@ -20,7 +21,6 @@
             var loadMoreContent = function() {
               var offset = currentContentLength();
 
-              console.log('hasFeaturedPost', config.hasFeaturedPost);
               if (!config.hasFeaturedPost) {
                 // featured entry is simply the first entry, so skip it
                 offset += 1;
@@ -55,6 +55,24 @@
                 loadMoreContent();
               }
             });
+
+            //-------------------------
+            // Featured post slide show
+            //-------------------------
+
+            if (config.hasFeaturedPost) {
+              featuredPosts.slick({
+                adaptiveHeight: true,
+                autoplay: true,
+                autoplaySpeed: 6000,
+                dots: true,
+                fade: true,
+                infinite: true,
+                speed: 1500,
+              });
+
+              featuredPosts.show();
+            }
         });
     };
 
