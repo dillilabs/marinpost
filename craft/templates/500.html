@@ -3,30 +3,30 @@
 {% set title = "Server Error" %}
 
 {% block main %}
-
   {% if currentUser and currentUser.admin %}
 
     <h1>Server Error</h1>
 
     {% if message %}
       <code>{{ message }}</code>
-
-      <p>Note: you're seeing these details only because you're an admin.</p>
+    {% else %}
+      <p>No error message found; please check the logs.</p>
     {% endif %}
+
+    <p>Note you're only seeing these details because you're an admin.</p>
 
   {% else %}
 
-    <h1>Oops, Sorry. Server Error</h1>
+    {% set inProduction = constant('CRAFT_ENVIRONMENT') == 'live' %}
 
+    {% if inProduction and message %}
+      {% set _administratorsNotified = craft.mpadmin.notifyAdminOfServerError(message) %}
+    {% endif %}
+
+    <h1>Oops, Sorry. Server Error</h1>
     We'll try to fix this asap.  <br>
     We've already been notified, but feel free to <a href='/contact'>Contact Us</a>.  <br> <br>
     <i>Thanks for your patience!</i>
 
-    {% if message %}
-      {# Notify admins via email #}
-      {% set notified = craft.mpadmin.notifyAdminOfServerError(message) %}
-    {% endif %}
-
   {% endif %}
-
 {% endblock %}

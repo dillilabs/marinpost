@@ -1,7 +1,7 @@
 <?php
 
 // Setup environment-friendly configs ... because Craft's multi-env db config doesn't actually work as advertised
-// https://github.com/BarrelStrength/Craft-Master/blob/master/public/index.php
+// from https://github.com/BarrelStrength/Craft-Master/blob/master/public/index.php
 switch ($_SERVER['SERVER_NAME']) {
 	case 'marinpost.org' :
 		define('CRAFT_ENVIRONMENT', 'live');
