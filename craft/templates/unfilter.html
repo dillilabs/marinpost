@@ -7,14 +7,32 @@
 {% set entriesPerPage = default ? default.value : 10 %}
 {% set limit = craft.request.param('limit') | default(entriesPerPage)  %}
 
-{% set featured = craft.entries.section('home').first.featuredPosts.first %}
+{% set sections = ['blog', 'media', 'news', 'notices'] %}
 
-{% if featured | length %}
-  {# omit featured from list of entries #}
-  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').id('not '~featured.id).offset(offset).limit(limit) %}
+{% set featuredPosts = craft.entries.section('home').first.featuredPosts %}
+
+{% if featuredPosts | length %}
+
+  {# omit featured posts from list of entries #}
+
+  {% set notIDs = ['and'] %}
+
+  {% for featured in featuredPosts %}
+    {% set notIDs = notIDs | merge(['not '~featured.id]) %}
+  {% endfor %}
+
+  {% set entries = craft.entries({
+    section: sections,
+    id: notIDs,
+    offset: offset,
+    limit: limit
+  }) %}
 
 {% else %}
-  {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').offset(offset).limit(limit) %}
+
+  {# the very first post is effectively "featured" so add one to offset #}
+
+  {% set entries = craft.entries.section(sections).offset(offset + 1).limit(limit) %}
 
 {% endif %}
 

@@ -21,11 +21,6 @@
             var loadMoreContent = function() {
               var offset = currentContentLength();
 
-              if (!config.hasFeaturedPost) {
-                // featured entry is simply the first entry, so skip it
-                offset += 1;
-              }
-
               isLoadingContent = true;
 
               $.get(
@@ -60,7 +55,7 @@
             // Featured post slide show
             //-------------------------
 
-            if (config.hasFeaturedPost) {
+            if (config.slideShow) {
               featuredPosts.slick({
                 adaptiveHeight: true,
                 autoplay: true,
@@ -77,6 +72,6 @@
     };
 
     $.fn.scrollingContent.defaults = {
-        hasFeaturedPost: false,
+        slideShow: false,
     };
 }(jQuery));

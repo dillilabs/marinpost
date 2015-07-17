@@ -2,64 +2,73 @@
 
 {% block main %}
   {% cache unless craft.config.cacheTagDisabled %}
+    {% set sections = ['blog', 'media', 'news', 'notices'] %}
+
+    {# stringify limit to prevent:  ERROR: Object of class Twig_Markup could not be converted to int #}
+    {% set limit = entriesPerPage.__toString %}
+
     {% set featuredPosts = entry.featuredPosts %}
 
     {% if featuredPosts | length %}
+
       {# omit featured posts from list of entries #}
 
-      {% set idClause = ['and'] %}
+      {% set notIDs = ['and'] %}
 
       {% for featured in featuredPosts %}
-        {% set idClause = idClause | merge(['not '~featured.id]) %}
+        {% set notIDs = notIDs | merge(['not '~featured.id]) %}
       {% endfor %}
 
-      {# entriesPerPage results in ERROR: Object of class Twig_Markup could not be converted to int #}
-
       {% set entries = craft.entries({
-        section: ['blog', 'media', 'news', 'notices'],
-        id: idClause,
-        limit: entriesPerPage.__toString
+        section: sections,
+        id: notIDs,
+        limit: limit
       }) %}
 
-      {% set hasFeatured = true %}
-
     {% else %}
-      {# featured is pulled from top of entries, so add an extra one #}
-      {# set limit = entriesPerPage + 1 #}
-      {# ERROR: Object of class Twig_Markup could not be converted to int #}
-      {% set limit = entriesPerPage.__toString + 1 %}
 
-      {% set entries = craft.entries.section('blog', 'media', 'news', 'notices').limit(limit).find %}
-      {% set featured = entries | first %}
-      {% set entries = entries | without(featured) %}
-      {% set hasFeatured = false %}
+      {# single "featured post" is to be pulled from top of entries, so fetch an extra one #}
+
+      {% set entries = craft.entries.section(sections).limit(limit + 1).find %}
+      {% set featuredPosts = [ entries | first ] %}
+      {% set entries = entries | without(featuredPosts | first) %}
 
     {% endif %}
 
-    {% set letters = craft.entries.section('letters').limit(entriesPerPage) %}
+    {% set slideShow = featuredPosts | length > 1 %}
+
+    {% set letters = craft.entries.section('letters').limit(limit) %}
 
     {% embed "_common/home" %}
       {% block featured %}
-        <div class="featured-posts" style="display: none;">
+
+        <div class="featured-posts" {% if slideShow %}style="display: none;"{% endif %}>
+
           {% for post in featuredPosts %}
             {{ p.featuredPost(post) }}
           {% endfor %}
+
         </div>
+
       {% endblock %}
 
       {% block whatsNew %}
         <h2>What's New</h2>
 
         <ul class="posts">
-        {% for entry in entries %}
-          {{ p.post(entry, true) }}
-        {% endfor %}
+
+          {% for entry in entries %}
+            {{ p.post(entry, true) }}
+          {% endfor %}
+
         </ul>
 
         <aside>
           <h2>Letters</h2>
+
           <div id="comments">
             <ul>
+
             {% for letter in letters %}
               <li>
                 <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ p.titleCase(letter.title) }}</a></h4>
@@ -67,6 +76,7 @@
                 {{ p.authorNameOrLink(letter, 'user') }}
               </li>
             {% endfor %}
+
             </ul>
           </div>
         </aside>
@@ -77,7 +87,7 @@
   {% set js %}
     $(function() {
       $('ul.posts').scrollingContent({
-        hasFeaturedPost: {{ hasFeatured ? 'true' : 'false' }},
+        slideShow: {{ slideShow ? 'true' : 'false' }}
       });
     });
   {% endset %}
