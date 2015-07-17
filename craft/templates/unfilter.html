@@ -9,11 +9,19 @@
 
 {% set sections = ['blog', 'media', 'news', 'notices'] %}
 
-{% set featuredPosts = craft.entries.section('home').first.featuredPosts %}
+{% set featuredPosts = [] %}
 
-{% if featuredPosts | length %}
+{% set slideShow = craft.entries.section('home').first.slideShow %}
 
-  {# omit featured posts from list of entries #}
+{% if slideShow | length %}
+
+  {% for slide in slideShow %}
+    {% set featuredPosts = featuredPosts | merge([ slide.entry.first ]) %}
+  {% endfor %}
+
+{% endif %}
+
+{% if featuredPosts | length %} {# omit featured posts from list of entries #}
 
   {% set notIDs = ['and'] %}
 
@@ -28,9 +36,7 @@
     limit: limit
   }) %}
 
-{% else %}
-
-  {# the very first post is effectively "featured" so add one to offset #}
+{% else %} {# the very first post is effectively "featured" so add one to offset #}
 
   {% set entries = craft.entries.section(sections).offset(offset + 1).limit(limit) %}
 

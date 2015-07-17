@@ -3,15 +3,20 @@
 {% block main %}
   {% cache unless craft.config.cacheTagDisabled %}
     {% set sections = ['blog', 'media', 'news', 'notices'] %}
+    {% set limit = entriesPerPage.__toString %} {# stringify limit to prevent:  ERROR: Object of class Twig_Markup could not be converted to int #}
+    {% set featuredPosts = [] %}
 
-    {# stringify limit to prevent:  ERROR: Object of class Twig_Markup could not be converted to int #}
-    {% set limit = entriesPerPage.__toString %}
+    {% set slideShow = entry.slideShow %}
 
-    {% set featuredPosts = entry.featuredPosts %}
+    {% if slideShow | length %}
 
-    {% if featuredPosts | length %}
+      {% for slide in slideShow %}
+        {% set featuredPosts = featuredPosts | merge([ slide.entry.first ]) %}
+      {% endfor %}
 
-      {# omit featured posts from list of entries #}
+    {% endif %}
+
+    {% if featuredPosts | length %} {# omit featured posts from list of entries #}
 
       {% set notIDs = ['and'] %}
 
@@ -25,9 +30,7 @@
         limit: limit
       }) %}
 
-    {% else %}
-
-      {# single "featured post" is to be pulled from top of entries, so fetch an extra one #}
+    {% else %} {# single "featured post" is to be pulled from top of entries, so fetch an extra one #}
 
       {% set entries = craft.entries.section(sections).limit(limit + 1).find %}
       {% set featuredPosts = [ entries | first ] %}
@@ -35,14 +38,14 @@
 
     {% endif %}
 
-    {% set slideShow = featuredPosts | length > 1 %}
+    {% set hasSlideShow = featuredPosts | length > 1 %}
 
     {% set letters = craft.entries.section('letters').limit(limit) %}
 
     {% embed "_common/home" %}
       {% block featured %}
 
-        <div class="featured-posts" {% if slideShow %}style="display: none;"{% endif %}>
+        <div class="featured-posts" {% if hasSlideShow %}style="display: none;"{% endif %}>
 
           {% for post in featuredPosts %}
             {{ p.featuredPost(post) }}
@@ -87,7 +90,7 @@
   {% set js %}
     $(function() {
       $('ul.posts').scrollingContent({
-        slideShow: {{ slideShow ? 'true' : 'false' }}
+        slideShow: {{ hasSlideShow ? 'true' : 'false' }}
       });
     });
   {% endset %}
