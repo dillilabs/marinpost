@@ -21,20 +21,25 @@
 
 {% endif %}
 
-{% if featuredPosts | length %} {# omit featured posts from list of entries #}
+{% if featuredPosts | length %}
 
-  {% set notIDs = ['and'] %}
+  {# omit featured posts from list of entries
+   #
+   #    {% set notIDs = ['and'] %}
+   #
+   #    {% for featured in featuredPosts %}
+   #      {% set notIDs = notIDs | merge(['not '~featured.id]) %}
+   #    {% endfor %}
+   #
+   #    {% set entries = craft.entries({
+   #      section: sections,
+   #      id: notIDs,
+   #      offset: offset,
+   #      limit: limit
+   #    }) %}
+   #}
 
-  {% for featured in featuredPosts %}
-    {% set notIDs = notIDs | merge(['not '~featured.id]) %}
-  {% endfor %}
-
-  {% set entries = craft.entries({
-    section: sections,
-    id: notIDs,
-    offset: offset,
-    limit: limit
-  }) %}
+  {% set entries = craft.entries.section(sections).offset(offset).limit(limit) %}
 
 {% else %} {# the very first post is effectively "featured" so add one to offset #}
 
