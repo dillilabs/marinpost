@@ -59,11 +59,11 @@
               featuredPosts.slick({
                 adaptiveHeight: true,
                 autoplay: true,
-                autoplaySpeed: 6000,
+                autoplaySpeed: 4000,
                 dots: true,
                 fade: true,
                 infinite: true,
-                speed: 1500,
+                speed: 500,
               });
 
               featuredPosts.show();
