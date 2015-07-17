@@ -644,7 +644,7 @@ fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:l
     background: #fffcd0;
 }
 .featured {
-    padding: 3%;
+    padding: 15px;
 }
 
 ul.tags {
