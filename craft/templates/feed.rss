@@ -8,26 +8,29 @@
         <language>en-us</language>
         <pubDate>{{ now.rss }}</pubDate>
         <lastBuildDate>{{ now.rss }}</lastBuildDate>
-
-        {% for entry in craft.entries.find %}
+        {% for entry in craft.entries.section(['blog', 'media', 'news', 'notices']) %}
             <item>
                 <title>{{ entry.title }}</title>
-                <link>{{ entry.url }}</link>
                 <pubDate>{{ entry.postDate.rss }}</pubDate>
                 <dc:creator>{{ entry.author.name }}</dc:creator>
-                <guid>{{ entry.url }}</guid>
-                <description><![CDATA[
-                  {% switch entry.section.handle %}
+                {% switch entry.section.handle %}
                     {% case 'blog' %}
-                      {{ entry.blogContent }}
-                    {% case 'letters' %}
-                      {{ entry.letterContent }}
+                        <link>{{ entry.url }}</link>
+                        <guid>{{ entry.url }}</guid>
+                        <description><![CDATA[{{ entry.blogContent }}]]></description>
+                    {% case 'media' %}
+                        <link>{{ siteUrl }}media/</link>
+                        <guid isPermaLink="false">media-{{ entry.id }}</guid>
+                        <description><![CDATA[{{ entry.linkComments }}]]></description>
+                    {% case 'news' %}
+                        <link>{{ siteUrl }}news/</link>
+                        <guid isPermaLink="false">news-{{ entry.id }}</guid>
+                        <description><![CDATA[{{ entry.linkComments }}]]></description>
                     {% case 'notices' %}
-                      {{ entry.noticeContent }}
-                    {% default %}
-                      {{ entry.linkComments }}
-                  {% endswitch %}
-                ]]></description>
+                        <link>{{ entry.url }}</link>
+                        <guid>{{ entry.url }}</guid>
+                        <description><![CDATA[{{ entry.noticeContent }}]]></description>
+                {% endswitch %}
             </item>
         {% endfor %}
     </channel>
