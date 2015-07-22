@@ -18,11 +18,11 @@
         {% include "_form/document" with { documentsAttribute: 'blogDocuments' } %}
         <div class="field">
           <label for="otherWebSite">Web Site</label>
-          <input type="text" name="fields[otherWebSite]" autocomplete="off" maxlength="{{ p.fieldMaxLength('otherWebSite') }}" placeholder="Enter URL" value="{{ entry.otherWebSite }}">
+          <input type="text" name="fields[otherWebSite]" autocomplete="off" maxlength="{{ p.fieldMaxLength('otherWebSite') }}" placeholder="http://www.example.com" value="{{ entry.otherWebSite }}">
         </div>
         <div class="field">
           <label for="website">Link to Video</label>
-          <input type="text" name="fields[webSite]" autocomplete="off" maxlength="{{ p.fieldMaxLength('webSite') }}" placeholder="Enter URL" value="{{ entry.webSite }}">
+          <input type="text" name="fields[webSite]" autocomplete="off" maxlength="{{ p.fieldMaxLength('webSite') }}" placeholder="http://www.example.com/video" value="{{ entry.webSite }}">
         </div>
     {% endblock %}
   {% endembed %}
