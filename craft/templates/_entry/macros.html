@@ -16,16 +16,19 @@
 {% endspaceless %}
 {% endmacro %}
 
-{% macro primaryImageCredit(entry) %}
+{% macro primaryImageCredit(entry, transform) %}
 {% spaceless %}
-  {% from _self import singularSection %}
+  {% from _self import excerpt, singularSection %}
 
   {% set section = singularSection(entry) %}
   {% set fieldName = section~'Images' %}
   {% set image = attribute(entry, fieldName).first %}
 
   {% if image is defined %}
-    {{ image.credit }}
+    {% set transform = transform | default('list') %}
+    {% set maxLength = transform == 'hero' ? 65 : 49 %}
+
+    {{ excerpt(image.credit, maxLength, true) }}
   {% endif %}
 {% endspaceless %}
 {% endmacro %}
@@ -158,19 +161,19 @@
     {% case 'media' %}
     <div class="image-wrapper">
       <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a> <!-- please add doc/video/audio class to "overlay" span for images -->
-      <p class="image-credit">{{ primaryImageCredit(entry) }}</p>
+      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
     </div>
 
     {% case 'news' %}
     <div class="image-wrapper">
       <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
-      <p class="image-credit">{{ primaryImageCredit(entry) }}</p>
+      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
     </div>
 
     {% default %}
     <div class="image-wrapper">
       <a href="{{ entry.url }}" class="detail"><img src="{{ image }}"></a>
-      <p class="image-credit">{{ primaryImageCredit(entry) }}</p>
+      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
     </div>
 
   {% endswitch %}
@@ -430,12 +433,13 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro excerpt(text, maxLength) %}
+{% macro excerpt(text, maxLength, omitEllipsis) %}
   {% set text = text | striptags %}
   {% set maxLength = maxLength | default(25) %}
+  {% set omitEllipsis = omitEllipsis | default(false) %}
 
   {% if (text | length) > maxLength %}
-    {{ text | slice(0, maxLength) }}...
+    {{ text | slice(0, maxLength) }}{{ omitEllipsis ? '' : '...' }}
   {% else %}
     {{ text }}
   {% endif %}
