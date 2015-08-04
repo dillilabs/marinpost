@@ -733,7 +733,7 @@ main.single > .post > h3.my-content {
     font-size: 1em;
 }
 
-.blog .single p:not(.image-credit), .notices .single p:not(.image-credit), .letters p {
+.blog .single p:not(.image-credit), .blog .single ol, .blog .single ul, .notices .single p:not(.image-credit), .notices .single ol, .notices .single ul, .letters p {
     color: #000;
     font-size: 1.1em;
     line-height: 1.5em;
