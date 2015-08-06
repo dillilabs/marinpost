@@ -1,11 +1,29 @@
-{% set query = craft.request.param('query') | replace('/^\\s+$/', '') %}
+{# strip single and double quotes #}
+{% set query = craft.request.param('query') | replace('/[\'"]/', '') %}
+
+{# eliminate successive whitespace #}
+{% set query = query | replace('/\\s+/', ' ') %}
+
+{% set searchTerms = [] %}
 
 {% if query | length %}
-  {% set searchTerms = query | split(' ') | filter | join(' OR ') %}
+  {% set searchTerms = query | split(' ') | filter %}
+
+  {% switch craft.request.param('type') %}
+    {% case 'exact' %}
+      {% set pattern = '"'~(searchTerms | join(' '))~'"' %}
+
+    {% case 'any' %}
+       {% set pattern = searchTerms | join(' OR ') %}
+
+    {% default %}
+       {% set pattern = searchTerms | join(' AND ') %}
+
+  {% endswitch %}
 
   {% set section = craft.request.param('section') %}
 
-  {% set entryIds = craft.mpsearch.search(searchTerms, section) %}
+  {% set entryIds = craft.mpsearch.search(pattern, section) %}
 {% endif %}
 
 {% extends "_common/layout" %}
@@ -14,31 +32,50 @@
 
 {% block main %}
   {% embed "_common/single" %}
+
     {% macro checkSection(match) %}
       {% set section = craft.request.param('section') %}
       {{ section == match ? 'checked' : '' }}
     {% endmacro %}
-    {% from _self import checkSection %}
+
+    {% macro checkType(match) %}
+      {% set type = craft.request.param('type') %}
+      {{ type == match ? 'checked' : '' }}
+    {% endmacro %}
+
+    {% from _self import checkSection, checkType %}
 
     {% block subNav %}
     {% endblock %}
 
     {% block typeOfWrapper %}list-wrapper{% endblock %}
     {% block title %}Search Results{% endblock %}
+
     {% block post %}
-      <form action="/search" method="GET">
+      <form action="/search" method="GET" class="advanced">
         <fieldset>
           <input type="search" name="query" autocomplete="off" value="{{ query }}">
-          <input type="submit" value="Search"><br>
+          <input type="submit" value="Search">
+          <span class="spinner"></span>
+
+          {% if searchTerms | length > 1 %}
+            <br />
+            <input type="radio" name="type" value="any" {{ checkType('any') }}> Any of these
+            <input type="radio" name="type" value="" {{ checkType('') }}> All of these
+            <input type="radio" name="type" value="exact" {{ checkType('exact') }}> Exact phrase
+          {% endif %}
+
+          <br />
           <input type="radio" name="section" value="" {{ checkSection('') }}> All
-          <input type="radio" name="section" value="blog" {{ checkSection('blog')}}> Blogs
+          <input type="radio" name="section" value="blog" {{ checkSection('blog')}}> Blog
           <input type="radio" name="section" value="news" {{ checkSection('news')}}> News
-          <input type="radio" name="section" value="notices" {{ checkSection('notices')}}> Notices
+          <input type="radio" name="section" value="notices" {{ checkSection('notices')}}> Notice
           <input type="radio" name="section" value="media" {{ checkSection('media')}}> Media
           <input type="radio" name="section" value="letters" {{ checkSection('letters')}}> LTRs
         </fieldset>
       </form>
-      <hr>
+
+      <hr />
 
       {% if query | length %}
         {% if entryIds | length %}

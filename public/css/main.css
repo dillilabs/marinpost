@@ -1037,6 +1037,19 @@ form input, form select {
     text-decoration: underline;
 }
 
+form.simple.processing input[name=query] {
+  background: url('../img/spinner.gif') no-repeat center;
+}
+
+form.advanced input[name=query] {
+  width: 340px;
+}
+form.advanced.processing span.spinner {
+  background: url('../img/spinner.gif') no-repeat center;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+}
 
 form input[type="text"], form input[type="password"],
 form select, textarea {
