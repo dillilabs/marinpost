@@ -434,7 +434,9 @@
 {% endmacro %}
 
 {% macro excerpt(text, maxLength, omitEllipsis) %}
-  {% set text = text | striptags %}
+  {# replace para and list tags with single spaces, strip everything else #}
+  {% set text = text | replace('/<\\/?(?:p|ol|ul|li)>/', ' ') | join | striptags %}
+
   {% set maxLength = maxLength | default(25) %}
   {% set omitEllipsis = omitEllipsis | default(false) %}
 
