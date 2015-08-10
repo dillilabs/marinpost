@@ -48,7 +48,7 @@ class MpAdminPlugin extends BasePlugin
     }
 
     //----------------------
-    // Hook functions
+    // Entry table hooks
     //----------------------
 
     public function modifyEntryTableAttributes(&$attributes, $source)
@@ -69,6 +69,20 @@ class MpAdminPlugin extends BasePlugin
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
         $attributes['authorId'] = Craft::t('Author');
+    }
+
+    //----------------------
+    // User table hooks
+    //----------------------
+
+    public function modifyUserTableAttributes(&$attributes, $source)
+    {
+        $attributes['city'] = Craft::t('City');
+    }
+
+    public function modifyUserSortableAttributes(&$attributes)
+    {
+        $attributes['city'] = Craft::t('City');
     }
 
     //----------------------
@@ -203,7 +217,7 @@ JS;
 
     public function getVersion()
     {
-        return '0.0.27';
+        return '0.0.28';
     }
 
     public function getDeveloper()
