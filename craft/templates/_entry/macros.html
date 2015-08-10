@@ -26,7 +26,7 @@
 
   {% if image is defined %}
     {% set transform = transform | default('list') %}
-    {% set maxLength = transform == 'hero' ? 65 : 49 %}
+    {% set maxLength = transform == 'hero' ? 60 : 44 %}
 
     {{ excerpt(image.credit, maxLength, true) }}
   {% endif %}
