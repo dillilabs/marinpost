@@ -68,11 +68,23 @@
   {% set topics = craft.request.query('topics') %}
   {% set date = craft.request.query('date') %}
 
+  {% set query = craft.request.query('query') %}
+
   {% if locations or topics or date %}
     {% set url = '/'~craft.request.segment(1)~'?locations='~locations~'&topics='~topics~'&date='~date %}
 
     <span class="prev-next">
       <a href="{{ url }}">&lt; Back to List</a>
+    </span>
+
+  {% elseif query %}
+    {% set section = craft.request.query('section') %}
+    {% set type = craft.request.query('type') %}
+
+    {% set url = '/search?query='~query~'&section='~section~'&type='~type %}
+
+    <span class="prev-next">
+      <a href="{{ url }}">&lt; Back to Search</a>
     </span>
 
   {% else %}
