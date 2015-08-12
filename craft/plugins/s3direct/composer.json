@@ -1,4 +1,7 @@
 {
+    "name": "marinpost/s3direct",
+    "description": "Upload Craft Assets directly to S3",
+    "license": "MIT",
     "require": {
         "aws/aws-sdk-php": "2.*"
     }
