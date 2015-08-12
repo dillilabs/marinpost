@@ -1,3 +1,4 @@
+{% import "_entry/macros" as m %}
 {% spaceless %}
 <?xml version="1.0"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -18,19 +19,19 @@
                     {% case 'blog' %}
                         <link>{{ entry.url }}</link>
                         <guid>{{ entry.url }}</guid>
-                        <description><![CDATA[{{ entry.blogContent }}]]></description>
+                        <description><![CDATA[<img src="{{ m.primaryImage(entry) }}" /> {{ entry.blogContent }}]]></description>
                     {% case 'media' %}
                         <link>{{ siteUrl }}media</link>
                         <guid isPermaLink="false">media-{{ entry.id }}</guid>
-                        <description><![CDATA[{{ entry.linkComments }}]]></description>
+                        <description><![CDATA[<img src="{{ m.primaryImage(entry) }}" /> {{ entry.linkComments }}]]></description>
                     {% case 'news' %}
                         <link>{{ siteUrl }}news</link>
                         <guid isPermaLink="false">news-{{ entry.id }}</guid>
-                        <description><![CDATA[{{ entry.linkComments }}]]></description>
+                        <description><![CDATA[<img src="{{ m.primaryImage(entry) }}" /> {{ entry.linkComments }}]]></description>
                     {% case 'notices' %}
                         <link>{{ entry.url }}</link>
                         <guid>{{ entry.url }}</guid>
-                        <description><![CDATA[{{ entry.noticeContent }}]]></description>
+                        <description><![CDATA[<img src="{{ m.primaryImage(entry) }}" /> {{ entry.noticeContent }}]]></description>
                 {% endswitch %}
             </item>
         {% endfor %}
