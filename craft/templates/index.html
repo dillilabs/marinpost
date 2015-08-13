@@ -3,7 +3,7 @@
 {% block main %}
   {% cache unless craft.config.cacheTagDisabled %}
     {% set sections = ['blog', 'media', 'news', 'notices'] %}
-    {% set limit = entriesPerPage.__toString %} {# stringify limit to prevent:  ERROR: Object of class Twig_Markup could not be converted to int #}
+    {% set limit = entriesPerPage %}
     {% set featuredPosts = [] %}
 
     {% set slideShow = entry.slideShow %}
