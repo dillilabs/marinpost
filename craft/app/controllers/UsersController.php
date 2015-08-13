@@ -106,10 +106,12 @@ class UsersController extends BaseController
 		$this->requirePostRequest();
 
 		$userId = craft()->request->getPost('userId');
+		$originalUserId = craft()->userSession->getId();
 
 		if (craft()->userSession->loginByUserId($userId))
 		{
 			craft()->userSession->setNotice(Craft::t('Logged in.'));
+			craft()->httpSession->add(UserSessionService::USER_IMPERSONATE_KEY, $originalUserId);
 
 			$this->_handleSuccessfulLogin(true);
 		}
@@ -963,8 +965,6 @@ class UsersController extends BaseController
 				$user->email = $originalEmail;
 			}
 
-			craft()->userSession->setNotice(Craft::t('User saved.'));
-
 			if (isset($_POST['redirect']) && mb_strpos($_POST['redirect'], '{userId}') !== false)
 			{
 				craft()->deprecator->log('UsersController::saveUser():userId_redirect', 'The {userId} token within the ‘redirect’ param on users/saveUser requests has been deprecated. Use {id} instead.');
@@ -981,17 +981,37 @@ class UsersController extends BaseController
 				}
 			}
 
-			$this->redirectToPostedUrl($user);
+			if (craft()->request->isAjaxRequest())
+			{
+				$return['success']   = true;
+				$return['id']        = $user->id;
+
+				$this->returnJson($return);
+			}
+			else
+			{
+				craft()->userSession->setNotice(Craft::t('User saved.'));
+				$this->redirectToPostedUrl($user);
+			}
 		}
 		else
 		{
-			craft()->userSession->setError(Craft::t('Couldn’t save user.'));
-		}
+			if (craft()->request->isAjaxRequest())
+			{
+				$this->returnJson(array(
+					'errors' => $user->getErrors(),
+				));
+			}
+			else
+			{
+				craft()->userSession->setError(Craft::t('Couldn’t save user.'));
 
-		// Send the account back to the template
-		craft()->urlManager->setRouteVariables(array(
-			'account' => $user
-		));
+				// Send the account back to the template
+				craft()->urlManager->setRouteVariables(array(
+					'account' => $user
+				));
+			}
+		}
 	}
 
 	/**
@@ -1049,10 +1069,26 @@ class UsersController extends BaseController
 					$this->returnErrorJson(Craft::t('The uploaded image is too large'));
 				}
 
-				craft()->images->cleanImage($folderPath.$fileName);
+                list ($width, $height) = ImageHelper::getImageSize($folderPath.$fileName);
+
+                if (IOHelper::getExtension($fileName) != 'svg')
+                {
+    				craft()->images->cleanImage($folderPath.$fileName);
+                }
+                else
+                {
+                    // Resave svg files as png
+                    $newFilename = preg_replace('/\.svg$/i', '.png', $fileName);
+
+                    craft()->images->
+                        loadImage($folderPath.$fileName, $width, $height)->
+                        saveAs($folderPath.$newFilename);
+
+                    IOHelper::deleteFile($folderPath.$fileName);
+                    $fileName = $newFilename;
+                }
 
 				$constraint = 500;
-				list ($width, $height) = getimagesize($folderPath.$fileName);
 
 				// If the file is in the format badscript.php.gif perhaps.
 				if ($width && $height)
@@ -1066,7 +1102,8 @@ class UsersController extends BaseController
 							'width' => round($width * $factor),
 							'height' => round($height * $factor),
 							'factor' => $factor,
-							'constraint' => $constraint
+							'constraint' => $constraint,
+                            'fileName' => $fileName
 						)
 					);
 
@@ -1113,14 +1150,19 @@ class UsersController extends BaseController
 			$user = craft()->users->getUserById($userId);
 			$userName = AssetsHelper::cleanAssetName($user->username, false);
 
-			// make sure that this is this user's file
+            if (IOHelper::getExtension($source) == 'svg')
+            {
+                $source = preg_replace('/\.svg$/i', '.png', $source);
+            }
+
+            // make sure that this is this user's file
 			$imagePath = craft()->path->getTempUploadsPath().'userphotos/'.$userName.'/'.$source;
 
 			if (IOHelper::fileExists($imagePath) && craft()->images->checkMemoryForImage($imagePath))
 			{
 				craft()->users->deleteUserPhoto($user);
 
-				$image = craft()->images->loadImage($imagePath);
+                $image = craft()->images->loadImage($imagePath);
 				$image->crop($x1, $x2, $y1, $y2);
 
 				if (craft()->users->saveUserPhoto(IOHelper::getFileName($imagePath), $image, $user))
@@ -1193,6 +1235,12 @@ class UsersController extends BaseController
 		if (!$user)
 		{
 			$this->_noUserExists($userId);
+		}
+
+		// Only allow activation emails to be send to pending users.
+		if ($user->getStatus() !== UserStatus::Pending)
+		{
+			throw new Exception(Craft::t('Invalid account status for user ID “{id}”.', array('id' => $userId)));
 		}
 
 		craft()->users->sendActivationEmail($user);

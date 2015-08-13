@@ -783,25 +783,25 @@ class IOHelper
 
 					try
 					{
-						Craft::log('Trying to write to file at '.$path.' using LOCK_EX.', LogLevel::Info, true);
+						Craft::log('Trying to write to file at '.$path.' using LOCK_EX.', LogLevel::Info);
 						if (static::_writeToFile($path, $contents, true, $append, $suppressErrors))
 						{
 							// Restore quickly.
 							restore_error_handler();
 
 							// Cache the file lock info to use LOCK_EX for 2 months.
-							Craft::log('Successfully wrote to file at '.$path.' using LOCK_EX. Saving in cache.', LogLevel::Info, true);
+							Craft::log('Successfully wrote to file at '.$path.' using LOCK_EX. Saving in cache.', LogLevel::Info);
 							craft()->cache->set('useWriteFileLock', 'yes', 5184000);
 							return true;
 						}
 						else
 						{
 							// Try again without the lock flag.
-							Craft::log('Trying to write to file at '.$path.' without LOCK_EX.', LogLevel::Info, true);
+							Craft::log('Trying to write to file at '.$path.' without LOCK_EX.', LogLevel::Info);
 							if (static::_writeToFile($path, $contents, false, $append, $suppressErrors))
 							{
 								// Cache the file lock info to not use LOCK_EX for 2 months.
-								Craft::log('Successfully wrote to file at '.$path.' without LOCK_EX. Saving in cache.', LogLevel::Info, true);
+								Craft::log('Successfully wrote to file at '.$path.' without LOCK_EX. Saving in cache.', LogLevel::Info);
 								craft()->cache->set('useWriteFileLock', 'no', 5184000);
 								return true;
 							}
@@ -813,11 +813,11 @@ class IOHelper
 						restore_error_handler();
 
 						// Try again without the lock flag.
-						Craft::log('Trying to write to file at '.$path.' without LOCK_EX.', LogLevel::Info, true);
+						Craft::log('Trying to write to file at '.$path.' without LOCK_EX.', LogLevel::Info);
 						if (static::_writeToFile($path, $contents, false, $append, $suppressErrors))
 						{
 							// Cache the file lock info to not use LOCK_EX for 2 months.
-							Craft::log('Successfully wrote to file at '.$path.' without LOCK_EX. Saving in cache.', LogLevel::Info, true);
+							Craft::log('Successfully wrote to file at '.$path.' without LOCK_EX. Saving in cache.', LogLevel::Info);
 							craft()->cache->set('useWriteFileLock', 'no', 5184000);
 							return true;
 						}
@@ -1490,13 +1490,13 @@ class IOHelper
 	/**
 	 * Cleans a filename.
 	 *
-	 * @param string $fileName
-	 * @param bool   $onlyAlphaNumeric
-	 * @param string $separator
+	 * @param string $fileName  The filename to clean.
+	 * @param bool   $onlyAscii Whether to only allow ASCII characters in the filename.
+	 * @param string $separator The separator to use for any whitespace. Defaults to '-'.
 	 *
 	 * @return mixed
 	 */
-	public static function cleanFilename($fileName, $onlyAlphaNumeric = false, $separator = '-')
+	public static function cleanFilename($fileName, $onlyAscii = false, $separator = '-')
 	{
 		$disallowedChars = array('â€”', 'â€“', '&#8216;', '&#8217;', '&#8220;', '&#8221;', '&#8211;', '&#8212;', '+', '%', '^', '~', '?', '[', ']', '/', '\\', '=', '<', '>', ':', ';', ',', '\'', '"', '&', '$', '#', '*', '(', ')', '|', '~', '`', '!', '{', '}');
 
@@ -1514,7 +1514,7 @@ class IOHelper
 		// Nuke any trailing or leading .-_
 		$fileName = trim($fileName, '.-_');
 
-		$fileName = ($onlyAlphaNumeric) ? preg_replace('/[^a-zA-Z0-9]/', '', $fileName) : $fileName;
+		$fileName = ($onlyAscii) ? StringHelper::asciiString($fileName) : $fileName;
 
 		return $fileName;
 	}

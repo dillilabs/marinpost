@@ -74,13 +74,19 @@ class ImagesService extends BaseApplicationComponent
 	 * Loads an image from a file system path.
 	 *
 	 * @param string $path
+	 * @param int $minSvgWidth The minimum width that the image should be loaded with if it’s an SVG.
+	 * @param int $minSvgHeight The minimum width that the image should be loaded with if it’s an SVG.
 	 *
 	 * @throws \Exception
 	 * @return Image
 	 */
-	public function loadImage($path)
+	public function loadImage($path, $minSvgWidth = 1000, $minSvgHeight = 1000)
 	{
 		$image = new Image();
+
+		$image->minSvgWidth = $minSvgWidth;
+		$image->minSvgHeight = $minSvgHeight;
+
 		$image->loadImage($path);
 		return $image;
 	}
@@ -147,17 +153,20 @@ class ImagesService extends BaseApplicationComponent
 		{
 			if (craft()->config->get('rotateImagesOnUploadByExifData'))
 			{
-				$this->rotateImageByExifData($filePath);
+				$cleanedbyRotation = $this->rotateImageByExifData($filePath);
 			}
 
-			$this->stripOrientationFromExifData($filePath);
+			$cleanedbyStripping = $this->stripOrientationFromExifData($filePath);
 		}
 		catch (\Exception $e)
 		{
 			Craft::log('Tried to rotate or strip EXIF data from image and failed: '.$e->getMessage(), LogLevel::Error);
 		}
 
-		return $this->loadImage($filePath)->saveAs($filePath, true);
+		if (!$cleanedbyRotation && !$cleanedbyStripping)
+		{
+			return $this->loadImage($filePath)->saveAs($filePath, true);
+		}
 	}
 
 	/**
@@ -165,7 +174,7 @@ class ImagesService extends BaseApplicationComponent
 	 *
 	 * @param string $filePath
 	 *
-	 * @return null
+	 * @return bool|null
 	 */
 	public function rotateImageByExifData($filePath)
 	{
@@ -176,7 +185,7 @@ class ImagesService extends BaseApplicationComponent
 
 		$exif = $this->getExifData($filePath);
 
-		$degrees = 0;
+		$degrees = false;
 
 		if (!empty($exif['ifd0.Orientation']))
 		{
@@ -200,9 +209,11 @@ class ImagesService extends BaseApplicationComponent
 			}
 		}
 
-		$image = $this->loadImage($filePath)->rotate($degrees);
-
-		return $image->saveAs($filePath, true);
+		if ($degrees)
+		{
+			$image = $this->loadImage($filePath)->rotate($degrees);
+			return $image->saveAs($filePath, true);
+		}
 	}
 
 	/**
@@ -255,13 +266,11 @@ class ImagesService extends BaseApplicationComponent
 				// Delete the Orientation entry and re-save the file
 				$ifd0->offsetUnset(\PelTag::ORIENTATION);
 				$file->saveFile($filePath);
-			}
 
-			return true;
+				return true;
+			}
 		}
-		else
-		{
-			return false;
-		}
+
+		return false;
 	}
 }

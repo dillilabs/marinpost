@@ -101,9 +101,22 @@ class MatrixBlockElementType extends BaseElementType
 	 */
 	public function getFieldsForElementsQuery(ElementCriteriaModel $criteria)
 	{
+		$blockTypes = craft()->matrix->getBlockTypesByFieldId($criteria->fieldId);
+
+		// Preload all of the fields up front to save ourselves some DB queries, and discard
+		$contexts = array();
+
+		foreach ($blockTypes as $blockType)
+		{
+			$contexts[] = 'matrixBlockType:'.$blockType->id;
+		}
+
+		craft()->fields->getAllFields(null, $contexts);
+
+		// Now assemble the actual fields list
 		$fields = array();
 
-		foreach (craft()->matrix->getBlockTypesByFieldId($criteria->fieldId) as $blockType)
+		foreach ($blockTypes as $blockType)
 		{
 			$fieldColumnPrefix = 'field_'.$blockType->handle.'_';
 

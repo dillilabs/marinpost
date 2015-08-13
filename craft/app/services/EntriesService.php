@@ -196,7 +196,7 @@ class EntriesService extends BaseApplicationComponent
 						$entry->clearErrors();
 
 						// Create the new "title" error message.
-						$errors['title'] = str_replace('Title', $entryType->titleLabel, $originalTitleError);
+						$errors['title'] = str_replace(Craft::t('Title'), $entryType->titleLabel, $originalTitleError);
 
 						// Add all of the errors back on the model.
 						$entry->addErrors($errors);
@@ -230,7 +230,7 @@ class EntriesService extends BaseApplicationComponent
 					}
 
 					// Update the entry's descendants, who may be using this entry's URI in their own URIs
-					craft()->elements->updateDescendantSlugsAndUris($entry);
+					craft()->elements->updateDescendantSlugsAndUris($entry, true, true);
 				}
 
 				// Save a new version

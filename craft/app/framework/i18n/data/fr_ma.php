@@ -11,10 +11,10 @@
  */
 return array (
   'version' => '8245',
-  'numberSymbols' =>
+  'numberSymbols' => 
   array (
     'decimal' => ',',
-    'group' => ' ',
+    'group' => ' ',
     'list' => ';',
     'percentSign' => '%',
     'plusSign' => '+',
@@ -26,9 +26,9 @@ return array (
   ),
   'decimalFormat' => '#,##0.###',
   'scientificFormat' => '#E0',
-  'percentFormat' => '#,##0 %',
-  'currencyFormat' => '#,##0.00 ¤;(#,##0.00 ¤)',
-  'currencySymbols' =>
+  'percentFormat' => '#,##0 %',
+  'currencyFormat' => '#,##0.00 ¤;(#,##0.00 ¤)',
+  'currencySymbols' => 
   array (
     'AUD' => '$AU',
     'BRL' => 'R$',
@@ -86,9 +86,9 @@ return array (
     'WST' => 'WS$',
     'ZWD' => '$Z',
   ),
-  'monthNames' =>
+  'monthNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       1 => 'janvier',
       2 => 'février',
@@ -103,7 +103,7 @@ return array (
       11 => 'novembre',
       12 => 'décembre',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'janv.',
       2 => 'févr.',
@@ -118,7 +118,7 @@ return array (
       11 => 'nov.',
       12 => 'déc.',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'J',
       2 => 'F',
@@ -134,9 +134,9 @@ return array (
       12 => 'D',
     ),
   ),
-  'monthNamesSA' =>
+  'monthNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'J',
       2 => 'F',
@@ -151,7 +151,7 @@ return array (
       11 => 'N',
       12 => 'D',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'janv.',
       2 => 'févr.',
@@ -166,7 +166,7 @@ return array (
       11 => 'nov.',
       12 => 'déc.',
     ),
-    'wide' =>
+    'wide' => 
     array (
       1 => 'janvier',
       2 => 'février',
@@ -182,9 +182,9 @@ return array (
       12 => 'décembre',
     ),
   ),
-  'weekDayNames' =>
+  'weekDayNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       0 => 'dimanche',
       1 => 'lundi',
@@ -194,7 +194,7 @@ return array (
       5 => 'vendredi',
       6 => 'samedi',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'dim.',
       1 => 'lun.',
@@ -204,7 +204,7 @@ return array (
       5 => 'ven.',
       6 => 'sam.',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'D',
       1 => 'L',
@@ -214,7 +214,7 @@ return array (
       5 => 'V',
       6 => 'S',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'di',
       1 => 'lu',
@@ -225,9 +225,9 @@ return array (
       6 => 'sa',
     ),
   ),
-  'weekDayNamesSA' =>
+  'weekDayNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'D',
       1 => 'L',
@@ -237,7 +237,7 @@ return array (
       5 => 'V',
       6 => 'S',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'dim.',
       1 => 'lun.',
@@ -247,7 +247,7 @@ return array (
       5 => 'ven.',
       6 => 'sam.',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'dim.',
       1 => 'lun.',
@@ -257,7 +257,7 @@ return array (
       5 => 'ven.',
       6 => 'sam.',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'dimanche',
       1 => 'lundi',
@@ -268,32 +268,32 @@ return array (
       6 => 'samedi',
     ),
   ),
-  'eraNames' =>
+  'eraNames' => 
   array (
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'av. J.-C.',
       1 => 'ap. J.-C.',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'avant Jésus-Christ',
       1 => 'après Jésus-Christ',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'av. J.-C.',
       1 => 'ap. J.-C.',
     ),
   ),
-  'dateFormats' =>
+  'dateFormats' => 
   array (
     'full' => 'EEEE d MMMM y',
     'long' => 'd MMMM y',
     'medium' => 'd MMM y',
     'short' => 'dd/MM/y',
   ),
-  'timeFormats' =>
+  'timeFormats' => 
   array (
     'full' => 'HH:mm:ss zzzz',
     'long' => 'HH:mm:ss z',
@@ -304,7 +304,7 @@ return array (
   'amName' => 'AM',
   'pmName' => 'PM',
   'orientation' => 'ltr',
-  'languages' =>
+  'languages' => 
   array (
     'aa' => 'afar',
     'ab' => 'abkhaze',
@@ -880,7 +880,7 @@ return array (
     'zxx' => 'sans contenu linguistique',
     'zza' => 'zazaki',
   ),
-  'scripts' =>
+  'scripts' => 
   array (
     'afak' => 'afaka',
     'arab' => 'arabo-persan',
@@ -1041,7 +1041,7 @@ return array (
     'zyyy' => 'commun',
     'zzzz' => 'écriture inconnue',
   ),
-  'territories' =>
+  'territories' => 
   array (
     '001' => 'Monde',
     '002' => 'Afrique',
@@ -1334,7 +1334,7 @@ return array (
     'zw' => 'Zimbabwe',
     'zz' => 'région indéterminée',
   ),
-  'pluralRules' =>
+  'pluralRules' => 
   array (
     0 => '(n>=0&&n<=2)&&n!=2',
     1 => 'true',

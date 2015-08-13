@@ -1,12 +1,5 @@
 <?php
 
-// Initially set it here.  WebApp->init() will check devMode and override appropriately.
-error_reporting(E_ALL & ~E_STRICT);
-ini_set('display_errors', 1);
-
-ini_set('log_errors', 1);
-ini_set('error_log', CRAFT_STORAGE_PATH.'runtime/logs/phperrors.log');
-
 $configArray = array(
 
 	// autoloading model and component classes
@@ -166,6 +159,7 @@ $configArray = array(
 		'app.etc.state.StatePersister',
 		'app.etc.templating.BaseTemplate',
 		'app.etc.templating.StringTemplate',
+		'app.etc.templating.TwigParser',
 		'app.etc.templating.twigextensions.Cache_Node',
 		'app.etc.templating.twigextensions.Cache_TokenParser',
 		'app.etc.templating.twigextensions.CraftTwigExtension',
@@ -415,6 +409,7 @@ $configArray = array(
 		'app.tasks.LocalizeRelationsTask',
 		'app.tasks.ResaveAllElementsTask',
 		'app.tasks.ResaveElementsTask',
+		'app.tasks.UpdateElementSlugsAndUrisTask',
 		'app.tests.BaseTest',
 		'app.tests.TestApplication',
 		'app.tests.helpers.StubHelper',
@@ -447,6 +442,7 @@ $configArray = array(
 		'app.variables.AppVariable',
 		'app.variables.AssetSourceTypeVariable',
 		'app.variables.BaseComponentTypeVariable',
+		'app.variables.CategoryGroupsVariable',
 		'app.variables.ConfigVariable',
 		'app.variables.CpVariable',
 		'app.variables.CraftVariable',
@@ -708,7 +704,6 @@ $components['urlManager']['pathParam'] = 'p';
 
 $components['errorHandler'] = array(
 	'class' => 'Craft\ErrorHandler',
-	'errorAction' => 'templates/renderError'
 );
 
 $components['fileCache']['class'] = 'Craft\FileCache';
@@ -732,7 +727,6 @@ $components['log']['routes'] = array(
 $components['httpSession']['autoStart']   = true;
 $components['httpSession']['cookieMode']  = 'only';
 $components['httpSession']['class']       = 'Craft\HttpSessionService';
-$components['httpSession']['sessionName'] = 'CraftSessionId';
 
 $components['userSession']['class'] = 'Craft\UserSessionService';
 $components['userSession']['allowAutoLogin']  = true;

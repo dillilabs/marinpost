@@ -372,16 +372,10 @@ class PelIfd implements IteratorAggregate, ArrayAccess {
                         PelFormat::ASCII);
 
                         $v = explode("\0", trim($data->getBytes(), ' '));
-
-                        /* BEGIN HACK */
-
                         if (!isset($v[1])) {
                             throw new PelException('Invalid copyright: %s',
                             $data->getBytes());
                         }
-
-                        /* END HACK */
-
                         return new PelEntryCopyright($v[0], $v[1]);
 
                     case PelTag::EXIF_VERSION:

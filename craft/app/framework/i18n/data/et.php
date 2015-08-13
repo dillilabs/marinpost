@@ -11,10 +11,10 @@
  */
 return array (
   'version' => '8663',
-  'numberSymbols' =>
+  'numberSymbols' => 
   array (
     'decimal' => ',',
-    'group' => ' ',
+    'group' => ' ',
     'list' => ';',
     'percentSign' => '%',
     'plusSign' => '+',
@@ -27,8 +27,8 @@ return array (
   'decimalFormat' => '#,##0.###',
   'scientificFormat' => '#E0',
   'percentFormat' => '#,##0%',
-  'currencyFormat' => '#,##0.00 ¤;(#,##0.00 ¤)',
-  'currencySymbols' =>
+  'currencyFormat' => '#,##0.00 ¤;(#,##0.00 ¤)',
+  'currencySymbols' => 
   array (
     'AUD' => 'AU$',
     'BRL' => 'R$',
@@ -53,9 +53,9 @@ return array (
     'XPF' => 'CFPF',
     'EEK' => 'kr',
   ),
-  'monthNames' =>
+  'monthNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       1 => 'jaanuar',
       2 => 'veebruar',
@@ -70,7 +70,7 @@ return array (
       11 => 'november',
       12 => 'detsember',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'jaan',
       2 => 'veebr',
@@ -85,7 +85,7 @@ return array (
       11 => 'nov',
       12 => 'dets',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'J',
       2 => 'V',
@@ -101,9 +101,9 @@ return array (
       12 => 'D',
     ),
   ),
-  'monthNamesSA' =>
+  'monthNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'J',
       2 => 'V',
@@ -118,7 +118,7 @@ return array (
       11 => 'N',
       12 => 'D',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'jaan',
       2 => 'veebr',
@@ -133,7 +133,7 @@ return array (
       11 => 'nov',
       12 => 'dets',
     ),
-    'wide' =>
+    'wide' => 
     array (
       1 => 'jaanuar',
       2 => 'veebruar',
@@ -149,9 +149,9 @@ return array (
       12 => 'detsember',
     ),
   ),
-  'weekDayNames' =>
+  'weekDayNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       0 => 'pühapäev',
       1 => 'esmaspäev',
@@ -161,7 +161,7 @@ return array (
       5 => 'reede',
       6 => 'laupäev',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -171,7 +171,7 @@ return array (
       5 => 'R',
       6 => 'L',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -181,7 +181,7 @@ return array (
       5 => 'R',
       6 => 'L',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -192,9 +192,9 @@ return array (
       6 => 'L',
     ),
   ),
-  'weekDayNamesSA' =>
+  'weekDayNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -204,7 +204,7 @@ return array (
       5 => 'R',
       6 => 'L',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -214,7 +214,7 @@ return array (
       5 => 'R',
       6 => 'L',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'P',
       1 => 'E',
@@ -224,7 +224,7 @@ return array (
       5 => 'R',
       6 => 'L',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'pühapäev',
       1 => 'esmaspäev',
@@ -235,32 +235,32 @@ return array (
       6 => 'laupäev',
     ),
   ),
-  'eraNames' =>
+  'eraNames' => 
   array (
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'e.m.a.',
       1 => 'm.a.j.',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'enne meie aega',
       1 => 'meie aja järgi',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'e.m.a.',
       1 => 'm.a.j.',
     ),
   ),
-  'dateFormats' =>
+  'dateFormats' => 
   array (
     'full' => 'EEEE, d. MMMM y',
     'long' => 'd. MMMM y',
     'medium' => 'dd.MM.y',
     'short' => 'dd.MM.yy',
   ),
-  'timeFormats' =>
+  'timeFormats' => 
   array (
     'full' => 'H:mm.ss zzzz',
     'long' => 'H:mm.ss z',
@@ -271,7 +271,7 @@ return array (
   'amName' => 'AM',
   'pmName' => 'PM',
   'orientation' => 'ltr',
-  'languages' =>
+  'languages' => 
   array (
     'aa' => 'afari',
     'ab' => 'abhaasi',
@@ -840,7 +840,7 @@ return array (
     'zxx' => 'mittekeeleline',
     'zza' => 'zaza',
   ),
-  'scripts' =>
+  'scripts' => 
   array (
     'arab' => 'Pärsia-araabia',
     'armn' => 'armeenia',
@@ -951,7 +951,7 @@ return array (
     'zyyy' => 'üldine',
     'zzzz' => 'määramata',
   ),
-  'territories' =>
+  'territories' => 
   array (
     '001' => 'maailm',
     '002' => 'Aafrika',
@@ -1242,7 +1242,7 @@ return array (
     'zm' => 'Sambia',
     'zw' => 'Zimbabwe',
   ),
-  'pluralRules' =>
+  'pluralRules' => 
   array (
     0 => 'n==1',
     1 => 'true',

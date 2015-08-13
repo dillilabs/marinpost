@@ -8,7 +8,7 @@
 		{%- set datepickerLocale = 'fr-CA' %}
 	{%- default %}
 		{%- set language = craft.i18n.getLocaleData().getLanguageID(craft.locale) %}
-		{%- if language in ['ar', 'de', 'fr', 'it', 'ja', 'nb', 'nl'] %}
+		{%- if language in ['ar', 'de', 'fr', 'it', 'ja', 'nb', 'nl', 'nn', 'no'] %}
 			{%- set datepickerLocale = language %}
 		{%- endif %}
 {%- endswitch %}
@@ -28,7 +28,7 @@
 {%- includeJsResource 'lib/jquery.placeholder.js' first %}
 {%- includeJsResource 'lib/velocity'~(useCompressedJs ? '.min')~'.js' first %}
 {%- includeJsResource 'lib/jquery-ui'~(useCompressedJs ? '.min')~'.js' first %}
-{%- includeJsResource 'lib/jquery-2.1.1'~(useCompressedJs ? '.min')~'.js' first %}
+{%- includeJsResource 'lib/jquery-2.1.4'~(useCompressedJs ? '.min')~'.js' first %}
 {%- includeJsResource 'lib/xregexp-all'~(useCompressedJs ? '-min')~'.js' first %}
 
 {%- includeTranslations "Show", "Hide" %}

@@ -149,11 +149,13 @@ class WebApp extends \CWebApplication
 	 */
 	public function processRequest()
 	{
-		// If this is a resource request, we should respond with the resource ASAP
+		// If this is a resource request, we should respond with the resource ASAP.
 		$this->_processResourceRequest();
 
+		$configService = $this->config;
+
 		// If we're not in devMode, or it's a 'dontExtendSession' request, we're going to remove some logging routes.
-		if (!$this->config->get('devMode') || (craft()->isInstalled() && !$this->userSession->shouldExtendSession()))
+		if (!$configService->get('devMode') || (craft()->isInstalled() && !$this->userSession->shouldExtendSession()))
 		{
 			$this->log->removeRoute('WebLogRoute');
 			$this->log->removeRoute('ProfileLogRoute');
@@ -172,6 +174,17 @@ class WebApp extends \CWebApplication
 			HeaderHelper::setHeader(array('X-Robots-Tag' => 'none'));
 			HeaderHelper::setHeader(array('X-Frame-Options' => 'SAMEORIGIN'));
 			HeaderHelper::setHeader(array('X-Content-Type-Options' => 'nosniff'));
+		}
+
+		// Send the X-Powered-By header?
+		if ($configService->get('sendPoweredByHeader'))
+		{
+			HeaderHelper::setHeader(array('X-Powered-By' => 'Craft CMS'));
+		}
+		else
+		{
+			// In case PHP is already setting one
+			HeaderHelper::removeHeader('X-Powered-By');
 		}
 
 		// Validate some basics on the database configuration file.
@@ -626,6 +639,21 @@ class WebApp extends \CWebApplication
 		return false;
 	}
 
+	// Events
+	// =========================================================================
+
+	/**
+	 * Fires an onEditionChange event.
+	 *
+	 * @param Event $event
+	 *
+	 * @throws \CException
+	 */
+	public function onEditionChange(Event $event)
+	{
+		$this->raiseEvent('onEditionChange', $event);
+	}
+
 	// Private Methods
 	// =========================================================================
 
@@ -733,10 +761,10 @@ class WebApp extends \CWebApplication
 				$url = UrlHelper::getUrl('install');
 				$this->request->redirect($url);
 			}
-			// Otherwise return a 404
+			// Otherwise return a 503
 			else
 			{
-				throw new HttpException(404);
+				throw new HttpException(503);
 			}
 		}
 	}
@@ -841,7 +869,7 @@ class WebApp extends \CWebApplication
 				if ($this->updates->isBreakpointUpdateNeeded())
 				{
 					throw new HttpException(200, Craft::t('You need to be on at least Craft {url} before you can manually update to Craft {targetVersion} build {targetBuild}.', array(
-						'url'           => '<a href="'.CRAFT_MIN_BUILD_URL.'">build '.CRAFT_MIN_BUILD_REQUIRED.'</a>',
+						'url'           => '[build '.CRAFT_MIN_BUILD_REQUIRED.']('.CRAFT_MIN_BUILD_URL.')',
 						'targetVersion' => CRAFT_VERSION,
 						'targetBuild'   => CRAFT_BUILD
 					)));

@@ -11,7 +11,7 @@
  */
 return array (
   'version' => '8671',
-  'numberSymbols' =>
+  'numberSymbols' => 
   array (
     'decimal' => ',',
     'group' => '.',
@@ -27,8 +27,8 @@ return array (
   'decimalFormat' => '#,##0.###',
   'scientificFormat' => '#E0',
   'percentFormat' => '#,##0%',
-  'currencyFormat' => '#,##0.00 ¤',
-  'currencySymbols' =>
+  'currencyFormat' => '#,##0.00 ¤',
+  'currencySymbols' => 
   array (
     'AUD' => 'A$',
     'BRL' => 'R$',
@@ -57,9 +57,9 @@ return array (
     'RSD' => 'дин.',
     'TRY' => 'Тл',
   ),
-  'monthNames' =>
+  'monthNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       1 => 'јануар',
       2 => 'фебруар',
@@ -74,7 +74,7 @@ return array (
       11 => 'новембар',
       12 => 'децембар',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'јан',
       2 => 'феб',
@@ -89,7 +89,7 @@ return array (
       11 => 'нов',
       12 => 'дец',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'ј',
       2 => 'ф',
@@ -105,9 +105,9 @@ return array (
       12 => 'д',
     ),
   ),
-  'monthNamesSA' =>
+  'monthNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       1 => 'ј',
       2 => 'ф',
@@ -122,7 +122,7 @@ return array (
       11 => 'н',
       12 => 'д',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       1 => 'јан',
       2 => 'феб',
@@ -137,7 +137,7 @@ return array (
       11 => 'нов',
       12 => 'дец',
     ),
-    'wide' =>
+    'wide' => 
     array (
       1 => 'јануар',
       2 => 'фебруар',
@@ -153,9 +153,9 @@ return array (
       12 => 'децембар',
     ),
   ),
-  'weekDayNames' =>
+  'weekDayNames' => 
   array (
-    'wide' =>
+    'wide' => 
     array (
       0 => 'недеља',
       1 => 'понедељак',
@@ -165,7 +165,7 @@ return array (
       5 => 'петак',
       6 => 'субота',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'нед',
       1 => 'пон',
@@ -175,7 +175,7 @@ return array (
       5 => 'пет',
       6 => 'суб',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'н',
       1 => 'п',
@@ -185,7 +185,7 @@ return array (
       5 => 'п',
       6 => 'с',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'нед',
       1 => 'пон',
@@ -196,9 +196,9 @@ return array (
       6 => 'суб',
     ),
   ),
-  'weekDayNamesSA' =>
+  'weekDayNamesSA' => 
   array (
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'н',
       1 => 'п',
@@ -208,7 +208,7 @@ return array (
       5 => 'п',
       6 => 'с',
     ),
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'нед',
       1 => 'пон',
@@ -218,7 +218,7 @@ return array (
       5 => 'пет',
       6 => 'суб',
     ),
-    'short' =>
+    'short' => 
     array (
       0 => 'не',
       1 => 'по',
@@ -228,7 +228,7 @@ return array (
       5 => 'пе',
       6 => 'су',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'недеља',
       1 => 'понедељак',
@@ -239,32 +239,32 @@ return array (
       6 => 'субота',
     ),
   ),
-  'eraNames' =>
+  'eraNames' => 
   array (
-    'abbreviated' =>
+    'abbreviated' => 
     array (
       0 => 'п. н. е.',
       1 => 'н. е.',
     ),
-    'wide' =>
+    'wide' => 
     array (
       0 => 'Пре нове ере',
       1 => 'Нове ере',
     ),
-    'narrow' =>
+    'narrow' => 
     array (
       0 => 'п.н.е.',
       1 => 'н.е.',
     ),
   ),
-  'dateFormats' =>
+  'dateFormats' => 
   array (
     'full' => 'EEEE, dd. MMMM y.',
     'long' => 'dd. MMMM y.',
     'medium' => 'dd.MM.y.',
     'short' => 'd.M.yy.',
   ),
-  'timeFormats' =>
+  'timeFormats' => 
   array (
     'full' => 'HH.mm.ss zzzz',
     'long' => 'HH.mm.ss z',
@@ -275,7 +275,7 @@ return array (
   'amName' => 'пре подне',
   'pmName' => 'поподне',
   'orientation' => 'ltr',
-  'languages' =>
+  'languages' => 
   array (
     'aa' => 'Афарски',
     'ab' => 'Абказијски',
@@ -788,7 +788,7 @@ return array (
     'zxx' => 'Без лингвистичког садржаја',
     'zza' => 'Заза',
   ),
-  'scripts' =>
+  'scripts' => 
   array (
     'arab' => 'персијско-арапско',
     'armi' => 'империјско арамејско писмо',
@@ -921,7 +921,7 @@ return array (
     'zyyy' => 'заједничко писмо',
     'zzzz' => 'Непознато или неважеће писмо',
   ),
-  'territories' =>
+  'territories' => 
   array (
     '001' => 'Свет',
     '002' => 'Африка',
@@ -1214,7 +1214,7 @@ return array (
     'zw' => 'Зимбабве',
     'zz' => 'Непозната или неважећа област',
   ),
-  'pluralRules' =>
+  'pluralRules' => 
   array (
     0 => 'fmod(n,10)==1&&fmod(n,100)!=11',
     1 => '(fmod(n,10)>=2&&fmod(n,10)<=4&&fmod(fmod(n,10),1)==0)&&(fmod(n,100)<12||fmod(n,100)>14)',
