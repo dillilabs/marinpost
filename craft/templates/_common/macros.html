@@ -4,9 +4,9 @@
   {{- segment == slug ? 'class="active"' : null -}}
 {% endmacro %}
 
-{% macro segmentLink(name, segmentNo) %}
+{% macro segmentLink(name, path, segmentNo) %}
   {% from _self import classActive %}
-  {% set slug = name | lower %}
+  {% set slug = path | default(name) | lower %}
 
   {% spaceless %}
     <a href="{{ url(slug) }}" {{ classActive(slug, segmentNo) }}>{{ name }}</a>
