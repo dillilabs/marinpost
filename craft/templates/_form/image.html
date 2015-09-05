@@ -4,7 +4,7 @@
 
 {% set assets = false %}
 {% if folder %}
-  {% set assets = craft.assets.folderId(folder.id).find %}
+  {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
 {% endif %}
 
 {% set entry = userProfile ? currentUser : entry %}

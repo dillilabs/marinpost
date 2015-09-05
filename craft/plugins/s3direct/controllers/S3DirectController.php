@@ -28,7 +28,7 @@ class S3DirectController extends BaseController
             $updated = craft()->s3Direct->updateAssetIndexForFilenames($sourceId, $inputFiles);
 
             $folder = craft()->s3Direct->s3Folder($sourceId);
-            $criteria = array('folderId' => $folder->id);
+            $criteria = array('folderId' => $folder->id, 'limit' => null);
             $assets = craft()->elements->getCriteria(ElementType::Asset, $criteria);
 
             $outputFiles = array();
