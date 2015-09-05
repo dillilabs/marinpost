@@ -49,7 +49,7 @@
                 {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}
                 <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
               </div>
-              <p>{{ entry.letterContent }}</p>
+              <div class="content">{{ entry.letterContent }}</div>
           </li>
         {% endfor %}
 

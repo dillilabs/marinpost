@@ -733,10 +733,14 @@ main.single > .post > h3.my-content {
     font-size: 1em;
 }
 
-.blog .single p:not(.image-credit), .blog .single ol, .blog .single ul, .notices .single p:not(.image-credit), .notices .single ol, .notices .single ul, .letters p {
+.blog .single p:not(.image-credit), .blog .single ol, .blog .single ul, .notices .single p:not(.image-credit), .notices .single ol, .notices .single ul, .letters .content p, .letters .content ol, .letters .content ul {
     color: #000;
     font-size: 1.1em;
     line-height: 1.5em;
+}
+
+.letters .content ul {
+  list-style-type: disc;
 }
 
 .list-wrapper p, .post p, .list-wrapper li, .post li {

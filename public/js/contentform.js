@@ -185,10 +185,11 @@
               var buttons = ['bold', 'italic', 'link'];
 
               switch (textarea.attr('name')) {
-                case 'fields[blogContent]':
+                case 'fields[letterContent]':
                   plugins = plugins.concat(['fontsize']);
                   buttons = buttons.concat(['fontsize', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'horizontalrule']);
                   break;
+                case 'fields[blogContent]':
                 case 'fields[noticeContent]':
                   plugins = plugins.concat(['fontsize', 'fontcolor', 'fontfamily']);
                   buttons = buttons.concat(['fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'alignment', 'horizontalrule']);

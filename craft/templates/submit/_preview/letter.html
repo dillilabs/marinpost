@@ -1,19 +1,24 @@
 {% extends "_common/layout" %}
 
-{% block main %}
-  {% embed "_common/single" %}
-    {% block title %}
-      Preview {{ f.closePreview }}
-    {% endblock %}
+{% block bodyClass %}letters{% endblock %}
 
-    {% block post %}
-      <h2 class="date">{{ entry.postDate | date('F j, Y') }}</h2>
-      <h3>{{ p.titleCase(entry.title) }}</h3>
-      <div class="byline">
-        {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}
-        <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
-      </div>
-      <p>{{ entry.letterContent }}</p>
-    {% endblock %}
-  {% endembed %}
+{% block main %}
+  <main class="single clearfix">
+    <div class="sub-nav"></div>
+    <div class="list-wrapper">
+      <h2>Preview {{ f.closePreview }}</h2>
+
+      <ul class="posts">
+        <li>
+          <h2 class="date">{{ entry.postDate | date('F j, Y') }}</h2>
+          <h3>{{ p.titleCase(entry.title) }}</h3>
+          <div class="byline">
+            {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}
+            <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
+          </div>
+          <div class="content">{{ entry.letterContent }}</div>
+        </li>
+      </ul>
+    </div>
+  </main>
 {% endblock %}
