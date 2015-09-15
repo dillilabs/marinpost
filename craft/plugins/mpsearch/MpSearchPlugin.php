@@ -52,7 +52,7 @@ class MpSearchPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.24';
+        return '1.0.0';
     }
 
     public function getDeveloper()
