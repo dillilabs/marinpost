@@ -3,7 +3,7 @@
 {% set title = "User Entries and Email"|t %}
 {% set selectedTab = 'entries' %}
 
-{% set users = craft.users.status(null).order('lastName, firstName') %}
+{% set users = craft.users.status(null).limit(null).order('lastName, firstName') %}
 
 {% set content %}
   <div class="note">
@@ -30,9 +30,17 @@
 
     {% if selectedUser | length %}
       <h2>
-        User: <a href="/admin/users/{{ selectedUser.id }}">{{ selectedUser.fullName }}</a>
-        <br><br>Email: <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a>
-        <br><br>Entries:
+        Name: {{ selectedUser.fullName }}<br><br>
+        Email: <a href="mailto:{{ selectedUser.email }}">{{ selectedUser.email }}</a><br><br>
+        {% if currentUser.admin or not selectedUser.admin %}
+          <form method='post' action='/admin/mpAdmin/loginAsUser'>
+            <input type='hidden' name='action' value='mpAdmin/loginAsUser'>
+            <input type='hidden' name='id' value='{{selectedUser.id }}'>
+            <input type='hidden' name='redirect' value='{{ siteUrl }}'>
+            <input type='submit' value='Login as {{ selectedUser.email }}'>
+          </form><br>
+        {% endif %}
+        Entries:
       </h2>
 
       {% if entries | length %}
@@ -56,12 +64,12 @@
                 <td>{{ entry.dateCreated | date('m/d/y') }}</td>
                 <td>{{ entry.status }}</td>
                 <td>
-                  {% if not entry.archived %}
+                  {% if currentUser.admin and not entry.archived %}
                     <a href="/admin/entries/{{ entry.section.handle }}/{{ entry.id }}">Edit</a>
                   {% endif %}
                 </td>
                 <td>
-                  {% if not entry.archived and entry.enabled and entry.section.handle in ['blog', 'notices'] %}
+                  {% if currentUser.admin and (not entry.archived and entry.enabled and entry.section.handle in ['blog', 'notices']) %}
                     <a href="{{ entry.url }}">View</a>
                   {% endif %}
                 </td>

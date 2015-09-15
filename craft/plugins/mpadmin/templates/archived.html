@@ -3,7 +3,7 @@
 {% set title = "Archived Entries"|t %}
 {% set selectedTab = 'archived' %}
 
-{% set archivedEntries = craft.entries.archived(true) %}
+{% set archivedEntries = craft.entries.archived(true).limit(null) %}
 
 {% set content %}
   <div class="note">

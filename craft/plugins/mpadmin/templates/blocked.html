@@ -3,8 +3,8 @@
 {% set title = "Blocked Users"|t %}
 {% set selectedTab = 'blocked' %}
 
-{% set blockedUsers = craft.users.status(null).group('blocked').order('lastName, firstName') %}
-{% set usersToBlock = craft.users.status(null).group('not blocked').admin('not 1').order('lastName, firstName') %}
+{% set blockedUsers = craft.users.status(null).group('blocked').limit(null).order('lastName, firstName') %}
+{% set usersToBlock = craft.users.status(null).group('not blocked').admin('not 1').limit(null).order('lastName, firstName') %}
 
 {% set content %}
   <div class="note">

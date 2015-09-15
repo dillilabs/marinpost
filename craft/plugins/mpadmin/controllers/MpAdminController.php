@@ -36,17 +36,18 @@ class MpAdminController extends BaseController
     }
 
     /**
-     * Control panel (admin only)
+     * Control panel (admin or admin assistant only)
      *
      * Export User email addresses in .csv or .tab format.
      */
     public function actionExportEmailAddresses()
     {
-        $this->requireAdmin();
+        craft()->mpAdmin->requireAdminOrAdminAssistant();
 
         $group = craft()->request->getParam('group', 'contributor');
         $criteria = craft()->elements->getCriteria(ElementType::User, array(
             'group' => $group,
+            'limit' => null,
         ));
         $users = $criteria->find();
 
@@ -63,6 +64,33 @@ class MpAdminController extends BaseController
         }
 
         craft()->request->sendFile("marinpost-$group-email-addresses.$format", implode("\n", $content), array('forceDownload' => true));
+    }
+
+    /**
+     * Control panel (admin or admin assistant only)
+     *
+     * Login as selected User.
+     *
+     * NOTE to prevent privilege escalation, an admin assistant may not login as an admin.
+     *
+     * TODO handle case of no id param, or no user
+     */
+    public function actionLoginAsUser()
+    {
+        craft()->mpAdmin->requireAdminOrAdminAssistant();
+
+        $user = $this->_getUser();
+
+        // only an admin may login is an admin
+        if (!$user->admin || craft()->userSession->isAdmin())
+        {
+            craft()->userSession->loginByUserId($user->id, false, false);
+            $this->redirectToPostedUrl();
+        }
+        else
+        {
+            throw new HttpException(403, Craft::t('This action may only be performed by admins.'));
+        }
     }
 
     /**
@@ -87,18 +115,19 @@ class MpAdminController extends BaseController
     }
 
     /**
-     * Control panel (admin only)
+     * Control panel (admin or admin assistant only)
      *
      * Return list of Entries authored by User.
      */
     public function actionUserEntries()
     {
-        $this->requireAdmin();
+        craft()->mpAdmin->requireAdminOrAdminAssistant();
 
         $user = $this->_getUser();
         $criteria = craft()->elements->getCriteria(ElementType::Entry, array(
             'authorId' => $user->id,
-            'status' => null,
+            'status'   => null,
+            'limit'    => null,
         ));
         $entries = $criteria->find();
         $archivedEntries = $criteria->archived(true)->find();
@@ -126,9 +155,11 @@ class MpAdminController extends BaseController
 
     private function _unpublishAndArchiveUserEntries($user)
     {
-        $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->authorId = $user->id;
-        $criteria->status = BaseElementModel::ENABLED;
+        $criteria = craft()->elements->getCriteria(ElementType::Entry, array(
+            'authorId' => $user->id,
+            'status'   => BaseElementModel::ENABLED,
+            'limit'    => null,
+        ));
         $entries = $criteria->find();
 
         foreach ($entries as $entry)

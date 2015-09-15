@@ -27,4 +27,12 @@ class MpAdminVariable
 
         return $minimee && $minimee->isEnabled && $minimee->settings->enabled;
     }
+
+    /**
+     * Return true if User is an admin assistant.
+     */
+    public function isAdmin($user)
+    {
+        return craft()->mpAdmin->isAdminOrAdminAssistant();
+    }
 }

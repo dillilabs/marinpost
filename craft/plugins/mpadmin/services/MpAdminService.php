@@ -141,4 +141,23 @@ class MpAdminService extends BaseApplicationComponent
 
         $this->plugin->logger($body, LogLevel::Warning);
     }
+
+    /**
+     * Return true if current User is an admin assistant.
+     */
+    public function isAdminOrAdminAssistant()
+    {
+        return (craft()->userSession->isAdmin() || craft()->userSession->getUser()->isInGroup('adminAssistant'));
+    }
+
+    /**
+     * Throw 403 unless User is an admin or admin assistant.
+     */
+    public function requireAdminOrAdminAssistant()
+    {
+        if (!$this->isAdminOrAdminAssistant())
+        {
+            throw new HttpException(403, Craft::t('This action may only be performed by admins or admin assitants.'));
+        }
+    }
 }
