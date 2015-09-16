@@ -70,7 +70,7 @@
     <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</a>
 
   {% else %}
-    {{ nameCase(author.name) }}
+    <span {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</span>
 
   {% endif %}
 {% endmacro %}
@@ -290,7 +290,7 @@
 {% endmacro %}
 
 {% macro letterUrl(entry) %}
-  {{- '/letters/' ~ entry.postDate | date('Y/m/d') -}}
+  {{- ['/letters/', (entry.postDate | date('Y/m/d')), '#', entry.id] | join -}}
 {% endmacro %}
 
 {% macro noticeEvent(notice, displayAddress) %}
@@ -385,23 +385,27 @@
 {% endmacro %}
 
 {% macro post(entry, unfiltered) %}
-  {% from _self import authorLinks, postBy, postImage, postSummary, postTags, postTitle %}
+  {% from _self import authorLinks, authorNameOrLink, excerpt, letterUrl, nameCase, postBy, postImage, postSummary, postTags, postTitle, titleCase %}
 
   {% set unfiltered = unfiltered | default(false) %}
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <li class="listing">
-        <div>
-            {{ postTitle(entry) }}
-          {% if craft.request.segment(1) == 'letters' %}
-            <p>{{ entry.letterContent }}</p>
-          {% else %}
-            {{ postBy(entry) }}
-            {{ postSummary(entry) }}
-          {% endif %}
-          {{ authorLinks(entry) }}
-        </div>
+      <li>
+        <h4><a href="{{ letterUrl(entry) }}">{{ titleCase(entry.title) }}</a></h4>
+        <p>
+          {{ excerpt(entry.letterContent, 250) }}
+          <a href="{{ letterUrl(entry) }}">more »</a>
+        </p>
+        {% if unfiltered %}
+          {# NB leveraging pre-existing flag to distinguish / from /letters #}
+          {{ authorNameOrLink(entry, 'user') }}
+        {% else %}
+          <p>
+            {{ authorNameOrLink(entry, 'user') }} &mdash; {{ nameCase(entry.author.city) }}
+            <span class="timestamp">{{ entry.postDate | date('F j, Y') }} - {{ entry.postDate | date('g:i A') }}</span>
+          </p>
+        {% endif %}
       </li>
 
     {% default %}

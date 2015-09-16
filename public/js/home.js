@@ -9,6 +9,8 @@
             var contentLengthThreshold = 20;
             var endOfContent = false;
             var featuredPosts = $('.featured-posts');
+            var letters = $('#comments ul');
+            var endOfLetters = false;
 
             //----------
             // Functions
@@ -17,14 +19,16 @@
             var currentContentLength = function() {
               return $('.listing').length;
             };
-          
-            var loadMoreContent = function() {
-              var offset = currentContentLength();
 
+            var loadMoreContent = function() {
               isLoadingContent = true;
 
               $.get(
-                '/unfilter?offset='+offset,
+                '/more/unfiltered',
+                {
+                  offset: currentContentLength(),
+                  limit: config.contentLimit,
+                },
                 function(data) {
                   if (data.length > contentLengthThreshold) {
                     content.append(data);
@@ -37,17 +41,44 @@
               );
             };
 
+            var lettersLength = function() {
+              return $('#comments li').length;
+            };
+
+            var loadMoreLetters = function() {
+              isLoadingContent = true;
+
+              $.get(
+                '/more/letters',
+                {
+                  offset: lettersLength(),
+                  limit: config.letterLimit,
+                  home: true,
+                },
+                function(data) {
+                  if (data.length > contentLengthThreshold) {
+                    letters.append(data);
+                  } else {
+                    endOfLetters = true;
+                  }
+
+                  isLoadingContent = false;
+                }
+              );
+            };
+
             //-------
             // Events
             //-------
-          
+
             $(window).scroll(function() {
               var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
-        
-              if (isLoadingContent || endOfContent) return;
-        
+
+              if (isLoadingContent) return;
+
               if (currentPosition > scrollPositionThreshold) {
-                loadMoreContent();
+                if (!endOfContent) loadMoreContent();
+                if (!endOfLetters) loadMoreLetters();
               }
             });
 
@@ -73,5 +104,7 @@
 
     $.fn.scrollingContent.defaults = {
         slideShow: false,
+        contentLimit: 10,
+        letterLimit: 10,
     };
 }(jQuery));

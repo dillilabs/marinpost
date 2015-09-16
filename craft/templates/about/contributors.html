@@ -4,7 +4,7 @@
   {% embed "about/_layout" %}
 
     {% block post %}
-      {% set contributors = craft.users.group('contributor').order('lastName, firstName') %}
+      {% set contributors = craft.users.group('contributor').limit(null).order('lastName, firstName') %}
 
       <h2>Contributors</h2>
 

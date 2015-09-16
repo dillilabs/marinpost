@@ -74,7 +74,7 @@
             };
 
             var urlFor = function(section, activeFilters) {
-              return '/filter?section=' + section + '&' + activeFilterUrlParams(activeFilters);
+              return '/more/filtered?section=' + section + '&' + activeFilterUrlParams(activeFilters);
             };
 
             var disableFilters = function() {

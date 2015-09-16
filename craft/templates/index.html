@@ -4,6 +4,7 @@
   {% cache unless craft.config.cacheTagDisabled %}
     {% set sections = ['blog', 'media', 'news', 'notices'] %}
     {% set limit = entriesPerPage %}
+    {% set letterLimit = limit + 2 %}
     {% set featuredPosts = [] %}
 
     {% set slideShow = entry.slideShow %}
@@ -35,7 +36,8 @@
 
       {% set entries = craft.entries.section(sections).limit(limit) %}
 
-    {% else %} {# single "featured post" is to be pulled from top of entries, so fetch an extra one #}
+    {% else %}
+      {# single "featured post" is to be pulled from top of entries, so don't repeat it; rather, fetch an extra one #}
 
       {% set entries = craft.entries.section(sections).limit(limit + 1) %}
       {% set featuredPosts = [ entries | first ] %}
@@ -45,7 +47,7 @@
 
     {% set hasSlideShow = featuredPosts | length > 1 %}
 
-    {% set letters = craft.entries.section('letters').limit(limit) %}
+    {% set letters = craft.entries.section('letters').limit(letterLimit) %}
 
     {% embed "_common/home" %}
       {% block featured %}
@@ -78,11 +80,7 @@
             <ul>
 
             {% for letter in letters %}
-              <li>
-                <h4><a href="/letters/{{ letter.postDate | date('Y/m/d') }}">{{ p.titleCase(letter.title) }}</a></h4>
-                <p>{{ p.excerpt(letter.letterContent, 180) }}</p>
-                {{ p.authorNameOrLink(letter, 'user') }}
-              </li>
+              {{ p.post(letter, true) }}
             {% endfor %}
 
             </ul>
@@ -95,7 +93,8 @@
   {% set js %}
     $(function() {
       $('ul.posts').scrollingContent({
-        slideShow: {{ hasSlideShow ? 'true' : 'false' }}
+        slideShow: {{ hasSlideShow ? 'true' : 'false' }},
+        letterLimit: {{ letterLimit }},
       });
     });
   {% endset %}

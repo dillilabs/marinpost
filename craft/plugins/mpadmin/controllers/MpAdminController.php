@@ -4,12 +4,10 @@ namespace Craft;
 class MpAdminController extends BaseController
 {
     private $plugin;
-    private $currentUser;
 
     function __construct()
     {
         $this->plugin = craft()->plugins->getPlugin('mpadmin');
-        $this->currentUser = craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
     }
 
     /**
@@ -73,18 +71,19 @@ class MpAdminController extends BaseController
      *
      * NOTE to prevent privilege escalation, an admin assistant may not login as an admin.
      *
-     * TODO handle case of no id param, or no user
+     * TODO handle case of no id param, or no selectedUser
      */
     public function actionLoginAsUser()
     {
         craft()->mpAdmin->requireAdminOrAdminAssistant();
 
-        $user = $this->_getUser();
+        $currentUser = craft()->userSession->user;
+        $selectedUser = $this->_getUser();
 
-        // only an admin may login is an admin
-        if (!$user->admin || craft()->userSession->isAdmin())
+        if ($currentUser->admin || !$selectedUser->admin)
         {
-            craft()->userSession->loginByUserId($user->id, false, false);
+            $this->plugin->logger("{$currentUser->email} logging in as {$selectedUser->email}", LogLevel::Warning);
+            craft()->userSession->loginByUserId($selectedUser->id, false, false);
             $this->redirectToPostedUrl();
         }
         else

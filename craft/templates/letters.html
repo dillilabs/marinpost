@@ -12,6 +12,7 @@
               <a href="#" id="reset-letter-filter">Reset</a>
           </span>
       </div>
+
       <div class="archive">
           <div id="select-letter-date" class="date-picker"></div>
           <div class="note">Click date to view previous letters</div>
@@ -24,52 +25,60 @@
     {% endblock %}
     
     {% block posts %}
+      {% set limit = entriesPerPage %}
+
       {% if craft.request.segments | length > 1 %}
-        {% set year = craft.request.segment(2) %}
-        {% set month = craft.request.segment(3) %}
-        {% set day = craft.request.segment(4) %}
-        {% set ymd = year~'-'~month~'-'~day %}
+        {# show letters of a particular date #}
 
-      {% else %}
-        {% set mostRecentLetter = craft.entries.section('letters').first %}
-        {% set ymd = mostRecentLetter.postDate | date('Y-m-d') %}
+        {% set ymd = [craft.request.segment(2), craft.request.segment(3), craft.request.segment(4)] | join('-') %}
+        {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
+        {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
+        {% set singleDay = true %}
 
-      {% endif %}
+        <h2 class="date">{{ date(ymd) | date('F j, Y') }}</h2>
 
-      {% set nextYmd = ymd | date_modify('+1 day') | date('Y-m-d') %}
-      {% set entries = craft.entries.section('letters').after(ymd).before(nextYmd).find %}
-
-      <h2 class="date">{{ date(ymd) | date('F j, Y') }}</h2>
-
-      {% if entries %}
-        {% for entry in entries %}
-          <li>
+        {% if entries %}
+          {% for entry in entries %}
+            <li id="{{ entry.id }}">
               <h3>{{ p.titleCase(entry.title) }}</h3>
               <div class="byline">
                 {{ p.authorNameOrLink(entry) }} &mdash; {{ p.nameCase(entry.author.city) }}
-                <span class="timestamp">{{ entry.postDate | date('g:i A') }}</span>
+                <span class="timestamp">{{ entry.postDate | date('F j, Y') }} - {{ entry.postDate | date('g:i A') }}</span>
               </div>
               <div class="content">{{ entry.letterContent }}</div>
-          </li>
-        {% endfor %}
+            </li>
+          {% endfor %}
 
-        <h3 class="join">Join the Conversation</h3>
-        <div id="letter-comments">
-          {% set disqusId = ymd %}
-          {% set disqusTitle = date(ymd) | date('F j, Y') %}
-          {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
-          {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
+          <h3 class="join">Join the Conversation</h3>
 
+          <div id="letter-comments">
+            {% set disqusId = ymd %}
+            {% set disqusTitle = date(ymd) | date('F j, Y') %}
+            {% set disqusUrl = siteUrl ~ '/letters/' ~ ymd | replace('-', '/') %}
+            {% include "_common/disqus_embed.html" with { identifier: disqusId, title: disqusTitle, url: disqusUrl } only %}
+          </div>
+        {% else %}
+          No letters found
+        {% endif %}
       {% else %}
-        No letters found
+        {# show chronological list of letter excerpts #}
+        {% set entries = craft.entries.section('letters').limit(limit) %}
+        {% set ymd = date | date('Y-m-d') %}
 
+        {% if entries %}
+          {% for entry in entries %}
+            {{ p.post(entry) }}
+          {% endfor %}
+        {% else %}
+          No letters found
+        {% endif %}
       {% endif %}
-      </div>
 
       {% set js %}
         $(function() {
           $('body').letters({
             date: '{{ ymd | date('Y/m/d') }}',
+            limit: {{ limit }},
           });
         });
       {% endset %}
