@@ -348,17 +348,17 @@
 
   {% switch entry.section.handle %}
     {% case 'letters' %}
-      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ letterUrl(entry) }}">more »</a></p>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more" href="{{ letterUrl(entry) }}">more&nbsp;»</a></p>
 
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media »</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media&nbsp;»</a></p>
 
     {% case 'news' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more »</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more&nbsp;»</a></p>
 
     {% case 'notices' %}
       {{ postTitle(entry) }}
@@ -369,7 +369,7 @@
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more detail" href="{{ entry.url }}">more »</a></p>
+      <p>{{ excerpt(content, maxChars) }} &hellip; <a class="more detail" href="{{ entry.url }}">more&nbsp;»</a></p>
 
   {% endswitch %}
 {% endmacro %}
@@ -395,7 +395,7 @@
         <h4><a href="{{ letterUrl(entry) }}">{{ titleCase(entry.title) }}</a></h4>
         <p>
           {{ excerpt(entry.letterContent, 250) }}
-          <a href="{{ letterUrl(entry) }}">more »</a>
+          <a class="more" href="{{ letterUrl(entry) }}">more&nbsp;»</a>
         </p>
         {% if unfiltered %}
           {# NB leveraging pre-existing flag to distinguish / from /letters #}
