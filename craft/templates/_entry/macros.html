@@ -393,18 +393,26 @@
     {% case 'letters' %}
       <li>
         <h4><a href="{{ letterUrl(entry) }}">{{ titleCase(entry.title) }}</a></h4>
+
         <p>
           {{ excerpt(entry.letterContent, 250) }}
           <a class="more" href="{{ letterUrl(entry) }}">more&nbsp;»</a>
         </p>
+
         {% if unfiltered %}
           {# NB leveraging pre-existing flag to distinguish / from /letters #}
           {{ authorNameOrLink(entry, 'user') }}
+
         {% else %}
           <p>
             {{ authorNameOrLink(entry, 'user') }} &mdash; {{ nameCase(entry.author.city) }}
             <span class="timestamp">{{ entry.postDate | date('F j, Y') }} - {{ entry.postDate | date('g:i A') }}</span>
           </p>
+
+        {% endif %}
+
+        {% if craft.request.segment(1) == 'account' %}
+          {{ authorLinks(entry) }}
         {% endif %}
       </li>
 
