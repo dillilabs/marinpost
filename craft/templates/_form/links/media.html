@@ -1,3 +1,7 @@
+{# NOTE: empty [fields][document][] MUST be removed (via Javascript) prior to form submission.
+ # See public/js/contentform.js and public/js/userform.js
+ #}
+
 {% set sourceId = 2 %}
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}

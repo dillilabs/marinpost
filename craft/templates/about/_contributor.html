@@ -29,7 +29,11 @@
         <p class="my-web-site"><a href="{{ p.externalUrl(user.webSite) }}" target="_blank">My Web Site</a></p>
       {% endif %}
 
-        <p>{% if user.bio %}{{ user.bio }}{% endif %}</p>
+      <p>{% if user.bio %}{{ user.bio }}{% endif %}</p>
+
+      <div class="attachments">
+        {{ p.documents(user.userDocuments) }}
+      </div>
 
       {% set entries = craft.entries.authorId(user.id) | group('section.handle') %}
 

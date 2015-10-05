@@ -10,7 +10,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{% if title is defined %}{{ title }} - {% endif %}{{ siteName }}</title>
+  <title>{{ title | default(siteName) }}</title>
   <link rel="home" href="{{ siteUrl }}" />
   <link rel="icon" type="image/png" href="{{ siteUrl }}img/favicon.ico">
   <link rel="alternate" type="application/rss+xml" title="The Marin Post" href="{{ siteUrl }}feed.rss" />

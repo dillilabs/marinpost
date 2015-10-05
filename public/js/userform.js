@@ -30,6 +30,16 @@
               }
             };
 
+            var removeEmptyDocumentFields = function() {
+              var document = form.find('input[type=hidden][name="fields[userDocuments][]"]');
+
+              // Craft doesn't take kindly to empty multiple fields
+              if (document.length && document.val().length == 0) {
+                document.remove();
+              }
+
+            };
+
             var temporarilyDisableSubmit = function(button) {
               var label = button.val();
               button.prop('disabled', true).val('Processing...');
@@ -82,6 +92,7 @@
             // Submit
             submitButtons.click(function(e) {
               removeEmptyImageFields();
+              removeEmptyDocumentFields();
               submitButtonClicked = true;
               temporarilyDisableSubmit($(this));
               form.submit();

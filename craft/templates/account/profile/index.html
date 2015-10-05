@@ -48,6 +48,9 @@
           <input type="text" name="fields[webSite]" autocomplete="off" maxlength="{{ p.fieldMaxLength('webSite') }}" placeholder="http://www.example.com" value="{{ currentUser.webSite }}">
         </div>
 
+        {% include "_form/document" with { documentsAttribute: 'userDocuments', userProfile: true } %}
+
+        <br />
         <input type="submit" value="Update">
       </form>
     {% endblock %}
