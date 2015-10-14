@@ -14,10 +14,10 @@
       {% set pattern = '"'~(searchTerms | join(' '))~'"' %}
 
     {% case 'any' %}
-       {% set pattern = searchTerms | join(' OR ') %}
+      {% set pattern = searchTerms | join(' OR ') %}
 
-    {% default %}
-       {% set pattern = searchTerms | join(' AND ') %}
+    {% default %} {# search for ALL terms #}
+      {% set pattern = searchTerms | join(' ') %}
 
   {% endswitch %}
 
