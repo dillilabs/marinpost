@@ -1,0 +1,7 @@
+{% for plan in craft.mpSubscription.listPlans %}
+  <label>
+    <input type="radio" name="plan" value="{{ plan.id }}" {% if plan.selected %}checked="checked"{% endif %}>
+    ${{ plan.amount / 100 }} / {{ plan.description }}
+  </label>
+  &nbsp;
+{% endfor %}

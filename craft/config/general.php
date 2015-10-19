@@ -1,20 +1,19 @@
 <?php
 
-/**
- * General Configuration
- *
- * All of your system's general configuration settings go in here.
- * You can see a list of the default settings in craft/app/etc/config/defaults/general.php
- */
+// Include URI scheme in siteUrl.
+$uriScheme = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+$siteUrl   = $uriScheme.$_SERVER['SERVER_NAME'].'/';
 
-define('URI_SCHEME', isset($_SERVER['HTTPS']) ? 'https://' : 'http://');
-define('SITE_URL', URI_SCHEME . $_SERVER['SERVER_NAME'] . '/');
+// Skip CSRF protection for Stripe webhook events.
+$requestUri           = $_SERVER['REQUEST_URI'];
+$enableCsrfProtection = !isset($requestUri) || $requestUri != '/stripeEvent';
 
 return array(
     '*' => array(
         'activateAccountFailurePath'      => 'account/register/error',
         'activateAccountSuccessPath'      => 'account/register/welcome',
         'autoLoginAfterAccountActivation' => true,
+        'enableCsrfProtection'            => $enableCsrfProtection,
         'filenameWordSeparator'           => null,
         'invalidUserTokenPath'            => 'account/login/error',
         'loginPath'                       => 'account/login',
@@ -25,22 +24,26 @@ return array(
         'setPasswordPath'                 => 'account/password/reset',
         'setPasswordSuccessPath'          => 'account/login',
         'siteName'                        => 'The Marin Post',
-        'siteUrl'                         => SITE_URL, // Include URI scheme
+        'siteUrl'                         => $siteUrl,
         'timezone'                        => 'America/Los_Angeles',
         'useEmailAsUsername'              => true,
 
-        // Not actually environment-specific
         'environmentVariables' => array(
-            // But required for the Minimee plugin's "Cache Url" configuration
-            'baseUrl' => SITE_URL,
+            // Not actually environment-specific, but required for
+            // the Minimee plugin's "Cache Url" configuration.
+            'baseUrl' => $siteUrl,
         ),
 
-        // Custom
+        // Custom setting used in templates
+        // to toggle caching on/off.
         'cacheTagDisabled' => true,
     ),
+
     'dev' => array(
         // 'devMode' => true,
     ),
+
     'live' => array(
+        // Just the defaults, ma'am.
     ),
 );

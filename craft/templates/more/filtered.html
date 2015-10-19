@@ -5,14 +5,13 @@
 {% set section = craft.request.param('section') %}
 
 {% set locations = craft.request.param('locations') | split(',') %}
-
 {% set topics = craft.request.param('topics') | split(',') %}
-
 {% set authors = craft.request.param('authors') | split(',') %}
 
-{% set date = craft.request.param('date') %}
+{% set startDate = craft.request.param('startDate') %}
+{% set endDate = craft.request.param('endDate') %}
 
-{% set filters = { 'locations': locations, 'topics': topics, 'authors': authors, 'date': date, 'section': section } %}
+{% set filters = { 'locations': locations, 'topics': topics, 'authors': authors, 'startDate': startDate, 'endDate': endDate, 'section': section } %}
 
 {% set offset = craft.request.param('offset') | default(0)  %}
 

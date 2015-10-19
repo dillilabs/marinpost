@@ -1,0 +1,8 @@
+{
+  "name": "marinpost/subscription",
+  "description": "Integrate Stripe Subscriptions",
+  "license": "MIT",
+  "require": {
+    "stripe/stripe-php": "3.*"
+  }
+}

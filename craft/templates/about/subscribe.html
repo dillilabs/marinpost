@@ -1,3 +1,7 @@
+{% if currentUser %}
+  {% redirect 'account/subscription' %}
+{% endif %}
+
 {% extends "_common/layout" %}
 
 {% block main %}

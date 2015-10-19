@@ -1,0 +1,24 @@
+{% import 'macros' as m %}
+
+{{ m.header(user) }}
+
+{% if entries | length %}
+  {% set entriesBySection = entries | group('section') %}
+
+  {% for section in ['Blogs', 'Notices', 'News Links', 'Media Links', 'Letters'] %}
+    {% if entriesBySection[section] %}
+      <h2>{{ section | upper }}</h2>
+
+      {% for entry in entriesBySection[section] %}
+        {{ m.post(entry) }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+{% else %}
+
+  <p><i>No matching entries found.</i></p>
+
+{% endif %}
+
+{{ m.footer }}

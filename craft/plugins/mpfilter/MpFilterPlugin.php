@@ -3,17 +3,6 @@ namespace Craft;
 
 class MpFilterPlugin extends BasePlugin
 {
-    private $settings;
-
-    /**
-     * Initialization
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->settings = $this->getSettings();
-    }
 
     /**
      * Semi-smart logger.
@@ -30,11 +19,13 @@ class MpFilterPlugin extends BasePlugin
     protected function defineSettings()
     {
         return array(
-            'countyId' => array(AttributeType::String, 'default' => 755),
-            'regionId' => array(AttributeType::String, 'default' => 39),
-            'stateId' => array(AttributeType::String, 'default' => 40),
+            'countyId'  => array(AttributeType::String, 'default' => 755),
+            'regionId'  => array(AttributeType::String, 'default' => 39),
+            'stateId'   => array(AttributeType::String, 'default' => 40),
             'countryId' => array(AttributeType::String, 'default' => 41),
+
             'defaultEntryLimit' => array(AttributeType::String, 'default' => 10),
+
             'forceLog' => array(AttributeType::Bool, 'default' => false),
         );
     }
@@ -57,7 +48,7 @@ class MpFilterPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.0.0';
+        return '1.2.2';
     }
 
     public function getDeveloper()

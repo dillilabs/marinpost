@@ -1,0 +1,7 @@
+{% for option in currentUser.subscriptionFrequency.options %}
+  <label>
+    <input type="radio" name="fields[subscriptionFrequency]" value="{{ option }}" {% if option.selected %}checked=checked{% endif %}/>
+    {{ option.label }}
+    &nbsp;
+  </label>
+{% endfor %}

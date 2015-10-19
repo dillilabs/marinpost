@@ -1061,6 +1061,11 @@ form select, textarea {
     padding: .25em;
     width: 98%;
 }
+form input[type="text"].short {
+    display: inline-block;
+    padding: .25em;
+    width: 20%;
+}
 form input[type="text"]::-webkit-input-placeholder {
     color: #000;
     font-size: .9em;
@@ -1140,6 +1145,49 @@ h2 span.preview {
 }
 h2 span.preview button.close {
     color: blue;
+}
+
+.subscription fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+.subscription legend {
+    font-weight: bold;
+}
+.subscription fieldset .location-group {
+    text-decoration: underline;
+    margin: 12px;
+}
+.subscription fieldset.disabled legend, .subscription fieldset.disabled .location-group, .subscription fieldset.disabled label {
+    color: #c0c0c0;
+}
+
+form.subscription label {
+  display: inline-block;
+  font-weight: normal;
+}
+
+form.subscription input[type="text"].month {
+    display: inline-block;
+    padding: .25em;
+    width: 20%;
+}
+
+form.subscription input[type="text"].year {
+    display: inline-block;
+    padding: .25em;
+    width: 30%;
+}
+
+form.subscription input[type=submit] {
+  margin-top: 10px;
+}
+
+form.subscription img.spinner, form.subscription img.success {
+  display: none;
+  height: 20px;
+  padding: 8px;
 }
 
 /* * * * * * * * * * * * * * * * * * * * *
@@ -1598,22 +1646,23 @@ footer {
 		right: 0;
 	}
 
-    .thumbs {
-        padding: .5em 0;
-        display: -webkit-box;
-        display: -moz-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-flex-flow: row wrap;
-        justify-content: flex-start;
-    }
+  .thumbs {
+      padding: .5em 0;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-flow: row wrap;
+      justify-content: flex-start;
+  }
 
-    #support {
-        display: inline-block;
-        padding: 0;
-        width: 100%;
-    }
+  #support {
+      display: inline-block;
+      padding: 0;
+      width: 100%;
+  }
+
 /*********** End of formerly tablet styles ***********/
 
 

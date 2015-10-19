@@ -1,0 +1,74 @@
+{% set locationIds = currentUser.subscriptionLocations.ids %}
+{% set topicIds = currentUser.subscriptionTopics.ids %}
+{% set authorIds = currentUser.subscriptionAuthors.ids %}
+
+{% import 'account/subscription/_form_macros.html' as m %}
+
+{% for option in currentUser.subscriptionContent.options %}
+  <label>
+    <input type="radio" name="fields[subscriptionContent]" value="{{ option }}" {% if option.selected %}checked=checked{% endif %}/>
+    {{ option.label }}
+    &nbsp;
+  </label>
+{% endfor %}
+
+<br>
+<br>
+<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>LOCATIONS</legend>
+  <input type="hidden" name="fields[subscriptionLocations]">
+
+  {% set group = null %}
+  {% for location in craft.categories.group('locations') %}
+    {% if location.geographicGroup != group %}
+      {% set group = location.geographicGroup %}
+      <div class="location-group">{{ group.label }}</div>
+    {% endif %}
+
+    <label>
+      <input type="checkbox" name="fields[subscriptionLocations][]" value="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" {{ m.checked(location.id, locationIds) }} {{ m.disabledByDefault() }} />
+      {{ location.title }}
+      &nbsp;
+    </label>
+  {% endfor %}
+</fieldset>
+
+<br>
+<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>TOPICS</legend>
+  <input type="hidden" name="fields[subscriptionTopics]">
+
+  <label><input type="checkbox" id="all-topics" {{ m.disabledByDefault }} />All Topics</label><br>
+
+  {% for topic in craft.categories.group('topics') %}
+    <label>
+      <input type="checkbox" name="fields[subscriptionTopics][]" value="{{ topic.id }}" {{ m.checked(topic.id, topicIds) }} {{ m.disabledByDefault() }} />
+      {{ topic.title }}
+      &nbsp;
+    </label>
+  {% endfor %}
+</fieldset>
+
+<br>
+<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>AUTHORS</legend>
+  <input type="hidden" name="fields[subscriptionAuthors]">
+
+  <label><input type="checkbox" id="all-authors" {{ m.disabledByDefault }} />All Authors</label><br>
+
+  {% for author in craft.users.group('contributor', 'guest').limit(null).order('lastName, firstName') if craft.entries.authorId(author.id).total > 0 %}
+    <label>
+      <input type="checkbox" name="fields[subscriptionAuthors][]" value="{{ author.id }}" {{ m.checked(author.id, authorIds) }} {{ m.disabledByDefault() }} />
+      {{ p.nameCase(author.name) }}
+      &nbsp;
+    </label>
+  {% endfor %}
+</fieldset>
+
+<br>
+<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>LETTERS</legend>
+  <input type="hidden" name="fields[subscriptionLetters]">
+
+  <label>
+    <input type="checkbox" name="fields[subscriptionLetters][]" value="1" {{ currentUser.subscriptionLetters | length ? 'checked="checked"' : '' }} {{ m.disabledByDefault() }} />
+    All Letters
+    &nbsp;
+  </label>
+</fieldset>

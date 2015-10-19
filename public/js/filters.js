@@ -55,22 +55,37 @@
             };
 
             var activeFilters = function() {
-              return {
+              var filters = {
                 locations: activeFiltersOf('location'),
                 topics: activeFiltersOf('topic'),
               //authors: activeFiltersOf('author'),
-                date: dateFilter,
+                startDate: '',
+                endDate: ''
               };
+
+              if (dateFilter.length) {
+                filters.startDate = dateFilter;
+                endDate = ymdToDate(dateFilter);
+                endDate.setDate(endDate.getDate() + 1);
+                filters.endDate = endDate.getFullYear()+'-'+(endDate.getMonth() + 1)+'-'+endDate.getDate();
+              }
+
+              return filters;
+            };
+
+            var ymdToDate = function(ymd) {
+              var ary = ymd.split('-');
+              return new Date(ary[0], ary[1] - 1, ary[2]);
             };
 
             var anyActiveFilters = function(selected) {
-            //return (selected.locations.length || selected.topics.length || selected.authors.length || selected.date.length);
-              return (selected.locations.length || selected.topics.length || selected.date.length);
+            //return (selected.locations.length || selected.topics.length || selected.authors.length || selected.startDate.length);
+              return (selected.locations.length || selected.topics.length || selected.startDate.length);
             };
 
             var activeFilterUrlParams = function(selected) {
-            //return 'locations='+selected.locations+'&topics='+selected.topics+'&authors='+selected.authors+'&date='+selected.date;
-              return 'locations='+selected.locations+'&topics='+selected.topics+'&date='+selected.date;
+            //return 'locations='+selected.locations+'&topics='+selected.topics+'&authors='+selected.authors+'&startDate='+selected.startDate+'&endDate='+selected.endDate;
+              return 'locations='+selected.locations+'&topics='+selected.topics+'&startDate='+selected.startDate+'&endDate='+selected.endDate;
             };
 
             var urlFor = function(section, activeFilters) {

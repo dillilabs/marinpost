@@ -1,0 +1,234 @@
+{% requireLogin %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h2>My Subscription</h2>
+      <div class="help">{{ n.siteMessage }}</div>
+
+      {% if craft.mpSubscription.activeSubscription %}
+        {#----------------------------------------------------------------------
+         # Subscription is active, or canceled but not yet expired.
+         #}
+
+        {% if currentUser.subscriptionCanceled %}
+          {#--------------------------------------------------------------------
+           # Subscription has been canceled by the User, but has not yet expired.
+           #}
+
+          <h3>Reactivate My Subscription</h3>
+
+          <form method="post" action="" accept-charset="UTF-8" class="reactivate-form subscription">
+            {{ getCsrfInput() }}
+            <input type="hidden" name="action" value="mpSubscription/reactivate">
+            <input type="hidden" name="redirect" value="account/subscription">
+
+            <p>
+              Your subscription has been canceled, but you will continue to receive email alerts
+              until your subscription finally expires on:
+              <b>{{ currentUser.subscriptionExpirationDate | date('F d, Y') }}</b>
+              <br><br>
+              If you <b>do not</b> want to receive email alerts, you can elect to <i>SUSPEND EMAIL ALERTS</i> below.
+            </p>
+
+            <input type="submit" value="Reactivate My Subscription" class="btn submit">
+            <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+          </form>
+
+        {% else %}
+          {#--------------------------------------------------------------------
+           # Active subscription.
+           #}
+
+          <h3>Subscription Plan</h3>
+
+          <form method="post" action="" accept-charset="UTF-8" class="plan-form subscription">
+            {{ getCsrfInput() }}
+            <input type="hidden" name="action" value="mpSubscription/changePlan">
+
+            {% include 'account/subscription/_plan.html' %}
+
+            <br>
+            <input type="submit" value="Update Subscription Plan" class="btn submit">
+            <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+            <img src="{{ siteUrl }}img/success.png" class="success">
+
+            <ul class="errors"></ul>
+          </form>
+
+          <hr>
+          <h3>Payment Method</h3>
+
+          <form method="post" action="" accept-charset="UTF-8" class="payment-form subscription">
+            {{ getCsrfInput() }}
+            <input type="hidden" name="action" value="mpSubscription/changeCard">
+
+            <p>
+              Current payment method:
+              <b><span class="current-card">{{ craft.mpSubscription.cardSummary }}</span></b>
+              <br>
+              To change your billing credit card, fill out information below and click "Update Payment Method"
+              (your current credit card information will be removed from your account when you update).
+            </p>
+
+            {% include 'account/subscription/_payment.html' %}
+
+            <br>
+            <input type="submit" value="Update Payment Method" class="btn submit">
+            <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+            <img src="{{ siteUrl }}img/success.png" class="success">
+
+            <ul class="errors"></ul>
+          </form>
+
+        {% endif %}
+
+        {#----------------------------------------------------------------------
+         # Active or canceled but not-yet-expired subscription.
+         #}
+
+        <hr>
+        <h3>Email Alert Frequency</h3>
+
+        <form method="post" action="" accept-charset="UTF-8" class="frequency-form subscription">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="users/saveUser">
+          <input type="hidden" name="userId" value="{{ currentUser.id }}">
+
+          {% include 'account/subscription/_frequency.html' %}
+
+          <br>
+          <input type="submit" value="Update Email Alert Frequency" class="btn submit" />
+          <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+          <img src="{{ siteUrl }}img/success.png" class="success">
+
+          <br>
+          <a href="#" class="current-issue">Email me a copy of my latest issue</a>
+          &nbsp;
+          <span class="current-issue-response" style="display: none;"></span>
+        </form>
+
+        <hr>
+        <h3>Email Alert Choices</h3>
+
+        <form method="post" action="" accept-charset="UTF-8" class="content-form filter-form subscription">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="users/saveUser">
+          <input type="hidden" name="userId" value="{{ currentUser.id }}">
+
+          {% include 'account/subscription/_content.html' %}
+
+          <br>
+          <input type="submit" value="Update Email Alert Choices" class="btn submit" />
+          <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+          <img src="{{ siteUrl }}img/success.png" class="success">
+        </form>
+
+        <hr>
+        <h3>Suspend Email Alerts</h3>
+
+        <form method="post" action="" accept-charset="UTF-8" class="suspend-form subscription">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="users/saveUser">
+          <input type="hidden" name="userId" value="{{ currentUser.id }}">
+            <label>
+              <input type="radio" name="fields[subscriptionSuspended]" value="1" {% if currentUser.subscriptionSuspended %}checked="checked"{% endif %}>
+              Yes &nbsp;
+            </label>
+            <label>
+              <input type="radio" name="fields[subscriptionSuspended]" value="" {% if not currentUser.subscriptionSuspended %}checked="checked"{% endif %}>
+              No &nbsp;
+            </label>
+
+          <br>
+          <input type="submit" value="Update" class="btn submit" />
+          <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+          <img src="{{ siteUrl }}img/success.png" class="success">
+        </form>
+
+        {% if not currentUser.subscriptionCanceled %}
+          {#--------------------------------------------------------------------
+           # Active subscription.
+           #}
+
+          <hr>
+
+          <h3>Cancel My Subscription</h3>
+
+          <form method="post" action="" accept-charset="UTF-8" class="cancel-form subscription">
+            {{ getCsrfInput() }}
+            <input type="hidden" name="action" value="mpSubscription/cancel">
+            <input type="hidden" name="redirect" value="account/subscription">
+
+            Subscription is set to renew on:
+            <b><span class="expiration-date">{{ currentUser.subscriptionExpirationDate | date('F d, Y') }}</span></b>
+ 
+            <br>
+            <input type="submit" value="Cancel My Subscription" class="btn submit">
+            <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+          </form>
+
+        {% endif %}
+
+      {% else %}
+        {#----------------------------------------------------------------------
+         # No subscription.
+         #}
+
+        <form method="post" action="" accept-charset="UTF-8" class="create-form filter-form subscription">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="mpSubscription/create">
+          <input type="hidden" name="redirect" value="account/subscription">
+
+          <ul class="errors">
+            {% if error is defined %}
+              <li>{{ error }}</li>
+            {% endif %}
+          </ul>
+
+          <h3>Subscription Plan</h3>
+          {% include 'account/subscription/_plan.html' %}
+
+          <hr>
+          <h3>Payment Method</h3>
+          {% include 'account/subscription/_payment.html' %}
+
+          <hr>
+          <h3>Email Alerts</h3>
+          {% include 'account/subscription/_frequency.html' %}
+
+          <hr>
+          <h3>Email Content</h3>
+          {% include 'account/subscription/_content.html' %}
+
+          <br>
+          <input type="submit" value="Subscribe to The Marin Post" class="btn submit">
+          <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+
+          <ul class="errors">
+            {% if error is defined %}
+              <li>{{ error }}</li>
+            {% endif %}
+          </ul>
+        </form>
+
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="https://js.stripe.com/v2/"></script>
+
+  <script>
+    Stripe.setPublishableKey('{{ craft.mpSubscription.publishableKey }}');
+  </script>
+
+  <script>
+    $(function() {
+        $('body').subscription();
+    });
+  </script>
+{% endblock %}

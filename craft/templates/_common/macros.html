@@ -40,10 +40,13 @@
   {% endif %}
 {% endmacro %}
 
-{% macro arrowLink(path, text) %}
+{% macro arrowLink(path, text, startsWith) %}
+  {% set startsWith = startsWith | default(false) %}
   {% set current = craft.request.path %}
 
-  {% if path == current %}
+  {% if startsWith and (current starts with path) %}
+    <h5 class="active">{{ text }}</h5>
+  {% elseif path == current %}
     <h5 class="active">{{ text }}</h5>
   {% else %}
     <h5><a href="/{{ path }}">{{ text }}</a></h5>

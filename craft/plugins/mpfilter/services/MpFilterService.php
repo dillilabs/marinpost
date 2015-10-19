@@ -16,6 +16,8 @@ class MpFilterService extends BaseApplicationComponent
      *  (array) location ids
      *  (array) topic ids
      *  (array) author ids
+     *  (string) start date
+     *  (string) end date
      *  (string) section handle
      *
      * and slice by optional:
@@ -30,24 +32,27 @@ class MpFilterService extends BaseApplicationComponent
         $locations = $this->_get($filters, 'locations');
         $locations = $this->_ensureProperlyScopedLocationFilter($locations);
 
-        $topics = $this->_get($filters, 'topics');
+        $topics  = $this->_get($filters, 'topics');
         $authors = $this->_get($filters, 'authors');
-        $date = $this->_get($filters, 'date');
+
+        $startDate = $this->_get($filters, 'startDate');
+        $endDate   = $this->_get($filters, 'endDate');
 
         $section = $this->_get($filters, 'section');
+
         $offset = $this->_get($slice, 'offset', 0);
-        $limit = $this->_get($slice, 'limit', $this->plugin->settings['defaultEntryLimit']);
+        $limit  = $this->_get($slice, 'limit',  $this->plugin->settings['defaultEntryLimit']);
 
-
-        if (empty($locations) && empty($topics) && empty($authors) && empty($date))
+        if (empty($locations) && empty($topics) && empty($authors) && empty($startDate) && empty($endDate))
         {
             $this->plugin->logger('No filters defined');
 
-            $entries =  $this->_slice($offset, $limit, array(), $section);
+            $entries = $this->_slice($offset, $limit, array(), $section);
         }
         else
         {
-            $filteredEntryIds = $this->_filteredEntries($locations, $topics, $authors, $date, $section);
+            $filteredEntryIds = $this->_filteredEntries($locations, $topics, $authors, $startDate, $endDate, $section);
+
             $this->plugin->logger(array('Filtered entries' => $filteredEntryIds));
 
             $entries = empty($filteredEntryIds) ? array() : $this->_slice($offset, $limit, $filteredEntryIds);
@@ -56,6 +61,50 @@ class MpFilterService extends BaseApplicationComponent
         $this->plugin->logger(array('sliced entries' => $this->_entryIds($entries)));
 
         return $entries;
+    }
+
+    /**
+     * Return array of Entry IDs for:
+     *
+     *   (datetime) start date
+     *   (datetime) end date
+     *
+     * and optionally an array of:
+     *
+     *  (array of int) location ids
+     *  (array of int) topic ids
+     *  (array of int) author ids
+     *  (boolean) letters
+     *
+     * Adapted from entries() to handle the subscription use case, where:
+     *
+     *   start- and end- date are required
+     *   letters are included, but not filtered
+     */
+    public function entryIdsForSubscription($startDate, $endDate, $filter = array())
+    {
+        $this->plugin->logger(array('startDate' => $startDate, 'endDate' => $endDate, 'filter' => $filter));
+
+        $locations = $this->_get($filter, 'locations', array());
+        $topics    = $this->_get($filter, 'topics',    array());
+        $authors   = $this->_get($filter, 'authors',   array());
+
+        if (!empty($locations))
+        {
+            $locations = $this->_ensureProperlyScopedLocationFilter($locations);
+        }
+
+        $entryIds = $this->_filteredEntries($locations, $topics, $authors, $startDate, $endDate);
+
+        if ($this->_get($filter, 'letters'))
+        {
+            $letterIds = $this->_datedEntries($startDate, $endDate, 'letters');
+            $entryIds = array_merge($entryIds, $letterIds);
+        }
+
+        $this->plugin->logger(array('Entry ids for subscription' => $entryIds));
+
+        return $entryIds;
     }
 
     //------------------
@@ -101,9 +150,19 @@ class MpFilterService extends BaseApplicationComponent
     }
 
     /**
-     * Return entires filtered by Location(s), Topic(s), Author(s), Date and optional Section.
+     * Return entires filtered by:
+     *
+     *   Location
+     *   Topic
+     *   Author
+     *   StartDate
+     *   EndDate
+     *
+     * and optional:
+     *
+     *   Section
      */
-    private function _filteredEntries($locations, $topics, $authors, $date, $section)
+    private function _filteredEntries($locations, $topics, $authors, $startDate, $endDate, $section = false)
     {
         $entriesFilteredBy = array();
 
@@ -131,9 +190,9 @@ class MpFilterService extends BaseApplicationComponent
             $this->plugin->logger(array('entries filtered by author' => $entriesFilteredBy['author']));
         }
 
-        if (!empty($date))
+        if (!empty($startDate))
         {
-            $entriesFilteredBy['date'] = $this->_datedEntries($date, $section);
+            $entriesFilteredBy['date'] = $this->_datedEntries($startDate, $endDate, $section);
             $this->plugin->logger(array('entries filtered by date' => $entriesFilteredBy['date']));
         }
 
@@ -171,17 +230,20 @@ class MpFilterService extends BaseApplicationComponent
         return $criteria->ids();
     }
 
-    private function _datedEntries($date = false, $section = false)
+    private function _datedEntries($startDate = false, $endDate = false, $section = false)
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
         if ($section) $criteria->section = $section;
 
-        if ($date) {
-            $criteria->after = $date;
-            $beforeDate = date_create_from_format('Y-m-d', $date);
-            $beforeDate->add(new DateInterval('P1D'));
-            $criteria->before = date_format($beforeDate, 'Y-m-d');
+        if ($startDate)
+        {
+            $criteria->after = $startDate;
+        }
+
+        if ($endDate)
+        {
+            $criteria->before = $endDate;
         }
 
         return $criteria->ids();

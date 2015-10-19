@@ -1,8 +1,8 @@
 craft/config/db.php
 craft/config/license.key
-craft/config/paypal.php
+craft/config/stripe.php
 
-craft/plugins/paypal/vendor
+craft/plugins/mpsubscription/vendor
 craft/plugins/s3direct/vendor
 
 craft/storage/*

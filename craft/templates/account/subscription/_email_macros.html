@@ -1,0 +1,344 @@
+{# Adapted from craft/templates/_entry/macros.html #}
+
+{% macro authorNameOrLink(entry, class) %}
+  {% from _self import contributorUrl, nameCase %}
+
+  {% set author = entry.author %}
+
+  {% if author.isInGroup('contributor') %}
+    <a href="{{ contributorUrl(author) }}" {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</a>
+
+  {% else %}
+    <span {% if class %}class="{{ class }}"{% endif %}>{{ nameCase(author.name) }}</span>
+
+  {% endif %}
+{% endmacro %}
+
+{% macro commentCount(entry) %}
+  {# TODO
+  - <span class="disqus-comment-count" data-disqus-identifier="{{ entry.id }}"></span>
+  #}
+{% endmacro %}
+
+{% macro contributorUrl(user) %}
+{% spaceless %}
+  {% set slug = [user.firstName, user.lastName] | join('-') | lower | replace('/[^\\w]+/', '-') %}
+  {% set base = "about/contributors" %}
+
+  {{ url([base, user.id, slug] | join('/')) }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro excerpt(text, maxLength, omitEllipsis) %}
+  {# replace para and list tags with single spaces, strip everything else #}
+  {% set text = text | replace('/<\\/?(?:p|ol|ul|li)>/', ' ') | join | striptags %}
+
+  {% set maxLength = maxLength | default(25) %}
+  {% set omitEllipsis = omitEllipsis | default(false) %}
+
+  {% if (text | length) > maxLength %}
+    {{ text | slice(0, maxLength) }}{{ omitEllipsis ? '' : '&hellip;' }}
+  {% else %}
+    {{ text }}
+  {% endif %}
+{% endmacro %}
+
+{% macro externalUrl(url) %}
+  {{ url matches '~^https?://~' ? url : 'http://'~url }}
+{% endmacro %}
+
+{% macro formatDateTime(date) %}
+  {{ date | date('F j, Y') }} - {{ date | date('g:ia') }}
+{% endmacro %}
+
+{% macro letterUrl(entry) %}
+  {{- ['/letters/', (entry.postDate | date('Y/m/d')), '#', entry.id] | join -}}
+{% endmacro %}
+
+{% macro mainContent(entry) %}
+  {% set mainContent = null %}
+
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      {% set mainContent = entry.blogContent %}
+
+    {% case 'letters' %}
+      {% set mainContent = entry.letterContent %}
+
+    {% case 'media' %}
+      {% set mainContent = entry.linkComments %}
+
+    {% case 'news' %}
+      {% set mainContent = entry.linkComments %}
+
+    {% case 'notices' %}
+      {% set mainContent = entry.noticeContent %}
+
+  {% endswitch %}
+
+  {{- mainContent -}}
+{% endmacro %}
+
+{% macro mediaUrl(entry) %}
+  {% from _self import externalUrl %}
+{% spaceless %}
+
+  {% set media = entry.mediaLink.first %}
+
+  {% switch media.type %}
+    {% case 'video' %}
+      {% set mediaUrl = externalUrl(media.videoUrl) %}
+
+    {% case 'audio' %}
+      {% set mediaUrl = externalUrl(media.audioUrl) %}
+
+    {% case 'document' %}
+      {% set mediaUrl = externalUrl(media.documentUrl) %}
+
+    {% case 'upload' %}
+      {% set file = media.document.first %}
+      {% set mediaUrl = file.url %}
+
+  {% endswitch %}
+
+  {{ mediaUrl }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro nameCase(name) %}
+  {{- craft.mpentry.nameCase(name) -}}
+{% endmacro %}
+
+{% macro noticeEvent(notice, displayAddress) %}
+  {% set displayAddress = displayAddress | default(false) %}
+
+  {% if notice.venue %}
+    <div style="margin-left: 175px;"><span class="event-venue">{{ notice.venue }}</span><br>
+
+    {% if displayAddress %}
+      {% if notice.streetAddress %}
+        {{ notice.streetAddress }}<br>
+      {% endif %}
+
+      {% if (notice.city is not empty) and (notice.state is not empty) %}
+        {{ [notice.city, notice.state] | join(', ') }}
+      {% else %}
+        {{ notice.city }}
+        {{ notice.state }}
+      {% endif %}
+
+      {{ notice.zipCode }}
+    {% endif %}
+    </div>
+  {% endif %}
+
+  {% if notice.startDate %}
+    <div style="margin-left: 175px;">
+      {{ notice.startDate | date('F j, Y') }}
+
+    {% if notice.endDate and (notice.endDate | date('Ymd')) != (notice.startDate | date('Ymd')) %}
+
+      to {{ notice.endDate | date('F j, Y') }}
+
+    {% endif %}
+
+    {% if notice.startTime %}
+      <br>
+      {{ notice.startTime | date('g:i a') }}
+
+      {% if notice.endTime %}
+
+        - {{ notice.endTime | date('g:i a') }}
+
+      {% endif %}
+    {% endif %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro post(entry) %}
+  {% from _self import authorNameOrLink, excerpt, letterUrl, nameCase, postImage, postSummary, titleCase %}
+
+  <div style="border-bottom: 1px solid #DAE4F4; margin-bottom: 1em;">
+    <div style="display: inline-block;">
+      {% if entry.section.handle != 'letters' %}
+
+        {{ postImage(entry) }}
+
+      {% endif %}
+
+      {{ postSummary(entry) }}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro postBy(entry) %}
+  {% from _self import authorNameOrLink, commentCount, formatDateTime, nameCase %}
+
+  {% switch entry.section.handle %}
+    {% case 'letters' %}
+      <div style="font-family: Arial, sans-serif;">
+        Posted by: {{ authorNameOrLink(entry) }} - {% if craft.request.segment(1) == 'letters' %}{{ nameCase(entry.author.city) }}{% else %}{{ formatDateTime(entry.postDate) }}{% endif %}
+      </div>
+
+    {% case 'news' %}
+      <div style="margin-left: 175px; font-family: Arial, sans-serif;">Posted by: {{ authorNameOrLink(entry) }} - {{ formatDateTime(entry.postDate) }}</div>
+
+    {% default %}
+      <div style="margin-left: 175px; font-family: Arial, sans-serif;">Posted by: {{ authorNameOrLink(entry) }} - {{ formatDateTime(entry.postDate) }} {{ commentCount(entry) }}</div>
+
+  {% endswitch %}
+{% endmacro %}
+
+{% macro postImage(entry, transform) %}
+  {% from _self import externalUrl, mediaUrl, primaryImage %}
+
+  {% set transform = transform | default('list') %}
+
+  {% set image = primaryImage(entry, transform) %}
+
+  {% switch entry.section.handle %}
+    {% case 'media' %}
+      <div style="float: left; margin-right: 15px; position: relative;">
+        <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a>
+      </div>
+
+    {% case 'news' %}
+      <div style="float: left; margin-right: 15px; position: relative;">
+        <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
+      </div>
+
+    {% default %}
+      <div style="float: left; margin-right: 15px; position: relative;">
+        <a href="{{ entry.url }}" class="detail"><img src="{{ image }}"></a>
+      </div>
+
+  {% endswitch %}
+{% endmacro %}
+
+{% macro postSummary(entry) %}
+  {% from _self import excerpt, externalUrl, letterUrl, mainContent, mediaUrl, noticeEvent, postBy, postTitle %}
+
+  {% set content = mainContent(entry) %}
+  {% set maxChars = 180 %}
+
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      {{ postTitle(entry) }}
+      {{ postBy(entry) }}
+      <p>{{ excerpt(content, maxChars) }} <a class="more detail" href="{{ entry.url }}">more&nbsp;»</a></p>
+
+    {% case 'letters' %}
+      {{ postTitle(entry) }}
+      {{ postBy(entry) }}
+      <p>{{ excerpt(content, maxChars) }} <a class="more" href="{{ letterUrl(entry) }}">more&nbsp;»</a></p>
+
+    {% case 'media' %}
+      {{ postTitle(entry) }}
+      {{ postBy(entry) }}
+      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media&nbsp;»</a></p>
+
+    {% case 'news' %}
+      {{ postTitle(entry) }}
+      {{ postBy(entry) }}
+      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more&nbsp;»</a></p>
+
+    {% case 'notices' %}
+      {{ postTitle(entry) }}
+      {{ noticeEvent(entry) }}
+      {{ postBy(entry) }}
+      <p><a class="more detail" href="{{ entry.url }}">more »</a></p>
+
+  {% endswitch %}
+{% endmacro %}
+
+{% macro postTitle(entry) %}
+  {% from _self import externalUrl, letterUrl, mediaUrl, titleCase %}
+  {% switch entry.section.handle %}
+    {% case 'blog' %}
+      <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+
+    {% case 'letters' %}
+      <h4 style="margin-top: 0px;"><a href="{{ letterUrl(entry) }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h4>
+
+    {% case 'media' %}
+      <h3 style="margin-top: 0px;"><a href="{{ mediaUrl(entry) }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+
+    {% case 'news' %}
+      <h3 style="margin-top: 0px;"><a href="{{ externalUrl(entry.newsLink) }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+
+    {% case 'notices' %}
+      <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+
+  {% endswitch %}
+{% endmacro %}
+
+{% macro primaryImage(entry, transform) %}
+{% spaceless %}
+  {% from _self import singularSection %}
+
+  {% set transform = transform | default('list') %}
+  {% set section = singularSection(entry) %}
+  {% set fieldName = section~'Images' %}
+  {% set image = attribute(entry, fieldName).first %}
+
+  {% if image is not null %}
+    {{ image.url(transform) }}
+
+  {% else %}
+    {{ siteUrl }}img/default/{{ transform }}/{{ section }}.jpg
+
+  {% endif %}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro singularSection(entry) %}
+{% spaceless %}
+  {% switch entry.section.handle %}
+    {% case 'letters' %}
+      {% set name = 'letter' %}
+
+    {% case 'notices' %}
+      {% set name = 'notice' %}
+
+    {% default %}
+      {% set name = entry.section.handle %}
+
+  {% endswitch %}
+
+  {{ name }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro titleCase(title) %}
+  {{- craft.mpentry.titleCase(title) -}}
+{% endmacro %}
+
+{% macro header(user) %}
+  <div style="font-family: Times, Georgia, serif;">
+    <div style="border-bottom-color: rgb(202, 200, 173); border-bottom-style: solid; border-bottom-width: 4px; padding-bottom: 12px;">
+      <a href="{{ siteUrl }}" style="color: #000;">
+        <div style="border: 9px solid #fe0000; height: 50px; margin: 30px 12px 23px; width: 50px; display: inline-block; float: left;"></div>
+        <div style="margin-top: 16px; display: inline-block;">
+          <h1 style="font-size: 2.4em; margin-bottom: -7px; margin-top: .6em; margin: .5em 0 0; text-align: center;">The Marin Post</h1>
+          <h2 style="font-size: 1.05em; margin-top: 0; padding: 0; text-align: center; font-style: italic; font-family: Arial, sans-serif; font-weight: normal;">The Voice of the Community</h2>
+        </div>
+      </a>
+    </div>
+
+    <h3 style="margin-bottom: 2px;">{{ craft.mpSubscription.currentIssueTitle(user) }}</h3>
+    <div style="margin-bottom: 2em;">{{ craft.mpSubscription.currentIssuePeriod(user) }}</div>
+{% endmacro %}
+
+{% macro footer() %}
+    <h3>My Marin Post</h3>
+    <ul>
+      <li>Change my <a href="{{ siteUrl }}account/subscription">Subscription Selections</a></li>
+      <li>Change my <a href="{{ siteUrl }}account/email">Email Address</a></li>
+    </ul>
+
+    <div style="padding: 1em; border-top: 1px solid #c9c8ac;">
+      Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
+    </div>
+  </div>
+{% endmacro %}

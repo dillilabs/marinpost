@@ -1,0 +1,11 @@
+{% macro checked(id, ids) %}
+  {{- id in ids ? 'checked=checked' : '' -}}
+{% endmacro %}
+
+{% macro grayedOutByDefault() %}
+  {{- currentUser.subscriptionContent == 'default' ? 'disabled' : '' -}}
+{% endmacro %}
+
+{% macro disabledByDefault() %}
+  {{- currentUser.subscriptionContent == 'default' ? 'disabled=disabled' : '' -}}
+{% endmacro %}

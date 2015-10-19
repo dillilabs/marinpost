@@ -51,6 +51,7 @@ class MpUserController extends BaseController
      *
      * User can delete their own account...but not really:
      *
+     *      cancel User's subscription, if found
      *      suspend User
      *      assign User to Deleted group
      */
@@ -59,9 +60,17 @@ class MpUserController extends BaseController
         $this->requireLogin();
 
         $user = craft()->userSession->user;
+
+        if (craft()->mpSubscription->activeSubscription($user)) {
+            // User has an active subscription
+            // so cancel it, and suspend email alerts.
+            $this->plugin->logger("$user is deleting their account, so we're also canceling their subscription and suspending alerts", LogLevel::Warning);
+            craft()->mpSubscription->cancel($user, true);
+        }
+
         craft()->users->suspendUser($user);
         $this->_assignUserToGroup($user, 'deleted');
-        $this->plugin->logger("[{$user}] ({$user->id}) deleted their account", LogLevel::Warning);
+        $this->plugin->logger("$user deleted their account", LogLevel::Warning);
 
         craft()->userSession->logout();
         $this->redirectToPostedUrl();

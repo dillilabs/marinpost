@@ -1,0 +1,55 @@
+<label>Cardholder Name
+  <input type="text" class="required" maxlength="50" data-stripe="name" />
+</label>
+
+<br>
+<label>Billing Address
+  <input type="text" class="required" maxlength="50" data-stripe="address_line1" />
+</label>
+
+<br>
+<label>Address 2
+  <input type="text" maxlength="30" data-stripe="address_line2" />
+</label>
+
+<br>
+<label>City
+  <input type="text" class="required" maxlength="30" data-stripe="address_city" />
+</label>
+
+<br>
+<label>State
+  <select id="state" class="required" data-stripe="address_state">
+    <optgroup label="">
+      {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+        <option value="{{ option.value }}">
+          {{ option.label }}
+        </option>
+      {% endfor %}
+    </optgroup>
+  </select>
+</label>
+
+<input type="hidden" value="US" data-stripe="address_country" />
+
+<br>
+<label>Zip
+  <input type="text" class="required" maxlength="5" data-stripe="address_zip" />
+</label>
+
+<br>
+<label>Card Number
+  <input type="text" maxlength="20" class="required" data-stripe="number" />
+</label>
+
+<br>
+<label>Card CVC
+  <input type="text" size="4" maxlength="4" class="required" data-stripe="cvc" />
+</label>
+
+<br>
+<label>Card Expiration Date
+  <br>
+  <input type="text" class="required month" size="2" maxlength="2" data-stripe="exp-month" placeholder="MM" />
+  <input type="text" class="required year" size="4" maxlength="4" data-stripe="exp-year" placeholder="YYYY" />
+</label>

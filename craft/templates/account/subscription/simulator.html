@@ -1,0 +1,97 @@
+{% requireLogin %}
+
+{% if not craft.mpSubscription.activeSubscription %}
+  {% redirect 'account/subscription' %}
+{% endif %}
+
+<h3>Subscription email simulator</h3>
+
+{% macro listOf(elements, name) %}
+  {% if elements | length %}
+    {% for element in elements %}
+      {{ name ? element.name : element.title }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  {% else %}
+    <i>--</i>
+  {% endif %}
+{% endmacro %}
+
+{% from _self import listOf %}
+
+<table>
+  <tr>
+    <th>SUBSCRIBER</th>
+    <td>{{ currentUser.name }}</td>
+  </tr>
+  <tr>
+    <th>EXPIRATION DATE</th>
+    <td>{{ currentUser.subscriptionExpirationDate | date('F j, Y') }}</td>
+  </tr>
+  <tr>
+    <th>CONTENT</th>
+    <td>{{ currentUser.subscriptionContent.label }}</td>
+  </tr>
+  {% if currentUser.subscriptionContent == 'custom' %}
+    <tr>
+      <th>LOCATIONS</th>
+      <td>{{ listOf(currentUser.subscriptionLocations) }}</td>
+    </tr>
+    <tr>
+      <th>TOPICS</th>
+      <td>{{ listOf(currentUser.subscriptionTopics) }}</td>
+    </tr>
+    <tr>
+      <th>AUTHORS</th>
+      <td>{{ listOf(currentUser.subscriptionAuthors, true) }}</td>
+    </tr>
+    <tr>
+      <th>LETTERS</th>
+      <td>{{ currentUser.subscriptionLetters | length ? 'Yes' : 'No' }}</td>
+    </tr>
+  {% endif %}
+  <tr>
+    <th>FREQUENCY</th>
+    <td>{{ currentUser.subscriptionFrequency.label }}</td>
+  </tr>
+  <tr>
+    <th>CURRENT ISSUE</th>
+    <td>{{ craft.mpSubscription.currentIssuePeriod }}</td>
+  </tr>
+  <tr>
+    <th>CANCELED</th>
+    <td>{{ currentUser.subscriptionCanceled == 1 ? 'Yes' : 'No' }}</td>
+  </tr>
+  <tr>
+    <th>SUSPENDED</th>
+    <td>{{ currentUser.subscriptionSuspended == 1 ? 'Yes' : 'No' }}</td>
+  </tr>
+</table>
+
+{% if not currentUser.subscriptionSuspended %}
+  <hr>
+
+  {% import 'account/subscription/_email_macros' as m %}
+  {% set entries = craft.mpSubscription.allEntries %}
+
+  {{ m.header(currentUser) }}
+
+  {% if entries | length %}
+    {% set entriesBySection = entries | group('section') %}
+
+    {% for section in ['Blogs', 'Notices', 'News Links', 'Media Links', 'Letters'] %}
+      {% if entriesBySection[section] %}
+        <h2>{{ section | upper }}</h2>
+
+        {% for entry in entriesBySection[section] %}
+          {{ m.post(entry) }}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  
+  {% else %}
+    <p><i>No matching entries found.</i></p>
+  
+  {% endif %}
+
+  {{ m.footer }}
+{% endif %}
