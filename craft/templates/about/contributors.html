@@ -12,7 +12,7 @@
 
       <ul class="posts">
         {% for contributor in contributors %}
-          <li class="listing">
+        <li class="listing" {% if contributor.userImage.first %}style="min-height: 176px"{% endif %}>
             {% if contributor.userImage.first %}
             <div class="image-wrapper profile">
               <a href="{{ p.contributorUrl(contributor) }}"><img src="{{ contributor.userImage.first.url('profile') }}" class="profile" /></a>
