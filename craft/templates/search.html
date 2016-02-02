@@ -1,6 +1,9 @@
 {# strip single and double quotes #}
 {% set query = craft.request.param('query') | replace('/[\'"]/', '') %}
 
+{# convert some common word/phrase separators (comma, semicolon and bar) to space #}
+{% set query = query | replace('/[,;\|]+/', ' ') %}
+
 {# eliminate successive whitespace #}
 {% set query = query | replace('/\\s+/', ' ') %}
 
