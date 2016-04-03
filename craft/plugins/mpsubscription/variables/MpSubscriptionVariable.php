@@ -8,11 +8,15 @@ class MpSubscriptionVariable
     //-------------------------------------------------------------------------
 
     /**
-     * Return true if current User has a subscription in good standing.
+     * Return true if User (default: current User) has a subscription in good standing.
+     * Used in public templates, subscription email and subscription simulator.
      */
-    public function activeSubscription()
+    public function activeSubscription($user = false)
     {
-        return craft()->mpSubscription->activeSubscription(craft()->userSession->user);
+        if (!$user) {
+            $user = craft()->userSession->user;
+        }
+        return craft()->mpSubscription->activeSubscription($user);
     }
 
     /**
@@ -49,7 +53,7 @@ class MpSubscriptionVariable
     }
 
     /**
-     * Return textual representation of the current issue's period.
+     * Return textual representation of the subscription period of the User (default: current User).
      * Used in email template and /account/subscription/simulator.
      */
     public function currentIssuePeriod($user = false)
@@ -70,5 +74,10 @@ class MpSubscriptionVariable
             $user = craft()->userSession->user;
         }
         return craft()->mpSubscription->currentIssueTitle($user);
+    }
+
+    public function usersWithoutPaidSubscription()
+    {
+        return craft()->mpSubscription->usersWithoutPaidSubscription();
     }
 }

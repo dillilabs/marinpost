@@ -1190,6 +1190,13 @@ form.subscription img.spinner, form.subscription img.success {
   padding: 8px;
 }
 
+.help.free-email-alerts {
+  border-bottom: 1px solid #C8D4E9;
+  color: rgb(128, 0, 0);
+  font-family: Arial, sans-serif;
+  margin-bottom: 1em;
+}
+
 /* * * * * * * * * * * * * * * * * * * * *
         SUPPORT
 * * * * * * * * * * * * * * * * * * * * * */

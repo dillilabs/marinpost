@@ -1,10 +1,10 @@
 {% requireLogin %}
 
-{% if not craft.mpSubscription.activeSubscription %}
-  {% redirect 'account/subscription' %}
+{% if craft.mpSubscription.activeSubscription %}
+  <h3>Subscription Email simulator</h3>
+{% else %}
+  <h3>Free {{ currentUser.subscriptionFrequency.label }} Email Alert Simulator</h3>
 {% endif %}
-
-<h3>Subscription email simulator</h3>
 
 {% macro listOf(elements, name) %}
   {% if elements | length %}
@@ -19,52 +19,67 @@
 {% from _self import listOf %}
 
 <table>
-  <tr>
-    <th>SUBSCRIBER</th>
-    <td>{{ currentUser.name }}</td>
-  </tr>
-  <tr>
-    <th>EXPIRATION DATE</th>
-    <td>{{ currentUser.subscriptionExpirationDate | date('F j, Y') }}</td>
-  </tr>
-  <tr>
-    <th>CONTENT</th>
-    <td>{{ currentUser.subscriptionContent.label }}</td>
-  </tr>
-  {% if currentUser.subscriptionContent == 'custom' %}
+  {% if craft.mpSubscription.activeSubscription %}
     <tr>
-      <th>LOCATIONS</th>
-      <td>{{ listOf(currentUser.subscriptionLocations) }}</td>
+      <th>SUBSCRIBER</th>
+      <td>{{ currentUser.name }}</td>
     </tr>
     <tr>
-      <th>TOPICS</th>
-      <td>{{ listOf(currentUser.subscriptionTopics) }}</td>
+      <th>EXPIRATION DATE</th>
+      <td>{{ currentUser.subscriptionExpirationDate | date('F j, Y') }}</td>
     </tr>
     <tr>
-      <th>AUTHORS</th>
-      <td>{{ listOf(currentUser.subscriptionAuthors, true) }}</td>
+      <th>CONTENT</th>
+      <td>{{ currentUser.subscriptionContent.label }}</td>
+    </tr>
+    {% if currentUser.subscriptionContent == 'custom' %}
+      <tr>
+        <th>LOCATIONS</th>
+        <td>{{ listOf(currentUser.subscriptionLocations) }}</td>
+      </tr>
+      <tr>
+        <th>TOPICS</th>
+        <td>{{ listOf(currentUser.subscriptionTopics) }}</td>
+      </tr>
+      <tr>
+        <th>AUTHORS</th>
+        <td>{{ listOf(currentUser.subscriptionAuthors, true) }}</td>
+      </tr>
+      <tr>
+        <th>LETTERS</th>
+        <td>{{ currentUser.subscriptionLetters | length ? 'Yes' : 'No' }}</td>
+      </tr>
+    {% endif %}
+    <tr>
+      <th>FREQUENCY</th>
+      <td>{{ currentUser.subscriptionFrequency.label }}</td>
     </tr>
     <tr>
-      <th>LETTERS</th>
-      <td>{{ currentUser.subscriptionLetters | length ? 'Yes' : 'No' }}</td>
+      <th>CURRENT ISSUE</th>
+      <td>{{ craft.mpSubscription.currentIssuePeriod }}</td>
+    </tr>
+    <tr>
+      <th>CANCELED</th>
+      <td>{{ currentUser.subscriptionCanceled == 1 ? 'Yes' : 'No' }}</td>
+    </tr>
+    <tr>
+      <th>SUSPENDED</th>
+      <td>{{ currentUser.subscriptionSuspended == 1 ? 'Yes' : 'No' }}</td>
+    </tr>
+  {% else %}
+    <tr>
+      <th>USER</th>
+      <td>{{ currentUser.name }}</td>
+    </tr>
+    <tr>
+      <th>CURRENT ISSUE</th>
+      <td>{{ craft.mpSubscription.currentIssuePeriod }}</td>
+    </tr>
+    <tr>
+      <th>OPTED OUT</th>
+      <td>{{ currentUser.subscriptionSuspended == 1 ? 'Yes' : 'No' }}</td>
     </tr>
   {% endif %}
-  <tr>
-    <th>FREQUENCY</th>
-    <td>{{ currentUser.subscriptionFrequency.label }}</td>
-  </tr>
-  <tr>
-    <th>CURRENT ISSUE</th>
-    <td>{{ craft.mpSubscription.currentIssuePeriod }}</td>
-  </tr>
-  <tr>
-    <th>CANCELED</th>
-    <td>{{ currentUser.subscriptionCanceled == 1 ? 'Yes' : 'No' }}</td>
-  </tr>
-  <tr>
-    <th>SUSPENDED</th>
-    <td>{{ currentUser.subscriptionSuspended == 1 ? 'Yes' : 'No' }}</td>
-  </tr>
 </table>
 
 {% if not currentUser.subscriptionSuspended %}
@@ -93,5 +108,5 @@
   
   {% endif %}
 
-  {{ m.footer }}
+  {{ m.footer(currentUser) }}
 {% endif %}

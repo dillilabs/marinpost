@@ -1,0 +1,18 @@
+<h2>My Email Alerts</h2>
+
+{# Note: immitate format of "site message" help class #}
+
+<div class="help free-email-alerts"><p>As a Marin Post member, you receive weekly updates of recent posts, delivered directly to your email box.</p></div>
+
+{# Opt out: toggle off free email alerts #}
+
+<h3>Opt Out of Weekly Email Alerts</h3>
+{% include 'account/subscription/_suspend_form.html' %}
+
+{# Opt in: subscribe #}
+
+<h2>Become a Marin Post Subscriber</h2>
+
+<div class="help free-email-alerts"><p>Receive customized daily, weekly, or monthly email alerts. Choose the locations, topics and authors that interest you.</p></div>
+
+{% include 'account/subscription/_create_form.html' %}

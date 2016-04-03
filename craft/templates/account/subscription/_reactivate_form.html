@@ -1,0 +1,16 @@
+<form method="post" action="" accept-charset="UTF-8" class="reactivate-form subscription">
+  {{ getCsrfInput() }}
+  <input type="hidden" name="action" value="mpSubscription/reactivate">
+  <input type="hidden" name="redirect" value="account/subscription">
+
+  <p>
+    Your subscription has been canceled, but you will continue to receive email alerts
+    until your subscription finally expires on:
+    <b>{{ currentUser.subscriptionExpirationDate | date('F d, Y') }}</b>
+    <br><br>
+    If you do not want to receive any more email alerts, then <b>Suspend Email Alerts</b> above.
+  </p>
+
+  <input type="submit" value="Reactivate My Subscription" class="btn submit">
+  <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+</form>

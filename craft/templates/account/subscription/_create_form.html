@@ -1,0 +1,36 @@
+<form method="post" action="" accept-charset="UTF-8" class="create-form filter-form subscription">
+  {{ getCsrfInput() }}
+  <input type="hidden" name="action" value="mpSubscription/create">
+  <input type="hidden" name="redirect" value="account/subscription">
+
+  <ul class="errors">
+    {% if error is defined %}
+      <li>{{ error }}</li>
+    {% endif %}
+  </ul>
+
+  <h3>Subscription Plan</h3>
+  {% include 'account/subscription/_plan_fields.html' %}
+
+  <hr>
+  <h3>Payment Method</h3>
+  {% include 'account/subscription/_stripe_fields.html' %}
+
+  <hr>
+  <h3>Email Alerts</h3>
+  {% include 'account/subscription/_frequency_fields.html' %}
+
+  <hr>
+  <h3>Email Content</h3>
+  {% include 'account/subscription/_content_fields.html' %}
+
+  <br>
+  <input type="submit" value="Subscribe to The Marin Post" class="btn submit">
+  <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+
+  <ul class="errors">
+    {% if error is defined %}
+      <li>{{ error }}</li>
+    {% endif %}
+  </ul>
+</form>

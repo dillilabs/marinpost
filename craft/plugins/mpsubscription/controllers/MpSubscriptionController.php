@@ -248,7 +248,10 @@ class MpSubscriptionController extends BaseController
 
     /**
      * Schedule task to email current issue to subscribed Users.
+     *
      * LOCAL-only request.
+     *
+     * @param string -- daily, weekly or monthly
      */
     public function actionCurrentIssue()
     {
@@ -265,11 +268,13 @@ class MpSubscriptionController extends BaseController
             craft()->end();
         }
 
-        $users = craft()->mpSubscription->activeSubscribersForEmailPeriod($period);
+        // Paid subscriptions
 
-        if (count($users) > 0)
+        $subscribers = craft()->mpSubscription->activeSubscribersForEmailPeriod($period);
+
+        if (count($subscribers) > 0)
         {
-            foreach ($users as $user)
+            foreach ($subscribers as $user)
             {
                 $this->_createTask($period, $user);
             }
@@ -277,6 +282,25 @@ class MpSubscriptionController extends BaseController
         else
         {
             $this->plugin->logger("No subscribers found for $period email alerts.");
+        }
+
+        if ($period == 'weekly')
+        {
+            // Complimentary subscriptions
+
+            $freebies = craft()->mpSubscription->usersWithoutPaidSubscription();
+
+            if (count($freebies) > 0)
+            {
+                foreach ($freebies as $user)
+                {
+                    $this->_createTask($period, $user);
+                }
+            }
+            else
+            {
+                $this->plugin->logger("No free subscriptions found.");
+            }
         }
 
         craft()->end();

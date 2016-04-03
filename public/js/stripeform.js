@@ -58,14 +58,15 @@
 
             var ajaxSubmit = function() {
                 var data = form.serialize();
-                var fields = form.find('input[type=text]');
-                var success = form.find('img.success');
-                var card = form.find('.current-card');
 
                 errors.empty();
                 disableSubmitAndShowSpinner();
 
                 $.post('/', data, function(data) {
+                    var fields  = form.find('input[type=text], select');
+                    var success = form.find('img.success');
+                    var card    = form.find('.current-card');
+
                     hideSpinnerAndEnableSubmit();
 
                     if (data.error) {

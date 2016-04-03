@@ -1,0 +1,59 @@
+{#-----------------------------------------------------------------------------
+ # ACTIVE or CANCELED but NOT-YET-EXPIRED
+ #}
+
+<h2>My Subscription</h2>
+
+<div class="help">{{ n.siteMessage }}</div>
+
+<h3>Suspend Email Alerts</h3>
+{% include 'account/subscription/_suspend_form.html' %}
+
+{% if currentUser.subscriptionCanceled %}
+
+  {#----------------------------------------------------------------------------
+   # CANCELED but NOT-YET-EXPIRED
+   #}
+
+  <hr>
+  <h3>Reactivate My Subscription</h3>
+  {% include 'account/subscription/_reactivate_form.html' %}
+
+{% else %}
+
+  {#----------------------------------------------------------------------------
+   # ACTIVE
+   #}
+
+  <hr>
+  <h3>Subscription Plan</h3>
+  {% include 'account/subscription/_plan_form.html' %}
+
+  <hr>
+  <h3>Payment Method</h3>
+  {% include 'account/subscription/_payment_form.html' %}
+
+{% endif %}
+
+{#------------------------------------------------------------------------------
+ # ACTIVE or CANCELED but NOT-YET-EXPIRED
+ #}
+
+<hr>
+<h3>Email Alert Frequency</h3>
+{% include 'account/subscription/_frequency_form.html' %}
+
+<hr>
+<h3>Email Alert Choices</h3>
+{% include 'account/subscription/_content_form.html' %}
+
+{% if not currentUser.subscriptionCanceled %}
+
+  {#----------------------------------------------------------------------------
+   # ACTIVE and NOT CANCELED
+   #}
+
+  <hr>
+  {% include 'account/subscription/_cancel_form.html' %}
+
+{% endif %}

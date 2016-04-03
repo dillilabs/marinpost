@@ -1,0 +1,13 @@
+<form method="post" action="" accept-charset="UTF-8" class="plan-form subscription">
+  {{ getCsrfInput() }}
+  <input type="hidden" name="action" value="mpSubscription/changePlan">
+
+  {% include 'account/subscription/_plan_fields.html' %}
+
+  <br>
+  <input type="submit" value="Update Subscription Plan" class="btn submit">
+  <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+  <img src="{{ siteUrl }}img/success.png" class="success">
+
+  <ul class="errors"></ul>
+</form>

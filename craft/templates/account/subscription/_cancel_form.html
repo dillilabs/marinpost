@@ -1,0 +1,14 @@
+<h3>Cancel My Subscription</h3>
+
+<form method="post" action="" accept-charset="UTF-8" class="cancel-form subscription">
+  {{ getCsrfInput() }}
+  <input type="hidden" name="action" value="mpSubscription/cancel">
+  <input type="hidden" name="redirect" value="account/subscription">
+
+  Subscription is set to renew on:
+  <b><span class="expiration-date">{{ currentUser.subscriptionExpirationDate | date('F d, Y') }}</span></b>
+
+  <br>
+  <input type="submit" value="Cancel My Subscription" class="btn submit">
+  <img src="{{ siteUrl }}img/spinner.gif" class="spinner">
+</form>

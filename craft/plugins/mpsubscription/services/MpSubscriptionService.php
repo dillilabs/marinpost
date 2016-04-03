@@ -292,6 +292,8 @@ class MpSubscriptionService extends BaseApplicationComponent
      *     - topics
      *     - authors
      *     - letters
+     *
+     * @param string -- daily, weekly or monthly
      */
     public function activeSubscribersForEmailPeriod($period)
     {
@@ -314,6 +316,19 @@ class MpSubscriptionService extends BaseApplicationComponent
         }
 
         return $users;
+    }
+
+    /**
+     * Return list of Users with non-paid, complimentary subscriptions.
+     */
+    public function usersWithoutPaidSubscription()
+    {
+        $criteria = craft()->elements->getCriteria(ElementType::User);
+        $criteria->stripeCustomerId           = ':empty:';
+        $criteria->subscriptionSuspended      = 'not 1';
+        $criteria->limit                      = null;
+
+        return $criteria->find();
     }
 
     /**
@@ -632,7 +647,7 @@ class MpSubscriptionService extends BaseApplicationComponent
 
         $email = new EmailModel();
         $email->toEmail = $user->email;
-        $email->subject = 'New from the Marin Post';
+        $email->subject = "{$user->subscriptionFrequency->label} Update from the Marin Post";
         $email->htmlBody = craft()->templates->render('entries', array(
             'user'    => $user,
             'entries' => $entries
