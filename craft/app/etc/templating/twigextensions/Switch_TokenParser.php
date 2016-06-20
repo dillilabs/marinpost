@@ -8,8 +8,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.etc.templating.twigextensions
  * @since     1.3
  */
@@ -52,6 +52,7 @@ class Switch_TokenParser extends \Twig_TokenParser
 
 		$stream->expect(\Twig_Token::BLOCK_START_TYPE);
 
+		$expressionParser = $this->parser->getExpressionParser();
 		$cases = array();
 		$default = null;
 		$end = false;
@@ -64,13 +65,29 @@ class Switch_TokenParser extends \Twig_TokenParser
 			{
 				case 'case':
 				{
-					$expr = $this->parser->getExpressionParser()->parseExpression();
+					$values = array();
+
+					while (true)
+					{
+						$values[] = $expressionParser->parsePrimaryExpression();
+
+						// Multiple allowed values?
+						if ($stream->test(\Twig_Token::OPERATOR_TYPE, 'or'))
+						{
+							$stream->next();
+						}
+						else
+						{
+							break;
+						}
+					}
+
 					$stream->expect(\Twig_Token::BLOCK_END_TYPE);
 					$body = $this->parser->subparse(array($this, 'decideIfFork'));
-					$cases[] = array(
-						'expr' => $expr,
+					$cases[] = new \Twig_Node(array(
+						'values' => new \Twig_Node($values),
 						'body' => $body
-					);
+					));
 					break;
 				}
 				case 'default':

@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.etc.web
  * @since     1.0
  */
@@ -437,9 +437,10 @@ class UrlManager extends \CUrlManager
 				$slugChars[] = $slugWordSeparator;
 			}
 
+			// Reference: http://www.regular-expressions.info/unicode.html
 			$this->_regexTokenPatterns = array(
 				'(?:[a-zA-Z][a-zA-Z0-9_]*)',
-				'(?:[\p{L}\p{N}'.preg_quote(implode($slugChars), '/').']+)',
+				'(?:[\p{L}\p{N}\p{M}'.preg_quote(implode($slugChars), '/').']+)',
 			);
 		}
 

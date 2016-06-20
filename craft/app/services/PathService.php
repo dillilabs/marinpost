@@ -8,21 +8,13 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     1.0
  */
 class PathService extends BaseApplicationComponent
 {
-	// Properties
-	// =========================================================================
-
-	/**
-	 * @var
-	 */
-	private $_templatesPath;
-
 	// Public Methods
 	// =========================================================================
 
@@ -64,6 +56,18 @@ class PathService extends BaseApplicationComponent
 	public function getStoragePath()
 	{
 		return CRAFT_STORAGE_PATH;
+	}
+
+	/**
+	 * Returns the path to the craft/storage/rebrand/ folder.
+	 *
+	 * @return string
+	 */
+	public function getRebrandPath()
+	{
+		$path = $this->getStoragePath().'rebrand/';
+		IOHelper::ensureFolderExists($path);
+		return $path;
 	}
 
 	/**
@@ -193,6 +197,18 @@ class PathService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Returns the path to the craft/storage/runtime/pluginicons/ folder.
+	 *
+	 * @return string The path to the craft/storage/runtime/pluginicons/ folder.
+	 */
+	public function getPluginIconsPath()
+	{
+		$path = $this->getRuntimePath().'pluginicons/';
+		IOHelper::ensureFolderExists($path);
+		return $path;
+	}
+
+	/**
 	 * Returns the path to the craft/storage/runtime/logs/ folder.
 	 *
 	 * @return string The path to the craft/storage/runtime/logs/ folder.
@@ -288,32 +304,24 @@ class PathService extends BaseApplicationComponent
 	 * CP or Site request.
 	 *
 	 * @return string The templates path.
+	 *
+	 * @deprecated Deprecated in 2.6.2778. Use TemplatesService::getTemplatesPath() or TemplatesService::getTemplateMode() instead.
 	 */
 	public function getTemplatesPath()
 	{
-		if (!isset($this->_templatesPath))
-		{
-			if (craft()->request->isCpRequest())
-			{
-				$this->_templatesPath = $this->getCpTemplatesPath();
-			}
-			else
-			{
-				$this->_templatesPath = $this->getSiteTemplatesPath();
-			}
-		}
-
-		return $this->_templatesPath;
+		return craft()->templates->getTemplatesPath();
 	}
 
 	/**
 	 * Sets the current templates path.
 	 *
 	 * @param string $path The new templates path.
+	 *
+	 * @deprecated Deprecated in 2.6.2778. Use TemplatesService::setTemplatesPath() or TemplatesService::setTemplateMode() instead.
 	 */
 	public function setTemplatesPath($path)
 	{
-		$this->_templatesPath = $path;
+		craft()->templates->setTemplatesPath($path);
 	}
 
 	/**

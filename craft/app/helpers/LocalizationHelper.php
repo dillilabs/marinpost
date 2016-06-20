@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.helpers
  * @since     1.0
  */
@@ -66,6 +66,7 @@ class LocalizationHelper
 		$translationFiles = array();
 		$parts = explode('_', $event->language);
 		$totalParts = count($parts);
+		$loadedAlready = false;
 
 		for ($i = 1; $i <= $totalParts; $i++)
 		{
@@ -77,17 +78,26 @@ class LocalizationHelper
 		// First see if we have any cached info.
 		foreach ($translationFiles as $translationFile)
 		{
+			$loadedAlready = false;
+
 			// We've loaded the translation file already, just check for the translation.
 			if (isset(static::$_translations[$translationFile]))
 			{
+				$loadedAlready = true;
+
 				if (isset(static::$_translations[$translationFile][$event->message]))
 				{
+					// Found a match... grab it and go.
 					$event->message = static::$_translations[$translationFile][$event->message];
+					return;
 				}
-
-				// No translation... just give up.
-				return;
 			}
+		}
+
+		// We've checked through an already loaded message file and there was no match. Just give up.
+		if ($loadedAlready)
+		{
+			return;
 		}
 
 		// No luck in cache, check the file system.
@@ -107,6 +117,10 @@ class LocalizationHelper
 					$event->message = static::$_translations[$translationFile][$event->message];
 					return;
 				}
+			}
+			else
+			{
+				static::$_translations[$translationFile] = array();
 			}
 		}
 	}

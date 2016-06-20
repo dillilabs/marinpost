@@ -10,33 +10,14 @@ namespace Craft;
  *
  * @author     Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright  Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license    http://buildwithcraft.com/license Craft License Agreement
- * @see        http://buildwithcraft.com
+ * @license    http://craftcms.com/license Craft License Agreement
+ * @see        http://craftcms.com
  * @package    craft.app.controllers
  * @since      1.0
  * @deprecated This class will have several breaking changes in Craft 3.0.
  */
 class AssetsController extends BaseController
 {
-	// Properties
-	// =========================================================================
-
-	/**
-	 * If set to false, you are required to be logged in to execute any of the given controller's actions.
-	 *
-	 * If set to true, anonymous access is allowed for all of the given controller's actions.
-	 *
-	 * If the value is an array of action names, then you must be logged in for any action method except for the ones in
-	 * the array list.
-	 *
-	 * If you have a controller that where the majority of action methods will be anonymous, but you only want require
-	 * login on a few, it's best to use {@link UserSessionService::requireLogin() craft()->userSession->requireLogin()}
-	 * in the individual methods.
-	 *
-	 * @var bool
-	 */
-	protected $allowAnonymous = array('actionGenerateTransform');
-
 	// Public Methods
 	// =========================================================================
 
@@ -220,6 +201,7 @@ class AssetsController extends BaseController
 			}
 			else
 			{
+				IOHelper::deleteFile($fileLocation, true);
 				throw new Exception(Craft::t('Something went wrong with the replace operation.'));
 			}
 		}
@@ -440,21 +422,40 @@ class AssetsController extends BaseController
 	}
 
 	/**
-	 * Get information about available transforms.
+	 * Download an Asset.
 	 *
-	 * @return null
+	 * @throws HttpException
 	 */
-	public function actionGetTransformInfo()
+	public function actionDownloadAsset()
 	{
-		$this->requireAjaxRequest();
-		$transforms = craft()->assetTransforms->getAllTransforms();
-		$output = array();
-		foreach ($transforms as $transform)
+		$this->requireLogin();
+		$this->requirePostRequest();
+
+		$assetId = craft()->request->getRequiredPost('assetId');
+
+		try
 		{
-			$output[] = (object) array('id' => $transform->id, 'handle' => HtmlHelper::encode($transform->handle), 'name' => HtmlHelper::encode($transform->name));
+			craft()->assets->checkPermissionByFileIds($assetId, 'viewAssetSource');
+		}
+		catch (Exception $e)
+		{
+			$this->returnErrorJson($e->getMessage());
 		}
 
-		$this->returnJson($output);
+		$asset = craft()->assets->getFileById($assetId);
+
+		if (!$asset)
+		{
+			throw new HttpException(404);
+		}
+
+		$source = craft()->assetSources->populateSourceType($asset->getSource());
+
+		$localPath = $source->getLocalCopy($asset);
+
+		craft()->request->sendFile($localPath, IOHelper::getFileContents($localPath), array('filename' => $asset->filename), false);
+		IOHelper::deleteFile($localPath);
+		craft()->end();
 	}
 
 	// Private Methods

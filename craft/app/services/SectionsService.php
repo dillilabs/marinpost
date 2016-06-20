@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     1.0
  */
@@ -15,11 +15,6 @@ class SectionsService extends BaseApplicationComponent
 {
 	// Properties
 	// =========================================================================
-
-	/**
-	 * @var
-	 */
-	public $typeLimits;
 
 	/**
 	 * @var
@@ -111,22 +106,10 @@ class SectionsService extends BaseApplicationComponent
 
 			$this->_sectionsById = array();
 
-			$typeCounts = array(
-				SectionType::Single => 0,
-				SectionType::Channel => 0,
-				SectionType::Structure => 0
-			);
-
 			foreach ($results as $result)
 			{
-				$type = $result['type'];
-
-				if (craft()->getEdition() >= Craft::Client || $typeCounts[$type] < $this->typeLimits[$type])
-				{
-					$section = new SectionModel($result);
-					$this->_sectionsById[$section->id] = $section;
-					$typeCounts[$type]++;
-				}
+				$section = new SectionModel($result);
+				$this->_sectionsById[$section->id] = $section;
 			}
 
 			$this->_fetchedAllSections = true;
@@ -337,11 +320,6 @@ class SectionsService extends BaseApplicationComponent
 		$sectionRecord->handle           = $section->handle;
 		$sectionRecord->type             = $section->type;
 		$sectionRecord->enableVersioning = $section->enableVersioning;
-
-		if (($isNewSection || $section->type != $oldSection->type) && !$this->canHaveMore($section->type))
-		{
-			$section->addError('type', Craft::t('You can’t add any more {type} sections.', array('type' => Craft::t(ucfirst($section->type)))));
-		}
 
 		// Type-specific attributes
 		if ($section->type == SectionType::Single)
@@ -623,6 +601,14 @@ class SectionsService extends BaseApplicationComponent
 
 							if (!$isNewSection)
 							{
+								// Re-save the entrytype name if the section name just changed
+								if (!$isNewSection && $oldSection->name != $section->name)
+								{
+									$entryType = $this->getEntryTypeById($entryTypeId);
+									$entryType->name = $section->name;
+									$this->saveEntryType($entryType);
+								}
+
 								// Make sure there's only one entry in this section
 								$entryIds = craft()->db->createCommand()
 									->select('id')
@@ -686,7 +672,7 @@ class SectionsService extends BaseApplicationComponent
 							{
 								// Add all of the entries to the structure
 								$criteria = craft()->elements->getCriteria(ElementType::Entry);
-								$criteria->locale = array_shift(array_keys($oldSectionLocales));
+								$criteria->locale = ArrayHelper::getFirstKey($oldSectionLocales);
 								$criteria->sectionId = $section->id;
 								$criteria->status = null;
 								$criteria->localeEnabled = null;
@@ -803,6 +789,28 @@ class SectionsService extends BaseApplicationComponent
 
 			try
 			{
+				// Nuke the field layouts first.
+				$entryTypeIds = array();
+				$entryTypes = $this->getEntryTypesBySectionId($sectionId);
+
+				foreach ($entryTypes as $entryType)
+				{
+					$entryTypeIds[] = $entryType->id;
+				}
+
+				// Delete the field layout(s)
+				 $query = craft()->db->createCommand()
+					->select('fieldLayoutId')
+					->from('entrytypes')
+					->where(array('in', 'id', $entryTypeIds));
+
+				$fieldLayoutIds = $query->queryColumn();
+
+				if ($fieldLayoutIds)
+				{
+					craft()->fields->deleteLayoutById($fieldLayoutIds);
+				}
+
 				// Grab the entry ids so we can clean the elements table.
 				$entryIds = craft()->db->createCommand()
 					->select('id')
@@ -862,15 +870,15 @@ class SectionsService extends BaseApplicationComponent
 	{
 		if ($section->hasUrls)
 		{
-			// Set Craft to the site template path
-			$oldTemplatesPath = craft()->path->getTemplatesPath();
-			craft()->path->setTemplatesPath(craft()->path->getSiteTemplatesPath());
+			// Set Craft to the site template mode
+			$oldTemplateMode = craft()->templates->getTemplateMode();
+			craft()->templates->setTemplateMode(TemplateMode::Site);
 
 			// Does the template exist?
 			$templateExists = craft()->templates->doesTemplateExist($section->template);
 
-			// Restore the original template path
-			craft()->path->setTemplatesPath($oldTemplatesPath);
+			// Restore the original template mode
+			craft()->templates->setTemplateMode($oldTemplateMode);
 
 			if ($templateExists)
 			{
@@ -1000,20 +1008,26 @@ class SectionsService extends BaseApplicationComponent
 				// Is the event giving us the go-ahead?
 				if ($event->performAction)
 				{
-					if (!$isNewEntryType && $oldEntryType->fieldLayoutId)
+					// Is there a new field layout?
+					$fieldLayout = $entryType->getFieldLayout();
+
+					if (!$fieldLayout->id)
 					{
-						// Drop the old field layout
-						craft()->fields->deleteLayoutById($oldEntryType->fieldLayoutId);
+						// Delete the old one
+						if (!$isNewEntryType && $oldEntryType->fieldLayoutId)
+						{
+							craft()->fields->deleteLayoutById($oldEntryType->fieldLayoutId);
+						}
+
+						// Save the new one
+						craft()->fields->saveLayout($fieldLayout);
+
+						// Update the entry type record/model with the new layout ID
+						$entryType->fieldLayoutId = $fieldLayout->id;
+						$entryTypeRecord->fieldLayoutId = $fieldLayout->id;
 					}
 
-					// Save the new one
-					$fieldLayout = $entryType->getFieldLayout();
-					craft()->fields->saveLayout($fieldLayout);
-
-					// Update the entry type record/model with the new layout ID
-					$entryType->fieldLayoutId = $fieldLayout->id;
-					$entryTypeRecord->fieldLayoutId = $fieldLayout->id;
-
+					// Save the entry type
 					$entryTypeRecord->save(false);
 
 					// Now that we have an entry type ID, save it on the model
@@ -1209,37 +1223,6 @@ class SectionsService extends BaseApplicationComponent
 			->count('sections.id');
 
 		return (bool) $count;
-	}
-
-	/**
-	 * Returns whether another section can be added of a given type.
-	 *
-	 * @param string $type
-	 *
-	 * @return bool
-	 */
-	public function canHaveMore($type)
-	{
-		if (craft()->getEdition() >= Craft::Client)
-		{
-			return true;
-		}
-		else
-		{
-			if (isset($this->typeLimits[$type]))
-			{
-				$count = craft()->db->createCommand()
-					->from('sections')
-					->where('type = :type', array(':type' => $type))
-					->count('id');
-
-				return $count < $this->typeLimits[$type];
-			}
-			else
-			{
-				return false;
-			}
-		}
 	}
 
 	// Events

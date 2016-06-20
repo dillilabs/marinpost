@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.etc.db
  * @since     1.0
  */
@@ -99,9 +99,11 @@ class DbBackup
 
 		$this->_processHeader();
 
-		foreach (craft()->db->getSchema()->getTables() as $resultName => $val)
+		$tableNames = craft()->db->getSchema()->getTableNames();
+
+		foreach ($tableNames as $tableName)
 		{
-			$this->_processResult($resultName);
+			$this->_processResult($tableName);
 		}
 
 		$this->_processConstraints();
@@ -138,8 +140,8 @@ class DbBackup
 		foreach ($statements as $key => $statement)
 		{
 			Craft::log('Executing SQL statement: '.$statement);
-			$command = craft()->db->createCommand($statement);
-			$command->execute();
+			$statement = craft()->db->getPdoInstance()->prepare($statement);
+			$statement->execute();
 		}
 
 		// Re-enable.
@@ -389,7 +391,7 @@ class DbBackup
 				// Data!
 				IOHelper::writeToFile($this->_filePath, PHP_EOL . '--' . PHP_EOL . '-- Data for table `' . $tableName . '`' . PHP_EOL . '--' . PHP_EOL . PHP_EOL, true, true);
 
-				$batchSize = 1000;
+				$batchSize = 100;
 
 				// Going to grab the data in batches.
 				$totalBatches = ceil($totalRows / $batchSize);
@@ -405,26 +407,33 @@ class DbBackup
 					{
 						$attrs = array_map(array(craft()->db, 'quoteColumnName'), array_keys($rows[0]));
 
-						foreach ($rows as $row)
-						{
-							$insertStatement = 'INSERT INTO ' . craft()->db->quoteTableName($tableName) . ' (' . implode(', ', $attrs) . ') VALUES';
+						$insertStatement = 'INSERT INTO ' . craft()->db->quoteTableName($tableName) . ' (' . implode(', ', $attrs) . ') VALUES'.PHP_EOL;
 
+						foreach ($rows as $key => $row)
+						{
 							// Process row
 							foreach ($row as $columnName => $value)
 							{
 								if ($value === null)
 								{
-									$row[$columnName] = 'NULL';
+									$rows[$key][$columnName] = 'NULL';
 								}
 								else
 								{
-									$row[$columnName] = craft()->db->getPdoInstance()->quote($value);
+									$rows[$key][$columnName] = craft()->db->getPdoInstance()->quote($value);
 								}
 							}
-
-							$insertStatement .= ' ('.implode(', ', $row).');';
-							IOHelper::writeToFile($this->_filePath, $insertStatement . PHP_EOL, true, true);
 						}
+
+						foreach ($rows as $row)
+						{
+							$insertStatement .= ' ('.implode(', ', $row).'),'.PHP_EOL;
+						}
+
+						// Nuke that last comma and add a ;
+						$insertStatement = mb_substr($insertStatement, 0, -mb_strlen(PHP_EOL) -1).';';
+
+						IOHelper::writeToFile($this->_filePath, $insertStatement . PHP_EOL, true, true);
 					}
 				}
 

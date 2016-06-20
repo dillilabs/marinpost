@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @link      http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @link      http://craftcms.com
  * @package   craft.app.elementactions
  * @since     2.3
  */
@@ -45,7 +45,22 @@ class EditElementAction extends BaseElementAction
 		},
 		activate: function(\$selectedItems)
 		{
-			new Craft.ElementEditor(\$selectedItems.find('.element'));
+			var \$element = \$selectedItems.find('.element:first');
+
+			if (Craft.elementIndex.viewMode == 'table') {
+				new Craft.ElementEditor(\$element, {
+					params: {
+						includeTableAttributesForSource: Craft.elementIndex.sourceKey
+					},
+					onSaveElement: $.proxy(function(response) {
+						if (response.tableAttributes) {
+							Craft.elementIndex.view._updateTableAttributes(\$element, response.tableAttributes);
+						}
+					}, this)
+				});
+			} else {
+				new Craft.ElementEditor(\$element);
+			}
 		}
 	});
 })();

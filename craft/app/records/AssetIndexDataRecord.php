@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.records
  * @since     1.0
  */
@@ -65,9 +65,8 @@ class AssetIndexDataRecord extends BaseRecord
 			'sourceId' 		=> array(AttributeType::Number, 'required' => true),
 			'offset'  		=> array(AttributeType::Number, 'required' => true),
 			'uri'  			=> array(ColumnType::Varchar, 'maxLength' => 255),
-			'size' 			=> array(AttributeType::Number),
+			'size' 			=> array(ColumnType::BigInt, 'unsigned' => true),
 			'recordId'		=> array(AttributeType::Number),
-
 		);
 	}
 }

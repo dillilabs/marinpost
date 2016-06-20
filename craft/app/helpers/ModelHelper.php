@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.helpers
  * @since     1.0
  */
@@ -32,9 +32,10 @@ class ModelHelper
 		AttributeType::Locale     => array('column' => ColumnType::Locale),
 		AttributeType::Name       => array('maxLength' => 255, 'column' => ColumnType::Varchar),
 		AttributeType::Number     => array('min' => null, 'max' => null, 'decimals' => 0),
-		AttributeType::SortOrder  => array('column' => ColumnType::TinyInt),
+		AttributeType::SortOrder  => array('column' => ColumnType::SmallInt, 'unsigned' => true),
 		AttributeType::Template   => array('maxLength' => 500, 'column' => ColumnType::Varchar),
 		AttributeType::Url        => array('maxLength' => 255, 'column' => ColumnType::Varchar),
+		AttributeType::UrlFormat  => array('column' => ColumnType::Text),
 	);
 
 	/**
@@ -374,7 +375,7 @@ class ModelHelper
 		}
 
 		// If this is a BaseRecord instance, catch any unique/required indexes. We don't validate required BELONGS_TO
-		// relations because they mightnot get set until after validation.
+		// relations because they might not get set until after validation.
 		if ($model instanceof BaseRecord)
 		{
 			foreach ($model->defineIndexes() as $config)

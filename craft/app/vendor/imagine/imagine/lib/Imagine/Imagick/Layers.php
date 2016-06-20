@@ -80,16 +80,23 @@ class Layers extends AbstractLayers
 
         try {
             foreach ($this as $offset => $layer) {
+                $imagick = $layer->getImagick();
                 $this->resource->setIteratorIndex($offset);
                 $this->resource->setFormat($format);
 
                 if (null !== $delay) {
-                    $this->resource->setImageDelay($delay / 10);
-                    $this->resource->setImageTicksPerSecond(100);
+                    $imagick->setImageDelay($delay);
+                    $imagick->setImageTicksPerSecond(100);
                 }
-                $this->resource->setImageIterations($loops);
+                else if ($frameDelay = $layer->getImagick()->getImageDelay())
+                {
+                    $imagick->setImageDelay($frameDelay);
+                    $imagick->setImageTicksPerSecond(100);
+                }
 
-                $this->resource->setImage($layer->getImagick());
+                $imagick->setImageIterations($loops);
+
+                $this->resource->setImage($imagick);
             }
         } catch (\ImagickException $e) {
             throw new RuntimeException('Failed to animate layers', $e->getCode(), $e);

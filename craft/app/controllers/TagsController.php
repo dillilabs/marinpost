@@ -9,8 +9,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.controllers
  * @since     1.1
  */
@@ -173,7 +173,15 @@ class TagsController extends BaseController
 		$tagTitleLengths = array();
 		$exactMatch = false;
 
-		$normalizedSearch = StringHelper::normalizeKeywords($search);
+		if (craft()->config->get('allowSimilarTags'))
+		{
+			$search = StringHelper::normalizeKeywords($search, array(), false);
+		}
+		else
+		{
+			$search = StringHelper::normalizeKeywords($search);
+		}
+
 
 		foreach ($tags as $tag)
 		{
@@ -184,9 +192,16 @@ class TagsController extends BaseController
 
 			$tagTitleLengths[] = mb_strlen($tag->getContent()->title);
 
-			$normalizedTitle = StringHelper::normalizeKeywords($tag->getContent()->title);
+			if (craft()->config->get('allowSimilarTags'))
+			{
+				$title = StringHelper::normalizeKeywords($tag->getContent()->title, array(), false);
+			}
+			else
+			{
+				$title = StringHelper::normalizeKeywords($tag->getContent()->title);
+			}
 
-			if ($normalizedTitle == $normalizedSearch)
+			if ($title == $search)
 			{
 				$exactMatches[] = 1;
 				$exactMatch = true;

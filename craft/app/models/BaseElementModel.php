@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.models
  * @since     1.0
  */
@@ -98,6 +98,11 @@ abstract class BaseElementModel extends BaseModel
 	 */
 	private $_siblingsCriteria;
 
+	/**
+	 * @var
+	 */
+	private $_eagerLoadedElements;
+
 	// Public Methods
 	// =========================================================================
 
@@ -110,7 +115,7 @@ abstract class BaseElementModel extends BaseModel
 	 */
 	public function __isset($name)
 	{
-		if ($name == 'title' || parent::__isset($name) || $this->getFieldByHandle($name))
+		if ($name == 'title' || $this->hasEagerLoadedElements($name) || parent::__isset($name) || $this->getFieldByHandle($name))
 		{
 			return true;
 		}
@@ -137,6 +142,12 @@ abstract class BaseElementModel extends BaseModel
 		}
 		catch (\Exception $e)
 		{
+			// Is $name a set of eager-loaded elements?
+			if ($this->hasEagerLoadedElements($name))
+			{
+				return $this->getEagerLoadedElements($name);
+			}
+
 			// Is $name a field handle?
 			if ($this->getFieldByHandle($name))
 			{
@@ -247,31 +258,8 @@ abstract class BaseElementModel extends BaseModel
 	{
 		if ($this->uri !== null)
 		{
-			$useLocaleSiteUrl = (
-				($this->locale != craft()->language) &&
-				($localeSiteUrl = craft()->config->getLocalized('siteUrl', $this->locale))
-			);
-
-			if ($useLocaleSiteUrl)
-			{
-				// Temporarily set Craft to use this element's locale's site URL
-				$siteUrl = craft()->getSiteUrl();
-				craft()->setSiteUrl($localeSiteUrl);
-			}
-
-			if ($this->uri == '__home__')
-			{
-				$url = UrlHelper::getSiteUrl();
-			}
-			else
-			{
-				$url = UrlHelper::getSiteUrl($this->uri);
-			}
-
-			if ($useLocaleSiteUrl)
-			{
-				craft()->setSiteUrl($siteUrl);
-			}
+			$path = ($this->uri == '__home__') ? '' : $this->uri;
+			$url = UrlHelper::getSiteUrl($path, null, null, $this->locale);
 
 			return $url;
 		}
@@ -322,23 +310,11 @@ abstract class BaseElementModel extends BaseModel
 	 *
 	 * @param int|null $size
 	 *
-	 * @return string|false
+	 * @return string|null
 	 */
 	public function getThumbUrl($size = null)
 	{
-		return false;
-	}
-
-	/**
-	 * Returns the URL to the element's icon image, if there is one.
-	 *
-	 * @param int|null $size
-	 *
-	 * @return string|false
-	 */
-	public function getIconUrl($size = null)
-	{
-		return false;
+		return null;
 	}
 
 	/**
@@ -507,6 +483,12 @@ abstract class BaseElementModel extends BaseModel
 	 */
 	public function getDescendants($dist = null)
 	{
+		// Eager-loaded?
+		if ($this->hasEagerLoadedElements('descendants'))
+		{
+			return $this->getEagerLoadedElements('descendants');
+		}
+
 		if (!isset($this->_descendantsCriteria))
 		{
 			$this->_descendantsCriteria = craft()->elements->getCriteria($this->elementType);
@@ -534,6 +516,12 @@ abstract class BaseElementModel extends BaseModel
 	 */
 	public function getChildren($field = null)
 	{
+		// Eager-loaded?
+		if ($this->hasEagerLoadedElements('children'))
+		{
+			return $this->getEagerLoadedElements('children');
+		}
+
 		// TODO: deprecated
 		// Maintain support for the deprecated relationship-focussed getChildren() function for the element types that
 		// were around before Craft 1.3
@@ -542,7 +530,7 @@ abstract class BaseElementModel extends BaseModel
 			in_array($this->elementType, array(ElementType::Asset, ElementType::GlobalSet, ElementType::Tag, ElementType::User))
 		)
 		{
-			craft()->deprecator->log('BaseElementModel::getChildren()_for_relations', 'Calling getChildren() to fetch an element’s target relations has been deprecated. Use the <a href="http://buildwithcraft.com/docs/relations#the-relatedTo-param">relatedTo</a> param instead.');
+			craft()->deprecator->log('BaseElementModel::getChildren()_for_relations', 'Calling getChildren() to fetch an element’s target relations has been deprecated. Use the <a href="http://craftcms.com/docs/relations#the-relatedTo-param">relatedTo</a> param instead.');
 			return $this->_getRelChildren($field);
 		}
 		else
@@ -759,7 +747,7 @@ abstract class BaseElementModel extends BaseModel
 	 */
 	public function offsetExists($offset)
 	{
-		if ($offset == 'title' || parent::offsetExists($offset) || $this->getFieldByHandle($offset))
+		if ($offset == 'title' || $this->hasEagerLoadedElements($offset) || parent::offsetExists($offset) || $this->getFieldByHandle($offset))
 		{
 			return true;
 		}
@@ -1060,19 +1048,59 @@ abstract class BaseElementModel extends BaseModel
 	 *
 	 * @param mixed $field
 	 *
-	 * @deprecated Deprecated in 1.3. Use the [relatedTo](http://buildwithcraft.com/docs/relations#the-relatedTo-param)
+	 * @deprecated Deprecated in 1.3. Use the [relatedTo](http://craftcms.com/docs/relations#the-relatedTo-param)
 	 *             param instead.
 	 *
 	 * @return ElementCriteriaModel
 	 */
 	public function getParents($field = null)
 	{
-		craft()->deprecator->log('BaseElementModel::getParents()', 'Calling getParents() to fetch an element’s source relations has been deprecated. Use the <a href="http://buildwithcraft.com/docs/relations#the-relatedTo-param">relatedTo</a> param instead.');
+		craft()->deprecator->log('BaseElementModel::getParents()', 'Calling getParents() to fetch an element’s source relations has been deprecated. Use the <a href="http://craftcms.com/docs/relations#the-relatedTo-param">relatedTo</a> param instead.');
 
 		$criteria = craft()->elements->getCriteria($this->elementType);
 		$criteria->parentOf    = $this;
 		$criteria->parentField = $field;
 		return $criteria;
+	}
+
+	/**
+	 * Returns whether elements have been eager-loaded with a given handle.
+	 *
+	 * @param string $handle The handle of the eager-loaded elements
+	 *
+	 * @return bool Whether elements have been eager-loaded with the given handle
+	 */
+	public function hasEagerLoadedElements($handle)
+	{
+		return isset($this->_eagerLoadedElements[$handle]);
+	}
+
+	/**
+	 * Returns some eager-loaded elements on a given handle.
+	 *
+	 * @param string $handle The handle of the eager-loaded elements
+	 *
+	 * @return BaseElementModel[]|null The eager-loaded elements, or null
+	 */
+	public function getEagerLoadedElements($handle)
+	{
+		if (isset($this->_eagerLoadedElements[$handle]))
+		{
+			return $this->_eagerLoadedElements[$handle];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sets some eager-loaded elements on a given handle.
+	 *
+	 * @param string             $handle   The handle to load the elements with in the future
+	 * @param BaseElementModel[] $elements The eager-loaded elements
+	 */
+	public function setEagerLoadedElements($handle, $elements)
+	{
+		$this->_eagerLoadedElements[$handle] = $elements;
 	}
 
 	// Protected Methods
@@ -1125,6 +1153,8 @@ abstract class BaseElementModel extends BaseModel
 			'lft'           => AttributeType::Number,
 			'rgt'           => AttributeType::Number,
 			'level'         => AttributeType::Number,
+
+			'searchScore'   => AttributeType::Number,
 		);
 	}
 

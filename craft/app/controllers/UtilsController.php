@@ -9,8 +9,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.controllers
  * @since     1.3
  */
@@ -54,8 +54,6 @@ class UtilsController extends BaseController
 	 */
 	public function actionPhpInfo()
 	{
-		craft()->config->maxPowerCaptain();
-
 		ob_start();
 		phpinfo(-1);
 		$phpInfo = ob_get_clean();
@@ -130,6 +128,15 @@ class UtilsController extends BaseController
 				else
 				{
 					$value = array_slice($row, 2);
+				}
+
+				if (
+					in_array($row[1], array('HTTP_COOKIE', 'Cookie', 'Set-Cookie', '_SERVER["HTTP_COOKIE"]')) ||
+					strpos($row[1], '_COOKIE[') !== false ||
+					strpos($row[1], '_REQUEST[') !== false
+				)
+				{
+					continue;
 				}
 
 				$phpInfo[$heading][$row[1]] = $value;
@@ -208,14 +215,16 @@ class UtilsController extends BaseController
 							$rowContents = explode("\n", $message);
 
 							// Find a few new markers
+							$filesStart = array_search('$_FILES=array (', $rowContents);
 							$cookieStart = array_search('$_COOKIE=array (', $rowContents);
 							$sessionStart = array_search('$_SESSION=array (', $rowContents);
 							$serverStart = array_search('$_SERVER=array (', $rowContents);
 							$postStart = array_search('$_POST=array (', $rowContents);
 
 							// If we found any of these, we know this is a devMode log.
-							if ($cookieStart || $sessionStart || $serverStart || $postStart)
+							if ($filesStart || $cookieStart || $sessionStart || $serverStart || $postStart)
 							{
+								$filesStart = $filesStart ? $filesStart + 1 : $filesStart;
 								$cookieStart = $cookieStart ? $cookieStart + 1 : $cookieStart;
 								$sessionStart = $sessionStart ? $sessionStart + 1 : $sessionStart;
 								$serverStart = $serverStart ? $serverStart + 1 : $serverStart;
@@ -223,20 +232,27 @@ class UtilsController extends BaseController
 
 								if (!$postStart)
 								{
-									if (!$cookieStart)
+									if (!$filesStart)
 									{
-										if (!$sessionStart)
+										if (!$cookieStart)
 										{
-											$start = $serverStart;
+											if (!$sessionStart)
+											{
+												$start = $serverStart;
+											}
+											else
+											{
+												$start = $sessionStart;
+											}
 										}
 										else
 										{
-											$start = $sessionStart;
+											$start = $cookieStart;
 										}
 									}
 									else
 									{
-										$start = $cookieStart;
+										$start = $filesStart;
 									}
 								}
 								else
@@ -290,7 +306,18 @@ class UtilsController extends BaseController
 									$logEntryModel->session = $this->_cleanUpArray(array_slice($rowContents, $sessionStart, $serverStart - $sessionStart - 3));
 								}
 
-								$logEntryModel->server = $this->_cleanUpArray(array_slice($rowContents, $serverStart, $profileStart - $serverStart - 1));
+								// Build out the $_SERVER array. Not exactly sure when this should end so just scan through the lines until the array has been closed.
+								$serverArray = array();
+								for ($line = $serverStart; isset($rowContents[$line]); $line++)
+								{
+									if (strncmp($rowContents[$line], ')', 1) === 0)
+									{
+										break;
+									}
+
+									$serverArray[] = $rowContents[$line];
+								}
+								$logEntryModel->server = $this->_cleanUpArray($serverArray);
 
 								// We can't just grab the profile info, we need to do some extra processing on it.
 								$tempProfile = array_slice($rowContents, $profileStart);
@@ -324,7 +351,7 @@ class UtilsController extends BaseController
 							}
 
 							// And save the log entry.
-							$logEntries[] = $logEntryModel;
+							array_unshift($logEntries, $logEntryModel);
 						}
 
 						if ($logEntries)

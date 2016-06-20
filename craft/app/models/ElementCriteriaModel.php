@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.models
  * @since     1.0
  */
@@ -171,7 +171,7 @@ class ElementCriteriaModel extends BaseModel implements \Countable
 	/**
 	 * Sets an attribute's value.
 	 *
-	 * In addition, will clears the cached values when a new attribute is set.
+	 * In addition, clears the cached values when a new attribute is set.
 	 *
 	 * @param string $name
 	 * @param mixed  $value
@@ -267,24 +267,27 @@ class ElementCriteriaModel extends BaseModel implements \Countable
 	 */
 	public function nth($offset)
 	{
-		if (!isset($this->_matchedElementsAtOffsets) || !array_key_exists($offset, $this->_matchedElementsAtOffsets))
+		// Do we already have it cached?
+		if (isset($this->_matchedElementsAtOffsets) && array_key_exists($offset, $this->_matchedElementsAtOffsets))
 		{
-			$criteria = new ElementCriteriaModel($this->getAttributes(), $this->_elementType);
-			$criteria->offset = $offset;
-			$criteria->limit = 1;
-			$elements = $criteria->find();
-
-			if ($elements)
-			{
-				$this->_matchedElementsAtOffsets[$offset] = $elements[0];
-			}
-			else
-			{
-				$this->_matchedElementsAtOffsets[$offset] = null;
-			}
+			return $this->_matchedElementsAtOffsets[$offset];
 		}
 
-		return $this->_matchedElementsAtOffsets[$offset];
+		// Temorarily change the offset/limit params, execute the query, and then change them back
+		$oldOffset = $this->offset;
+		$oldLimit = $this->limit;
+		$this->offset = $offset;
+		$this->limit = 1;
+		$elements = $this->find();
+		$this->offset = $oldOffset;
+		$this->limit = $oldLimit;
+
+		if ($elements)
+		{
+			return $elements[0];
+		}
+
+		return null;
 	}
 
 	/**
@@ -401,6 +404,21 @@ class ElementCriteriaModel extends BaseModel implements \Countable
 		}
 	}
 
+	// Events
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Fires an 'onPopulateElements' event.
+	 *
+	 * @param Event $event
+	 *
+	 * @return null
+	 */
+	public function onPopulateElements(Event $event)
+	{
+		$this->raiseEvent('onPopulateElements', $event);
+	}
+
 	// Deprecated Methods
 	// -------------------------------------------------------------------------
 
@@ -458,7 +476,7 @@ class ElementCriteriaModel extends BaseModel implements \Countable
 			'status'           => array(AttributeType::String, 'default' => BaseElementModel::ENABLED),
 			'title'            => AttributeType::String,
 			'uri'              => AttributeType::String,
-			'kind'             => AttributeType::Mixed,
+			'with'             => AttributeType::Mixed,
 
 			// TODO: Deprecated
 			'childField'       => AttributeType::String,

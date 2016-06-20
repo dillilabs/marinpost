@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.models
  * @since     1.0
  */
@@ -27,6 +27,11 @@ class EntryModel extends BaseElementModel
 	 * @var string
 	 */
 	protected $elementType = ElementType::Entry;
+
+	/**
+	 * @var UserModel
+	 */
+	private $_author;
 
 	// Public Methods
 	// =========================================================================
@@ -135,7 +140,7 @@ class EntryModel extends BaseElementModel
 				else
 				{
 					// Just return the first one
-					return $sectionEntryTypes[array_shift(array_keys($sectionEntryTypes))];
+					return ArrayHelper::getFirstValue($sectionEntryTypes);
 				}
 			}
 		}
@@ -148,10 +153,22 @@ class EntryModel extends BaseElementModel
 	 */
 	public function getAuthor()
 	{
-		if ($this->authorId)
+		if (!isset($this->_author) && $this->authorId)
 		{
-			return craft()->users->getUserById($this->authorId);
+			$this->_author = craft()->users->getUserById($this->authorId);
 		}
+
+		return $this->_author;
+	}
+
+	/**
+	 * Sets the entry's author.
+	 *
+	 * @param UserModel|null $author
+	 */
+	public function setAuthor(UserModel $author = null)
+	{
+		$this->_author = $author;
 	}
 
 	/**
@@ -222,6 +239,22 @@ class EntryModel extends BaseElementModel
 			}
 
 			return $url;
+		}
+	}
+
+	/**
+	 * Sets some eager-loaded elements on a given handle.
+	 *
+	 * @param string             $handle   The handle to load the elements with in the future
+	 * @param BaseElementModel[] $elements The eager-loaded elements
+	 */
+	public function setEagerLoadedElements($handle, $elements)
+	{
+		if ($handle == 'author') {
+			$author = isset($elements[0]) ? $elements[0] : null;
+			$this->setAuthor($author);
+		} else {
+			parent::setEagerLoadedElements($handle, $elements);
 		}
 	}
 

@@ -9,8 +9,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.controllers
  * @since     2.0
  */
@@ -56,7 +56,7 @@ class TasksController extends BaseController
 				// Attempt to close the connection if this is an Ajax request
 				if (craft()->request->isAjaxRequest())
 				{
-					craft()->request->close();
+					craft()->request->close('1');
 				}
 
 				// Start running tasks

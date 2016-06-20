@@ -54,8 +54,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.etc.web
  * @since     1.0
  */
@@ -114,13 +114,28 @@ class WebApp extends \CWebApplication
 		// Attach our Craft app behavior.
 		$this->attachBehavior('AppBehavior', new AppBehavior());
 
-		// Initialize Cache, HttpRequestService and LogRouter right away (order is important)
-		$this->getComponent('cache');
-		$this->getComponent('request');
+		// If there is a custom validationKey set, apply it here.
+		if ($validationKey = $this->config->get('validationKey'))
+		{
+			$this->security->setValidationKey($validationKey);
+
+			// Make sure any instances of Yii's CSecurityManager class are using the custom validation
+			// key as well
+			$this->getComponent('securityManager')->setValidationKey($validationKey);
+		}
 
 		// Attach our own custom Logger
 		Craft::setLogger(new Logger());
 
+		// If there is a custom appId set, apply it here.
+		if ($appId = $this->config->get('appId'))
+		{
+			$this->setId($appId);
+		}
+
+		// Initialize Cache, HttpRequestService and LogRouter right away (order is important)
+		$this->getComponent('cache');
+		$this->getComponent('request');
 		$this->getComponent('log');
 
 		// So we can try to translate Yii framework strings
@@ -128,12 +143,6 @@ class WebApp extends \CWebApplication
 
 		// Set our own custom runtime path.
 		$this->setRuntimePath($this->path->getRuntimePath());
-
-		// If there is a custom appId set, apply it here.
-		if ($appId = $this->config->get('appId'))
-		{
-			$this->setId($appId);
-		}
 
 		// Set the edition components
 		$this->_setEditionComponents();
@@ -202,16 +211,16 @@ class WebApp extends \CWebApplication
 		// Check if the app path has changed.  If so, run the requirements check again.
 		$this->_processRequirementsCheck();
 
-		// Makes sure that the uploaded files are compatible with the current DB schema
+		// Makes sure that the uploaded files are compatible with the current database schema
 		if (!$this->updates->isSchemaVersionCompatible())
 		{
 			if ($this->request->isCpRequest())
 			{
 				$version = $this->getVersion();
 				$build = $this->getBuild();
-				$url = "http://download.buildwithcraft.com/craft/{$version}/{$version}.{$build}/Craft-{$version}.{$build}.zip";
+				$url = "https://download.craftcdn.com/craft/{$version}/{$version}.{$build}/Craft-{$version}.{$build}.zip";
 
-				throw new HttpException(200, Craft::t('Craft does not support backtracking to this version. Please upload Craft {url} or later.', array(
+				throw new HttpException(200, Craft::t('Craft CMS does not support backtracking to this version. Please upload Craft CMS {url} or later.', array(
 					'url' => '['.$build.']('.$url.')',
 				)));
 			}
@@ -323,7 +332,7 @@ class WebApp extends \CWebApplication
 	 */
 	public function createController($route, $owner = null)
 	{
-		if (($route = trim($route, '/')) === '')
+		if ((array)$route === $route || ($route = trim($route, '/')) === '')
 		{
 			$route = $this->defaultController;
 		}
@@ -654,6 +663,28 @@ class WebApp extends \CWebApplication
 		$this->raiseEvent('onEditionChange', $event);
 	}
 
+	/**
+	 * @todo Remove for Craft 3.
+	 *
+	 * @param int    $code The level of the error raised.
+	 * @param string $message The error message.
+	 * @param string $file The filename that the error was raised in.
+	 * @param int    $line The line number the error was raised at.
+	 */
+	public function handleError($code, $message, $file, $line)
+	{
+		// PHP 7 turned some E_STRICT messages to E_WARNINGs. Code 2 is for all warnings
+		// and since there are no messages specific codes we have to parse the string for what
+		// we're looking for. Lame, but it works since all PHP error messages are always in English.
+		// https://stackoverflow.com/questions/11556375/is-there-a-way-to-localize-phps-error-output
+		if (version_compare(PHP_VERSION, '7', '>=') && $code === 2 && strpos($message, 'should be compatible with') !== false)
+		{
+			return;
+		}
+
+		parent::handleError($code, $message, $file, $line);
+	}
+
 	// Private Methods
 	// =========================================================================
 
@@ -868,7 +899,7 @@ class WebApp extends \CWebApplication
 			{
 				if ($this->updates->isBreakpointUpdateNeeded())
 				{
-					throw new HttpException(200, Craft::t('You need to be on at least Craft {url} before you can manually update to Craft {targetVersion} build {targetBuild}.', array(
+					throw new HttpException(200, Craft::t('You need to be on at least Craft CMS {url} before you can manually update to Craft CMS {targetVersion} build {targetBuild}.', array(
 						'url'           => '[build '.CRAFT_MIN_BUILD_REQUIRED.']('.CRAFT_MIN_BUILD_URL.')',
 						'targetVersion' => CRAFT_VERSION,
 						'targetBuild'   => CRAFT_BUILD
@@ -961,7 +992,10 @@ class WebApp extends \CWebApplication
 
 			// Special case because we hide the cpTrigger in emails.
 			$this->request->getPath() === craft()->config->get('actionTrigger').'/users/setpassword' ||
-			$this->request->getPath() === craft()->config->get('actionTrigger').'/users/verifyemail'
+			$this->request->getPath() === craft()->config->get('actionTrigger').'/users/verifyemail' ||
+			// Special case because this might be a request with a user that has "Access the site when the system is off"
+			// permissions and is in the process of logging in while the system is off.
+			$this->request->getActionSegments() == array('users', 'login')
 		)
 		{
 			if ($this->userSession->checkPermission('accessCpWhenSystemIsOff'))

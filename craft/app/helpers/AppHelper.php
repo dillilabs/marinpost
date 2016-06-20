@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.helpers
  * @since     1.0
  */
@@ -119,6 +119,47 @@ class AppHelper
 		$value = ini_get($var);
 
 		return static::_normalizePhpConfigValueToBytes($value);
+	}
+
+	/**
+	 * Normalizes a version number based on the same logic as PHP’s [version_compare](http://php.net/manual/en/function.version-compare.php) uses internally.
+	 *
+	 * @param string $version The version number
+	 *
+	 * @return string The normalized version number
+	 */
+	public static function normalizeVersionNumber($version)
+	{
+		// Periods before/after non-numeric sequences
+		$version = preg_replace('/[^0-9]+/', '.$0.', $version);
+
+		// Convert sequences of ./-/+'s into single periods
+		$version = preg_replace('/[\._\-\+]+/', '.', $version);
+
+		// Remove any leading/trailing periods
+		$version = trim($version, '.');
+
+		return $version;
+	}
+
+	/**
+	 * Returns the major version from a given version number.
+	 *
+	 * @param string $version The full version number
+	 *
+	 * @return string The major version
+	 */
+	public static function getMajorVersion($version)
+	{
+		$version = self::normalizeVersionNumber($version);
+		$parts = explode('.', $version, 2);
+
+		if (!empty($parts[0]))
+		{
+			return $parts[0];
+		}
+
+		return null;
 	}
 
 	// Deprecated Methods

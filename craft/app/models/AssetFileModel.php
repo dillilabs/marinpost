@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.models
  * @since     1.0
  */
@@ -30,6 +30,11 @@ class AssetFileModel extends BaseElementModel
 	 * @var string
 	 */
 	private $_transformSource = '';
+
+	/**
+	 * @var BaseAssetSourceType
+	 */
+	private $_sourceType = null;
 
 	// Public Methods
 	// =========================================================================
@@ -199,9 +204,9 @@ class AssetFileModel extends BaseElementModel
 	 */
 	public function getImg()
 	{
-		if ($this->kind == 'image')
+		if ($this->kind == 'image' && $this->getHasUrls())
 		{
-			$img = '<img src="'.$this->url.'" width="'.$this->getWidth().'" height="'.$this->getHeight().'" alt="'.HtmlHelper::encode($this->title).'" />';
+			$img = '<img src="'.$this->getUrl().'" width="'.$this->getWidth().'" height="'.$this->getHeight().'" alt="'.HtmlHelper::encode($this->title).'" />';
 			return TemplateHelper::getRaw($img);
 		}
 	}
@@ -225,7 +230,7 @@ class AssetFileModel extends BaseElementModel
 	/**
 	 * Sets the transform.
 	 *
-	 * @param mixed $transform
+	 * @param string|array|null $transform The transform that should be applied, if any. Can either be the handle of a named transform, or an array that defines the transform settings.
 	 *
 	 * @return AssetFileModel
 	 */
@@ -238,12 +243,17 @@ class AssetFileModel extends BaseElementModel
 	/**
 	 * Returns the URL to the file.
 	 *
-	 * @param string|null $transform
+	 * @param string|array|null $transform The transform that should be applied, if any. Can either be the handle of a named transform, or an array that defines the transform settings.
 	 *
 	 * @return mixed
 	 */
 	public function getUrl($transform = null)
 	{
+		if (!$this->getHasUrls())
+		{
+			return false;
+		}
+
 		if ($transform === null && isset($this->_transform))
 		{
 			$transform = $this->_transform;
@@ -257,7 +267,7 @@ class AssetFileModel extends BaseElementModel
 	 *
 	 * @param int $size
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getThumbUrl($size = 125)
 	{
@@ -269,26 +279,7 @@ class AssetFileModel extends BaseElementModel
 		}
 		else
 		{
-			return false;
-		}
-	}
-
-	/**
-	 * @inheritDoc BaseElementModel::getIconUrl()
-	 *
-	 * @param int $size
-	 *
-	 * @return string
-	 */
-	public function getIconUrl($size = 125)
-	{
-		if ($this->hasThumb())
-		{
-			return false;
-		}
-		else
-		{
-			return UrlHelper::getResourceUrl('icons/'.$this->getExtension().'/'.$size);
+			return UrlHelper::getResourceUrl('icons/'.$this->getExtension());
 		}
 	}
 
@@ -299,12 +290,13 @@ class AssetFileModel extends BaseElementModel
 	 */
 	public function hasThumb()
 	{
+
 		if ($this->kind == 'image')
 		{
 			if ($this->_getHeight() && $this->_getWidth())
 			{
 				// Gd doesn't process bitmaps
-				if (in_array($this->getExtension(), array('svg', 'bmp')) && craft()->images->isGd())
+				if (in_array($this->getExtension(), array('bmp')) && craft()->images->isGd())
 				{
 					return false;
 				}
@@ -337,7 +329,7 @@ class AssetFileModel extends BaseElementModel
 	/**
 	 * Get image height.
 	 *
-	 * @param string|null $transform The optional transform handle for which to get thumbnail.
+	 * @param string|array|null $transform The transform that should be applied, if any. Can either be the handle of a named transform, or an array that defines the transform settings.
 	 *
 	 * @return bool|float|mixed
 	 */
@@ -369,6 +361,31 @@ class AssetFileModel extends BaseElementModel
 		return $this->_getDimension('width', $transform);
 	}
 
+	/**
+	 * Returns the path to the asset, relative to the root of its asset source.
+	 *
+	 * @return string
+	 */
+	public function getPath()
+	{
+		return $this->folderPath.$this->filename;
+	}
+
+	/**
+	 * Return whether the Asset has a URL.
+	 *
+	 * @return bool
+	 */
+	public function getHasUrls()
+	{
+		if (!$this->_sourceType)
+		{
+			$this->_sourceType = craft()->assetSources->populateSourceType($this->getSource());
+		}
+
+		return $this->_sourceType->getHasUrls();
+	}
+
 	// Protected Methods
 	// =========================================================================
 
@@ -383,7 +400,7 @@ class AssetFileModel extends BaseElementModel
 			'sourceId'		=> AttributeType::Number,
 			'folderId'		=> AttributeType::Number,
 			'filename'		=> AttributeType::String,
-			'originalName'	=> AttributeType::String,
+			'folderPath'	=> AttributeType::String,
 			'kind'			=> AttributeType::String,
 			'width'			=> AttributeType::Number,
 			'height'		=> AttributeType::Number,
@@ -473,15 +490,17 @@ class AssetFileModel extends BaseElementModel
 		if (!$transform->width || !$transform->height)
 		{
 			// Fill in the blank
-			list($dimensions['width'], $dimensions['height']) = ImageHelper::calculateMissingDimension($dimensions['width'], $dimensions['height'], $this->_getWidth(), $this->_getHeight());
+			$dimensionArray = ImageHelper::calculateMissingDimension($dimensions['width'], $dimensions['height'], $this->_getWidth(), $this->_getHeight());
+			$dimensions['width'] = (int)$dimensionArray[0];
+			$dimensions['height'] = (int)$dimensionArray[1];
 		}
 
 		// Special case for 'fit' since that's the only one whose dimensions vary from the transform dimensions
 		if ($transform->mode == 'fit')
 		{
 			$factor = max($this->_getWidth() / $dimensions['width'], $this->_getHeight() / $dimensions['height']);
-			$dimensions['width']  = round($this->_getWidth() / $factor);
-			$dimensions['height'] = round($this->_getHeight() / $factor);
+			$dimensions['width']  = (int)round($this->_getWidth() / $factor);
+			$dimensions['height'] = (int)round($this->_getHeight() / $factor);
 		}
 
 		return $dimensions[$dimension];

@@ -8,8 +8,8 @@ craft()->requireEdition(Craft::Client);
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     1.0
  */
@@ -73,6 +73,9 @@ class EmailMessagesService extends BaseApplicationComponent
 				$message->subject  = $this->_translateMessageString($key, 'subject', $localeId);
 				$message->body     = $this->_translateMessageString($key, 'body', $localeId);
 			}
+
+			// Not possible to customize the heading
+			$message->heading = $this->_translateMessageString($key, 'heading', $localeId);
 
 			$messages[] = $message;
 		}

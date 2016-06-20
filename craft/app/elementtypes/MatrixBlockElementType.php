@@ -7,8 +7,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.elementtypes
  * @since     1.3
  */
@@ -176,5 +176,49 @@ class MatrixBlockElementType extends BaseElementType
 	public function populateElementModel($row)
 	{
 		return MatrixBlockModel::populateModel($row);
+	}
+
+	/**
+	 * @inheritDoc IElementType::getEagerLoadingMap()
+	 *
+	 * @param BaseElementModel[]  $sourceElements
+	 * @param string $handle
+	 *
+	 * @return array|false
+	 */
+	public function getEagerLoadingMap($sourceElements, $handle)
+	{
+		// $handle *must* be set as "blockTypeHandle:fieldHandle" so we know _which_ myRelationalField to resolve to
+		$handleParts = explode(':', $handle);
+
+		if (count($handleParts) != 2)
+		{
+			return false;
+		}
+
+		list($blockTypeHandle, $fieldHandle) = $handleParts;
+
+		// Get the block type
+		$matrixFieldId = $sourceElements[0]->fieldId;
+		$blockTypes = craft()->matrix->getBlockTypesByFieldId($matrixFieldId, 'handle');
+
+		if (!isset($blockTypes[$blockTypeHandle]))
+		{
+			// Not a valid block type handle (assuming all $sourceElements are blocks from the same Matrix field)
+			return false;
+		}
+
+		$blockType = $blockTypes[$blockTypeHandle];
+
+		// Set the field context
+		$contentService = craft()->content;
+		$originalFieldContext = $contentService->fieldContext;
+		$contentService->fieldContext = 'matrixBlockType:'.$blockType->id;
+
+		$map = parent::getEagerLoadingMap($sourceElements, $fieldHandle);
+
+		$contentService->fieldContext = $originalFieldContext;
+
+		return $map;
 	}
 }

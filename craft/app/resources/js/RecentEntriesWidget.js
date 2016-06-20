@@ -1,8 +1,8 @@
 /**
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.resources
  */
 
@@ -27,6 +27,8 @@ Craft.RecentEntriesWidget = Garnish.Base.extend(
 		this.$tbody = this.$container.find('tbody:first');
 		this.hasEntries = !!this.$tbody.length;
 
+		this.$widget.data('widget').on('destroy', $.proxy(this, 'destroy'));
+
 		Craft.RecentEntriesWidget.instances.push(this);
 	},
 
@@ -48,8 +50,9 @@ Craft.RecentEntriesWidget = Garnish.Base.extend(
 				'<td>' +
 					'<a href="'+entry.url+'">'+entry.title+'</a> ' +
 					'<span class="light">' +
-						entry.postDate +
-						(Craft.edition >= Craft.Client ? ', '+entry.username : '') +
+						(entry.dateCreated ? Craft.formatDate(entry.dateCreated) : '') +
+						(entry.dateCreated && entry.username && Craft.edition >= Craft.Client ? ', ' : '') +
+						(entry.username && Craft.edition >= Craft.Client ? entry.username : '') +
 					'</span>' +
 				'</td>' +
 			'</tr>'
@@ -70,6 +73,12 @@ Craft.RecentEntriesWidget = Garnish.Base.extend(
 		}
 
 		this.$container.velocity(props);
+	},
+
+	destroy: function()
+	{
+		Craft.RecentEntriesWidget.instances.splice($.inArray(this, Craft.RecentEntriesWidget.instances), 1);
+		this.base();
 	}
 }, {
 	instances: []

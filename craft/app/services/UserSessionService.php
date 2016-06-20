@@ -9,8 +9,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     1.0
  */
@@ -23,6 +23,7 @@ class UserSessionService extends \CWebUser
 	const FLASH_COUNTERS   = 'Craft.UserSessionService.flashcounters';
 	const AUTH_ACCESS_VAR  = '__auth_access';
 	const USER_IMPERSONATE_KEY = 'Craft.UserSessionService.prevImpersonateUserId';
+	const ELEVATED_SESSION_TIMEOUT_VAR = '__elevated_timeout';
 
 	// Properties
 	// =========================================================================
@@ -105,46 +106,12 @@ class UserSessionService extends \CWebUser
 		{
 			if (!isset($this->_userModel))
 			{
-				$userRow = $this->_getUserRow($this->getId());
+				$userRow = $this->_getValidUserRow($this->getId());
 
 				// Only return active and pending users.
 				if ($userRow)
 				{
-					$validUser = false;
-
-					// TODO: Remove after next breakpoint.
-					// Keeping extra logic here so the upgrade to 2.3 won't freak.
-					// First the pre 2.3 check.
-					if ((isset($userRow['status']) && $userRow['status'] == UserStatus::Active) || (isset($userRow['status']) && $userRow['status'] == UserStatus::Pending))
-					{
-						$validUser = true;
-					}
-
-					// Now the 2.3 check. If all 3 of these are false, then the user is active or pending.
-					if ((isset($userRow['suspended']) && isset($userRow['archived']) && isset($userRow['locked'])) && (!$userRow['suspended'] && !$userRow['archived'] && !$userRow['locked']))
-					{
-						$validUser = true;
-					}
-
-					// One last attempt.
-					if (!$validUser)
-					{
-						// If the previous user was an admin and we're impersonating the current user.
-						if ($previousUserId = craft()->httpSession->get(static::USER_IMPERSONATE_KEY))
-						{
-							$previousUser = craft()->users->getUserById($previousUserId);
-
-							if ($previousUser && $previousUser->admin)
-							{
-								$validUser = true;
-							}
-						}
-					}
-
-					if ($validUser)
-					{
-						$this->_userModel = UserModel::populateModel($userRow);
-					}
+					$this->_userModel = UserModel::populateModel($userRow);
 				}
 				else
 				{
@@ -373,7 +340,7 @@ class UserSessionService extends \CWebUser
 	 */
 	public function isGuest()
 	{
-		$user = $this->_getUserRow($this->getId());
+		$user = $this->_getValidUserRow($this->getId());
 		return empty($user);
 	}
 
@@ -509,9 +476,9 @@ class UserSessionService extends \CWebUser
 	 * Logs a user in.
 	 *
 	 * If $rememberMe is set to `true`, the user will be logged in for the duration specified by the
-	 * [rememberedUserSessionDuration](http://buildwithcraft.com/docs/config-settings#rememberedUserSessionDuration)
+	 * [rememberedUserSessionDuration](http://craftcms.com/docs/config-settings#rememberedUserSessionDuration)
 	 * config setting. Otherwise it will last for the duration specified by the
-	 * [userSessionDuration](http://buildwithcraft.com/docs/config-settings#userSessionDuration)
+	 * [userSessionDuration](http://craftcms.com/docs/config-settings#userSessionDuration)
 	 * config setting.
 	 *
 	 * @param string $username   The user’s username.
@@ -558,7 +525,7 @@ class UserSessionService extends \CWebUser
 	 * Logs a user in for solely by their user ID.
 	 *
 	 * This method doesn’t have any sort of credential verification, so use it at your own peril.
-     *
+	 *
 	 * @param int  $userId            The user ID of the person to log in.
 	 * @param bool $rememberMe        Whether the user should be remembered.
 	 * @param bool $setUsernameCookie Whether to set the username cookie or not.
@@ -791,6 +758,11 @@ class UserSessionService extends \CWebUser
 			case UserIdentity::ERROR_NO_CP_OFFLINE_ACCESS:
 			{
 				$error = Craft::t('You cannot access the CP while the system is offline with that account.');
+				break;
+			}
+			case UserIdentity::ERROR_NO_SITE_OFFLINE_ACCESS:
+			{
+				$error = Craft::t('You cannot access the site while the system is offline with that account.');
 				break;
 			}
 			case UserIdentity::ERROR_PENDING_VERIFICATION:
@@ -1149,6 +1121,74 @@ class UserSessionService extends \CWebUser
 		return parent::getFlashes($delete);
 	}
 
+	/**
+	 * Returns how many seconds are left in the current elevated user session.
+	 *
+	 * @return int The number of seconds left in the current elevated user session
+	 */
+	public function getElevatedSessionTimeout()
+	{
+		// Are they logged in?
+		if (!$this->getIsGuest())
+		{
+			$expires = $this->getState(static::ELEVATED_SESSION_TIMEOUT_VAR);
+
+			if ($expires !== null)
+			{
+				$currentTime = time();
+
+				if ($expires > $currentTime)
+				{
+					return $expires - $currentTime;
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Returns whether the user current has an elevated session.
+	 *
+	 * @return bool Whether the user has an elevated session
+	 */
+	public function hasElevatedSession()
+	{
+		return ($this->getElevatedSessionTimeout() != 0);
+	}
+
+	/**
+	 * Starts an elevated user session for the current user.
+	 *
+	 * @param string $password the current user’s password
+	 *
+	 * @return bool Whether the password was valid, and the user session has been elevated
+	 */
+	public function startElevatedSession($password)
+	{
+		// Get the current user
+		$user = $this->getUser();
+
+		if (!$user)
+		{
+			return false;
+		}
+
+		// Validate the password
+		$passwordModel = new PasswordModel();
+		$passwordModel->password = $password;
+
+		if ($passwordModel->validate() && craft()->users->validatePassword($user->password, $password))
+		{
+			// Set the elevated session expiration date
+			$this->setState(self::ELEVATED_SESSION_TIMEOUT_VAR, time() + craft()->config->getElevatedSessionDuration());
+
+			return true;
+		}
+
+		return false;
+	}
+
 	// Events
 	// -------------------------------------------------------------------------
 
@@ -1203,7 +1243,7 @@ class UserSessionService extends \CWebUser
 	 * Updates the authentication status according to {@link authTimeout}.
 	 *
 	 * Based on the parts of {@link \CWebUser::updateAuthStatus()} that are relevant to Craft, but this version also
-	 * enforces the [requireUserAgentAndIpForSession](http://buildwithcraft.com/docs/config-settings#requireUserAgentAndIpForSession)
+	 * enforces the [requireUserAgentAndIpForSession](http://craftcms.com/docs/config-settings#requireUserAgentAndIpForSession)
 	 * config setting, and it won't update the timeout state if the 'dontExtendSession' param is set.
 	 *
 	 * @return null
@@ -1249,8 +1289,8 @@ class UserSessionService extends \CWebUser
 	 * Renews the user’s identity cookie.
 	 *
 	 * This function extends the identity cookie's expiration time based on either the
-	 * [userSessionDuration](http://buildwithcraft.com/docs/config-settings#userSessionDuration) or
-	 * [rememberedUserSessionDuration](http://buildwithcraft.com/docs/config-settings#rememberedUserSessionDuration)
+	 * [userSessionDuration](http://craftcms.com/docs/config-settings#userSessionDuration) or
+	 * [rememberedUserSessionDuration](http://craftcms.com/docs/config-settings#rememberedUserSessionDuration)
 	 * config setting, depending on whether Remember Me was checked when they logged in.
 	 *
 	 * @return null
@@ -1387,6 +1427,9 @@ class UserSessionService extends \CWebUser
 		{
 			$this->setState(static::AUTH_TIMEOUT_VAR, time()+$this->authTimeout);
 		}
+
+		// Clear out the elevated session, if there is one
+		$this->setState(self::ELEVATED_SESSION_TIMEOUT_VAR, null);
 	}
 
 	/**
@@ -1476,11 +1519,11 @@ class UserSessionService extends \CWebUser
 	private function _findSessionToken($loginName, $uid)
 	{
 		$result = craft()->db->createCommand()
-		    ->select('s.token, s.userId')
-		    ->from('sessions s')
-		    ->join('users u', 's.userId = u.id')
-		    ->where('(u.username=:username OR u.email=:email) AND s.uid=:uid', array(':username' => $loginName, ':email' => $loginName, 'uid' => $uid))
-		    ->queryRow();
+			->select('s.token, s.userId')
+			->from('sessions s')
+			->join('users u', 's.userId = u.id')
+			->where('(u.username=:username OR u.email=:email) AND s.uid=:uid', array(':username' => $loginName, ':email' => $loginName, 'uid' => $uid))
+			->queryRow();
 
 		if (is_array($result) && count($result) > 0)
 		{
@@ -1522,17 +1565,43 @@ class UserSessionService extends \CWebUser
 	 *
 	 * @return int
 	 */
-	private function _getUserRow($id)
+	private function _getValidUserRow($id)
 	{
 		if (!isset($this->_userRow))
 		{
 			if ($id)
 			{
-				$userRow = craft()->db->createCommand()
-				    ->select('*')
-				    ->from('users')
-				    ->where('id=:id', array(':id' => $id))
-				    ->queryRow();
+				$impersonate = false;
+
+				if ($previousUserId = craft()->httpSession->get(static::USER_IMPERSONATE_KEY))
+				{
+					$previousUser = craft()->users->getUserById($previousUserId);
+
+					if ($previousUser && $previousUser->admin)
+					{
+						$impersonate = true;
+					}
+				}
+
+				$query = craft()->db->createCommand()
+					->select('*')
+					->from('users')
+					->where('id=:id', array(':id' => $id));
+
+				if (!$impersonate)
+				{
+					// @todo Remove after next breakpoint release. 2615 is the first 2.3 release.
+					if (craft()->getBuild() < 2615)
+					{
+						$query->andWhere(array('or', 'status="active"', 'status="pending"'));
+					}
+					else
+					{
+						$query->andWhere(array('and', 'suspended=0', 'archived=0', 'locked=0'));
+					}
+				}
+
+				$userRow = $query->queryRow();
 
 				if ($userRow)
 				{

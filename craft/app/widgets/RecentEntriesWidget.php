@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.widgets
  * @since     1.0
  */
@@ -53,20 +53,17 @@ class RecentEntriesWidget extends BaseWidget
 	 */
 	public function getTitle()
 	{
-		if (craft()->getEdition() >= Craft::Client)
+		$sectionId = $this->getSettings()->section;
+
+		if (is_numeric($sectionId))
 		{
-			$sectionId = $this->getSettings()->section;
+			$section = craft()->sections->getSectionById($sectionId);
 
-			if (is_numeric($sectionId))
+			if ($section)
 			{
-				$section = craft()->sections->getSectionById($sectionId);
-
-				if ($section)
-				{
-					$title = Craft::t('Recent {section} Entries', array(
-						'section' => Craft::t($section->name)
-					));
-				}
+				$title = Craft::t('Recent {section} Entries', array(
+					'section' => Craft::t($section->name)
+				));
 			}
 		}
 
@@ -92,6 +89,16 @@ class RecentEntriesWidget extends BaseWidget
 	}
 
 	/**
+	 * @inheritDoc IWidget::getIconPath()
+	 *
+	 * @return string
+	 */
+	public function getIconPath()
+	{
+		return craft()->path->getResourcesPath().'images/widgets/recent-entries.svg';
+	}
+
+	/**
 	 * @inheritDoc IWidget::getBodyHtml()
 	 *
 	 * @return string|false
@@ -100,14 +107,11 @@ class RecentEntriesWidget extends BaseWidget
 	{
 		$params = array();
 
-		if (craft()->getEdition() >= Craft::Client)
-		{
-			$sectionId = $this->getSettings()->section;
+		$sectionId = $this->getSettings()->section;
 
-			if (is_numeric($sectionId))
-			{
-				$params['sectionId'] = (int)$sectionId;
-			}
+		if (is_numeric($sectionId))
+		{
+			$params['sectionId'] = (int)$sectionId;
 		}
 
 		$js = 'new Craft.RecentEntriesWidget('.$this->model->id.', '.JsonHelper::encode($params).');';
@@ -172,13 +176,20 @@ class RecentEntriesWidget extends BaseWidget
 			return array();
 		}
 
+		$limit = $this->getSettings()->limit;
+
+		if (!$limit)
+		{
+			$limit = 100;
+		}
+
 		$criteria = craft()->elements->getCriteria(ElementType::Entry);
 		$criteria->status = null;
 		$criteria->localeEnabled = null;
 		$criteria->locale = $targetLocale;
 		$criteria->sectionId = $targetSectionId;
 		$criteria->editable = true;
-		$criteria->limit = $this->getSettings()->limit;
+		$criteria->limit = $limit;
 		$criteria->order = 'elements.dateCreated desc';
 
 		return $criteria->find();

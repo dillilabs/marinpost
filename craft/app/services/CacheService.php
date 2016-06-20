@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     2.0
  */
@@ -113,8 +113,9 @@ class CacheService extends BaseApplicationComponent
 	 *
 	 * @param string            $id         The key identifying the value to be cached.
 	 * @param mixed             $value      The value to be cached.
-	 * @param int $expire                   The number of seconds in which the cached value will expire. 0 means never
-	 *                                      expire.
+	 * @param int $expire                   The number of seconds in which the cached value will expire. Pass `0` to
+	 *                                      have the value never expire, and `null` to use the ‘cacheDuration’ config setting.
+	 *                                      (Default value is `null`.)
 	 * @param \ICacheDependency $dependency Dependency of the cached item. If the dependency changes, the item is
 	 *                                      labeled invalid.
 	 *

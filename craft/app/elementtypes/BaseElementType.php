@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.elementtypes
  * @since     1.0
  */
@@ -202,7 +202,7 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 
 			if ($sortableAttributes)
 			{
-				$order = (!empty($viewState['order']) && isset($sortableAttributes[$viewState['order']])) ? $viewState['order'] : array_shift(array_keys($sortableAttributes));
+				$order = (!empty($viewState['order']) && isset($sortableAttributes[$viewState['order']])) ? $viewState['order'] : ArrayHelper::getFirstKey($sortableAttributes);
 				$sort  = (!empty($viewState['sort']) && in_array($viewState['sort'], array('asc', 'desc'))) ? $viewState['sort'] : 'asc';
 
 				// Combine them, accounting for the possibility that $order could contain multiple values,
@@ -222,7 +222,13 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 			case 'table':
 			{
 				// Get the table columns
-				$variables['attributes'] = $this->defineTableAttributes($sourceKey);
+				$variables['attributes'] = $this->getTableAttributesForSource($sourceKey);
+
+				// Give each attribute a chance to modify the criteria
+				foreach ($variables['attributes'] as $attribute)
+				{
+					$this->prepElementCriteriaForTableAttribute($criteria, $attribute[0]);
+				}
 
 				break;
 			}
@@ -237,23 +243,57 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 	/**
 	 * @inheritDoc IElementType::defineSortableAttributes()
 	 *
-	 * @retrun array
+	 * @return array
 	 */
 	public function defineSortableAttributes()
 	{
-		return $this->defineTableAttributes();
+		$tableAttributes = craft()->elementIndexes->getAvailableTableAttributes($this->getClassHandle());
+		$sortableAttributes = array();
+
+		foreach ($tableAttributes as $key => $labelInfo)
+		{
+			$sortableAttributes[$key] = $labelInfo['label'];
+		}
+
+		return $sortableAttributes;
 	}
 
 	/**
-	 * @inheritDoc IElementType::defineTableAttributes()
+	 * @inheritDoc IElementType::defineAvailableTableAttributes()
+	 *
+	 * @return array
+	 */
+	public function defineAvailableTableAttributes()
+	{
+		if (method_exists($this, 'defineTableAttributes'))
+		{
+			// Classic.
+			return $this->defineTableAttributes();
+		}
+
+		return array();
+	}
+
+	/**
+	 * @inheritDoc IElementType::getDefaultTableAttributes()
 	 *
 	 * @param string|null $source
 	 *
 	 * @return array
 	 */
-	public function defineTableAttributes($source = null)
+	public function getDefaultTableAttributes($source = null)
 	{
-		return array();
+		if (method_exists($this, 'defineTableAttributes'))
+		{
+			// Classic.
+			$availableTableAttributes = $this->defineTableAttributes($source);
+		}
+		else
+		{
+			$availableTableAttributes = $this->defineAvailableTableAttributes();
+		}
+
+		return array_keys($availableTableAttributes);
 	}
 
 	/**
@@ -268,6 +308,20 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 	{
 		switch ($attribute)
 		{
+			case 'link':
+			{
+				$url = $element->getUrl();
+
+				if ($url)
+				{
+					return '<a href="'.$url.'" target="_blank" data-icon="world" title="'.Craft::t('Visit webpage').'"></a>';
+				}
+				else
+				{
+					return '';
+				}
+			}
+
 			case 'uri':
 			{
 				$url = $element->getUrl();
@@ -297,7 +351,7 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 						$value = str_replace($find, $replace, $value);
 					}
 
-					return '<a href="'.$url.'" target="_blank" class="go"><span dir="ltr">'.$value.'</span></a>';
+					return '<a href="'.$url.'" target="_blank" class="go" title="'.Craft::t('Visit webpage').'"><span dir="ltr">'.$value.'</span></a>';
 				}
 				else
 				{
@@ -307,6 +361,37 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 
 			default:
 			{
+				// Is this a custom field?
+				if (preg_match('/^field:(\d+)$/', $attribute, $matches))
+				{
+					$fieldId = $matches[1];
+					$field = craft()->fields->getFieldById($fieldId);
+
+					if ($field)
+					{
+						$fieldType = $field->getFieldType();
+
+						if ($fieldType && $fieldType instanceof IPreviewableFieldType)
+						{
+							// Was this field value eager-loaded?
+							if ($fieldType instanceof IEagerLoadingFieldType && $element->hasEagerLoadedElements($field->handle))
+							{
+								$value = $element->getEagerLoadedElements($field->handle);
+							}
+							else
+							{
+								$value = $element->getFieldValue($field->handle);
+							}
+
+							$fieldType->setElement($element);
+
+							return $fieldType->getTableAttributeHtml($value);
+						}
+					}
+
+					return '';
+				}
+
 				$value = $element->$attribute;
 
 				if ($value instanceof DateTime)
@@ -432,6 +517,97 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 	}
 
 	/**
+	 * @inheritDoc IElementType::getEagerLoadingMap()
+	 *
+	 * @param BaseElementModel[]  $sourceElements
+	 * @param string $handle
+	 *
+	 * @return array|false
+	 */
+	public function getEagerLoadingMap($sourceElements, $handle)
+	{
+		// Eager-loading descendants or direct children?
+		if ($handle == 'descendants' || $handle == 'children')
+		{
+			// Get the source element IDs
+			$sourceElementIds = array();
+
+			foreach ($sourceElements as $sourceElement)
+			{
+				$sourceElementIds[] = $sourceElement->id;
+			}
+
+			// Get the structure data for these elements
+			// @todo: case sql is MySQL-specific
+			$selectSql = 'structureId, elementId, lft, rgt';
+
+			if ($handle == 'children')
+			{
+				$selectSql .= ', level';
+			}
+
+			$structureData = craft()->db->createCommand()
+				->select($selectSql)
+				->from('structureelements')
+				->where(array('in', 'elementId', $sourceElementIds))
+				->queryAll();
+
+			$conditions = array('or');
+			$params = array();
+			$sourceSelectSql = '(CASE';
+
+			foreach ($structureData as $i => $elementStructureData)
+			{
+				$thisElementConditions = array('and', 'structureId=:structureId'.$i, 'lft>:lft'.$i, 'rgt<:rgt'.$i);
+
+				if ($handle == 'children')
+				{
+					$thisElementConditions[] = 'level=:level'.$i;
+					$params[':level'.$i] = $elementStructureData['level'] + 1;
+				}
+
+				$conditions[] = $thisElementConditions;
+				$sourceSelectSql .= " WHEN structureId=:structureId{$i} AND lft>:lft{$i} AND rgt<:rgt{$i} THEN :sourceId{$i}";
+				$params[':structureId'.$i] = $elementStructureData['structureId'];
+				$params[':lft'.$i] = $elementStructureData['lft'];
+				$params[':rgt'.$i] = $elementStructureData['rgt'];
+				$params[':sourceId'.$i] = $elementStructureData['elementId'];
+			}
+
+			$sourceSelectSql .= ' END) as source';
+
+			// Return any child elements
+			$map = craft()->db->createCommand()
+				->select($sourceSelectSql.', elementId as target')
+				->from('structureelements')
+				->where($conditions, $params)
+				->order('structureId, lft')
+				->queryAll();
+
+			return array(
+				'elementType' => $this->getClassHandle(),
+				'map' => $map
+			);
+		}
+
+		// Is $handle a custom field handle?
+		// (Leave it up to the extended class to set the field context, if it shouldn't be 'global')
+		$field = craft()->fields->getFieldByHandle($handle);
+
+		if ($field)
+		{
+			$fieldType = $field->getFieldType();
+
+			if ($fieldType && $fieldType instanceof IEagerLoadingFieldType)
+			{
+				return $fieldType->getEagerLoadingMap($sourceElements);
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @inheritDoc IElementType::getEditorHtml()
 	 *
 	 * @param BaseElementModel $element
@@ -502,6 +678,51 @@ abstract class BaseElementType extends BaseComponentType implements IElementType
 	 */
 	public function onAfterMoveElementInStructure(BaseElementModel $element, $structureId)
 	{
+	}
+
+	// Protected Methods
+	// =========================================================================
+
+	/**
+	 * Returns the attributes that should be shown for the given source.
+	 *
+	 * @param string $sourceKey The source key
+	 *
+	 * @return array The attributes that should be shown for the given source
+	 */
+	protected function getTableAttributesForSource($sourceKey)
+	{
+		return craft()->elementIndexes->getTableAttributes($this->getClassHandle(), $sourceKey);
+	}
+
+	/**
+	 * Preps the element criteria for a given table attribute
+	 *
+	 * @param ElementCriteriaModel $criteria
+	 * @param string               $attribute
+	 *
+	 * @return void
+	 */
+	protected function prepElementCriteriaForTableAttribute(ElementCriteriaModel $criteria, $attribute)
+	{
+		// Is this a custom field?
+		if (preg_match('/^field:(\d+)$/', $attribute, $matches))
+		{
+			$fieldId = $matches[1];
+			$field = craft()->fields->getFieldById($fieldId);
+
+			if ($field)
+			{
+				$fieldType = $field->getFieldType();
+
+				if ($fieldType && $fieldType instanceof IEagerLoadingFieldType)
+				{
+					$with = $criteria->with ?: array();
+					$with[] = $field->handle;
+					$criteria->with = $with;
+				}
+			}
+		}
 	}
 
 	// Private Methods

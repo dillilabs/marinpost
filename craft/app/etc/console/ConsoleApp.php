@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.etc.console
  * @since     1.0
  */
@@ -53,6 +53,9 @@ class ConsoleApp extends \CConsoleApplication
 		// Attach our Craft app behavior.
 		$this->attachBehavior('AppBehavior', new AppBehavior());
 
+		// Attach our own custom Logger
+		Craft::setLogger(new Logger());
+
 		// Initialize Cache and LogRouter right away (order is important)
 		$this->getComponent('cache');
 		$this->getComponent('log');
@@ -62,9 +65,6 @@ class ConsoleApp extends \CConsoleApplication
 
 		// Set our own custom runtime path.
 		$this->setRuntimePath(craft()->path->getRuntimePath());
-
-		// Attach our own custom Logger
-		Craft::setLogger(new Logger());
 
 		// No need for these.
 		craft()->log->removeRoute('WebLogRoute');
@@ -116,6 +116,17 @@ class ConsoleApp extends \CConsoleApplication
 	}
 
 	/**
+	 * Returns the system time zone.  Note that this method cannot be in {@link AppBehavior}, because Yii will check
+	 * {@link \CApplication::getTimeZone()} instead.
+	 *
+	 * @return string
+	 */
+	public function getTimeZone()
+	{
+		return $this->asa('AppBehavior')->getTimezone();
+	}
+
+	/**
 	 * Attaches an event handler, or remembers it for later if the component has not been initialized yet.
 	 *
 	 * The event should be identified in a `serviceHandle.eventName` format. For example, if you want to add an event
@@ -151,7 +162,7 @@ class ConsoleApp extends \CConsoleApplication
 
 		list($componentId, $eventName) = explode('.', $event, 2);
 
-		$component = $this->getComponent($componentId);
+		$component = $this->getComponent($componentId, false);
 
 		// Normalize the event name
 		if (strncmp($eventName, 'on', 2) !== 0)
@@ -159,7 +170,14 @@ class ConsoleApp extends \CConsoleApplication
 			$eventName = 'on'.ucfirst($eventName);
 		}
 
-		$component->$eventName = $handler;
+		if ($component)
+		{
+			$component->$eventName = $handler;
+		}
+		else
+		{
+			$this->_pendingEvents[$componentId][$eventName][] = $handler;
+		}
 	}
 
 	/**
@@ -217,6 +235,28 @@ class ConsoleApp extends \CConsoleApplication
 		}
 
 		parent::setComponents($components, $merge);
+	}
+
+	/**
+	 * @todo Remove for Craft 3.
+	 *
+	 * @param int    $code The level of the error raised.
+	 * @param string $message The error message.
+	 * @param string $file The filename that the error was raised in.
+	 * @param int    $line The line number the error was raised at.
+	 */
+	public function handleError($code, $message, $file, $line)
+	{
+		// PHP 7 turned some E_STRICT messages to E_WARNINGs. Code 2 is for all warnings
+		// and since there are no messages specific codes we have to parse the string for what
+		// we're looking for. Lame, but it works since all PHP error messages are always in English.
+		// https://stackoverflow.com/questions/11556375/is-there-a-way-to-localize-phps-error-output
+		if (version_compare(PHP_VERSION, '7', '>=') && $code === 2 && strpos($message, 'should be compatible with') !== false)
+		{
+			return;
+		}
+
+		parent::handleError($code, $message, $file, $line);
 	}
 
 	// Protected Methods

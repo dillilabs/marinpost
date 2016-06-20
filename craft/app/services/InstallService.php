@@ -6,8 +6,8 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.services
  * @since     1.0
  */
@@ -38,7 +38,7 @@ class InstallService extends BaseApplicationComponent
 
 		if (craft()->isInstalled())
 		{
-			throw new Exception(Craft::t('Craft is already installed.'));
+			throw new Exception(Craft::t('Craft CMS is already installed.'));
 		}
 
 		// Set the language to the desired locale

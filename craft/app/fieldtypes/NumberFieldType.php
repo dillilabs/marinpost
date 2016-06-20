@@ -6,12 +6,12 @@ namespace Craft;
  *
  * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
  * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://buildwithcraft.com/license Craft License Agreement
- * @see       http://buildwithcraft.com
+ * @license   http://craftcms.com/license Craft License Agreement
+ * @see       http://craftcms.com
  * @package   craft.app.fieldtypes
  * @since     1.0
  */
-class NumberFieldType extends BaseFieldType
+class NumberFieldType extends BaseFieldType implements IPreviewableFieldType
 {
 	// Public Methods
 	// =========================================================================
@@ -96,16 +96,12 @@ class NumberFieldType extends BaseFieldType
 	// =========================================================================
 
 	/**
-	 * @inheritDoc BaseSavableComponentType::defineSettings()
+	 * @inheritDoc BaseSavableComponentType::getSettingsModel()
 	 *
-	 * @return array
+	 * @return BaseModel
 	 */
-	protected function defineSettings()
+	protected function getSettingsModel()
 	{
-		return array(
-			'min'      => array(AttributeType::Number, 'default' => 0),
-			'max'      => array(AttributeType::Number, 'compare' => '>= min'),
-			'decimals' => array(AttributeType::Number, 'default' => 0),
-		);
+		return new NumberFieldTypeSettingsModel();
 	}
 }
