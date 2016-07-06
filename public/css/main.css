@@ -214,6 +214,15 @@ fieldset > ul,
     font-size: 1.05em;
 }
 
+/* These also are defined more generally above... */
+.help a, .help a:visited {
+    color: #004eff;
+    text-decoration: none;
+}
+.help a:hover {
+    text-decoration: underline;
+}
+
 /* * * * * * * * * * * * * * * * * * * * *
         HEADER
 * * * * * * * * * * * * * * * * * * * * * */
