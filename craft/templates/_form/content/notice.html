@@ -5,7 +5,7 @@
 
     <div class="counter" style="float: right;"></div><br style="clear: both;">
 
-    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" data-limit="{{ limit }}" placeholder="Create your notice here (limit {{ limit }} characters)">
+    <textarea id="noticeContent" name="fields[noticeContent]" class="wysiwyg required" maxlength="{{ limit }}" data-limit="{{ limit }}" placeholder="Create your notice here (limit {{ limit }} characters)">
     {%- if entry is defined %}{{ entry.noticeContent }}{% endif -%}
     </textarea>
 

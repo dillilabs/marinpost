@@ -5,7 +5,7 @@
     
     <div class="counter" style="float: right;"></div><br style="clear: both;">
 
-    <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="12" class="wysiwyg required" data-limit="{{ limit }}" placeholder="Write or copy and paste your letter here (limit {{ limit }} characters)">
+    <textarea id="letterContent" name="fields[letterContent]" cols="60" rows="12" class="wysiwyg required" maxlength="{{ limit }}" data-limit="{{ limit }}" placeholder="Write or copy and paste your letter here (limit {{ limit }} characters)">
     {%- if entry is defined %}{{ entry.letterContent }}{% endif -%}
     </textarea>
     
