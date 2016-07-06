@@ -44,7 +44,7 @@
 {% endmacro %}
 
 {% macro externalUrl(url) %}
-  {{ url matches '~^https?://~' ? url : 'http://'~url }}
+  {{- url matches '~^https?://~' ? url : 'http://'~url -}}
 {% endmacro %}
 
 {% macro formatDateTime(date) %}
