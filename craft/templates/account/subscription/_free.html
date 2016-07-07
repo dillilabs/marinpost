@@ -2,7 +2,7 @@
 
 {# Note: immitate format of "site message" help class #}
 
-<div class="help free-email-alerts"><p>As a Marin Post member, you receive weekly updates of recent posts, delivered directly to your email box.</p></div>
+<div class="help subscription">{{ n.siteMessage('account/weekly-updates') }}</div>
 
 {# Opt out: toggle off free email alerts #}
 
@@ -13,6 +13,6 @@
 
 <h2>Become a Marin Post Subscriber</h2>
 
-<div class="help free-email-alerts"><p>Receive customized daily, weekly, or monthly email alerts. Choose the locations, topics and authors that interest you.</p></div>
+<div class="help subscription">{{ n.siteMessage('account/subscribe') }}</div>
 
 {% include 'account/subscription/_create_form.html' %}
