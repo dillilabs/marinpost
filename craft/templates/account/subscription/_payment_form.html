@@ -1,7 +1,11 @@
+{% import 'account/subscription/_form_macros.html' as m %}
+
 <form method="post" action="" accept-charset="UTF-8" class="payment-form subscription">
   {{ getCsrfInput() }}
   <input type="hidden" name="action" value="mpSubscription/changeCard">
   <input type="hidden" name="redirect" value="account/subscription">
+
+  <p>Current card: <b><span class='current-card'>{{ m.currentCard }}</span></b></p>
 
   <ul class="errors">
     {% if error is defined %}

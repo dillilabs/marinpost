@@ -2,6 +2,14 @@
   {{- id in ids ? 'checked=checked' : '' -}}
 {% endmacro %}
 
+{% macro currentCard() %}
+  {% for row in currentUser.stripeCard %}
+    {% if row.key == 'Card Summary' %}
+      {{ row.value }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
 {% macro grayedOutByDefault() %}
   {{- currentUser.subscriptionContent == 'default' ? 'disabled' : '' -}}
 {% endmacro %}
