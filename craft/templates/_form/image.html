@@ -40,6 +40,10 @@
 
 <a href="#" id="open-image-modal">{{ image ? 'Replace Image' : 'Add an Image' }}</a>
 
+{% if not userProfile %}
+  {{ n.siteMessage('add/replace/image') }}
+{% endif %}
+
 <div id="image-modal" class="upload-modal image" title="My Images" style="display: none;">
   <div>
     <div class="help">{{ n.siteMessage('my/images') }}</div>
