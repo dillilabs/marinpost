@@ -98,6 +98,9 @@
           <li>{{ n.pathLink('Guest Writers', 'about/guests') }}</li>
           <li>{{ n.pathLink('Terms of Use', 'about/terms') }}</li>
           <li>{{ n.pathLink('Privacy Policy', 'about/privacy') }}</li>
+        {% if not currentUser %}
+          <li>{{ n.pathLink('Sign Up', 'account/register') }}</li>
+        {% endif %}
           <li>{{ n.pathLink('Subscribe', 'about/subscribe') }}</li>
           <li>{{ n.pathLink('Sponsor Us', 'about/sponsor') }}</li>
           <li>{{ n.pathLink('Advertise', 'about/advertise') }}</li>
