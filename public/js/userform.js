@@ -9,6 +9,7 @@
 
             // Redactor
             var wysiwygFields = form.find('textarea.wysiwyg');
+            var excessContent = false;
 
             // Submit buttons
             var submitButtons = form.find('input[type=submit]');
@@ -74,8 +75,13 @@
                   contentChanged = true;
                 },
                 counterCallback: function(data) {
-                  // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
-                  counters.text(data.characters + ' of ' + limit + ' characters used');
+                  if (data.characters <= limit) {
+                    excessContent = false;
+                    counters.text(data.characters + ' of ' + limit + ' characters used');
+                  } else {
+                    excessContent = true;
+                    counters.text('CONTENT LIMIT EXCEEDED: editing disabled until excess is removed.');
+                  }
                 },
               });
             });
@@ -91,6 +97,10 @@
 
             // Submit
             submitButtons.click(function(e) {
+              if (excessContent) {
+                alert('Content limit exceeded: please remove excess.');
+                return false;
+              }
               removeEmptyImageFields();
               removeEmptyDocumentFields();
               submitButtonClicked = true;

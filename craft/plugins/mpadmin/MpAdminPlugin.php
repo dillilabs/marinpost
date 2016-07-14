@@ -6,8 +6,6 @@ class MpAdminPlugin extends BasePlugin
     /**
      *  If CP request:
      *
-     *      Load JS resources for Redactor Plugins.
-     *
      *      Inject Javascript to ensure only a single User group is selected per User.
      *
      *  Else:
@@ -24,7 +22,6 @@ class MpAdminPlugin extends BasePlugin
 
         if (craft()->request->isCpRequest())
         {
-            $this->_loadRedactorPluginResources();
             $this->_ensureOneUserGroup();
         }
         else
@@ -172,19 +169,6 @@ JS;
         craft()->templates->includeJs($js);
     }
 
-    /**
-     * Load JS resources for Redactor Plugins
-     */
-    private function _loadRedactorPluginResources()
-    {
-        $plugins = array('counter', 'fontcolor', 'fontfamily', 'fontsize', 'limiter', 'underline');
-
-        foreach ($plugins as $plugin)
-        {
-            craft()->templates->includeJsResource("lib/redactor/plugins/{$plugin}.js");
-        }
-    }
-
     //---------
     // Settings
     //---------
@@ -217,7 +201,7 @@ JS;
 
     public function getVersion()
     {
-        return '1.0.1';
+        return '1.2.0';
     }
 
     public function getDeveloper()

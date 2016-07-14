@@ -219,6 +219,10 @@ fieldset > ul,
     color: #004eff;
     text-decoration: none;
 }
+.help a strong, .help a:visited strong {
+    color: #004eff;
+    text-decoration: none;
+}
 .help a:hover {
     text-decoration: underline;
 }
@@ -768,6 +772,10 @@ main.single > .post > h3.my-content {
 
 .help p {
     text-align: justify;
+}
+
+.help strong {
+    color: #000;
 }
 
 .message {

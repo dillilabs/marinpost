@@ -6515,10 +6515,11 @@ Craft.AssetSelectorModal = Craft.BaseElementSelectorModal.extend(
 		{
 			allowTransforms = true;
 
-				for (var i = 0; i < $selectedElements.length; i++)
+			for (var i = 0; i < $selectedElements.length; i++)
 			{
 				if (!$('.element.hasthumb:first', $selectedElements[i]).length)
 				{
+					allowTransforms = false;
 					break;
 				}
 			}
@@ -10077,7 +10078,7 @@ Craft.ElementEditor = Garnish.Base.extend(
 
 			if (response.locales)
 			{
-				var $header = $('<div class="header"/>'),
+				var $header = $('<div class="hud-header"/>'),
 					$localeSelectContainer = $('<div class="select"/>').appendTo($header);
 
 				this.$localeSelect = $('<select/>').appendTo($localeSelectContainer);
@@ -10101,7 +10102,7 @@ Craft.ElementEditor = Garnish.Base.extend(
 
 			this.onCreateForm(this.$form);
 
-			var $footer = $('<div class="footer"/>').appendTo(this.$form),
+			var $footer = $('<div class="hud-footer"/>').appendTo(this.$form),
 				$buttonsContainer = $('<div class="buttons right"/>').appendTo($footer);
 			this.$cancelBtn = $('<div class="btn">'+Craft.t('Cancel')+'</div>').appendTo($buttonsContainer);
 			this.$saveBtn = $('<input class="btn submit" type="submit" value="'+Craft.t('Save')+'"/>').appendTo($buttonsContainer);
@@ -11843,6 +11844,10 @@ Craft.Grid = Garnish.Base.extend(
 	itemHeights: null,
 	leftPadding: null,
 
+	_refreshingCols: false,
+	_refreshColsAfterRefresh: false,
+	_forceRefreshColsAfterRefresh: false,
+
 	init: function(container, settings)
 	{
 		this.$container = $(container);
@@ -11919,8 +11924,19 @@ Craft.Grid = Garnish.Base.extend(
 
 	refreshCols: function(force, animate)
 	{
+		if (this._refreshingCols) {
+			this._refreshColsAfterRefresh = true;
+			if (force) {
+				this._forceRefreshColsAfterRefresh = true;
+			}
+			return;
+		}
+
+		this._refreshingCols = true;
+
 		if (!this.items.length)
 		{
+			this.completeRefreshCols();
 			return;
 		}
 
@@ -11934,7 +11950,7 @@ Craft.Grid = Garnish.Base.extend(
 
 		if (this.refreshCols._.scrollHeight == 0)
 		{
-			delete this.refreshCols._;
+			this.completeRefreshCols();
 			return;
 		}
 
@@ -11960,7 +11976,7 @@ Craft.Grid = Garnish.Base.extend(
 		// Same number of columns as before?
 		if (force !== true && this.totalCols === this.refreshCols._.totalCols)
 		{
-			delete this.refreshCols._;
+			this.completeRefreshCols();
 			return;
 		}
 
@@ -12233,12 +12249,33 @@ Craft.Grid = Garnish.Base.extend(
 			}
 		}
 
-		this.onRefreshCols();
-
-		delete this.refreshCols._;
+		this.completeRefreshCols();
 
 		// Resume container resize listening
 		this.addListener(this.$container, 'resize', this.handleContainerHeightProxy);
+
+		this.onRefreshCols();
+	},
+
+	completeRefreshCols: function()
+	{
+		// Delete the internal variable object
+		if (typeof this.refreshCols._ != typeof undefined)
+		{
+			delete this.refreshCols._;
+		}
+
+		this._refreshingCols = false;
+
+		if (this._refreshColsAfterRefresh) {
+			force = this._forceRefreshColsAfterRefresh;
+			this._refreshColsAfterRefresh = false;
+			this._forceRefreshColsAfterRefresh = false;
+
+			Garnish.requestAnimationFrame($.proxy(function() {
+				this.refreshCols(force);
+			}, this))
+		}
 	},
 
 	getItemWidth: function(colspan)
@@ -16391,7 +16428,7 @@ Craft.ui =
 
 		if (config.showCharsLeft && config.maxlength)
 		{
-			$input.css('padding-'(Craft.orientation == 'ltr' ? 'right' : 'left'), (7.2*config.maxlength.toString().length+14)+'px');
+			$input.css('padding-'+(Craft.orientation == 'ltr' ? 'right' : 'left'), (7.2*config.maxlength.toString().length+14)+'px');
 		}
 
 		if (config.placeholder || config.showCharsLeft)

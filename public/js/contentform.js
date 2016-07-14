@@ -33,6 +33,7 @@
 
             // Redactor
             var wysiwygFields = form.find('textarea.wysiwyg');
+            var excessContent = false;
 
             // Textarea
             var limitedTextareaFields = form.find('textarea.limited');
@@ -212,8 +213,13 @@
                   contentChanged = true;
                 },
                 counterCallback: function(data) {
-                  // console.log('Words: ' + data.words + ', Characters: ' + data.characters + ', Characters w/o spaces: ' + (data.characters - data.spaces));
-                  counters.text(data.characters + ' of ' + limit + ' characters used');
+                  if (data.characters <= limit) {
+                    excessContent = false;
+                    counters.text(data.characters + ' of ' + limit + ' characters used');
+                  } else {
+                    excessContent = true;
+                    counters.text('CONTENT LIMIT EXCEEDED: editing disabled until excess is removed.');
+                  }
                 },
               });
             });
@@ -278,6 +284,12 @@
             submitButtons.click(function(e) {
               var submitType = $(this).attr('data-submit');
               var section = '';
+
+              if (excessContent && submitType != 'cancel') {
+                alert('Content limit exceeded: please remove excess.');
+                return false;
+              }
+
               submitButtonClicked = true;
 
               switch (submitType) {
