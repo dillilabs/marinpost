@@ -774,7 +774,7 @@ main.single > .post > h3.my-content {
     text-align: justify;
 }
 
-.help strong {
+.help strong, .help b {
     color: #000;
 }
 
