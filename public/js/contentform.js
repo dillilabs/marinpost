@@ -193,6 +193,7 @@
                 case 'fields[blogContent]':
                 case 'fields[noticeContent]':
                   plugins = plugins.concat(['fontsize', 'fontcolor', 'fontfamily']);
+                  buttons = ['html'].concat(buttons);
                   buttons = buttons.concat(['fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'alignment', 'horizontalrule']);
                   break;
               }
