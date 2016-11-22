@@ -9,6 +9,7 @@ class MpSubscriptionVariable
 
     /**
      * Return true if User (default: current User) has a subscription in good standing.
+     *
      * Used in public templates, subscription email and subscription simulator.
      */
     public function activeSubscription($user = false)
@@ -45,6 +46,7 @@ class MpSubscriptionVariable
 
     /**
      * Return entries composing current User's current issue.
+     *
      * Used ONLY in /account/subscription/simulator.
      */
     public function allEntries()
@@ -54,6 +56,7 @@ class MpSubscriptionVariable
 
     /**
      * Return textual representation of the subscription period of the User (default: current User).
+     *
      * Used in email template and /account/subscription/simulator.
      */
     public function currentIssuePeriod($user = false)
@@ -66,6 +69,7 @@ class MpSubscriptionVariable
 
     /**
      * Return title of current issue.
+     *
      * Used in email template and /account/subscription/simulator.
      */
     public function currentIssueTitle($user = false)

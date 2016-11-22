@@ -249,6 +249,9 @@ class MpSubscriptionController extends BaseController
     /**
      * Schedule task to email current issue to subscribed Users.
      *
+     * When period=weekly then also send complimentary issue to
+     * non-subscribing Users and to non-Users on the email list.
+     *
      * LOCAL-only request.
      *
      * @param string -- daily, weekly or monthly
@@ -268,7 +271,9 @@ class MpSubscriptionController extends BaseController
             craft()->end();
         }
 
+        //----------------------------------------------------------------------
         // Paid subscriptions
+        //----------------------------------------------------------------------
 
         $subscribers = craft()->mpSubscription->activeSubscribersForEmailPeriod($period);
 
@@ -286,21 +291,30 @@ class MpSubscriptionController extends BaseController
 
         if ($period == 'weekly')
         {
+
+            //------------------------------------------------------------------
             // Complimentary subscriptions
+            //------------------------------------------------------------------
 
-            $freebies = craft()->mpSubscription->usersWithoutPaidSubscription();
+            $nonSubscribers = craft()->mpSubscription->usersWithoutPaidSubscription();
 
-            if (count($freebies) > 0)
+            if (count($nonSubscribers) > 0)
             {
-                foreach ($freebies as $user)
+                foreach ($nonSubscribers as $user)
                 {
                     $this->_createTask($period, $user);
                 }
             }
             else
             {
-                $this->plugin->logger("No free subscriptions found.");
+                $this->plugin->logger("No complimentary subscriptions found.");
             }
+
+            //------------------------------------------------------------------
+            // Weekly Update for Other Recipients
+            //------------------------------------------------------------------
+
+            $this->_createTaskForOtherRecipients();
         }
 
         craft()->end();
@@ -354,6 +368,26 @@ class MpSubscriptionController extends BaseController
         $settings    = array('user' => $user);
 
         $task = craft()->tasks->createTask($klass, $description, $settings);
+
+        if (!$task->hasErrors())
+        {
+            $this->plugin->logger("Successfully scheduled $klass task: $description.");
+        }
+        else
+        {
+            $this->plugin->logger("Failed to schedule $klass task: $description: ".$task->getErrors(), LogLevel::Error);
+        }
+    }
+
+    /**
+     * Create Task to send email to non Users.
+     */
+    private function _createTaskForOtherRecipients()
+    {
+        $klass       = 'MpSubscriptionOtherRecipients';
+        $description = 'Weekly Update for Other Recipients';
+
+        $task = craft()->tasks->createTask($klass, $description);
 
         if (!$task->hasErrors())
         {

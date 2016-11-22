@@ -333,7 +333,7 @@
 {% macro footer(user) %}
     <div style="font-family: Arial, sans-serif;">
       <h3>My Marin Post</h3>
-      {% if craft.mpSubscription.activeSubscription %}
+      {% if craft.mpSubscription.activeSubscription(user) %}
         <a href="{{ siteUrl }}account/subscription">Change subscription settings</a><br><br>
       {% else %}
         <a href="{{ siteUrl }}about/subscribe">Subscribe to The Marin Post</a><br><br>

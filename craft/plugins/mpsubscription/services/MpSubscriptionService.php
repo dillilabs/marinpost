@@ -362,6 +362,7 @@ class MpSubscriptionService extends BaseApplicationComponent
 
     /**
      * Get entries for given User.
+     *
      * NOTE public visibility required when called by MpSubscriptionVariable.
      */
     public function entriesForUser($user)
@@ -387,12 +388,56 @@ class MpSubscriptionService extends BaseApplicationComponent
 
         $entryIds = craft()->mpFilter->entryIdsForSubscription($startDate, $endDate, $filterBy);
 
-        $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->id = $entryIds;
+        $criteria        = craft()->elements->getCriteria(ElementType::Entry);
+        $criteria->id    = $entryIds;
         $criteria->order = 'postDate desc';
-        $entries = $criteria->find();
+        $entries         = $criteria->find();
 
         return $entries;
+    }
+
+    /**
+     * Send weekly update email to other, non-User Recipients.
+     */
+    public function sendWeeklyUpdateToOtherRecipients()
+    {
+        $recipients = $this->_getOtherRecipients();
+
+        if (empty($recipients))
+        {
+            $this->plugin->logger('No other recipients found.');
+            return;
+        }
+
+        $entries = $this->_entriesForOtherRecipients();
+
+        if (empty($entries))
+        {
+            $this->plugin->logger('No content found for weekly update to other recipients.');
+            return;
+        }
+
+        $periodDescription = $this->currentIssuePeriodDescription('weekly');
+
+        $savePath = craft()->path->getTemplatesPath();
+        craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpsubscription/templates');
+
+        $body = craft()->templates->render('other_recipient_entries', array(
+            'entries' => $entries,
+            'period'  => $periodDescription
+        ));
+        craft()->path->setTemplatesPath($savePath);
+
+        foreach ($recipients as $recipient)
+        {
+            $email = new EmailModel();
+            $email->toEmail  = $recipient->email;
+            $email->subject  = 'Weekly Update from the Marin Post';
+            $email->htmlBody = $body;
+
+            craft()->email->sendEmail($email);
+            $this->plugin->logger("Sent weekly update email to {$recipient->email}.");
+        }
     }
 
     /**
@@ -409,13 +454,22 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
-     * Return textual representation of the User's current issue's period, eg:
-     *
-     *   February 1 - 7, 2016
+     * Return textual representation of the User's current issue's period.
      */
     public function currentIssuePeriod($user)
     {
         $period = $user->subscriptionFrequency;
+
+        return $this->currentIssuePeriodDescription($period);
+    }
+
+    /**
+     * Return textual representation of the current issue's period, eg:
+     *
+     *   February 1 - 7, 2016
+     */
+    public function currentIssuePeriodDescription($period)
+    {
         $dates = $this->_startAndEndDates($period);
 
         switch ($period)
@@ -632,6 +686,35 @@ class MpSubscriptionService extends BaseApplicationComponent
         }
 
         return $dates;
+    }
+
+    /**
+     * Get list of other recipients of weekly update email.
+     */
+    private function _getOtherRecipients()
+    {
+        $criteria          = craft()->elements->getCriteria(ElementType::Entry);
+        $criteria->section = 'emailAddresses';
+        $entries           = $criteria->find();
+
+        return $entries;
+    }
+
+    /**
+     * Get entries for other recipients of weekly update email.
+     */
+    private function _entriesForOtherRecipients()
+    {
+        list($startDate, $endDate) = $this->_startAndEndDates('weekly');
+
+        $entryIds = craft()->mpFilter->entryIdsForSubscription($startDate, $endDate);
+
+        $criteria        = craft()->elements->getCriteria(ElementType::Entry);
+        $criteria->id    = $entryIds;
+        $criteria->order = 'postDate desc';
+        $entries         = $criteria->find();
+
+        return $entries;
     }
 
     /**

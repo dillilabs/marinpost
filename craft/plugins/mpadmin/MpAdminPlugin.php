@@ -51,21 +51,32 @@ class MpAdminPlugin extends BasePlugin
     public function modifyEntryTableAttributes(&$attributes, $source)
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
-        $attributes['author'] = Craft::t('Author');
+        $attributes['author']      = Craft::t('Author');
+        $attributes['email']       = Craft::t('Email');
     }
 
     public function getEntryTableAttributeHtml(EntryModel $entry, $attribute)
     {
-        if (defined($attribute) && $attribute == 'author')
+        if (defined($attribute))
         {
-            return $entry->author->name;
+            switch ($attribute)
+            {
+            case 'author':
+                return $entry->author->name;
+                break;
+
+            case 'email':
+                return $entry->email;
+                break;
+            }
         }
     }
 
     public function modifyEntrySortableAttributes(&$attributes)
     {
         $attributes['dateCreated'] = Craft::t('Created Date');
-        $attributes['authorId'] = Craft::t('Author');
+        $attributes['authorId']    = Craft::t('Author');
+        $attributes['email']       = Craft::t('Email');
     }
 
     //----------------------
@@ -201,7 +212,7 @@ JS;
 
     public function getVersion()
     {
-        return '1.2.0';
+        return '1.3.0';
     }
 
     public function getDeveloper()
