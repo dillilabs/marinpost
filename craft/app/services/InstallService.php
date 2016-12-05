@@ -59,7 +59,6 @@ class InstallService extends BaseApplicationComponent
 			$this->_createContentTable();
 			$this->_createRelationsTable();
 			$this->_createShunnedMessagesTable();
-			$this->_createSearchIndexTable();
 			$this->_createTemplateCacheTables();
 			$this->_createAndPopulateInfoTable($inputs);
 
@@ -74,6 +73,9 @@ class InstallService extends BaseApplicationComponent
 			{
 				$transaction->commit();
 			}
+
+			Craft::log('Creating search index table.');
+			$this->_createSearchIndexTable();
 		}
 		catch (\Exception $e)
 		{
@@ -114,35 +116,38 @@ class InstallService extends BaseApplicationComponent
 		$recordsFolder = craft()->path->getAppPath().'records/';
 		$recordFiles = IOHelper::getFolderContents($recordsFolder, false, ".*Record\.php$");
 
-		foreach ($recordFiles as $file)
+		if ($recordFiles)
 		{
-			if (IOHelper::fileExists($file))
+			foreach ($recordFiles as $file)
 			{
-				$fileName = IOHelper::getFileName($file, false);
-				$class = __NAMESPACE__.'\\'.$fileName;
-
-				// Ignore abstract classes and interfaces
-				$ref = new \ReflectionClass($class);
-				if ($ref->isAbstract() || $ref->isInterface())
+				if (IOHelper::fileExists($file))
 				{
-					Craft::log("Skipping record {$file} because it’s abstract or an interface.", LogLevel::Warning);
-					continue;
-				}
+					$fileName = IOHelper::getFileName($file, false);
+					$class = __NAMESPACE__.'\\'.$fileName;
 
-				$obj = new $class('install');
+					// Ignore abstract classes and interfaces
+					$ref = new \ReflectionClass($class);
+					if ($ref->isAbstract() || $ref->isInterface())
+					{
+						Craft::log("Skipping record {$file} because it’s abstract or an interface.", LogLevel::Warning);
+						continue;
+					}
 
-				if (method_exists($obj, 'createTable'))
-				{
-					$records[] = $obj;
+					$obj = new $class('install');
+
+					if (method_exists($obj, 'createTable'))
+					{
+						$records[] = $obj;
+					}
+					else
+					{
+						Craft::log("Skipping record {$file} because it doesn’t have a createTable() method.", LogLevel::Warning);
+					}
 				}
 				else
 				{
-					Craft::log("Skipping record {$file} because it doesn’t have a createTable() method.", LogLevel::Warning);
+					Craft::log("Skipping record {$file} because it doesn’t exist.", LogLevel::Warning);
 				}
-			}
-			else
-			{
-				Craft::log("Skipping record {$file} because it doesn’t exist.", LogLevel::Warning);
 			}
 		}
 
@@ -347,17 +352,14 @@ class InstallService extends BaseApplicationComponent
 		Craft::log('Creating the info table.');
 
 		craft()->db->createCommand()->createTable('info', array(
-			'version'       => array('column' => ColumnType::Varchar,  'length' => 15,    'null' => false),
-			'build'         => array('column' => ColumnType::Int,      'length' => 11,    'unsigned' => true, 'null' => false),
+			'version'       => array('column' => ColumnType::Varchar,  'length' => 50,    'null' => false),
 			'schemaVersion' => array('column' => ColumnType::Varchar,  'length' => 15,    'null' => false),
-			'releaseDate'   => array('column' => ColumnType::DateTime, 'null' => false),
 			'edition'       => array('column' => ColumnType::TinyInt,  'length' => 1,     'unsigned' => true, 'default' => 0, 'null' => false),
 			'siteName'      => array('column' => ColumnType::Varchar,  'length' => 100,   'null' => false),
 			'siteUrl'       => array('column' => ColumnType::Varchar,  'length' => 255,   'null' => false),
 			'timezone'      => array('column' => ColumnType::Varchar,  'length' => 30),
 			'on'            => array('column' => ColumnType::TinyInt,  'length' => 1,     'unsigned' => true, 'default' => 0, 'null' => false),
 			'maintenance'   => array('column' => ColumnType::TinyInt,  'length' => 1,     'unsigned' => true, 'default' => 0, 'null' => false),
-			'track'         => array('column' => ColumnType::Varchar,  'maxLength' => 40, 'required' => true),
 		));
 
 		Craft::log('Finished creating the info table.');
@@ -366,15 +368,12 @@ class InstallService extends BaseApplicationComponent
 
 		$info = new InfoModel(array(
 			'version'       => CRAFT_VERSION,
-			'build'         => CRAFT_BUILD,
 			'schemaVersion' => CRAFT_SCHEMA_VERSION,
-			'releaseDate'   => CRAFT_RELEASE_DATE,
 			'edition'       => 0,
 			'siteName'      => $inputs['siteName'],
 			'siteUrl'       => $inputs['siteUrl'],
 			'on'            => 1,
 			'maintenance'   => 0,
-			'track'         => 'stable',
 		));
 
 		if (craft()->saveInfo($info))

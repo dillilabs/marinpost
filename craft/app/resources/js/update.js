@@ -1,11 +1,3 @@
-/**
- * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
- * @copyright Copyright (c) 2014, Pixel & Tonic, Inc.
- * @license   http://craftcms.com/license Craft License Agreement
- * @see       http://craftcms.com
- * @package   craft.app.resources
- */
-
 (function($) {
 
 
@@ -16,21 +8,18 @@ Craft.Updater = Garnish.Base.extend(
 	$errorDetails: null,
 	data: null,
 
-	init: function(handle, manualUpdate)
+	init: function(data)
 	{
 		this.$graphic = $('#graphic');
 		this.$status = $('#status');
 
-		if (!handle)
+		if (!data || !data.handle)
 		{
 			this.showError(Craft.t('Unable to determine what to update.'));
 			return;
 		}
 
-		this.data = {
-			handle: handle,
-			manualUpdate: manualUpdate
-		};
+		this.data = data;
 
 		this.postActionRequest('update/prepare');
 	},
@@ -122,7 +111,7 @@ Craft.Updater = Garnish.Base.extend(
 				) +
 			'">' +
 				Craft.t('Send for help') +
-			'</a>'
+			'</a>';
 
 		this.updateStatus(errorText);
 	},

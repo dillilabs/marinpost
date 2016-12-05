@@ -5,6 +5,7 @@
 	"(blank)",
 	"1 update available",
 	"Actions",
+	"Apply this to the {number} remaining conflicts?",
 	"An unknown error occurred.",
 	"Any changes will be lost if you leave this page.",
 	"Are you sure you want to delete “{name}”?",
@@ -214,9 +215,6 @@
 
 					</li>
 				{% endfor %}
-
-				{#
-				#}
 			</ul>
 		</nav>
 
@@ -372,7 +370,7 @@
 			{% endspaceless -%}
 
 			<ul>
-				<li>Craft CMS {{ craft.app.getVersion() }}.{{ craft.app.getBuild() }}</li>
+				<li>Craft CMS {{ craft.app.getVersion() }}</li>
 				<li>© Pixel &amp; Tonic</li>
 				{% if currentUser.can('performUpdates') %}
 					<li><a id="footer-updates" href="{{ url('updates') }}">{{ craft.app.isUpdateInfoCached() and totalUpdates is defined and totalUpdates ? updateText : "Check for updates"|t }}</a></li>

@@ -67,7 +67,7 @@ class WebApp extends \CWebApplication
 	/**
 	 * The language that the application is written in. This mainly refers to the language that the messages and view
 	 * files are in.
-     *
+	 *
 	 * Setting it here even though CApplication already defaults to 'en_us', so it's clear and in case they change it
 	 * down the road.
 	 *
@@ -217,11 +217,10 @@ class WebApp extends \CWebApplication
 			if ($this->request->isCpRequest())
 			{
 				$version = $this->getVersion();
-				$build = $this->getBuild();
-				$url = "https://download.craftcdn.com/craft/{$version}/{$version}.{$build}/Craft-{$version}.{$build}.zip";
+                $url = AppHelper::getCraftDownloadUrl($version);
 
 				throw new HttpException(200, Craft::t('Craft CMS does not support backtracking to this version. Please upload Craft CMS {url} or later.', array(
-					'url' => '['.$build.']('.$url.')',
+					'url' => '['.$version.']('.$url.')',
 				)));
 			}
 			else
@@ -243,9 +242,12 @@ class WebApp extends \CWebApplication
 		}
 
 		// If there's a new version, but the schema hasn't changed, just update the info table
-		if ($this->updates->hasCraftBuildChanged())
+		if ($this->updates->hasCraftVersionChanged())
 		{
 			$this->updates->updateCraftVersionInfo();
+
+			// Clear the template caches in case they've been compiled since this release was cut.
+			IOHelper::clearFolder($this->path->getCompiledTemplatesPath());
 		}
 
 		// If the system is offline, make sure they have permission to be here
@@ -869,9 +871,6 @@ class WebApp extends \CWebApplication
 
 			if ($cachedAppPath === false || $cachedAppPath !== $appPath)
 			{
-				// Flush the data cache, so we're not getting cached CP resource paths.
-				craft()->cache->flush();
-
 				$this->runController('templates/requirementscheck');
 			}
 		}
@@ -899,10 +898,11 @@ class WebApp extends \CWebApplication
 			{
 				if ($this->updates->isBreakpointUpdateNeeded())
 				{
-					throw new HttpException(200, Craft::t('You need to be on at least Craft CMS {url} before you can manually update to Craft CMS {targetVersion} build {targetBuild}.', array(
-						'url'           => '[build '.CRAFT_MIN_BUILD_REQUIRED.']('.CRAFT_MIN_BUILD_URL.')',
+					$minVersionUrl = AppHelper::getCraftDownloadUrl(CRAFT_MIN_VERSION_REQUIRED);
+
+					throw new HttpException(200, Craft::t('You need to be on at least Craft CMS {url} before you can manually update to Craft CMS {targetVersion}.', array(
+						'url'           => '['.CRAFT_MIN_VERSION_REQUIRED.']('.$minVersionUrl.')',
 						'targetVersion' => CRAFT_VERSION,
-						'targetBuild'   => CRAFT_BUILD
 					)));
 				}
 				else
@@ -914,6 +914,9 @@ class WebApp extends \CWebApplication
 							$this->userSession->setReturnUrl($this->request->getPath());
 						}
 					}
+
+					// Clear the template caches in case they've been compiled since this release was cut.
+					IOHelper::clearFolder($this->path->getCompiledTemplatesPath());
 
 					// Show the manual update notification template
 					$this->runController('templates/manualUpdateNotification');
