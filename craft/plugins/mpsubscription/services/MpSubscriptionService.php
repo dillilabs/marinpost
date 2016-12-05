@@ -332,6 +332,18 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
+     * Get list of other, non-User recipients of the weekly update email.
+     */
+    public function getOtherRecipients()
+    {
+        $criteria          = craft()->elements->getCriteria(ElementType::Entry);
+        $criteria->section = 'emailAddresses';
+        $entries           = $criteria->find();
+
+        return $entries;
+    }
+
+    /**
      * Send email to User for configured email period.
      *
      * IF daily
@@ -397,15 +409,13 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
-     * Send weekly update email to other, non-User Recipients.
+     * Send weekly update email to other, non-User recipient.
      */
-    public function sendWeeklyUpdateToOtherRecipients()
+    public function sendEmailToAddress($emailAddress)
     {
-        $recipients = $this->_getOtherRecipients();
-
-        if (empty($recipients))
+        if ($this->_userWithEmailAddress($emailAddress))
         {
-            $this->plugin->logger('No other recipients found.');
+            $this->plugin->logger("User exists with email of $emailAddress");
             return;
         }
 
@@ -413,7 +423,7 @@ class MpSubscriptionService extends BaseApplicationComponent
 
         if (empty($entries))
         {
-            $this->plugin->logger('No content found for weekly update to other recipients.');
+            $this->plugin->logger('No content found for weekly update to other, non-User recipient.');
             return;
         }
 
@@ -428,15 +438,20 @@ class MpSubscriptionService extends BaseApplicationComponent
         ));
         craft()->path->setTemplatesPath($savePath);
 
-        foreach ($recipients as $recipient)
-        {
-            $email = new EmailModel();
-            $email->toEmail  = $recipient->email;
-            $email->subject  = 'Weekly Update from the Marin Post';
-            $email->htmlBody = $body;
+        $email = new EmailModel();
+        $email->toEmail  = $emailAddress;
+        $email->subject  = 'Weekly Update from the Marin Post';
+        $email->htmlBody = $body;
 
-            craft()->email->sendEmail($email);
-            $this->plugin->logger("Sent weekly update email to {$recipient->email}.");
+        $sent = craft()->email->sendEmail($email);
+
+        if ($sent)
+        {
+            $this->plugin->logger("Successfully sent weekly update email to $emailAddress.");
+        }
+        else
+        {
+            $this->plugin->logger("Failed to send weekly update email to $emailAddress.", LogLevel::Error);
         }
     }
 
@@ -689,15 +704,14 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
-     * Get list of other recipients of weekly update email.
+     * Return true if User exists with the given email address.
      */
-    private function _getOtherRecipients()
+    private function _userWithEmailAddress($emailAddress)
     {
-        $criteria          = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->section = 'emailAddresses';
-        $entries           = $criteria->find();
+        $criteria        = craft()->elements->getCriteria(ElementType::User);
+        $criteria->email = $emailAddress;
 
-        return $entries;
+        return $criteria->total() > 0;
     }
 
     /**

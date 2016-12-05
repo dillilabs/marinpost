@@ -249,8 +249,9 @@ class MpSubscriptionController extends BaseController
     /**
      * Schedule task to email current issue to subscribed Users.
      *
-     * When period=weekly then also send complimentary issue to
-     * non-subscribing Users and to non-Users on the email list.
+     * When period: weekly then also send complimentary issue to
+     * non-subscribing Users and to other, non-User recipients
+     * on the email list.
      *
      * LOCAL-only request.
      *
@@ -311,10 +312,22 @@ class MpSubscriptionController extends BaseController
             }
 
             //------------------------------------------------------------------
-            // Weekly Update for Other Recipients
+            // Weekly Update for other, non-User recipients
             //------------------------------------------------------------------
 
-            $this->_createTaskForOtherRecipients();
+            $otherRecipients = craft()->mpSubscription->getOtherRecipients();
+
+            if (count($otherRecipients) > 0)
+            {
+                foreach ($otherRecipients as $recipient)
+                {
+                    $this->_createTaskForOtherRecipient($recipient->email);
+                }
+            }
+            else
+            {
+                $this->plugin->logger('No other, non-user recipients for weekly update found.');
+            }
         }
 
         craft()->end();
@@ -380,14 +393,15 @@ class MpSubscriptionController extends BaseController
     }
 
     /**
-     * Create Task to send email to non Users.
+     * Create Task to send weekly update email to other, non-User recipient.
      */
-    private function _createTaskForOtherRecipients()
+    private function _createTaskForOtherRecipient($emailAddress)
     {
-        $klass       = 'MpSubscriptionOtherRecipients';
-        $description = 'Weekly Update for Other Recipients';
+        $klass       = 'MpSubscription_OtherRecipient';
+        $description = "Weekly update for $emailAddress (other, non-user recipient)";
+        $settings    = array('emailAddress' => $emailAddress);
 
-        $task = craft()->tasks->createTask($klass, $description);
+        $task = craft()->tasks->createTask($klass, $description, $settings);
 
         if (!$task->hasErrors())
         {
