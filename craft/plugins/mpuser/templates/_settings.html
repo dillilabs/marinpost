@@ -1,6 +1,6 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Listing Settings</p>
+<p style="font-weight:bold">Settings</p>
 
 {{ forms.textField({
 	label: "Honey Pot"|t,
@@ -9,8 +9,6 @@
 	name: 'honeypotField',
 	value: settings.honeypotField,
 }) }}
-
-<p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
 	first: true,

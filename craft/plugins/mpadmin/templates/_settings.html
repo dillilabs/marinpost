@@ -1,6 +1,6 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Moderator Settings</p>
+<p style="font-weight:bold">Settings</p>
 
 {{ forms.textareaField({
 	label: "Trigger Words"|t,
@@ -11,24 +11,20 @@
 }) }}
 
 {{ forms.textField({
-	label: "Email Address"|t,
+	label: "Moderator Email Address"|t,
 	instructions: "Optional email address of Moderator to be CC'd in the event of seemingly offensive language."|t,
 	id: 'moderatorEmail',
 	name: 'moderatorEmail',
 	value: settings.moderatorEmail,
 }) }}
 
-<p style="font-weight:bold">Server Error Settings</p>
-
 {{ forms.textField({
-	label: "Email Address"|t,
+	label: "Admin Email Address"|t,
 	instructions: "Optional email address of Admin to be CC'd in the event of a server error."|t,
 	id: 'adminEmail',
 	name: 'adminEmail',
 	value: settings.adminEmail,
 }) }}
-
-<p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
 	first: true,

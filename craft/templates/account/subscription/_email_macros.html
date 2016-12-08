@@ -191,7 +191,7 @@
 {% endmacro %}
 
 {% macro postImage(entry, transform) %}
-  {% from _self import externalUrl, mediaUrl, primaryImage %}
+  {% from _self import primaryImage %}
 
   {% set transform = transform | default('list') %}
 
@@ -200,12 +200,12 @@
   {% switch entry.section.handle %}
     {% case 'media' %}
       <div style="float: left; margin-right: 15px; position: relative;">
-        <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a>
+        <a href="{{ entry.url }}" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a>
       </div>
 
     {% case 'news' %}
       <div style="float: left; margin-right: 15px; position: relative;">
-        <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
+        <a href="{{ entry.url }}" target="_blank"><img src="{{ image }}"></a>
       </div>
 
     {% default %}
@@ -217,7 +217,7 @@
 {% endmacro %}
 
 {% macro postSummary(entry) %}
-  {% from _self import excerpt, externalUrl, letterUrl, mainContent, mediaUrl, noticeEvent, postBy, postTitle %}
+  {% from _self import excerpt, letterUrl, mainContent, noticeEvent, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
   {% set maxChars = 180 %}
@@ -236,12 +236,12 @@
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media&nbsp;»</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ entry.url }}" target="_blank">view media&nbsp;»</a></p>
 
     {% case 'news' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more&nbsp;»</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ entry.url }}" target="_blank">more&nbsp;»</a></p>
 
     {% case 'notices' %}
       {{ postTitle(entry) }}
@@ -253,7 +253,7 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import externalUrl, letterUrl, mediaUrl, titleCase %}
+  {% from _self import letterUrl, titleCase %}
   {% switch entry.section.handle %}
     {% case 'blog' %}
       <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
@@ -262,10 +262,10 @@
       <h4 style="margin-top: 0px;"><a href="{{ letterUrl(entry) }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h4>
 
     {% case 'media' %}
-      <h3 style="margin-top: 0px;"><a href="{{ mediaUrl(entry) }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+      <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'news' %}
-      <h3 style="margin-top: 0px;"><a href="{{ externalUrl(entry.newsLink) }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
+      <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" target="_blank" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'notices' %}
       <h3 style="margin-top: 0px;"><a href="{{ entry.url }}" style="color: #000;">{{ titleCase(entry.title) }}</a></h3>

@@ -1,6 +1,6 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Location Filter Settings</p>
+<p style="font-weight:bold">Settings</p>
 
 {{ forms.textField({
 	label: "County Location"|t,
@@ -34,8 +34,6 @@
 	value: settings.countryId,
 }) }}
 
-<p style="font-weight:bold">Filter Results List Settings</p>
-
 {{ forms.textField({
 	label: "Default Entry Limit"|t,
 	instructions: "Enter default limit of entries per filter/more request"|t,
@@ -43,8 +41,6 @@
 	name: 'defaultEntryLimit',
 	value: settings.defaultEntryLimit,
 }) }}
-
-<p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
 	first: true,

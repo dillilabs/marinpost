@@ -1,6 +1,14 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Listing Settings</p>
+<p style="font-weight:bold">Settings</p>
+
+{{ forms.textField({
+	label: "Google Analytics Tracking ID"|t,
+	instructions: "Enter Google Analytics Tracking ID, eg: UA-XXXXX-Y"|t,
+	id: 'googleAnalyticsTrackingId',
+	name: 'googleAnalyticsTrackingId',
+	value: settings.googleAnalyticsTrackingId,
+}) }}
 
 {{ forms.textField({
 	label: "Default Entry Limit"|t,
@@ -9,8 +17,6 @@
 	name: 'defaultEntryLimit',
 	value: settings.defaultEntryLimit,
 }) }}
-
-<p style="font-weight:bold">Logging Settings</p>
 
 {{ forms.checkboxField({
 	first: true,

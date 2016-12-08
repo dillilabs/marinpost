@@ -36,6 +36,14 @@ class MpEntryVariable
         return craft()->mpEntry->synchronizeChildLocations($entry);
     }
 
+    /**
+     * Post entry pageview to Google Analytics via Measurement Protocol.
+     */
+    public function postToGoogleAnalytics($entry)
+    {
+        return craft()->mpEntry->postToGoogleAnalytics($entry);
+    }
+
     //--------------------
     // Private functions
     //--------------------

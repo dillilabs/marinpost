@@ -1,0 +1,7 @@
+{% set _ = craft.mpentry.postToGoogleAnalytics(entry) %}
+
+{% import "_entry/macros" as p %}
+
+{% set externalUrl = p.externalUrl(entry.newsLink) | trim | htmlEntityDecode %}
+
+{% redirect externalUrl %}

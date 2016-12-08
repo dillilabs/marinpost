@@ -103,7 +103,7 @@
   <span class="filetype">({{ file.kind }} {{ file.size | filesize }})</span>
 {% endmacro %}
 
-{%macro externalUrl(url) %}
+{% macro externalUrl(url) %}
   {{ url matches '~^https?://~' ? url : 'http://'~url }}
 {% endmacro %}
 
@@ -151,30 +151,29 @@
 {% endmacro %}
 
 {% macro postImage(entry, transform) %}
-  {% from _self import externalUrl, mediaUrl, primaryImage, primaryImageCredit %}
+  {% from _self import primaryImage, primaryImageCredit %}
 
   {% set transform = transform | default('list') %}
-
-  {% set image = primaryImage(entry, transform) %}
+  {% set image     = primaryImage(entry, transform) %}
 
   {% switch entry.section.handle %}
     {% case 'media' %}
-    <div class="image-wrapper">
-      <a href="{{ mediaUrl(entry) }}" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a> <!-- please add doc/video/audio class to "overlay" span for images -->
-      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
-    </div>
+      <div class="image-wrapper">
+        <a href="{{ entry.url }}" class="detail" target="_blank"><span class="overlay {{ entry.mediaLink.first.type }}"></span><img src="{{ image }}"></a>
+        <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
+      </div>
 
     {% case 'news' %}
-    <div class="image-wrapper">
-      <a href="{{ externalUrl(entry.newsLink) }}" target="_blank"><img src="{{ image }}"></a>
-      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
-    </div>
+      <div class="image-wrapper">
+        <a href="{{ entry.url }}" class="detail" target="_blank"><img src="{{ image }}"></a>
+        <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
+      </div>
 
     {% default %}
-    <div class="image-wrapper">
-      <a href="{{ entry.url }}" class="detail"><img src="{{ image }}"></a>
-      <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
-    </div>
+      <div class="image-wrapper">
+        <a href="{{ entry.url }}" class="detail"><img src="{{ image }}"></a>
+        <p class="image-credit">{{ primaryImageCredit(entry, transform) }}</p>
+      </div>
 
   {% endswitch %}
 {% endmacro %}
@@ -216,16 +215,17 @@
 {% endmacro %}
 
 {% macro postTitle(entry) %}
-  {% from _self import externalUrl, mediaUrl, titleCase %}
+  {% from _self import titleCase %}
+
   {% switch entry.section.handle %}
     {% case 'blog' %}
       <h3><a href="{{ entry.url }}" class="detail">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'media' %}
-      <h3><a class="more" href="{{ mediaUrl(entry) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
+      <h3><a class="more" href="{{ entry.url }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'news' %}
-      <h3><a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
+      <h3><a class="more" href="{{ entry.url }}" target="_blank">{{ titleCase(entry.title) }}</a></h3>
 
     {% case 'notices' %}
       <h3><a href="{{ entry.url }}" class="detail">{{ titleCase(entry.title) }}</a></h3>
@@ -341,7 +341,7 @@
 {% endmacro %}
 
 {% macro postSummary(entry) %}
-  {% from _self import excerpt, externalUrl, letterUrl, mainContent, mediaUrl, noticeEvent, postBy, postTitle %}
+  {% from _self import excerpt, letterUrl, mainContent, noticeEvent, postBy, postTitle %}
 
   {% set content = mainContent(entry) %}
   {% set maxChars = 180 %}
@@ -353,12 +353,12 @@
     {% case 'media' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ mediaUrl(entry) }}" target="_blank">view media&nbsp;»</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ entry.url }}" target="_blank">view media&nbsp;»</a></p>
 
     {% case 'news' %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
-      <p>{{ content }} &hellip; <a class="more" href="{{ externalUrl(entry.newsLink) }}" target="_blank">more&nbsp;»</a></p>
+      <p>{{ content }} &hellip; <a class="more" href="{{ entry.url }}" target="_blank">more&nbsp;»</a></p>
 
     {% case 'notices' %}
       {{ postTitle(entry) }}

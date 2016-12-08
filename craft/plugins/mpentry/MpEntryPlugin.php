@@ -36,9 +36,9 @@ class MpEntryPlugin extends BasePlugin
         self::log(is_array($mixed) ? json_encode($mixed) : $mixed, $level, $this->settings['forceLog']);
     }
 
-    //----------------------
+    //--------------------------------------------------------------------------
     // Event functions
-    //----------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Respond to entries.onBeforeSaveEntry event.
@@ -115,24 +115,25 @@ class MpEntryPlugin extends BasePlugin
         });
     }
 
-    //-----------------
+    //--------------------------------------------------------------------------
     // Helper functions
-    //-----------------
+    //--------------------------------------------------------------------------
 
     private function _author()
     {
         return craft()->userSession->isLoggedIn() ? craft()->userSession->user : null;
     }
 
-    //---------
+    //--------------------------------------------------------------------------
     // Settings
-    //---------
+    //--------------------------------------------------------------------------
 
     protected function defineSettings()
     {
         return array(
-            'defaultEntryLimit' => array(AttributeType::String, 'default' => 10),
-            'forceLog' => array(AttributeType::Bool, 'default' => false),
+            'defaultEntryLimit'         => array(AttributeType::String, 'default' => 10),
+            'forceLog'                  => array(AttributeType::Bool,   'default' => false),
+            'googleAnalyticsTrackingId' => array(AttributeType::String, 'default' => ''),
         );
     }
 
@@ -143,9 +144,9 @@ class MpEntryPlugin extends BasePlugin
         ));
     }
 
-    //----------------------
+    //--------------------------------------------------------------------------
     // Boilerplate functions
-    //----------------------
+    //--------------------------------------------------------------------------
 
     public function getName()
     {
@@ -154,7 +155,7 @@ class MpEntryPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.0.0';
+        return '1.2.0';
     }
 
     public function getDeveloper()
@@ -166,4 +167,16 @@ class MpEntryPlugin extends BasePlugin
     {
         return 'https://github.com/speder';
     }
+
+    //--------------------------------------------------------------------------
+    // Twig
+    //--------------------------------------------------------------------------
+
+    public function addTwigExtension()
+    {
+        Craft::import('plugins.mpentry.twigextensions.MpEntryTwigExtension');
+
+        return new MpEntryTwigExtension();
+    }
+
 }

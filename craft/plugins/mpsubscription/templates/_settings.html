@@ -1,11 +1,10 @@
 {% import '_includes/forms' as forms %}
 
-<p style="font-weight:bold">Log Settings</p>
+<p style="font-weight:bold">Settings</p>
 
 {{ forms.checkboxField({
 	label: "Force Logging"|t,
 	id: 'forceLog',
 	name: 'forceLog',
-	instructions: "Log messages even if below threshold."|t,
 	checked: (settings.forceLog is defined and settings.forceLog is not empty ? true : false),
 }) }}

@@ -1,6 +1,8 @@
 <?php
 namespace Craft;
 
+use \Guzzle\Http\Client;
+
 class MpEntryService extends BaseApplicationComponent
 {
     private $plugin;
@@ -9,6 +11,10 @@ class MpEntryService extends BaseApplicationComponent
     {
         $this->plugin = craft()->plugins->getPlugin('mpentry');
     }
+
+    //--------------------------------------------------------------------------
+    // Public functions
+    //--------------------------------------------------------------------------
 
     /**
      * Validate (disabled) entry, add errors and return false if invalid.
@@ -268,9 +274,39 @@ class MpEntryService extends BaseApplicationComponent
         }
     }
 
-    //------------------
+    /**
+     * Post entry pageview to Google Analytics via Measurement Protocol.
+     */
+    public function postToGoogleAnalytics($entry)
+    {
+        $url  = 'https://www.google-analytics.com/collect';
+        $tid  = $this->plugin->settings['googleAnalyticsTrackingId'];
+        $host = CRAFT_ENVIRONMENT == 'dev' ? 'dev.marinpost.org' : 'marinpost.org';
+        $data = array(
+            'v'   => '1',
+            'tid' => $tid,
+            'cid' => StringHelper::UUID(),
+            't'   => 'pageview',
+            'dh'  => $host,
+            'dp'  => $entry->uri,
+            'dt'  => $entry->title
+        );
+        $body = json_encode($data);
+
+        $client = new \Guzzle\Http\Client();
+        $req    = $client->post($url, array('content-type' => 'application/json'));
+        $req->setBody($body);
+
+        $res    = $req->send();
+        $code   = $res->getStatusCode();
+        $reason = $res->getReasonPhrase();
+
+        $this->plugin->logger("Posted $body to $url, with response $code : $reason");
+    }
+
+    //--------------------------------------------------------------------------
     // Private functions
-    //------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Return array of Location IDs from Locations which are geographical "children" of the Primary Location
