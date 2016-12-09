@@ -32,6 +32,7 @@ class MpSubscriptionTask extends BaseTask
         $user     = $settings->user;
 
         $this->plugin->logger("Running step $step for $user.");
+
         craft()->mpSubscription->sendEmailToUser($user);
 
         return true;

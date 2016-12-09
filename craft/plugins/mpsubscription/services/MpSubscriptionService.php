@@ -411,11 +411,12 @@ class MpSubscriptionService extends BaseApplicationComponent
     /**
      * Send weekly update email to other, non-User recipient.
      */
-    public function sendEmailToAddress($emailAddress)
+    public function sendEmailToOtherRecipient($recipient)
     {
-        if ($this->_userWithEmailAddress($emailAddress))
+        if ($this->_userWithEmailAddress($recipient->email))
         {
-            $this->plugin->logger("User exists with email of $emailAddress");
+            $this->plugin->logger("User exists with email of {$recipient->email}, so disabling EmailAddress entry.");
+            craft()->mpEntry->updateStatus($recipient->id, BaseElementModel::DISABLED);
             return;
         }
 
@@ -439,7 +440,7 @@ class MpSubscriptionService extends BaseApplicationComponent
         craft()->path->setTemplatesPath($savePath);
 
         $email = new EmailModel();
-        $email->toEmail  = $emailAddress;
+        $email->toEmail  = $recipient->email;
         $email->subject  = 'Weekly Update from the Marin Post';
         $email->htmlBody = $body;
 
@@ -447,11 +448,11 @@ class MpSubscriptionService extends BaseApplicationComponent
 
         if ($sent)
         {
-            $this->plugin->logger("Successfully sent weekly update email to $emailAddress.");
+            $this->plugin->logger("Successfully sent weekly update email to {$recipient->email}.");
         }
         else
         {
-            $this->plugin->logger("Failed to send weekly update email to $emailAddress.", LogLevel::Error);
+            $this->plugin->logger("Failed to send weekly update email to {$recipient->email}.", LogLevel::Error);
         }
     }
 

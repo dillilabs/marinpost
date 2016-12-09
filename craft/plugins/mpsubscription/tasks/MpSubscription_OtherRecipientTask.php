@@ -13,7 +13,7 @@ class MpSubscription_OtherRecipientTask extends BaseTask
 
     protected function defineSettings()
     {
-        return array('emailAddress' => AttributeType::String);
+        return array('recipient' => AttributeType::Mixed);
     }
 
     public function getDescription()
@@ -28,11 +28,12 @@ class MpSubscription_OtherRecipientTask extends BaseTask
 
     public function runStep($step)
     {
-        $settings     = $this->getSettings();
-        $emailAddress = $settings->emailAddress;
+        $settings  = $this->getSettings();
+        $recipient = $settings->recipient;
 
-        $this->plugin->logger("Running step $step for $emailAddress.");
-        craft()->mpSubscription->sendEmailToAddress($emailAddress);
+        $this->plugin->logger("Running step $step for {$recipient->email}.");
+
+        craft()->mpSubscription->sendEmailToOtherRecipient($recipient);
 
         return true;
     }

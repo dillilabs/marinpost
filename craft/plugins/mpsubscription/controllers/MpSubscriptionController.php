@@ -321,7 +321,7 @@ class MpSubscriptionController extends BaseController
             {
                 foreach ($otherRecipients as $recipient)
                 {
-                    $this->_createTaskForOtherRecipient($recipient->email);
+                    $this->_createTaskForOtherRecipient($recipient);
                 }
             }
             else
@@ -395,11 +395,11 @@ class MpSubscriptionController extends BaseController
     /**
      * Create Task to send weekly update email to other, non-User recipient.
      */
-    private function _createTaskForOtherRecipient($emailAddress)
+    private function _createTaskForOtherRecipient($recipient)
     {
         $klass       = 'MpSubscription_OtherRecipient';
-        $description = "Weekly update for $emailAddress (other, non-user recipient)";
-        $settings    = array('emailAddress' => $emailAddress);
+        $description = "Weekly update for {$recipient->email} (other, non-user recipient)";
+        $settings    = array('recipient' => $recipient);
 
         $task = craft()->tasks->createTask($klass, $description, $settings);
 
