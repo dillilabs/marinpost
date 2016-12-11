@@ -288,7 +288,7 @@ class MpEntryService extends BaseApplicationComponent
             'cid' => StringHelper::UUID(),
             't'   => 'pageview',
             'dh'  => $host,
-            'dp'  => $entry->uri,
+            'dp'  => "/{$entry->uri}",
             'dt'  => $entry->title
         );
         $body = json_encode($data);
