@@ -224,7 +224,8 @@ class MpFilterService extends BaseApplicationComponent
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
-        if ($section) $criteria->section = $section;
+        $criteria->section = $this->_section($section);
+
         if ($authorIds) $criteria->authorId = $authorIds;
 
         return $criteria->ids();
@@ -234,7 +235,7 @@ class MpFilterService extends BaseApplicationComponent
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
-        if ($section) $criteria->section = $section;
+        $criteria->section = $this->_section($section);
 
         if ($startDate)
         {
@@ -264,7 +265,7 @@ class MpFilterService extends BaseApplicationComponent
             $criteria->fixedOrder = true;
         }
 
-        if ($section) $criteria->section = $section;
+        $criteria->section = $this->_section($section);
         $criteria->offset = $offset;
         $criteria->limit = $limit;
 
@@ -293,7 +294,8 @@ class MpFilterService extends BaseApplicationComponent
     private function _locationEntries($locationIds = false, $section = false)
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        if ($section) $criteria->section = $section;
+
+        $criteria->section = $this->_section($section);
 
         if ($locationIds)
         {
@@ -382,7 +384,7 @@ class MpFilterService extends BaseApplicationComponent
     {
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
 
-        if ($section) $criteria->section = $section;
+        $criteria->section = $this->_section($section);
 
         if ($topicIds)
         {
@@ -485,4 +487,13 @@ class MpFilterService extends BaseApplicationComponent
     {
         return array_map(function($entry) { return $entry->id; }, $entries);
     }
+
+    /**
+     * Confine filter to sections with user-created content.
+     */
+    private function _section($section = false)
+    {
+        return $section ? $section : array('blog', 'letters', 'media', 'news', 'notices');
+    }
+
 }

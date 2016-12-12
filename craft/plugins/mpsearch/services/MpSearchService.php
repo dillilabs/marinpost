@@ -21,15 +21,10 @@ class MpSearchService extends BaseApplicationComponent
      *      news
      *      notices
      */
-    public function search($searchTerms, $section = null)
+    public function search($searchTerms, $section = false)
     {
-        if (!$section)
-        {
-            $section = array('blog', 'letters', 'media', 'news', 'notices');
-        }
-
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
-        $criteria->section = $section;
+        $criteria->section = $this->_section($section);
         $criteria->search = $searchTerms;
         $criteria->order = 'score';
 
@@ -46,7 +41,7 @@ class MpSearchService extends BaseApplicationComponent
         {
             $criteria = craft()->elements->getCriteria(ElementType::Entry);
             $criteria->authorId = $authorIds;
-            if ($section) $criteria->section = $section;
+            $criteria->section = $this->_section($section);
             $criteria->order = 'score';
             $authorEntryIds = $criteria->ids();
             $this->plugin->logger(array('authorEntryIds' => $authorEntryIds));
@@ -84,4 +79,13 @@ class MpSearchService extends BaseApplicationComponent
     {
         return array_map(function($entry) { return $entry->id; }, $entries);
     }
+
+    /**
+     * Confine filter to sections with user-created content.
+     */
+    private function _section($section = false)
+    {
+        return $section ? $section : array('blog', 'letters', 'media', 'news', 'notices');
+    }
+
 }
