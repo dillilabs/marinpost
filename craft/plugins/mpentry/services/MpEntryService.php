@@ -279,29 +279,37 @@ class MpEntryService extends BaseApplicationComponent
      */
     public function postToGoogleAnalytics($entry)
     {
-        $url  = 'https://www.google-analytics.com/collect';
-        $tid  = $this->plugin->settings['googleAnalyticsTrackingId'];
-        $host = CRAFT_ENVIRONMENT == 'dev' ? 'dev.marinpost.org' : 'marinpost.org';
-        $data = array(
-            'v'   => '1',
-            'tid' => $tid,
-            'cid' => StringHelper::UUID(),
-            't'   => 'pageview',
-            'dh'  => $host,
-            'dp'  => "/{$entry->uri}",
-            'dt'  => $entry->title
-        );
-        $body = json_encode($data);
+        $debug = CRAFT_ENVIRONMENT == 'dev';
 
-        $client = new \Guzzle\Http\Client();
-        $req    = $client->post($url, array('content-type' => 'application/json'));
-        $req->setBody($body);
+        $url   = $debug ? 'https://www.google-analytics.com/debug/collect' : 'https://www.google-analytics.com/collect';
+        $v     = 1;
+        $tid   = $this->plugin->settings['googleAnalyticsTrackingId'];
+		$cid   = StringHelper::UUID();
+        $t     = 'pageview';
+        $host  = $debug ? 'dev.marinpost.org' : 'marinpost.org';
+        $page  = "/{$entry->uri}";
+        $title = $entry->title;
+		$data  = "v=$v&tid=$tid&cid=$cid&t=$t&dh=$host&dp=$page&dt=$title";
 
-        $res    = $req->send();
-        $code   = $res->getStatusCode();
-        $reason = $res->getReasonPhrase();
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_RETURNTRANSFER => 1,
+			CURLOPT_URL            => $url,
+			CURLOPT_POST           => 1,
+			CURLOPT_POSTFIELDS     => $data
+		));
 
-        $this->plugin->logger("Posted $body to $url, with response $code : $reason");
+        if ($debug)
+        {
+		    $resp = curl_exec($curl);
+            $this->plugin->logger("Posted to $url: $data, response: $resp");
+        }
+        else
+        {
+            $this->plugin->logger("Posted to $url: $data");
+        }
+
+		curl_close($curl);
     }
 
     //--------------------------------------------------------------------------
