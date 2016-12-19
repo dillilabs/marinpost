@@ -305,6 +305,7 @@ class MpSubscriptionService extends BaseApplicationComponent
         $criteria->subscriptionExpirationDate = "> $today";
         $criteria->subscriptionSuspended      = 'not 1';
         $criteria->subscriptionFrequency      = $period;
+        $criteria->limit                      = null;
 
         // OPTIMIZE do this via relatedTo...
         foreach ($criteria->find() as $user)
@@ -338,6 +339,7 @@ class MpSubscriptionService extends BaseApplicationComponent
     {
         $criteria          = craft()->elements->getCriteria(ElementType::Entry);
         $criteria->section = 'emailAddresses';
+        $criteria->limit   = null;
         $entries           = $criteria->find();
 
         return $entries;
@@ -403,6 +405,7 @@ class MpSubscriptionService extends BaseApplicationComponent
         $criteria        = craft()->elements->getCriteria(ElementType::Entry);
         $criteria->id    = $entryIds;
         $criteria->order = 'postDate desc';
+        $criteria->limit = null;
         $entries         = $criteria->find();
 
         return $entries;
@@ -727,6 +730,7 @@ class MpSubscriptionService extends BaseApplicationComponent
         $criteria        = craft()->elements->getCriteria(ElementType::Entry);
         $criteria->id    = $entryIds;
         $criteria->order = 'postDate desc';
+        $criteria->limit = null;
         $entries         = $criteria->find();
 
         return $entries;

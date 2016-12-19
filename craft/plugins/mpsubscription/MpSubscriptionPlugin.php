@@ -56,7 +56,7 @@ class MpSubscriptionPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '1.2.3';
+        return '1.2.4';
     }
 
     public function getDeveloper()
