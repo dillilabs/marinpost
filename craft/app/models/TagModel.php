@@ -100,13 +100,18 @@ class TagModel extends BaseElementModel
 
 	/**
 	 * Returns the tag's title.
+     *
+     * @param bool $logDeprecationError
 	 *
 	 * @deprecated Deprecated in 2.3. Use {@link $title} instead.
 	 * @return string
 	 */
-	public function getName()
+	public function getName($logDeprecationError = true)
 	{
-		// TODO: Add a deprecation log in 3.0
+	    if ($logDeprecationError) {
+            craft()->deprecator->log('TagModel::name', 'The Tag ‘name’ property has been deprecated. Use ‘title’ instead.');
+        }
+
 		return $this->getContent()->title;
 	}
 
