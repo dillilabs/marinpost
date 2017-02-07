@@ -206,8 +206,7 @@ class MpSubscriptionController extends BaseController
         }
 
         $object = $event->data->object;
-        $customerId = $object->object == 'customer' ? $object->id : $object->customer;
-        $this->plugin->logger("Received Stripe Event[{$event->type}, {$event->id}] Object[{$object->object}, {$object->id}] Customer[$customerId]");
+        $this->plugin->logger("Received Stripe Event[{$event->type}, {$event->id}] Object[{$object->object}, {$object->id}]");
 
         switch ($event->type)
         {
@@ -234,6 +233,9 @@ class MpSubscriptionController extends BaseController
         case 'invoice.payment_failed':
 
             // NOTE not all of these events are actually of interest to the handler
+
+            $customerId = $object->object == 'customer' ? $object->id : $object->customer;
+            $this->plugin->logger("Received Stripe Event[{$event->type}, {$event->id}] Object[{$object->object}, {$object->id}] for Customer[$customerId]");
 
             craft()->mpSubscription->handleStripeEvent($event->id);
             break;
