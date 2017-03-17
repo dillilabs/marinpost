@@ -1,14 +1,16 @@
 {% extends "_common/layout" %}
 
-{% set title = "Surveys" %}
+{% set title = entry.title %}
 
 {% block main %}
   {% embed "_common/single" %}
+    {% block title %}{{ entry.title }}{% endblock %}
+
     {% block subNav %}
     {% endblock %}
-    {% block title %}Surveys{% endblock %}
+
     {% block post %}
-      <div class="help">{{ n.siteMessage }}</div>
+      {{ entry.survey | raw }}
     {% endblock %}
   {% endembed %}
 {% endblock %}
