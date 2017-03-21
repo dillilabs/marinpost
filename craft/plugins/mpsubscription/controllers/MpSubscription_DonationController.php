@@ -28,16 +28,32 @@ class MpSubscription_DontationController extends BaseController
     {
         $this->requirePostRequest();
 
-        $token = craft()->request->getParam('stripeToken');
-        if (!$token)
+        $email = craft()->request->getParam('email');
+        if (!$email)
         {
-            craft()->urlManager->setRouteVariables(array('error' => 'Credit card is required.'));
+            craft()->urlManager->setRouteVariables(array('error' => 'Email address is required.'));
             return;
         }
 
+        $token = craft()->request->getParam('stripeToken');
+        if (!$token)
+        {
+            craft()->urlManager->setRouteVariables(array('error' => 'Credit card info is required.'));
+            return;
+        }
+
+        $amount = craft()->request->getParam('amount');
+        if (!$amount)
+        {
+            craft()->urlManager->setRouteVariables(array('error' => 'Dollar amount is required'));
+            return;
+        }
+
+        $monthly = craft()->request->getParam('monthly');
+
         try
         {
-            craft()->mpSubscription_donation->create($token);
+            craft()->mpSubscription_donation->create($email, $token, $amount, $monthly);
 
             $this->plugin->logger("Successfully created subscription for $user, and subscribed to $plan.");
             $this->redirectToPostedUrl();

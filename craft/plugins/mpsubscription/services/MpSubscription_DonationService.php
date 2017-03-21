@@ -20,23 +20,41 @@ class MpSubscription_DontationService extends BaseApplicationComponent
     //-------------------------------------------------------------------------
 
     /**
-     * Create Stripe Customer and Subscription.
-     * Invoked by regular HTTP request.
+     * Charge email for amount on token (credit card).
+     *
+     * If monthly then create a monthly Stripe Plan, Customer and Subscription
+     * for it.
+     *
+     * Else create a one-time Stripe Charge.
      */
-    public function create($name, $amount, $email, $token)
+    public function create($email, $token, $amount, $monthly)
     {
         $this->_setAPiKey();
 
-        $plan = $this->_create_plan($name, $amount);
+        if ($monthly)
+        {
+            $plan = $this->_create_plan($email, $amount);
 
-        $customer = \Stripe\Customer::create(array(
-            'description' => "Monthly Donation from $name",
-            'email'       => $email,
-            'plan'        => $plan,
-            'source'      => $token
-        ));
+            \Stripe\Customer::create(array(
+                'description' => "Monthly donation from $email",
+                'email'       => $email,
+                'plan'        => $plan,
+                'source'      => $token,
+            ));
+        }
+        else
+        {
+            \Stripe\Charge::create(array(
+                'amount'               => $amount,
+                'currency'             => 'usd',
+                'description'          => "One-time donation from $email",
+                'reciept_email'        => $email,
+                'source'               => $token,
+                'statement_descriptor' => 'DONATION TO MARINPOST',
+            ));
+        }
 
-        return $customer;
+        return true;
     }
 
     //-------------------------------------------------------------------------
@@ -47,16 +65,17 @@ class MpSubscription_DontationService extends BaseApplicationComponent
      * Create Stripe Plan.
      * Invoked by regular HTTP request.
      */
-    private function _create_plan($name, $amount)
+    private function _create_plan($email, $amount)
     {
-        $id = uniqid('monthly.donation.');
+        $uniqueId = uniqid('monthly.donation.');
 
 		$plan = \Stripe\Plan::create(array(
-			'amount'   => $amount,
-			'currency' => 'usd',
-			'id'       => $id,
-			'interval' => 'month',
-			'name'     => "Monthly Donation from $name"
+			'amount'               => $amount,
+			'currency'             => 'usd',
+			'id'                   => $uniqueId,
+			'interval'             => 'month',
+			'name'                 => "Monthly donation from $email",
+            'statement_descriptor' => 'DONATION TO MARINPOST',
 		));
 
         return $plan;

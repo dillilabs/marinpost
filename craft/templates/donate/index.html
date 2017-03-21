@@ -1,0 +1,123 @@
+{% extends "_common/layout" %}
+
+{% set title = entry.title %}
+
+{% block main %}
+  {% embed "_common/single" %}
+    {% block title %}{{ entry.title }}{% endblock %}
+
+    {% block subNav %}
+    {% endblock %}
+
+    {% block post %}
+      <div class="help">{{ entry.genericContent }}</div>
+
+     {% include 'donate/_form.html' %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="https://js.stripe.com/v3/"></script>
+
+  <script>
+    $(function() {
+      var cents = 0;
+
+      function validateAmount() {
+        var amount = $('input#amount').val();
+
+        amount = amount.replace(/\$/g, '').replace(/\,/g, '')
+
+        amount = parseFloat(amount);
+
+        if (isNaN(amount)) {
+          $('#error_explanation').html('<p>Please enter a valid amount in USD ($).</p>');
+          return false;
+
+        } else if (amount < 5.00) {
+          $('#error_explanation').html('<p>Donation amount must be at least $5.</p>');
+          return false;
+
+        }
+
+        cents = amount * 100; // Needs to be an integer!
+        cents = Math.round(cents);
+        return true
+      }
+
+      function stripeTokenHandler(token) {
+        var hiddenInput = document.createElement('input');
+
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        form.submit();
+      }
+
+      var form = document.getElementById('payment-form');
+      var displayError = document.getElementById('card-errors');
+      var stripe = Stripe('{{ craft.mpSubscription.publishableKey }}');
+      var elements = stripe.elements();
+
+      var cardNumber = elements.create('cardNumber');
+      var cardExpiry = elements.create('cardExpiry');
+      var cardCvc = elements.create('cardCvc');
+
+      cardNumber.mount('#cardNumber');
+      cardExpiry.mount('#cardExpiry');
+      cardCvc.mount('#cardCvc');
+
+      cardNumber.addEventListener('change', function(event) {
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      cardExpiry.addEventListener('change', function(event) {
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      cardCvc.addEventListener('change', function(event) {
+        if (event.error) {
+          displayError.textContent = event.error.message;
+        } else {
+          displayError.textContent = '';
+        }
+      });
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var options = {
+          name: form.querySelector('input[name=name]').value,
+          address_line1: form.querySelector('input[name=address_line1]').value,
+          address_line2: form.querySelector('input[name=address_line2]').value,
+          address_city: form.querySelector('input[name=address_city]').value,
+          address_state: form.querySelector('input[name=address_state]').value,
+          address_zip: form.querySelector('input[name=address_zip]').value
+        };
+
+        stripe.createToken(cardNumber, options).then(function(result) {
+          if (result.error) {
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+          } else {
+            stripeTokenHandler(result.token);
+          }
+        });
+      });
+
+      $('#form-wrapper').accordion({ collapsible: true });
+      $('#form-wrapper > h3:first').click();
+    });
+  </script>
+{% endblock %}
