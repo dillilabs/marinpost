@@ -29,7 +29,7 @@ class MpSearchService extends BaseApplicationComponent
         $criteria->section = $this->_section($section);
         $criteria->search = $searchTerms;
         $criteria->order = 'score';
-        // $criteria->limit = 100;
+        $criteria->limit = null;
 
         $entryIds = $criteria->ids();
         $this->plugin->logger(array('entryIds' => $entryIds));
@@ -37,7 +37,7 @@ class MpSearchService extends BaseApplicationComponent
         $criteria = craft()->elements->getCriteria(ElementType::User);
         $criteria->search = $searchTerms;
         $criteria->order = 'score';
-        // $criteria->limit = 100;
+        $criteria->limit = null;
 
         $authorIds = $criteria->ids();
         $this->plugin->logger(array('authorIds' => $authorIds));
@@ -48,7 +48,7 @@ class MpSearchService extends BaseApplicationComponent
             $criteria->authorId = $authorIds;
             $criteria->section = $this->_section($section);
             $criteria->order = 'postDate desc';
-            // $criteria->limit = 100;
+            $criteria->limit = null;
 
             $authorEntryIds = $criteria->ids();
             $this->plugin->logger(array("entryIds of author $authorId" => $authorEntryIds));

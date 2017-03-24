@@ -35,7 +35,7 @@
         {{ p.documents(user.userDocuments) }}
       </div>
 
-      {% set entries = craft.entries.authorId(user.id) | group('section.handle') %}
+      {% set entries = craft.entries.authorId(user.id).limit(null) | group('section.handle') %}
 
       {% import "about/_macros" as m %}
 

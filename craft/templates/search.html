@@ -83,7 +83,7 @@
       {% if query | length %}
         {% if entryIds | length %}
           <ul class="posts search">
-          {% for entry in craft.entries.id(entryIds) %}
+          {% for entry in craft.entries.id(entryIds).order('postDate desc').limit(null) %}
             {{ p.post(entry, true) }}
           {% endfor %}
           </ul>
