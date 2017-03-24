@@ -23,10 +23,13 @@ class MpSearchService extends BaseApplicationComponent
      */
     public function search($searchTerms, $section = false)
     {
+        $this->plugin->logger("searchTerms: '$searchTerms' section: $section");
+
         $criteria = craft()->elements->getCriteria(ElementType::Entry);
         $criteria->section = $this->_section($section);
         $criteria->search = $searchTerms;
         $criteria->order = 'score';
+        // $criteria->limit = 100;
 
         $entryIds = $criteria->ids();
         $this->plugin->logger(array('entryIds' => $entryIds));
@@ -34,17 +37,21 @@ class MpSearchService extends BaseApplicationComponent
         $criteria = craft()->elements->getCriteria(ElementType::User);
         $criteria->search = $searchTerms;
         $criteria->order = 'score';
+        // $criteria->limit = 100;
+
         $authorIds = $criteria->ids();
         $this->plugin->logger(array('authorIds' => $authorIds));
 
-        if ($authorIds)
+        foreach ($authorIds as $authorId)
         {
             $criteria = craft()->elements->getCriteria(ElementType::Entry);
             $criteria->authorId = $authorIds;
             $criteria->section = $this->_section($section);
-            $criteria->order = 'score';
+            $criteria->order = 'postDate desc';
+            // $criteria->limit = 100;
+
             $authorEntryIds = $criteria->ids();
-            $this->plugin->logger(array('authorEntryIds' => $authorEntryIds));
+            $this->plugin->logger(array("entryIds of author $authorId" => $authorEntryIds));
 
             if ($authorEntryIds)
             {
