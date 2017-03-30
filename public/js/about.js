@@ -6,7 +6,6 @@ $(function() {
   }
 
   if (m = document.location.pathname.match(/(^\/about\/contributors\/\d+\/\S+)/)) {
-    console.log(m[1]);
     contributorRadioButtons.find('input[value$="'+m[1]+'"]').attr('checked', 'checked');
   }
 

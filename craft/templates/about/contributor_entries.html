@@ -1,0 +1,16 @@
+{# Called via Javascript from /about/contributors/id #}
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set authorId = craft.request.param('authorId') %}
+{% set section  = craft.request.param('section') %}
+
+{% set entries = craft.entries.authorId(authorId).section(section).limit(null) %}
+
+{% import "_entry/macros" as m %}
+
+{% for entry in entries %}
+  {{ m.post(entry) }}
+{% endfor %}
+
+{% endspaceless %}

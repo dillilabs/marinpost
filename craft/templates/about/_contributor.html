@@ -35,15 +35,16 @@
         {{ p.documents(user.userDocuments) }}
       </div>
 
-      {% set entries = craft.entries.authorId(user.id).limit(null) | group('section.handle') %}
-
-      {% import "about/_macros" as m %}
-
-      {{ m.entries(entries['blog'], 'My Blog Posts') }}
-      {{ m.entries(entries['news'], 'My News Links') }}
-      {{ m.entries(entries['notices'], 'My Notices') }}
-      {{ m.entries(entries['media'], 'My Media Links') }}
-      {{ m.entries(entries['letters'], 'My Letters') }}
+      <h3 class="my-content" data-section="blog"><a href="#">My Blog Posts</a></h3>
+      <ul class="posts" style="display:none"></ul>
+      <h3 class="my-content" data-section="news"><a href="#">My News Links</a></h3>
+      <ul class="posts" style="display:none"></ul>
+      <h3 class="my-content" data-section="notices"><a href="#">My Notices</a></h3>
+      <ul class="posts" style="display:none"></ul>
+      <h3 class="my-content" data-section="media"><a href="#">My Media Links</a></h3>
+      <ul class="posts" style="display:none"></ul>
+      <h3 class="my-content" data-section="letters"><a href="#">My Letters</a></h3>
+      <ul class="posts" style="display:none"></ul>
 
       {% include "_common/disqus_count.html" %}
     {% endblock %}
@@ -52,10 +53,35 @@
 
 {% set js %}
   $(function() {
-    $('h3.my-content a').click(function(e) {
-      e.preventDefault();
+    var authorId = '{{ craft.request.segment(3) }}';
 
-      $(this).parent().next('ul').toggle();
+    $('h3.my-content a').click(function(e) {
+      var $link   = $(this);
+      var $parent = $link.parent();
+      var $list   = $parent.next('ul.posts');
+      var section = $parent[0].dataset.section;
+
+      console.log('authorId', authorId, 'section', section);
+
+      if ($parent.hasClass('active')) {
+        $list.hide();
+      } else {
+        if ($list.children().length == 0) {
+          $link.append('<img src="/img/spinner.gif" style="padding-left: 8px">');
+
+          $list.load(
+            '/about/contributor_entries',
+            {authorId: authorId, section: section},
+            function() {
+              $link.find('img').remove();
+            }
+          );
+        }
+
+        $list.show();
+      }
+
+      e.preventDefault();
     });
   });
 {% endset %}
