@@ -3,7 +3,7 @@ namespace Craft;
 
 require CRAFT_PLUGINS_PATH.'/mpsubscription/vendor/autoload.php';
 
-class MpSubscription_DontationController extends BaseController
+class MpSubscription_DonationController extends BaseController
 {
     protected $allowAnonymous = array(
         'actionCreate',
@@ -21,32 +21,30 @@ class MpSubscription_DontationController extends BaseController
     //-------------------------------------------------------------------------
 
     /**
-     * CREATE subscription for donor.
-     * Regular HTTP request.
+     * CREATE donation for donor.
+     * AJAX request.
      */
     public function actionCreate()
     {
         $this->requirePostRequest();
-
-        $email = craft()->request->getParam('email');
-        if (!$email)
-        {
-            craft()->urlManager->setRouteVariables(array('error' => 'Email address is required.'));
-            return;
-        }
+        $this->requireAjaxRequest();
 
         $token = craft()->request->getParam('stripeToken');
         if (!$token)
         {
-            craft()->urlManager->setRouteVariables(array('error' => 'Credit card info is required.'));
-            return;
+            $this->returnErrorJson('Credit card info is required.');
+        }
+
+        $email = craft()->request->getParam('email');
+        if (!$email)
+        {
+            $this->returnErrorJson('Email address is required.');
         }
 
         $amount = craft()->request->getParam('amount');
         if (!$amount)
         {
-            craft()->urlManager->setRouteVariables(array('error' => 'Dollar amount is required'));
-            return;
+            $this->returnErrorJson('Donation amount is required.');
         }
 
         $monthly = craft()->request->getParam('monthly');
@@ -55,18 +53,21 @@ class MpSubscription_DontationController extends BaseController
         {
             craft()->mpSubscription_donation->create($email, $token, $amount, $monthly);
 
-            $this->plugin->logger("Successfully created subscription for $user, and subscribed to $plan.");
-            $this->redirectToPostedUrl();
+            $this->plugin->logger("Successfully created ".($amount / 100.0)." donation for $email.");
+            $this->returnJson(array('success' => true));
         }
         catch (\Stripe\Error\Base $e)
         {
             $error = $e->getMessage();
-            $this->plugin->logger("Failed to create subscription for $user: $error", LogLevel::Error);
-            craft()->urlManager->setRouteVariables(array('error' => $error));
+            $this->plugin->logger("Stripe errors: failed to create donation for $email: $error", LogLevel::Error);
+            $this->returnErrorJson($error);
+        }
+        catch (Exception $e)
+        {
+            $error = $e->getMessage();
+            $this->plugin->logger("Unknown error: failed to create donation for $email: $error", LogLevel::Error);
+            $this->returnErrorJson($error);
         }
     }
 
-    //-------------------------------------------------------------------------
-    // Private functions
-    //-------------------------------------------------------------------------
 }

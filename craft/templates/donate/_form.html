@@ -1,81 +1,84 @@
-<div id='form-wrapper'>
-  <h3>Dontate Now</h3>
-
-  <div>
-		<form method="post" action="" accept-charset="UTF-8" class="" id="payment-form">
-			{{ getCsrfInput() }}
-			<input type="hidden" name="action" value="mpSubscription/donation/create">
-			<input type="hidden" name="redirect" value="donate/thankyou">
-
-      <div class="form-row">
-
-        <label for="name" class="required">Cardholder Name
-          <div>
-            <input name="name" class="field" placeholder="John Doe" />
-          </div>
-        </label>
-
-        <label for="email" class="required">Email Address
-          <div>
-            <input name="email" type="email" class="field" placeholder="john@example.com" />
-          </div>
-        </label>
-
-        <label for="address_line1" class="required">Billing Address
-          <div>
-            <input name="address_line1" class="field" placeholder="123 Main" />
-          </div>
-        </label>
-
-        <label for="address_line2">Address 2
-          <div>
-            <input name="address_line2" class="field" placeholder="Apt. 2" />
-          </div>
-        </label>
-
-        <label for="address_state" class="required">State
-          <select name="address_state" class="field">
-            <option value="">Please select one</option>
-          {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
-            <option value="{{ option.value }}">{{ option.label }}</option>
-          {% endfor %}
-          </select>
-        </label>
-
-        <label for="address_zip" class="required">Zip
-          <div>
-            <input name="address_zip" class="field" placeholder="94110" />
-          </div>
-        </label>
-
-        <label for="cardNumber" class="required">Card Number
-          <div id="cardNumber"></div>
-        </label>
-
-        <label for="cardExpiry" class="required">Card Expiry
-          <div id="cardExpiry"></div>
-        </label>
-
-        <label for="cardCvc" class="required">Card CVC
-          <div id="cardCvc"></div>
-        </label>
-
-        <label for="amount" class="required">Donation Amount (USD)
-          <div>
-            $ <input name="amount" class="field" placeholder="25.00" pattern="^\d+\.\d{2}$" />
-          </div>
-        </label>
-
-        <label for="monthly" class="required">Monthly?
-          <div>
-            <input name="monthly" type="checkbox" class="field" />
-          </div>
-        </label>
-
-        <div id="card-errors"></div>
-      </div>
-
-      <button>Donate Now</button>
+<div class="donation-wrapper">
+  <h3 class="my-content"><a href="#">Dontate Now</a></h3>
+  
+  <div class='form-wrapper' style="display:none">
+    <form method="post" action="" accept-charset="UTF-8" class="" id="donation-form">
+      {{ getCsrfInput() }}
+      <input type="hidden" name="action" value="mpSubscription/donation/create">
+  
+      <label>Name on Credit Card
+        <input type="text" class="required" maxlength="50" data-stripe="name" />
+      </label>
+  
+      <br>
+      <label>Billing Address
+        <input type="text" class="required" maxlength="50" data-stripe="address_line1" />
+      </label>
+  
+      <br>
+      <label>Address 2
+        <input type="text" maxlength="30" data-stripe="address_line2" />
+      </label>
+  
+      <br>
+      <label>City
+        <input type="text" class="required" maxlength="30" data-stripe="address_city" />
+      </label>
+  
+      <br>
+      <label>State
+        <select id="state" class="required" data-stripe="address_state">
+        {% for option in craft.fields.getFieldbyHandle('state').settings.options %}
+          <option value="{{ option.value }}">
+            {{ option.label }}
+          </option>
+        {% endfor %}
+        </select>
+      </label>
+  
+      <input type="hidden" value="US" data-stripe="address_country" />
+  
+      <br>
+      <label>Zip
+        <input type="text" class="required" maxlength="5" data-stripe="address_zip" />
+      </label>
+  
+      <br>
+      <label>Email Address
+        <input type="text" maxlength="50" class="required.custom" name="email" />
+      </label>
+  
+      <br>
+      <label>Card Number
+        <input type="text" maxlength="20" class="required" data-stripe="number" />
+      </label>
+  
+      <br>
+      <label>Card CVC
+        <input type="text" size="4" maxlength="4" class="required" data-stripe="cvc" />
+      </label>
+  
+      <br>
+      <label>Card Expiration Date
+        <br>
+        <input type="text" class="required month" size="2" maxlength="2" data-stripe="exp-month" placeholder="MM" />
+        <input type="text" class="required year" size="4" maxlength="4" data-stripe="exp-year" placeholder="YYYY" />
+      </label>
+  
+      <br>
+      <label>Donation Amount (USD)
+        $ <input type="text" maxlength="8" class="required.custom" name="amount" placeholder="50.00" pattern="^\d+\.\d{2}$" />
+      </label>
+  
+      <br>
+      <label>Repeat Monthly?
+        <input type="checkbox" name="monthly" checked />
+      </label>
+  
+      <ul class="errors"></ul>
+  
+      <input type="submit" value="Donate Now" class="btn submit">
+      <img src="{{ siteUrl }}img/spinner.gif" class="spinner" style="display:none">
     </form>
   </div>
 </div>

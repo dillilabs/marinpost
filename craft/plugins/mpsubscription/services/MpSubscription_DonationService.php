@@ -3,7 +3,7 @@ namespace Craft;
 
 require CRAFT_PLUGINS_PATH.'/mpsubscription/vendor/autoload.php';
 
-class MpSubscription_DontationService extends BaseApplicationComponent
+class MpSubscription_DonationService extends BaseApplicationComponent
 {
     private $plugin;
     private $secretKey;
@@ -26,6 +26,23 @@ class MpSubscription_DontationService extends BaseApplicationComponent
      * for it.
      *
      * Else create a one-time Stripe Charge.
+     *
+     * NOTE on Stripe "reciept email":
+     *
+     * The email address to send this charge's receipt to. The receipt will not
+     * be sent until the charge is paid. If this charge is for a customer, the
+     * email address specified here will override the customer's email address.
+     * Receipts will not be sent for test mode charges. If receipt_email is
+     * specified for a charge in live mode, a receipt will be sent regardless
+     * of your email settings.
+     *
+     * We also support saving a customer’s default email address, and can
+     * automatically send receipts to that email address whenever your customer
+     * makes a payment. This is useful for recurring payments. In this case,
+     * you don’t need to pass in a receipt_email each time you charge your
+     * customer. To enable this, you’ll want to set an email when creating a
+     * customer, and then turn on customer receipts from your email settings by
+     * checking the box to “Email customers for successful payment.”
      */
     public function create($email, $token, $amount, $monthly)
     {
@@ -42,7 +59,7 @@ class MpSubscription_DontationService extends BaseApplicationComponent
                 'source'      => $token,
             ));
         }
-        else
+        else // one-time donation
         {
             \Stripe\Charge::create(array(
                 'amount'               => $amount,
@@ -62,8 +79,7 @@ class MpSubscription_DontationService extends BaseApplicationComponent
     //-------------------------------------------------------------------------
 
     /**
-     * Create Stripe Plan.
-     * Invoked by regular HTTP request.
+     * Create Stripe Plan for monthly donation.
      */
     private function _create_plan($email, $amount)
     {
