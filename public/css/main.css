@@ -1176,32 +1176,40 @@ h2 span.preview button.close {
     text-decoration: underline;
     margin: 12px;
 }
-.subscription fieldset.disabled legend, .subscription fieldset.disabled .location-group, .subscription fieldset.disabled label {
+.subscription fieldset.disabled legend,
+.subscription fieldset.disabled .location-group,
+.subscription fieldset.disabled label {
     color: #c0c0c0;
 }
 
-form.subscription label {
+form.subscription label,
+form.donation label {
   display: inline-block;
   font-weight: normal;
 }
 
-form.subscription input[type="text"].month {
+form.subscription input[type="text"].month,
+form.donation input[type="text"].month {
     display: inline-block;
     padding: .25em;
     width: 20%;
 }
 
-form.subscription input[type="text"].year {
+form.subscription input[type="text"].year,
+form.donation input[type="text"].year {
     display: inline-block;
     padding: .25em;
     width: 30%;
 }
 
-form.subscription input[type=submit] {
+form.subscription input[type=submit],
+form.donation input[type=submit] {
   margin-top: 10px;
 }
 
-form.subscription img.spinner, form.subscription img.success {
+form.subscription img.spinner,
+form.subscription img.success,
+form.donation img.spinner {
   display: none;
   height: 20px;
   padding: 8px;
