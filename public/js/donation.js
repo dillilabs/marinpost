@@ -109,6 +109,13 @@
 
                 errors.empty();
 
+                if (amountField.val().length == 0) {
+                    errors.append('<li>Donation amount is required</li>');
+                    valid = false;
+                } else if (!validateAmount(amountField.val())) {
+                    valid = false;
+                }
+
                 stripeFields.each(function(i, field) {
                     var field = $(field);
 
@@ -120,13 +127,6 @@
 
                 if (emailField.val().length == 0) {
                     errors.append('<li>Email Address is required</li>');
-                    valid = false;
-                }
-
-                if (amountField.val().length == 0) {
-                    errors.append('<li>Donation amount is required</li>');
-                    valid = false;
-                } else if (!validateAmount(amountField.val())) {
                     valid = false;
                 }
 

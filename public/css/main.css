@@ -1202,6 +1202,11 @@ form.donation input[type="text"].year {
     width: 30%;
 }
 
+form.donation input[type="text"].amount {
+    display: inline-block;
+    width: 30%;
+}
+
 form.subscription input[type=submit],
 form.donation input[type=submit] {
   margin-top: 10px;
