@@ -48,13 +48,17 @@ class MpSubscription_DonationService extends BaseApplicationComponent
     {
         $this->_setAPiKey();
 
+        $metadata = $this->_retrieve_metadata_from_token($token);
+        $name     = $metadata['name'];
+
         if ($monthly)
         {
-            $plan = $this->_create_plan($email, $amount);
+            $plan = $this->_create_plan($name, $amount);
 
             \Stripe\Customer::create(array(
-                'description' => "Monthly donation from $email",
+                'description' => "Monthly donation from $name",
                 'email'       => $email,
+                'metadata'    => $metadata,
                 'plan'        => $plan,
                 'source'      => $token,
             ));
@@ -64,8 +68,9 @@ class MpSubscription_DonationService extends BaseApplicationComponent
             \Stripe\Charge::create(array(
                 'amount'               => $amount,
                 'currency'             => 'usd',
-                'description'          => "One-time donation from $email",
-                'reciept_email'        => $email,
+                'description'          => "One-time donation from $name",
+                'metadata'             => array('email' => $email),
+                'receipt_email'        => $email,
                 'source'               => $token,
                 'statement_descriptor' => 'DONATION TO MARINPOST',
             ));
@@ -79,9 +84,29 @@ class MpSubscription_DonationService extends BaseApplicationComponent
     //-------------------------------------------------------------------------
 
     /**
+     * Get metadata used to generate Stripe token.
+     */
+    private function _retrieve_metadata_from_token($token)
+    {
+        $object = \Stripe\Token::retrieve($token);
+
+        $metadata = array(
+            'name'            => $object->card->name,
+            'address_line1'   => $object->card->address_line1,
+            'address_line2'   => $object->card->address_line2,
+            'address_city'    => $object->card->address_city,
+            'address_state'   => $object->card->address_state,
+            'address_zip'     => $object->card->address_zip,
+            'address_country' => $object->card->address_country,
+        );
+
+        return $metadata;
+    }
+
+    /**
      * Create Stripe Plan for monthly donation.
      */
-    private function _create_plan($email, $amount)
+    private function _create_plan($name, $amount)
     {
         $uniqueId = uniqid('monthly.donation.');
 
@@ -90,7 +115,7 @@ class MpSubscription_DonationService extends BaseApplicationComponent
 			'currency'             => 'usd',
 			'id'                   => $uniqueId,
 			'interval'             => 'month',
-			'name'                 => "Monthly donation from $email",
+			'name'                 => "Monthly donation from $name",
             'statement_descriptor' => 'DONATION TO MARINPOST',
 		));
 

@@ -53,19 +53,19 @@ class MpSubscription_DonationController extends BaseController
         {
             craft()->mpSubscription_donation->create($email, $token, $amount, $monthly);
 
-            $this->plugin->logger("Successfully created ".($amount / 100.0)." donation for $email.");
+            $this->plugin->logger("Successfully handled $".($amount / 100.0)." donation from $email.");
             $this->returnJson(array('success' => true));
         }
         catch (\Stripe\Error\Base $e)
         {
             $error = $e->getMessage();
-            $this->plugin->logger("Stripe errors: failed to create donation for $email: $error", LogLevel::Error);
+            $this->plugin->logger("Stripe errors: failed to handle donation from $email: $error", LogLevel::Error);
             $this->returnErrorJson($error);
         }
         catch (Exception $e)
         {
             $error = $e->getMessage();
-            $this->plugin->logger("Unknown error: failed to create donation for $email: $error", LogLevel::Error);
+            $this->plugin->logger("Unknown error: failed to handle donation from $email: $error", LogLevel::Error);
             $this->returnErrorJson($error);
         }
     }
