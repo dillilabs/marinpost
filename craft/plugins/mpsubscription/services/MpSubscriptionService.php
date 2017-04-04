@@ -45,6 +45,7 @@ class MpSubscriptionService extends BaseApplicationComponent
         $this->_setAPiKey();
 
         $plans = array();
+        $planPrefix = 'mp.subscription'; // This is required to distinguish from recurring monthly donations
 
         try
         {
@@ -55,14 +56,16 @@ class MpSubscriptionService extends BaseApplicationComponent
 
             foreach ($object->data as $plan)
             {
-                $description = $plan->interval == 'year' ? 'Year' : ($plan->interval_count == '3' ? 'Quarter' : 'Month');
+                if (substr($plan->id, 0, strlen($planPrefix)) === $planPrefix) {
+					$description = $plan->interval == 'year' ? 'Year' : ($plan->interval_count == '3' ? 'Quarter' : 'Month');
 
-                $plans[$description] = array(
-                    'id'          => $plan->id,
-                    'amount'      => $plan->amount,
-                    'description' => $description,
-                    'selected'    => $currentPlanId ? $plan->id == $currentPlanId : $description == $defaultPlan
-                );
+					$plans[$description] = array(
+						'id'          => $plan->id,
+						'amount'      => $plan->amount,
+						'description' => $description,
+						'selected'    => $currentPlanId ? $plan->id == $currentPlanId : $description == $defaultPlan
+					);
+				}
             }
 
             // Sort: Monthly > Quarterly > Yearly
