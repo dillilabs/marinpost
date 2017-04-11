@@ -206,7 +206,7 @@ class MpSubscriptionController extends BaseController
         }
 
         $object = $event->data->object;
-        $this->plugin->logger("Received Stripe Event[{$event->type}, {$event->id}] Object[{$object->object}, {$object->id}]");
+        $this->plugin->logger("Received Stripe Event[{$event->type}, {$event->id}] Object[{$object->object}]");
 
         switch ($event->type)
         {
