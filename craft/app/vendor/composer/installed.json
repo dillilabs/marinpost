@@ -1,17 +1,58 @@
 [
     {
-        "name": "symfony/event-dispatcher",
-        "version": "v2.8.15",
-        "version_normalized": "2.8.15.0",
+        "name": "enshrined/svg-sanitize",
+        "version": "0.5.3.1",
+        "version_normalized": "0.5.3.1",
         "source": {
             "type": "git",
-            "url": "https://github.com/symfony/event-dispatcher.git",
-            "reference": "25c576abd4e0f212e678fe8b2bd9a9a98c7ea934"
+            "url": "https://github.com/pixelandtonic/svg-sanitizer.git",
+            "reference": "a392da2ace76ecb27263cb09e2163449514bcf81"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/25c576abd4e0f212e678fe8b2bd9a9a98c7ea934",
-            "reference": "25c576abd4e0f212e678fe8b2bd9a9a98c7ea934",
+            "url": "https://api.github.com/repos/pixelandtonic/svg-sanitizer/zipball/a392da2ace76ecb27263cb09e2163449514bcf81",
+            "reference": "a392da2ace76ecb27263cb09e2163449514bcf81",
+            "shasum": ""
+        },
+        "require-dev": {
+            "codeclimate/php-test-reporter": "^0.1.2",
+            "phpunit/phpunit": "^4.7"
+        },
+        "time": "2017-06-09 21:45:33",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "enshrined\\svgSanitize\\": "src"
+            }
+        },
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "Daryll Doyle",
+                "email": "daryll@enshrined.co.uk"
+            }
+        ],
+        "description": "An SVG sanitizer for PHP",
+        "support": {
+            "source": "https://github.com/pixelandtonic/svg-sanitizer/tree/0.5.3.1"
+        }
+    },
+    {
+        "name": "symfony/event-dispatcher",
+        "version": "v2.8.22",
+        "version_normalized": "2.8.22.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/event-dispatcher.git",
+            "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/1377400fd641d7d1935981546aaef780ecd5bf6d",
+            "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d",
             "shasum": ""
         },
         "require": {
@@ -19,7 +60,7 @@
         },
         "require-dev": {
             "psr/log": "~1.0",
-            "symfony/config": "~2.0,>=2.0.5|~3.0.0",
+            "symfony/config": "^2.0.5|~3.0.0",
             "symfony/dependency-injection": "~2.6|~3.0.0",
             "symfony/expression-language": "~2.6|~3.0.0",
             "symfony/stopwatch": "~2.3|~3.0.0"
@@ -28,7 +69,7 @@
             "symfony/dependency-injection": "",
             "symfony/http-kernel": ""
         },
-        "time": "2016-10-13 01:43:15",
+        "time": "2017-06-02 07:47:27",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -325,31 +366,32 @@
     },
     {
         "name": "pixelandtonic/imagine",
-        "version": "v0.6.3.2",
-        "version_normalized": "0.6.3.2",
+        "version": "v0.7.1.1",
+        "version_normalized": "0.7.1.1",
         "source": {
             "type": "git",
             "url": "https://github.com/pixelandtonic/Imagine.git",
-            "reference": "d63a1661129c526df51081000fb7fac7fc26bdb0"
+            "reference": "e124b3e6ff8ea371a5b08a0e51e023f879693efc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pixelandtonic/Imagine/zipball/d63a1661129c526df51081000fb7fac7fc26bdb0",
-            "reference": "d63a1661129c526df51081000fb7fac7fc26bdb0",
+            "url": "https://api.github.com/repos/pixelandtonic/Imagine/zipball/e124b3e6ff8ea371a5b08a0e51e023f879693efc",
+            "reference": "e124b3e6ff8ea371a5b08a0e51e023f879693efc",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.2"
         },
         "require-dev": {
-            "sami/sami": "dev-master"
+            "sami/sami": "^3.3",
+            "symfony/phpunit-bridge": "^3.2"
         },
         "suggest": {
             "ext-gd": "to use the GD implementation",
             "ext-gmagick": "to use the Gmagick implementation",
             "ext-imagick": "to use the Imagick implementation"
         },
-        "time": "2016-12-07 13:58:20",
+        "time": "2017-06-02 21:08:52",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -442,17 +484,17 @@
     },
     {
         "name": "twig/twig",
-        "version": "1.24.1.1",
-        "version_normalized": "1.24.1.1",
+        "version": "1.33.2.1",
+        "version_normalized": "1.33.2.1",
         "source": {
             "type": "git",
             "url": "https://github.com/pixelandtonic/Twig.git",
-            "reference": "c49d824b19924e99db813a21f058959c4aa9b374"
+            "reference": "ab1e550378251d5f644c756064ef0e8e99502859"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pixelandtonic/Twig/zipball/c49d824b19924e99db813a21f058959c4aa9b374",
-            "reference": "c49d824b19924e99db813a21f058959c4aa9b374",
+            "url": "https://api.github.com/repos/pixelandtonic/Twig/zipball/ab1e550378251d5f644c756064ef0e8e99502859",
+            "reference": "ab1e550378251d5f644c756064ef0e8e99502859",
             "shasum": ""
         },
         "require": {
@@ -462,7 +504,7 @@
             "symfony/debug": "~2.7",
             "symfony/phpunit-bridge": "~2.7"
         },
-        "time": "2016-07-14 23:35:41",
+        "time": "2017-04-20 23:54:49",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -503,33 +545,33 @@
         ],
         "support": {
             "forum": "https://groups.google.com/forum/#!forum/twig-users",
-            "source": "https://github.com/pixelandtonic/Twig/tree/1.24.1.1"
+            "source": "https://github.com/pixelandtonic/Twig/tree/1.33.2.1"
         }
     },
     {
         "name": "yiisoft/yii",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "1.1.19.1",
+        "version_normalized": "1.1.19.1",
         "source": {
             "type": "git",
             "url": "https://github.com/pixelandtonic/yii.git",
-            "reference": "3b0c867e107663bff6d089c13f0ee5d40728a482"
+            "reference": "c7a034eba65dc7b6768f0c5aefaeb2693cef787a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/pixelandtonic/yii/zipball/3b0c867e107663bff6d089c13f0ee5d40728a482",
-            "reference": "3b0c867e107663bff6d089c13f0ee5d40728a482",
+            "url": "https://api.github.com/repos/pixelandtonic/yii/zipball/c7a034eba65dc7b6768f0c5aefaeb2693cef787a",
+            "reference": "c7a034eba65dc7b6768f0c5aefaeb2693cef787a",
             "shasum": ""
         },
         "require": {
             "php": ">=5.1.0"
         },
-        "time": "2016-12-30 21:43:47",
+        "time": "2017-06-09 20:46:36",
         "bin": [
             "framework/yiic"
         ],
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "framework/YiiBase.php",
