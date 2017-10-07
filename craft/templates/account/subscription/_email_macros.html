@@ -348,3 +348,10 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro survey(title) %}
+  <h2>TAKE OUR LATEST SURVEY</h2>
+  <div style="border-bottom: 1px solid #DAE4F4; margin-bottom: 1em; padding-bottom: 1em;">
+    <h3><a href="{{ siteUrl }}surveys">{{ title }}</a></h3>
+  </div>
+{% endmacro %}

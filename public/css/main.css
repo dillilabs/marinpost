@@ -511,7 +511,7 @@ nav ul ul li:last-of-type {
     text-transform: uppercase;
 }
 
-fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:last-of-type, .account .sub-nav h5:last-of-type, .my-content:last-of-type > a {
+fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:last-of-type, .account .sub-nav h5:last-of-type, .surveys .sub-nav h5:last-of-type, .my-content:last-of-type > a {
     border-bottom: 1px solid #ccc;
 }
 
@@ -1289,6 +1289,24 @@ a.subscribe {
 	margin-right: 0;
 }
 
+#survey-sidebar {
+  font-family: Arial,sans-serif;
+  font-weight: bold;
+  line-height: normal;
+  padding-top: 1em;
+}
+
+#survey-sidebar .cta {
+  font-style: italic;
+  font-weight: normal;
+  font-family: Times,Georgia,serif;
+  padding-top: .5em;
+}
+
+#survey-sidebar a {
+  font-size: 1.1em;
+}
+
 footer {
     border-top: 1px solid #c9c8ac;
     clear: both;
@@ -1492,24 +1510,24 @@ footer {
         margin-top: 16px;
     }
 
-	header h1 {
-		font-size: 2.4em;
-		margin-bottom: -7px;
-		margin-top: .6em;
-	}
+    header h1 {
+      font-size: 2.4em;
+      margin-bottom: -7px;
+      margin-top: .6em;
+    }
 
-	header h2 {
-		font-size: 1.05em;
-	}
+    header h2 {
+      font-size: 1.05em;
+    }
 
-    .sub-nav {
-        display: block;
-  		float: left;
-  		padding-top: 3em;
-        width: 28%;
-	}
+      .sub-nav {
+          display: block;
+        float: left;
+        padding-top: 3em;
+          width: 28%;
+    }
 
-    .about .sub-nav, .account .sub-nav, .submit .sub-nav {
+    .about .sub-nav, .account .sub-nav, .submit .sub-nav, .surveys .sub-nav {
         margin-top: 1em;
     }
 
@@ -1517,9 +1535,9 @@ footer {
         padding-top: 0;
     }
 
-	.sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
-	    padding: .45em 0 .45em 25px;
-	}
+    .sub-nav h5.active, .my-content.active a, .sub-nav .filter h5, .filter a, .sub-nav a, .sub-nav a:visited, .my-content > a {
+        padding: .45em 0 .45em 25px;
+    }
 
     #mini-menu #search {
         width: 78%;

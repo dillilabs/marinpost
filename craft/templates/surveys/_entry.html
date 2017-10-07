@@ -1,0 +1,33 @@
+{% extends "_common/layout" %}
+
+{% set title = "Surveys" %}
+
+{% block main %}
+  {% set closedSurveys = craft.entries.section('surveys').surveyOpen('not 1').limit(null).find %}
+
+  {% embed "_common/single" %}
+  {% block title %}Survey Results{% endblock %}
+
+    {% block subNav %}
+      {{ n.arrowLink('surveys', 'Take our survey') }}
+
+      {% for survey in closedSurveys %}
+        {{ n.arrowLink('surveys/'~survey.slug, survey.title) }}
+      {% endfor %}
+    {% endblock %}
+
+    {% block post %}
+      <div class="survey-results">
+        {% if entry.surveyResults|length %}
+          {% for result in entry.surveyResults %}
+            <div>
+              <img src="{{ result.url }}" />
+            </div>
+          {% endfor %}
+        {% else %}
+          Sorry, no results yet.
+        {% endif %}
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

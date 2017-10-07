@@ -108,5 +108,10 @@
   
   {% endif %}
 
+  {% set survey = craft.entries.section('surveys').surveyOpen(1).first %}
+  {% if survey | length %}
+    {{ m.survey(survey.title) }}
+  {% endif %}
+
   {{ m.footer(currentUser) }}
 {% endif %}

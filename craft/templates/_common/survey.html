@@ -1,0 +1,9 @@
+{% set currentSurvey = craft.entries.section('surveys').surveyOpen(1).first %}
+
+{% if currentSurvey|length %}
+  <div id="survey-sidebar" class="clearfix">
+    TAKE OUR SURVEY
+    <div class="cta">Click on Survey title</div>
+    <a href="/surveys">{{ currentSurvey.title }}</a>
+  </div>
+{% endif %}

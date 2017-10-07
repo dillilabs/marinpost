@@ -1,0 +1,31 @@
+{% extends "_common/layout" %}
+
+{% set title = "Surveys" %}
+
+{% block main %}
+  {% set currentSurvey = craft.entries.section('surveys').surveyOpen(1).first %}
+  {% set closedSurveys = craft.entries.section('surveys').surveyOpen('not 1').limit(null).find %}
+
+  {% embed "_common/single" %}
+    {% block title %}Take our latest Survey{% endblock %}
+
+    {% block subNav %}
+      <h4>Surveys</h4>
+      {% if currentSurvey|length %}
+        {{ n.arrowLink('surveys', 'Take our survey') }}
+      {% endif %}
+
+      {% for survey in closedSurveys %}
+        {{ n.arrowLink('surveys/'~survey.slug, survey.title) }}
+      {% endfor %}
+    {% endblock %}
+
+    {% block post %}
+      {% if currentSurvey|length %}
+        <div class="survey-embed-code">
+          {{ currentSurvey.surveyEmbedCode|raw }}
+        </div>
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
