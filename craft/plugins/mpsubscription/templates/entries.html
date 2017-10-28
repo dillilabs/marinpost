@@ -2,6 +2,11 @@
 
 {{ m.header(user) }}
 
+{% set survey = craft.entries.section('surveys').surveyOpen(1).first %}
+{% if survey | length %}
+  {{ m.survey(survey.title) }}
+{% endif %}
+
 {% if entries | length %}
   {% set entriesBySection = entries | group('section') %}
 
@@ -19,11 +24,6 @@
 
   <p><i>No matching entries found.</i></p>
 
-{% endif %}
-
-{% set survey = craft.entries.section('surveys').surveyOpen(1).first %}
-{% if survey | length %}
-  {{ m.survey(survey.title) }}
 {% endif %}
 
 {{ m.footer(user) }}
