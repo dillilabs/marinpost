@@ -350,9 +350,17 @@
 {% endmacro %}
 
 {% macro survey(title) %}
-  <div style="text-align: center; font-family: Arial,sans-serif">
-    <div style="color: red; font-size: 1.4em; padding-bottom: .2em"><b>Take our Survey</b></div>
-    <i>(click on Survey title)</i><br>
-    <div style="padding-top: .2em; font-size: 1.2em"><b><a href="{{ siteUrl }}surveys">{{ title }}</a></div>
+  <div style="border-bottom: 1px solid #DAE4F4; margin-bottom: 1em; padding-bottom: 1.3em">
+    <div style="display: inline-block;">
+      <div style="float: left; margin-right: 15px; position: relative;">
+        <a href="{{ siteUrl }}surveys" target="_blank">
+          <img src="https://s3-us-west-1.amazonaws.com/themarinpost/img/surveys/weekly-update-survey.jpg">
+        </a>
+      </div>
+      <h3 style="margin-top: 0px; margin-bottom: .3em"><a href="{{ siteUrl }}surveys" style="color: #000;">{{ title }}</a></h3>
+      <div style="margin-left: 175px;">
+        <i><a href="{{ siteUrl }}surveys">(click on the title or this text to take the survey)</a></i>
+      </div>
+    </div>
   </div>
 {% endmacro %}

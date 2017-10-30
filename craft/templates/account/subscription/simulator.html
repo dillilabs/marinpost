@@ -92,6 +92,7 @@
 
   {% set survey = craft.entries.section('surveys').surveyOpen(1).first %}
   {% if survey | length %}
+     <h2>SURVEYS</h2>
     {{ m.survey(survey.title) }}
   {% endif %}
 
