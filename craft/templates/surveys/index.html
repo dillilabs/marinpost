@@ -6,8 +6,19 @@
   {% set currentSurvey = craft.entries.section('surveys').surveyOpen(1).first %}
   {% set closedSurveys = craft.entries.section('surveys').surveyOpen('not 1').limit(null).find %}
 
+  {% set lastClosedSurvey = closedSurveys|first %}
+  {% set resultsPresent   = (lastClosedSurvey|length) and (lastClosedSurvey.surveyResults|length) %}
+
   {% embed "_common/single" %}
-    {% block title %}Take our latest Survey{% endblock %}
+    {% block title %}
+      {% if currentSurvey|length %}
+        Take our latest Survey
+      {% elseif resultsPresent %}
+        {{ lastClosedSurvey.title }}
+      {% else %}
+        Surveys
+      {% endif %}
+    {% endblock %}
 
     {% block subNav %}
       <h4>Surveys</h4>
@@ -22,9 +33,25 @@
 
     {% block post %}
       {% if currentSurvey|length %}
+
         <div class="survey-embed-code">
           {{ currentSurvey.surveyEmbedCode|raw }}
         </div>
+
+      {% elseif resultsPresent %}
+
+        <div class="survey-results">
+          {% for result in lastClosedSurvey.surveyResults %}
+            <div>
+              <img src="{{ result.url }}" />
+            </div>
+          {% endfor %}
+        </div>
+
+      {% else %}
+
+        <p>Sorry, no current survey nor results of any past surveys can be found.</p>
+
       {% endif %}
     {% endblock %}
   {% endembed %}
