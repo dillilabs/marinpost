@@ -24,7 +24,7 @@
         {% if entry.surveyResults|length %}
           {% for result in entry.surveyResults %}
             <div>
-              <a href="{{ result.url }}">
+              <a href="{{ result.url }}" target="_blank">
                 <img src="{{ result.url }}" />
                 <span class="enlarge-image">Click to enlarge</span>
               </a>
