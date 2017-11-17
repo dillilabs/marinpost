@@ -1307,6 +1307,13 @@ a.subscribe {
   font-size: 1.1em;
 }
 
+.survey-results .enlarge-image {
+  float: right;
+  font-family: Arial,sans-serif;
+  font-size: .9em;
+  margin-bottom: 1em;
+}
+
 footer {
     border-top: 1px solid #c9c8ac;
     clear: both;

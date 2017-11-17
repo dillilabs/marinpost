@@ -43,7 +43,10 @@
         <div class="survey-results">
           {% for result in lastClosedSurvey.surveyResults %}
             <div>
-              <img src="{{ result.url }}" />
+              <a href="{{ result.url }}">
+                <img src="{{ result.url }}" />
+                <span class="enlarge-image">Click to enlarge</span>
+              </a>
             </div>
           {% endfor %}
         </div>
