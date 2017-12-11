@@ -477,7 +477,7 @@ class RedactorIFieldType extends BaseFieldType
 	 */
 	private function _includeFieldResources($configJs)
 	{
-		craft()->templates->includeCssResource('redactori/lib/redactor/redactor.css');
+        craft()->templates->includeCssResource('redactori/css/redactori.css');
 
 		// Gotta use the uncompressed Redactor JS until the compressed one gets our Live Preview menu fix
 		craft()->templates->includeJsResource('redactori/lib/redactor/redactor.js');
@@ -487,12 +487,16 @@ class RedactorIFieldType extends BaseFieldType
 		$this->_maybeIncludeRedactorPlugin($configJs, 'video', false);
 		$this->_maybeIncludeRedactorPlugin($configJs, 'pagebreak', true);
 
+        //----------------------------------------------------------------------
         // HACK to include 3rd party font plugins -- speder 10 August 2016
+        //----------------------------------------------------------------------
 		$this->_maybeIncludeRedactorPlugin($configJs, 'fontcolor', false);
 		$this->_maybeIncludeRedactorPlugin($configJs, 'fontfamily', false);
 		$this->_maybeIncludeRedactorPlugin($configJs, 'fontsize', false);
 
+        //----------------------------------------------------------------------
         // HACK to include 3rd party underline plugins -- speder 18 February 2017
+        //----------------------------------------------------------------------
 		$this->_maybeIncludeRedactorPlugin($configJs, 'underline', false);
 
 		craft()->templates->includeTranslations('Insert image', 'Insert URL', 'Choose image', 'Link', 'Link to an entry', 'Insert link', 'Unlink', 'Link to an asset', 'Link to a category');
