@@ -187,7 +187,7 @@ Craft.CP = Garnish.Base.extend(
 			});
 		}
 
-		Garnish.$win.on('load', $.proxy(function()
+		Garnish.$doc.on('ready', $.proxy(function()
 		{
 			// Look for forms that we should watch for changes on
 			this.$confirmUnloadForms = $('form[data-confirm-unload]');
@@ -1047,7 +1047,7 @@ var TaskProgressIcon = Garnish.Base.extend(
 	setDescription: function(description)
 	{
 		this.$a.attr('title', description);
-		this.$label.html(description);
+		this.$label.text(description);
 	},
 
 	setProgress: function(progress, animate)
