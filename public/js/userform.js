@@ -7,7 +7,7 @@
             // Selectors
             //-----------------------
 
-            // Redactor
+            // CKEditor
             var wysiwygFields = form.find('textarea.wysiwyg');
             var excessContent = false;
 
@@ -51,38 +51,52 @@
             };
 
             //-----------------------
-            // Redactor
+            // CKEditor
             //-----------------------
 
             wysiwygFields.each(function() {
-              var textarea = $(this);
-              var limit = textarea.attr('data-limit');
-              var counters =textarea.closest('.field').find('.counter');
-              var plugins = ['fullscreen', 'counter', 'limiter', 'underline'];
-              var buttons = ['bold', 'italic', 'unorderedlist', 'orderedlist', 'link', 'outdent', 'indent'];
+              var maxChars = $(this).attr('data-limit');
 
-              textarea.redactor({
-                minHeight: 200,
-                maxHeight: 800,
-                plugins: plugins,
-                buttons: buttons,
-                toolbarFixed: true,
-                limiter: limit,
-                changeCallback: function(e) {
-                  contentChanged = true;
-                },
-                codeKeydownCallback: function(e) {
-                  contentChanged = true;
-                },
-                counterCallback: function(data) {
-                  if (data.characters <= limit) {
-                    excessContent = false;
-                    counters.text(data.characters + ' of ' + limit + ' characters used');
-                  } else {
-                    excessContent = true;
-                    counters.text('CONTENT LIMIT EXCEEDED: editing disabled until excess is removed.');
+              // Configure CKEditor toolbar and char counter/limiter
+              CKEDITOR.replace(this, {
+                customConfig: '/js/ckeditor/config.js',
+                toolbar: [
+                  {
+                    name: 'whatever',
+                    items: [
+                      'Bold',
+                      'Italic',
+                      'Underline',
+                      'Link',
+                      'BulletedList',
+                      'NumberedList',
+                      'Outdent',
+                      'Indent',
+                      'Undo',
+                      'Redo',
+                      'Scayt',
+                      'Maximize'
+                    ],
                   }
-                },
+                ],
+                wordcount: {
+                  showParagraphs: false,
+                  showWordCount: false,
+                  showCharCount: true,
+                  countSpacesAsChars: true,
+                  countHTML: false,
+                  countLineBreaks: false,
+                  maxWordCount: -1,
+                  maxCharCount: maxChars,
+                  pasteWarningDuration: 0,
+                }
+              });
+
+              // Record change to form content. See also form.on('keyup_change', ...)
+              $.each(CKEDITOR.instances, function() {
+                this.on('change', function() {
+                  contentChanged = true;
+                });
               });
             });
 
@@ -90,7 +104,7 @@
             // Events
             //-----------------------
 
-            // Record change to form content. See also Redactor
+            // Record change to form content. See also CKEditor
             form.on('keyup change', 'input, select, textarea', function() {
               contentChanged = true;
             });

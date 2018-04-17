@@ -31,7 +31,7 @@
             // Date picker
             var dateFields = form.find('input.date');
 
-            // Redactor
+            // CKEditor
             var wysiwygFields = form.find('textarea.wysiwyg');
             var excessContent = false;
 
@@ -175,53 +175,59 @@
             };
 
             //-----------------------
-            // Redactor
+            // CKEditor
             //-----------------------
 
             wysiwygFields.each(function() {
-              var textarea = $(this);
-              var limit = textarea.attr('data-limit');
-              var counters =textarea.closest('.field').find('.counter');
-              var plugins = ['underline', 'counter', 'limiter'];
-              var buttons = ['bold', 'italic', 'link'];
+              var maxChars = $(this).attr('data-limit');
 
-              switch (textarea.attr('name')) {
-                case 'fields[letterContent]':
-                  plugins = plugins.concat(['fontsize']);
-                  buttons = buttons.concat(['fontsize', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'horizontalrule']);
-                  break;
-                case 'fields[blogContent]':
-                case 'fields[noticeContent]':
-                  plugins = plugins.concat(['fontsize', 'fontcolor', 'fontfamily']);
-                  buttons = ['html'].concat(buttons);
-                  buttons = buttons.concat(['fontsize', 'fontcolor', 'fontfamily', 'unorderedlist', 'orderedlist', 'outdent', 'indent', 'alignment', 'horizontalrule']);
-                  break;
-              }
-
-              plugins = plugins.concat('fullscreen'); // rightmost button
-
-              textarea.redactor({
-                minHeight: 200,
-                maxHeight: 800,
-                plugins: plugins,
-                buttons: buttons,
-                toolbarFixed: true,
-                limiter: limit,
-                changeCallback: function(e) {
-                  contentChanged = true;
-                },
-                codeKeydownCallback: function(e) {
-                  contentChanged = true;
-                },
-                counterCallback: function(data) {
-                  if (data.characters <= limit) {
-                    excessContent = false;
-                    counters.text(data.characters + ' of ' + limit + ' characters used');
-                  } else {
-                    excessContent = true;
-                    counters.text('CONTENT LIMIT EXCEEDED: editing disabled until excess is removed.');
+              // Configure CKEditor toolbar and char counter/limiter
+              CKEDITOR.replace(this, {
+                customConfig: '/js/ckeditor/config.js',
+                toolbar: [
+                  {
+                    name: 'whatever',
+                    items: [
+                      'Bold',
+                      'Italic',
+                      'Underline',
+                      'HorizontalRule',
+                      'Link',
+                      'Image',
+                      'BulletedList',
+                      'NumberedList',
+                      'Outdent',
+                      'Indent',
+                      'JustifyLeft',
+                      'Font',
+                      'FontSize',
+                      'TextColor',
+                      'BGColor',
+                      'Undo',
+                      'Redo',
+                      'Scayt',
+                      'Maximize'
+                    ],
                   }
-                },
+                ],
+                wordcount: {
+                  showParagraphs: false,
+                  showWordCount: false,
+                  showCharCount: true,
+                  countSpacesAsChars: true,
+                  countHTML: false,
+                  countLineBreaks: false,
+                  maxWordCount: -1,
+                  maxCharCount: maxChars,
+                  pasteWarningDuration: 0,
+                }
+              });
+
+              // Record change to form content. See also form.on('keyup_change', ...)
+              $.each(CKEDITOR.instances, function() {
+                this.on('change', function() {
+                  contentChanged = true;
+                });
               });
             });
 
@@ -276,7 +282,7 @@
             // Respond to Media Link type change
             mediaTypeSelect.change(onChangeMediaLinkType);
 
-            // Record change to form content. See also Redactor
+            // Record change to form content. See also CKEditor
             form.on('keyup change', 'input, select, textarea', function() {
               contentChanged = true;
             });

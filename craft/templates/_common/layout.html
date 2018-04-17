@@ -30,7 +30,6 @@
         '/var/www/marinpost.org/public/css/slick-theme.css',
         '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/jquery.fileupload.css',
         '/var/www/marinpost.org/craft/plugins/s3direct/resources/css/s3direct.css',
-        '/var/www/marinpost.org/public/css/redactor.css',
         '/var/www/marinpost.org/public/css/main.css',
       ])
     }}
@@ -45,7 +44,6 @@
     <link rel="stylesheet" href="{{ siteUrl }}css/slick-theme.css">
     <link rel="stylesheet" href="{{ siteUrl }}cpresources/s3direct/css/jquery.fileupload.css">
     <link rel="stylesheet" href="{{ siteUrl }}cpresources/s3direct/css/s3direct.css">
-    <link rel="stylesheet" href="{{ siteUrl }}css/redactor.css">
     <link rel="stylesheet" href="{{ siteUrl }}css/main.css">
 
   {% endif %}
@@ -170,6 +168,8 @@
     Copyright {{ now.year }} <a href="http://www.communityventurepartners.org/">Community Venture Partners, Inc.</a> All rights reserved.
   </footer>
 
+  <script src="https://cdn.ckeditor.com/4.8.0/full-all/ckeditor.js"></script>
+
   {% if craft.mpadmin.minimeeEnabled %} {# Minimee requires a local filesystem path #}
 
     {{ craft.minimee.js([
@@ -181,14 +181,6 @@
         '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-process.js',
         '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/jquery.fileupload-validate.js',
         '/var/www/marinpost.org/craft/plugins/s3direct/resources/js/s3direct.js',
-        '/var/www/marinpost.org/public/js/redactor.js',
-        '/var/www/marinpost.org/public/js/redactor/counter.js',
-        '/var/www/marinpost.org/public/js/redactor/fontcolor.js',
-        '/var/www/marinpost.org/public/js/redactor/fontfamily.js',
-        '/var/www/marinpost.org/public/js/redactor/fontsize.js',
-        '/var/www/marinpost.org/public/js/redactor/fullscreen.js',
-        '/var/www/marinpost.org/public/js/redactor/limiter.js',
-        '/var/www/marinpost.org/public/js/redactor/underline.js',
         '/var/www/marinpost.org/public/js/console.js',
         '/var/www/marinpost.org/public/js/home.js',
         '/var/www/marinpost.org/public/js/search.js',
@@ -217,14 +209,6 @@
     <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-process.js"></script>
     <script src="{{ siteUrl }}cpresources/s3direct/js/jquery.fileupload-validate.js"></script>
     <script src="{{ siteUrl }}cpresources/s3direct/js/s3direct.js"></script>
-    <script src="{{ siteUrl }}js/redactor.js"></script>
-    <script src="{{ siteUrl }}js/redactor/counter.js"></script>
-    <script src="{{ siteUrl }}js/redactor/fontcolor.js"></script>
-    <script src="{{ siteUrl }}js/redactor/fontfamily.js"></script>
-    <script src="{{ siteUrl }}js/redactor/fontsize.js"></script>
-    <script src="{{ siteUrl }}js/redactor/fullscreen.js"></script>
-    <script src="{{ siteUrl }}js/redactor/limiter.js"></script>
-    <script src="{{ siteUrl }}js/redactor/underline.js"></script>
     <script src="{{ siteUrl }}js/console.js"></script>
     <script src="{{ siteUrl }}js/home.js"></script>
     <script src="{{ siteUrl }}js/search.js"></script>
