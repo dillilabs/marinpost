@@ -89,6 +89,11 @@
                   maxWordCount: -1,
                   maxCharCount: maxChars,
                   pasteWarningDuration: 0,
+                },
+                font_style: {
+                  element: 'span',
+                  styles: {'font-family': 'Times,Georgia,serif'},
+                  overrides: [{element: 'font', attributes: {'face': null}}]
                 }
               });
 
