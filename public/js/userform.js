@@ -55,14 +55,14 @@
             //-----------------------
 
             wysiwygFields.each(function() {
-              var maxChars = $(this).attr('data-limit');
+              var maxCharCount = $(this).attr('data-limit');
 
               // Configure CKEditor toolbar and char counter/limiter
               CKEDITOR.replace(this, {
                 customConfig: '/js/ckeditor/config.js',
                 toolbar: [
                   {
-                    name: 'whatever',
+                    name: 'userForm',
                     items: [
                       'Bold',
                       'Italic',
@@ -74,7 +74,6 @@
                       'Indent',
                       'Undo',
                       'Redo',
-                      'Scayt',
                       'Maximize'
                     ],
                   }
@@ -87,14 +86,9 @@
                   countHTML: false,
                   countLineBreaks: false,
                   maxWordCount: -1,
-                  maxCharCount: maxChars,
+                  maxCharCount: maxCharCount,
                   pasteWarningDuration: 0,
                 },
-                font_style: {
-                  element: 'span',
-                  styles: {'font-family': 'Times,Georgia,serif'},
-                  overrides: [{element: 'font', attributes: {'face': null}}]
-                }
               });
 
               // Record change to form content. See also form.on('keyup_change', ...)
