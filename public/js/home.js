@@ -88,7 +88,7 @@
 
             if (config.slideShow) {
               featuredPosts.slick({
-                adaptiveHeight: true,
+                adaptiveHeight: false,
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
