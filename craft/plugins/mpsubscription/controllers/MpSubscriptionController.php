@@ -264,14 +264,14 @@ class MpSubscriptionController extends BaseController
     {
         if (! $this->_isLocalRequest())
         {
-            echo 'Local-only function.';
+            echo 'ERROR: local-only function.';
             craft()->end();
         }
 
         $period = craft()->request->getParam('period');
         if (! $period)
         {
-            echo 'period param is required.';
+            echo 'ERROR: period param is required.';
             craft()->end();
         }
 
