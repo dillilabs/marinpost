@@ -371,7 +371,8 @@ class MpSubscriptionController extends BaseController
      */
     private function _isLocalRequest()
     {
-        return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
+    //  return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
+        return $_SERVER['REMOTE_ADDR'] == $_SERVER['SERVER_ADDR'];
     }
 
     /**
