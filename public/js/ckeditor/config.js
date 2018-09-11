@@ -43,4 +43,5 @@ CKEDITOR.editorConfig = function(config) {
       ],
     }
   ];
+  config.pasteFilter = 'plain-text';
 };
