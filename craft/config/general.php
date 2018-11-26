@@ -27,7 +27,7 @@ return array(
         'siteUrl'                         => $siteUrl,
         'timezone'                        => 'America/Los_Angeles',
         'useEmailAsUsername'              => true,
-        'userSessionDuration'             => false,
+        'userSessionDuration'             => 'P1D',
 
         'environmentVariables' => array(
             // Not actually environment-specific, but required for
