@@ -56,7 +56,7 @@
       <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
         {% if folder %}
           {% for asset in assets %}
-            <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+            <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
               <div><img src="/img/default/list/pdf.jpg" /></div>
               <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
             </li>
