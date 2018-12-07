@@ -6442,7 +6442,7 @@
 							+ '<input type="text" id="redactor-image-title" />'
 							+ '<label class="redactor-image-link-option">' + this.lang.get('link') + '</label>'
 							+ '<input type="text" id="redactor-image-link" class="redactor-image-link-option" aria-label="' + this.lang.get('link') + '" />'
-							+ '<label class="redactor-image-link-option"><input type="checkbox" id="redactor-image-link-blank" aria-label="' + this.lang.get('link_new_tab') + '"> ' + this.lang.get('link_new_tab') + '</label>'
+							+ '<label class="redactor-image-link-option"><input type="checkbox" checked id="redactor-image-link-blank" aria-label="' + this.lang.get('link_new_tab') + '"> ' + this.lang.get('link_new_tab') + '</label>'
 							+ '<label class="redactor-image-position-option">' + this.lang.get('image_position') + '</label>'
 							+ '<select class="redactor-image-position-option" id="redactor-image-align" aria-label="' + this.lang.get('image_position') + '">'
 								+ '<option value="none">' + this.lang.get('none') + '</option>'
@@ -6472,7 +6472,7 @@
 							+ '<input type="url" id="redactor-link-url" aria-label="URL" />'
 							+ '<label>' + this.lang.get('text') + '</label>'
 							+ '<input type="text" id="redactor-link-url-text" aria-label="' + this.lang.get('text') + '" />'
-							+ '<label><input type="checkbox" id="redactor-link-blank"> ' + this.lang.get('link_new_tab') + '</label>'
+							+ '<label><input type="checkbox" checked id="redactor-link-blank"> ' + this.lang.get('link_new_tab') + '</label>'
 						+ '</section>'
 					};
 
