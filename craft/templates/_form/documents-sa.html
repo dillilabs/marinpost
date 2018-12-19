@@ -1,0 +1,206 @@
+{# NOTE: empty fields[fieldName][] MUST be removed (via Javascript) prior to form submission.
+ # See public/js/contentform.js and public/js/userform.js
+ #}
+
+{% set sourceId = 2 %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+
+{% set assets = false %}
+{% if folder %}
+  {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
+{% endif %}
+
+{% set entry = userProfile ? currentUser : entry %}
+{% set document = false %}
+{% set errors = false %}
+{% if entry %}
+  {% set document = attribute(entry, documentsAttribute).first %}
+  {% set errors = document.hasErrors %}
+{% endif %}
+
+{% set excerptLength = 20 %}
+{#
+<div class="field document">
+  <label>Document</label>
+  <p class="document-title">{{ document ? document.title : '' }}</p> 
+
+  {% if errors %}
+    {{ f.errorList(documentBlock.allErrors) }}
+  {% endif %}
+
+  <input type="hidden" name="fields[{{ documentsAttribute }}]">
+
+  <div class="document-field inputs">
+    <input type="hidden" name="fields[{{ documentsAttribute }}][]" {% if document %}value="{{ document.id }}"{% endif -%}>
+  </div>
+</div>
+i#}
+<div id="document-modal" class="upload-modal document" title="My Documents" style="display: none;">
+  <div>
+    <div class="help">{{ n.siteMessage('my/documents-sa') }}</div>
+  </div>
+
+  <div>
+    <div class="upload-wrapper clearfix">
+      <span class="fileinput-button">
+        <span>Upload a Document</span>
+        <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+        <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+      </span>
+
+      <div class="s3direct document progress-bar progress-bar-success"></div>
+    </div>
+
+    <div class="files-wrapper clearfix">
+      <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
+        {% if folder %}
+          {% for asset in assets %}
+            <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+              <div><img src="/img/default/list/pdf.jpg" /></div>
+              <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+{#
+<a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
+<span class="note"> &nbsp; *PDF documents only</span>
+#}
+{% set js %}
+$(function() {
+
+  $(".submit").hide();
+  var openModal = $('#open-document-modal');
+  var modal = $('#document-modal');
+  var fileInput = modal.find('#document-fileupload');
+  var srcFiles = modal.find('ul#src-files');
+  {#var okButton = false;#}
+  var targetFileId = $('input[type=hidden][name="fields[{{ documentsAttribute }}][]"]');
+  var targetFileTitle = $('.document-title');
+  var deleteButton = false;
+  var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
+
+  var selectedFile = function() {
+    return srcFiles.children('li.selected:first');
+  }
+
+  var selectFile = function(li) {
+    li.parent().children().removeClass('selected');
+    li.addClass('selected');
+  };
+
+  {#var updateOkButton = function() {
+    okButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+  };
+#}
+  var populateDocumentFromModal = function() {
+    var selectedFile = srcFiles.children('li.selected:first');
+
+    if (selectedFile.length == 1) {
+      targetFileId.val(selectedFile.attr('data-asset-id')).trigger('change');
+      targetFileTitle.text(selectedFile.attr('data-asset-title'));
+    } else {
+      targetFileId.val('').trigger('change');
+      targetFileTitle.text('');
+    }
+  };
+
+  var updateDeleteButton = function() {
+    deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+  };
+
+  var deleteDocument = function() {
+    var selectedFile = srcFiles.children('li.selected:first');
+    var assetId;
+
+    if (selectedFile.length == 1) {
+      assetId = selectedFile.attr('data-asset-id');
+
+      $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          selectedFile.remove();
+          updateDeleteButton();
+          {#updateOkButton();#}
+        }
+      });
+    }
+  };
+
+  var populateListFromIndex = function(files) {
+    var selectedId = selectedFile().attr('data-asset-id');
+    srcFiles.children().remove();
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'class="selected"' : '';
+      var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
+
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
+    });
+
+    srcFiles.show();
+  };
+
+  openModal.click(function(e) {
+    e.preventDefault();
+    modal.dialog('open');
+  });
+
+  modal.dialog({
+    modal: true,
+    autoOpen: true,
+    height: window.matchMedia("(min-width: 51em)").matches ? $(window).height() * 0.75 : $(window).height(),
+    width: window.matchMedia("(min-width: 51em)").matches ? $(window).width() * 0.75 : $(window).width(),
+    dialogClass: 'no-close',
+    buttons: {
+      {#OK: function() {
+        populateDocumentFromModal();
+        modal.dialog('close');
+      },#}
+      Close: function() {
+        document.location.href="/";
+        modal.dialog('close');
+      },
+      Delete: function() {
+        deleteDocument();
+      }
+    },
+    open: function(event, ui) {
+      var widget = $(this).dialog('widget');
+      {#okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');#}
+      {#updateOkButton();#}
+      deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
+      updateDeleteButton();
+    },
+    closeOnEscape: false,
+  });
+
+  srcFiles.on('click', 'li', function(e) {
+    selectFile($(this));
+    {#updateOkButton();#}
+    updateDeleteButton();
+  });
+
+  fileInput.s3direct({
+    bucket: "{{ s3.bucket }}",
+    subfolder: "{{ s3.subfolder }}",
+    currentUserId: "{{ currentUser.id }}",
+    policy: "{{ s3.policy }}",
+    signature: "{{ s3.signature }}",
+    accessKey: "{{ s3.keyId }}",
+    assetsSourceId: {{ sourceId }},
+    acceptFileTypes: /.+\.pdf$/i,
+    uploadProgressBarSelector: '.s3direct.document.progress-bar',
+    updateIndexIndicatorSelector: 'img.s3direct.document',
+    onUpdateAssetsIndex: populateListFromIndex,
+    requireFileTitle: true,
+    debug: true,
+  });
+});
+{% endset %}
+{% includeJs js %}
