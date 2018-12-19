@@ -76,7 +76,7 @@ $(function() {
   var modal = $('#image-modal');
   var fileInput = modal.find('#image-fileupload');
   var srcFiles = modal.find('ul#src-files');
-  var okButton = false;
+{#  var okButton = false;#}
   var targetFileId = $('input[type=hidden][name="fields[{{ imagesAttribute }}][]"]');
   var targetImage = $('img.display-image');
   var defaultImagePath = '{{ defaultImagePath }}';
@@ -106,10 +106,10 @@ $(function() {
     srcFiles.show();
   };
 
-  var updateOkButton = function() {
+ {# var updateOkButton = function() {
     okButton.button((selectedImage().length == 1) ? 'enable' : 'disable');
   };
-
+#}
   var populateImageFromModal = function() {
     var selectedImage = srcFiles.children('li.selected:first');
 
@@ -139,7 +139,7 @@ $(function() {
         } else {
           selectedImage.remove();
           updateDeleteButton();
-          updateOkButton();
+          {#updateOkButton();#}
         }
       });
     }
@@ -157,10 +157,10 @@ $(function() {
     width: window.matchMedia("(min-width: 51em)").matches ? $(window).width() * 0.75 : $(window).width(),
     dialogClass: 'no-close',
     buttons: {
-      OK: function() {
+      {#OK: function() {
 	document.location.href="/";	
-      },
-      Cancel: function() {
+      },#}
+      Close: function() {
 	document.location.href="/";	
         modal.dialog('close');
       },
@@ -170,8 +170,8 @@ $(function() {
     },
     open: function(event, ui) {
       var widget = $(this).dialog('widget');
-      okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
-      updateOkButton();
+      {#okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
+      updateOkButton();#}
       deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
       updateDeleteButton();
     },
@@ -180,7 +180,7 @@ $(function() {
 
   srcFiles.on('click', 'li', function(e) {
     selectImage($(this));
-    updateOkButton();
+    {#updateOkButton();#}
     updateDeleteButton();
   });
 

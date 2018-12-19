@@ -1,4 +1,4 @@
-<main class="clearfix">
+main class="clearfix">
   <div class="sub-nav account">{% block subNav %}
       <h4>My Account</h4>
         {{ n.arrowLink('account/information', 'My Account') }}
@@ -12,8 +12,9 @@
         {{ n.arrowLink('account/news', 'My News') }}
         {{ n.arrowLink('account/media', 'My Media') }}
         {{ n.arrowLink('account/letters', 'My Letters') }}
-        {{ n.arrowLink('account/subscription', 'My Subscription', true) }}
         {{ n.arrowLink('account/images', 'My Images') }}
+        {{ n.arrowLink('account/documents', 'My Documents') }}
+        {{ n.arrowLink('account/subscription', 'My Subscription', true) }}
         {{ n.arrowLink('account/delete', 'Delete Account') }}
       {% endblock %}
     </div>
