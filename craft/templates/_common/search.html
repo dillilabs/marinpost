@@ -1,6 +1,6 @@
 <form action="/search" method="GET" class="simple">
   <fieldset>
-    <input type="search" placeholder="Add keywords and then hit ENTER" name="query" autocomplete="off"><br />
+    <input type="search" name="query" placeholder="Type Keywords - Hit Enter" autocomplete="off"><br />
     <input type="radio" name="section" id="search-all" value="" {{ n.searchSection('') }}> <label for="search-all">All</label>
     <input type="radio" name="section" id="search-blog" value="blog" {{ n.searchSection('blog') }}> <label for="search-blog">Blogs</label>
     <input type="radio" name="section" id="search-news" value="news" {{ n.searchSection('news') }}> <label for="search-news">News</label>
