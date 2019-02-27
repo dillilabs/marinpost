@@ -1286,14 +1286,14 @@ a.subscribe {
 	display: inline-block;
 	margin: 0 auto .75em auto;
 	text-align: center;
-    width: 70%;
+  width: 70%;
 }
 
 #share ul {
 	list-style: none;
 	margin: 0 auto;
 	padding: 0 10%;
-	text-align: right;
+	text-align: center;
 }
 
 #share li {
