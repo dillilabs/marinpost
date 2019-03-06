@@ -4,6 +4,7 @@ craft/config/stripe.php
 
 craft/plugins/mpsubscription/vendor
 craft/plugins/s3direct/vendor
+craft/plugins/import/vendor
 
 craft/storage/*
 !craft/storage/.keep
