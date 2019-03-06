@@ -1975,3 +1975,7 @@ footer {
 @media print {
 
 }
+
+p {
+    overflow-wrap: break-word;
+}
