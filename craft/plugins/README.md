@@ -16,4 +16,4 @@ Note the following Craft plugins have been modified:
 
 3. RedactorI
 
-	git show 713c9ca4acbdf11e07ff7870ac629df83e83c4db craft/plugins/redactori/resources/lib/redactor/redactor.js
+	git show 4041fb8fa72a4c616eff8db61e758a59901ac887 public/js/redactor.js
