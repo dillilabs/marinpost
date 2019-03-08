@@ -54,35 +54,93 @@
 {% set js %}
   $(function() {
     var authorId = '{{ craft.request.segment(3) }}';
+    
+    /**
+     * offset[section] denotes number of already fetched entries for each section
+     * where section is blog, news, notices, media or letters
+     */ 
+    var offset = {
+      'blog': 0,
+      'news': 0,
+      'notices': 0,
+      'media': 0,
+      'letters': 0
+    };
+    
+    /**
+     * limit denotes how many entries to retrieve
+     */ 
+    const limit = 20;
+    
+    /**
+     * list[section] denotes the dom element to which entries are appended to. 
+     * where section is blog, news, notices, media or letters
+     */
+    var $list = {
+      'blog': null,
+      'news': null,
+      'notices': null,
+      'media': null,
+      'letters': null
+    }
 
     $('h3.my-content a').click(function(e) {
       var $link   = $(this);
-      var $parent = $link.parent();
-      var $list   = $parent.next('ul.posts');
+      var $parent = $link.parent();      
       var section = $parent[0].dataset.section;
-
-      console.log('authorId', authorId, 'section', section);
+      $list[section]  = $parent.next('ul.posts');     
 
       if ($parent.hasClass('active')) {
-        $list.hide();
+        $list[section].hide();
       } else {
-        if ($list.children().length == 0) {
-          $link.append('<img src="/img/spinner.gif" style="padding-left: 8px">');
+        if ($list[section].children().length == 0) {
+          $link.append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
 
-          $list.load(
+          $list[section].load(
             '/about/contributor_entries',
-            {authorId: authorId, section: section},
+            {authorId: authorId, section: section, offset: offset[section], limit: limit},
             function() {
               $link.find('img').remove();
+              $list[section].append('<input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/>');
+              offset[section] = offset[section] + limit;
             }
           );
         }
 
-        $list.show();
+        $list[section].show();
       }
 
       e.preventDefault();
     });
+
+    /**
+     * Click handler for 'Load More...' button. Fetches the posts depending on the 'limit' 
+     * and appends them to the specified section (blog, news, notices, media, letters).
+     *
+     * #btn-load-more is not created in DOM. Therefore, we attach the listener using .on().
+     */
+    $(document).on('click', '#btn-load-more', function(e) {
+      $loadMoreBtn = $(this);
+      var section = $loadMoreBtn.data('section');
+      
+      $list[section].append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
+
+      $list[section].append($('<div>').load(
+        '/about/contributor_entries',
+        {authorId: authorId, section: section, offset: offset[section], limit: limit},
+        function(result) {
+          $list[section].find('#spinner').remove();          
+          $loadMoreBtn.remove();
+          $loadMoreBtn.find('img').remove();
+          if(result){
+            $list[section].append($loadMoreBtn);
+            offset[section] = offset[section] + limit;
+          }          
+        }
+      ));
+
+      e.preventDefault();
+    });    
   });
 {% endset %}
 {% includeJs js %}

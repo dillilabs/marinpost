@@ -4,8 +4,10 @@
 
 {% set authorId = craft.request.param('authorId') %}
 {% set section  = craft.request.param('section') %}
+{% set offset  = craft.request.param('offset') %}
+{% set limit  = craft.request.param('limit') %}
 
-{% set entries = craft.entries.authorId(authorId).section(section).limit(null) %}
+{% set entries = craft.entries.authorId(authorId).section(section).offset(offset).limit(limit) %}
 
 {% import "_entry/macros" as m %}
 
