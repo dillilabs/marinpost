@@ -101,7 +101,7 @@
             {authorId: authorId, section: section, offset: offset[section], limit: limit},
             function() {
               $link.find('img').remove();
-              $list[section].append('<input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/>');
+              $list[section].append('<div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/></div>');
               offset[section] = offset[section] + limit;
             }
           );
@@ -129,11 +129,10 @@
         '/about/contributor_entries',
         {authorId: authorId, section: section, offset: offset[section], limit: limit},
         function(result) {
-          $list[section].find('#spinner').remove();          
-          $loadMoreBtn.remove();
-          $loadMoreBtn.find('img').remove();
+          $list[section].find('#spinner').remove();
+          $loadMoreBtn.parent().remove();          
           if(result){
-            $list[section].append($loadMoreBtn);
+            $list[section].append($loadMoreBtn.parent());
             offset[section] = offset[section] + limit;
           }          
         }
