@@ -17,7 +17,7 @@ $(function() {
   });
 
   $.fn.scrollingSearchContent  = function(options) {
-    var config = $.extend({}, $.fn.scrollingContent.defaults, options);
+    var config = $.extend({}, $.fn.scrollingSearchContent.defaults, options);
 
     return this.each(function() {
         var content = $(this);
