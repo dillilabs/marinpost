@@ -72,7 +72,7 @@ $(function() {
     });
   };
 
-  $.fn.scrollingContent.defaults = {
+  $.fn.scrollingSearchContent.defaults = {
       contentLimit: 10
   };
 });
