@@ -82,16 +82,23 @@
 
       {% if query | length %}
         {% if entryIds | length %}
+          {% set posts = craft.entries.id(entryIds).offset(0).limit(10) %}
           <ul class="posts search">
-          {% for entry in craft.entries.id(entryIds).order('postDate desc').limit(null) %}
+          {% for entry in posts %}
             {{ p.post(entry, true) }}
           {% endfor %}
           </ul>
-
         {% else %}
           <p>Nothing found for <i>{{ query }}</i>{%- if section %} in {{ section }}{% endif -%}</p>
         {% endif %}
       {% endif %}
+      
     {% endblock %}
-  {% endembed %}
+  {% endembed %}  
 {% endblock %}
+{% set js %}
+  $(function() {
+    $('.posts.search').scrollingContent();
+  });
+{% endset %}
+{% includeJs js %}

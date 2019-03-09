@@ -59,6 +59,15 @@ class MpSearchService extends BaseApplicationComponent
             }
         }
 
+        // Remove duplicate entries
+        $entryIds = array_unique($entryIds);
+        
+        // save the search result entries in HTTP session
+        // so that front end could optimally display it
+        // using auto loading (scroll to load more) on
+        // search page. See search.html for more info.
+        craft()->httpSession->add('searchEntryIds', $entryIds);
+
         $this->plugin->logger(array('entryIds' => $entryIds));
         return $entryIds;
     }

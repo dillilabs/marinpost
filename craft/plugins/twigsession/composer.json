@@ -1,0 +1,14 @@
+{
+	"name": "dillilabs/twigsession",
+	"description": "HTTP Session",
+	"type": "craft-plugin",
+	"authors": [
+		{
+			"name": "Dilli Labs",
+			"homepage": "https://www.dillilabs.com"
+		}
+	],
+	"require": {
+		"composer/installers": "~1.0"
+	}
+}

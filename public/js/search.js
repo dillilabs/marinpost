@@ -15,4 +15,64 @@ $(function() {
     e.preventDefault();
     document.location = this.href + document.location.search;
   });
+
+  $.fn.scrollingContent  = function(options) {
+    var config = $.extend({}, $.fn.scrollingContent.defaults, options);
+
+    return this.each(function() {
+        var content = $(this);
+        var scrollPositionThreshold = 0.85;
+        var isLoadingContent = false;
+        var contentLengthThreshold = 20;
+        var endOfContent = false;
+
+        //----------
+        // Functions
+        //----------
+
+        var currentContentLength = function() {
+          return $('.listing').length;
+        };
+
+        var loadMoreContent = function() {
+          isLoadingContent = true;
+
+          $.get(
+            '/search_custom/entries',
+            {
+              offset: currentContentLength(),
+              limit: config.contentLimit,
+            },
+            function(data) {
+              if (data.length > contentLengthThreshold) {
+                content.append(data);
+              } else {
+                endOfContent = true;
+              }
+
+              isLoadingContent = false;
+            }
+          );
+        };
+
+        //-------
+        // Events
+        //-------
+
+        $(window).scroll(function() {
+          var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
+
+          if (isLoadingContent) return;
+
+          if (currentPosition > scrollPositionThreshold) {
+            if (!endOfContent) loadMoreContent();
+          }
+        });
+        
+    });
+  };
+
+  $.fn.scrollingContent.defaults = {
+      contentLimit: 10
+  };
 });

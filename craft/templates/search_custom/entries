@@ -1,0 +1,16 @@
+{# Called via Javascript from /search #}
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set offset  = craft.request.param('offset') %}
+{% set limit  = craft.request.param('limit') %}
+{% set entryIds = craft.twigSession.get('searchEntryIds') %}
+{% set entries = craft.entries.id(entryIds).order('postDate desc').offset(offset).limit(limit) %}
+
+{% import "_entry/macros" as p %}
+
+{% for entry in entries %}
+  {{ p.post(entry, true) }}
+{% endfor %}
+
+{% endspaceless %}
