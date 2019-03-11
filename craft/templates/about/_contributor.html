@@ -96,10 +96,11 @@
         if ($list[section].children().length == 0) {
           $link.append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
 
-          $list[section].load(
+          $.get(
             '/about/contributor_entries',
             {authorId: authorId, section: section, offset: offset[section], limit: limit},
-            function() {
+            function(result) {
+             $list[section].html(result);
               $link.find('img').remove();
               $list[section].append('<div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/></div>');
               offset[section] = offset[section] + limit;
