@@ -125,19 +125,19 @@
       
       $list[section].append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
 
-      $list[section].append($('<div>').load(
+      $.get(
         '/about/contributor_entries',
-        {authorId: authorId, section: section, offset: offset[section], limit: limit, 
-          "{{ craft.config.csrfTokenName|e('js') }}": "{{ craft.request.csrfToken|e('js') }}"},
+        {authorId: authorId, section: section, offset: offset[section], limit: limit},
         function(result) {
+          $list[section].append($('<div>').html(result));
           $list[section].find('#spinner').remove();
-          $loadMoreBtn.parent().remove();          
+          $loadMoreBtn.parent().remove();
           if(result){
             $list[section].append($loadMoreBtn.parent());
             offset[section] = offset[section] + limit;
-          }          
+          }
         }
-      ));
+      );
 
       e.preventDefault();
     });    
