@@ -127,7 +127,8 @@
 
       $list[section].append($('<div>').load(
         '/about/contributor_entries',
-        {authorId: authorId, section: section, offset: offset[section], limit: limit},
+        {authorId: authorId, section: section, offset: offset[section], limit: limit, 
+          "{{ craft.config.csrfTokenName|e('js') }}": "{{ craft.request.csrfToken|e('js') }}"},
         function(result) {
           $list[section].find('#spinner').remove();
           $loadMoreBtn.parent().remove();          
