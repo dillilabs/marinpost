@@ -28,9 +28,6 @@
           {{ p.post(entry) }}
         {% endfor %}
       </ul>
-      {% if entries | length == 10 %}
-        <div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="{{ section }}"/></div>
-      {% endif %}      
     {% endblock %}
   </div>
 </main>

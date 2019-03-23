@@ -12,32 +12,70 @@
     const limit = 10;
 
     /**
-     * Click handler for 'Load More...' button. Fetches the posts depending on the 'limit' 
-     * and 'offset' and appends them to posts
+     * auto loading upon scroll to bottom
      */
-    $(document).on('click', '#btn-load-more', function(e) {
+    $.fn.scrollingSectionContent  = function(options) {
+        var config = $.extend({}, $.fn.scrollingSectionContent.defaults, options);
+    
+        return this.each(function() {
+            var content = $(this);
+            var scrollPositionThreshold = 0.85;
+            var isLoadingContent = false;
+            var contentLengthThreshold = 20;
+            var endOfContent = false;
+    
+            //----------
+            // Functions
+            //----------
+    
+            var currentContentLength = function() {
+              return $('.listing').length;
+            };
+    
+            var loadMoreContent = function() {
+              isLoadingContent = true;
+    
+              $.get(
+                '/account/entries/section_entries',
+                {
+                    section: '{{ section }}', 
+                    offset: offset, 
+                    limit: limit
+                },
+                function(data) {
+                    if (data.length > contentLengthThreshold) {
+                        content.append(data);
+                        offset = offset + limit;
+                    } else {
+                        endOfContent = true;
+                    }
+                    isLoadingContent = false;
+                }
+              );
+            };
+    
+            //-------
+            // Events
+            //-------
+    
+            $(window).scroll(function() {
+              var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
+    
+              if (isLoadingContent) return;
+    
+              if (currentPosition > scrollPositionThreshold) {
+                if (!endOfContent) loadMoreContent();
+              }
+            });
+            
+        });
+      };
+    
+      $.fn.scrollingSectionContent.defaults = {
+          contentLimit: 10
+      };
 
-      $loadMoreBtn = $(this);
-      var section = $loadMoreBtn.data('section');
-      $(".list-wrapper").append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
-
-      $.get(
-        '/account/entries/section_entries',
-        {section: section, offset: offset, limit: limit},
-        function(result) {
-          $('.posts').append($('<div>').html(result));
-          $(".list-wrapper").find('#spinner').remove();
-          $loadMoreBtn.parent().remove();
-          if(result){
-            if($(result).length == 10)
-              $('.list-wrapper').append($loadMoreBtn.parent());
-            offset = offset + limit;
-          }
-        }
-      );
-      
-      e.preventDefault();
-    });
+      $('.posts').scrollingSectionContent();
   });
 {% endset %}
 {% includeJs js %}
