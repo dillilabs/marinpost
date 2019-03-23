@@ -1,0 +1,43 @@
+{% set js %}
+  $(function() {  
+
+    /**
+     * offset denotes number of already fetched entries.
+     */ 
+    var offset = {{ entries | length }};
+    
+    /**
+     * limit denotes how many entries to retrieve every time load more is clicked
+     */ 
+    const limit = 10;
+
+    /**
+     * Click handler for 'Load More...' button. Fetches the posts depending on the 'limit' 
+     * and 'offset' and appends them to posts
+     */
+    $(document).on('click', '#btn-load-more', function(e) {
+
+      $loadMoreBtn = $(this);
+      var section = $loadMoreBtn.data('section');
+      $(".list-wrapper").append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
+
+      $.get(
+        '/account/entries/section_entries',
+        {section: section, offset: offset, limit: limit},
+        function(result) {
+          $('.posts').append($('<div>').html(result));
+          $(".list-wrapper").find('#spinner').remove();
+          $loadMoreBtn.parent().remove();
+          if(result){
+            if($(result).length == 10)
+              $('.list-wrapper').append($loadMoreBtn.parent());
+            offset = offset + limit;
+          }
+        }
+      );
+      
+      e.preventDefault();
+    });
+  });
+{% endset %}
+{% includeJs js %}

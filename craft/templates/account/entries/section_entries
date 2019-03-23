@@ -1,0 +1,19 @@
+{# Called via Javascript from /account/_layout #}
+{% requireLogin %}
+{% set statuses = ['live', 'disabled'] %}
+{% if not craft.request.isAjax %} {% exit 404 %} {% endif %}
+{% spaceless %}
+
+{% set section  = craft.request.param('section') %}
+{% set offset  = craft.request.param('offset') %}
+{% set limit  = craft.request.param('limit') %}
+
+{% set entries = craft.entries.section(section).status(statuses).authorId(currentUser.id).order('dateCreated desc').offset(offset).limit(limit) %}
+
+{% import "_entry/macros" as m %}
+
+{% for entry in entries %}
+  {{ m.post(entry) }}
+{% endfor %}
+
+{% endspaceless %}
