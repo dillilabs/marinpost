@@ -7,8 +7,10 @@
 {% extends "_common/layout" %}
 
 {% block main %}
+  <script>
+    /* section is used by the auto loading on scroll handler defined in account.js */
+    var section = '{{ section }}';
+  </script>
   {% embed "account/_layout" %}
-  {% endembed %}
-  {% embed "account/entries/_loadmorejs" %}
   {% endembed %}
 {% endblock %}

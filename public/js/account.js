@@ -161,4 +161,79 @@ $(function() {
       document.location = $(this).attr('data-url');
     }
   });
+
+  /**
+   * offset denotes number of already fetched entries.
+   */ 
+  var offset = 10;
+  
+  /**
+   * limit denotes how many entries to retrieve every time load more is clicked
+   */ 
+  const limit = 10;
+
+  /**
+   * auto loading upon scroll to bottom
+   */
+  $.fn.scrollingSectionContent  = function(options) {
+    var config = $.extend({}, $.fn.scrollingSectionContent.defaults, options);
+
+    return this.each(function() {
+      var content = $(this);
+      var scrollPositionThreshold = 0.85;
+      var isLoadingContent = false;
+      var contentLengthThreshold = 20;
+      var endOfContent = false;
+
+      //----------
+      // Functions
+      //----------
+
+      var currentContentLength = function() {
+        return $('.listing').length;
+      };
+
+      var loadMoreContent = function() {
+        isLoadingContent = true;
+
+        $.get(
+          '/account/entries/section_entries',
+          {
+            section: section,
+            offset: offset, 
+            limit: limit
+          },
+          function(data) {
+            if (data.length > contentLengthThreshold) {
+                content.append(data);
+                offset = offset + limit;
+            } else {
+                endOfContent = true;
+            }
+            isLoadingContent = false;
+          }
+        );
+      };
+
+      //-------
+      // Events
+      //-------
+
+      $(window).scroll(function() {
+        var currentPosition = $(window).scrollTop() / ($(document).height() - $(window).height());
+
+        if (isLoadingContent) return;
+
+        if (currentPosition > scrollPositionThreshold) {
+          if (!endOfContent) loadMoreContent();
+        }
+      });
+    });
+  };
+
+  $.fn.scrollingSectionContent.defaults = {
+      contentLimit: 10
+  };
+
+  $('.posts').scrollingSectionContent();
 });
