@@ -217,9 +217,9 @@ $(function() {
           if (!endOfContent) loadMoreContent();
         }
       });
-      $.fn.scrollingSectionContent.defaults = {
-        contentLimit: 10
-      };
     });
+  };
+  $.fn.scrollingSectionContent.defaults = {
+    contentLimit: 10
   };
 });
