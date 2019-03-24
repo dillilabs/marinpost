@@ -7,10 +7,17 @@
 {% extends "_common/layout" %}
 
 {% block main %}
-  <script>
-    /* section is used by the auto loading on scroll handler defined in account.js */
-    var section = '{{ section }}';
-  </script>
   {% embed "account/_layout" %}
   {% endembed %}
 {% endblock %}
+
+{% set js %}
+$(function() {
+  $.fn.scrollingSectionContent.defaults = {
+    contentLimit: 10,
+    section: '{{ section }}'
+  };
+  $('.posts').scrollingSectionContent();
+});
+{% endset %}
+{% includeJs js %}

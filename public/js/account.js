@@ -163,16 +163,6 @@ $(function() {
   });
 
   /**
-   * offset denotes number of already fetched entries.
-   */ 
-  var offset = 10;
-  
-  /**
-   * limit denotes how many entries to retrieve every time load more is clicked
-   */ 
-  const limit = 10;
-
-  /**
    * auto loading upon scroll to bottom
    */
   $.fn.scrollingSectionContent  = function(options) {
@@ -199,14 +189,13 @@ $(function() {
         $.get(
           '/account/entries/section_entries',
           {
-            section: section,
-            offset: offset, 
-            limit: limit
+            section: config.section,
+            offset: currentContentLength(), 
+            limit: config.contentLimit
           },
           function(data) {
             if (data.length > contentLengthThreshold) {
                 content.append(data);
-                offset = offset + limit;
             } else {
                 endOfContent = true;
             }
@@ -228,12 +217,9 @@ $(function() {
           if (!endOfContent) loadMoreContent();
         }
       });
+      $.fn.scrollingSectionContent.defaults = {
+        contentLimit: 10
+      };
     });
   };
-
-  $.fn.scrollingSectionContent.defaults = {
-      contentLimit: 10
-  };
-
-  $('.posts').scrollingSectionContent();
 });
