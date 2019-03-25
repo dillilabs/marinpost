@@ -13,11 +13,7 @@
 
 {% set js %}
 $(function() {
-  $.fn.scrollingSectionContent.defaults = {
-    contentLimit: 10,
-    section: '{{ section }}'
-  };
-  $('.posts').scrollingSectionContent();
+  $('.posts').scrollingSectionContent({section: '{{ section }}'});
 });
 {% endset %}
 {% includeJs js %}

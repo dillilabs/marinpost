@@ -219,7 +219,13 @@ $(function() {
       });
     });
   };
+
+  //----------------------------------------------
+  // Plugin defaults, to be overridden in template
+  //----------------------------------------------
+
   $.fn.scrollingSectionContent.defaults = {
-    contentLimit: 10
+    contentLimit: 10,
+    section: null
   };
 });
