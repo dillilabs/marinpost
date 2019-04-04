@@ -37,6 +37,9 @@ $(function() {
       'letters': null
     }
 
+    var pathArray = window.location.pathname.split('\/');
+    var authorId = pathArray[3];
+
     /**
      * Contributors Page
      * 
@@ -47,8 +50,6 @@ $(function() {
       var $parent = $link.parent();
       var section = $parent[0].dataset.section;
       $list[section] = $parent.next('ul.posts');
-      var pathArray = window.location.pathname.split('\/');
-      var authorId = pathArray[3];
 
       if ($parent.hasClass('active')) {
         $list[section].hide();
@@ -81,9 +82,7 @@ $(function() {
      * 
      * Hide sections if they do not contain any entries.
      */
-    $.each($('h3.my-content'), function (index, sectionHeadingElem) {
-      var pathArray = window.location.pathname.split('\/');
-      var authorId = pathArray[3];
+    $.each($('h3.my-content'), function (index, sectionHeadingElem) {      
       var section = sectionHeadingElem.dataset.section;
       if (section) {
         $.get(
@@ -108,9 +107,7 @@ $(function() {
      *
      * #btn-load-more is not created in DOM. Therefore, we attach the listener using .on().
      */
-    $(document).on('click', '#btn-load-more', function (e) {
-      var pathArray = window.location.pathname.split('\/');
-      var authorId = pathArray[3];
+    $(document).on('click', '#btn-load-more', function (e) {      
       $loadMoreBtn = $(this);
       var section = $loadMoreBtn.data('section');
       $list[section].append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
