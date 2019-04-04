@@ -100,9 +100,11 @@
             '/about/contributor_entries',
             {authorId: authorId, section: section, offset: offset[section], limit: limit},
             function(result) {
-             $list[section].html(result);
+              $list[section].html(result);
               $link.find('img').remove();
-              $list[section].append('<div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/></div>');
+              if($(result).filter('.listing').length == limit){
+                $list[section].append('<div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="'+section+'"/></div>');
+              }
               offset[section] = offset[section] + limit;
             }
           );
@@ -112,6 +114,24 @@
       }
 
       e.preventDefault();
+    });
+
+    /**
+     * Hide sections if they do not contain any entries.
+     */
+    $.each( $('h3.my-content'), function( index, sectionHeadingElem ){
+      var section = sectionHeadingElem.dataset.section;
+      if(section){
+        $.get(
+          '/about/contributor_entries',
+          {authorId: authorId, section: section, offset: offset[section], limit: limit},
+          function(result) {
+            if(!result){                  
+              $(sectionHeadingElem).hide();
+            }
+          }
+        );
+      }
     });
 
     /**
@@ -134,7 +154,8 @@
           $list[section].find('#spinner').remove();
           $loadMoreBtn.parent().remove();
           if(result){
-            $list[section].append($loadMoreBtn.parent());
+            if($(result).filter('.listing').length == limit)
+              $list[section].append($loadMoreBtn.parent());
             offset[section] = offset[section] + limit;
           }
         }
