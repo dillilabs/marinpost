@@ -6,7 +6,7 @@ $(function() {
   }
 
   if (m = document.location.pathname.match(/(^\/about\/contributors\/\d+\/\S+)/)) {
-    contributorRadioButtons.find('input[value$="'+m[1]+'"]').attr('checked', 'checked');
+    contributorRadioButtons.find('input[value$="' + m[1] + '"]').attr('checked', 'checked');
 
     /**
      * offset[section] denotes number of already fetched entries for each section
@@ -61,9 +61,12 @@ $(function() {
             '/about/contributor_entries',
             { authorId: authorId, section: section, offset: offset[section], limit: limit },
             function (result) {
-              $list[section].html(result);
+              var html = JSON.parse(result).html.substring(6, JSON.parse(result).html.length - 6 );
+              var totalCount = JSON.parse(result).total_count;
+              var count = JSON.parse(result).count;
+              $list[section].html(html);
               $link.find('img').remove();
-              if ($(result).filter('.listing').length == limit) {
+              if (totalCount > offset[section]+ count) {
                 $list[section].append('<div style="text-align: center;"><input type="button" id="btn-load-more" value="Load More..." style="margin-bottom: .5em;" data-section="' + section + '"/></div>');
               }
               offset[section] = offset[section] + limit;
@@ -82,18 +85,18 @@ $(function() {
      * 
      * Hide sections if they do not contain any entries.
      */
-    $.each($('h3.my-content'), function (index, sectionHeadingElem) {      
+    $.each($('h3.my-content'), function (index, sectionHeadingElem) {
       var section = sectionHeadingElem.dataset.section;
       if (section) {
         $.get(
           '/about/contributor_entries',
           { authorId: authorId, section: section, offset: offset[section], limit: limit },
           function (result) {
-            if (result) {
-              $(sectionHeadingElem).show();
-            } else {
+            var totalCount = JSON.parse(result).total_count;
+            if(totalCount == 0)
               $(sectionHeadingElem).hide();
-            }
+            else 
+              $(sectionHeadingElem).show();            
           }
         );
       }
@@ -107,7 +110,7 @@ $(function() {
      *
      * #btn-load-more is not created in DOM. Therefore, we attach the listener using .on().
      */
-    $(document).on('click', '#btn-load-more', function (e) {      
+    $(document).on('click', '#btn-load-more', function (e) {
       $loadMoreBtn = $(this);
       var section = $loadMoreBtn.data('section');
       $list[section].append('<img id="spinner" src="/img/spinner.gif" style="padding-left: 8px">');
@@ -116,14 +119,18 @@ $(function() {
         '/about/contributor_entries',
         { authorId: authorId, section: section, offset: offset[section], limit: limit },
         function (result) {
-          $list[section].append($('<div>').html(result));
+          var html = JSON.parse(result).html.substring(6, JSON.parse(result).html.length - 6 );
+          var totalCount = JSON.parse(result).total_count;
+          var count = JSON.parse(result).count;
+
+          $list[section].append($('<div>').html(html));
           $list[section].find('#spinner').remove();
           $loadMoreBtn.parent().remove();
-          if (result) {
-            if ($(result).filter('.listing').length == limit)
-              $list[section].append($loadMoreBtn.parent());
-            offset[section] = offset[section] + limit;
+
+          if (totalCount > offset[section] + count) {
+            $list[section].append($loadMoreBtn.parent());
           }
+          offset[section] = offset[section] + limit;          
         }
       );
 

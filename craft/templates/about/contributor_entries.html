@@ -6,13 +6,17 @@
 {% set section  = craft.request.param('section') %}
 {% set offset  = craft.request.param('offset') %}
 {% set limit  = craft.request.param('limit') %}
-
+{% set totEntries = craft.entries.authorId(authorId).section(section) %}
 {% set entries = craft.entries.authorId(authorId).section(section).offset(offset).limit(limit) %}
 
+{% set entriesHTML = "" %}
 {% import "_entry/macros" as m %}
-
 {% for entry in entries %}
-  {{ m.post(entry) }}
+  {% set entriesHTML = entriesHTML ~ m.post(entry) %}
 {% endfor %}
-
+{
+  "total_count" : {{ totEntries | length }},
+  "count" : {{ entries | length }},
+  "html" : "{{ entriesHTML | json_encode() }}"
+}
 {% endspaceless %}
