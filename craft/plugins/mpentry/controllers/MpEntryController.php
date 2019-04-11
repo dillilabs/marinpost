@@ -16,6 +16,8 @@ class MpEntryController extends BaseController
      * Front-end
      *
      * Publish an entry directly by setting the status.
+     *
+     * Notify admin.
      */
     public function actionPublishEntry()
     {
@@ -23,10 +25,12 @@ class MpEntryController extends BaseController
 
         $entry = $this->_getEntry();
         craft()->mpEntry->updateStatus($entry->id, BaseElementModel::ENABLED);
-        // Updating the status of a never-before published entry
-        // does not update either the postDate or the URI slug
-        // so we must do it manually.
+
+        // Updating the status of a never-before published entry does not update
+        // either the postDate or the URI slug so we must do it manually.
         craft()->mpEntry->setPostDateAndSlug($entry->id);
+
+        craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
 
         $this->redirect('/account/'.$entry->section->handle);
     }

@@ -143,6 +143,33 @@ class MpAdminService extends BaseApplicationComponent
     }
 
     /**
+     * Notify admin of published entry -- for spam purposes.
+     */
+    public function notifyAdminOfPublishedEntry($entry)
+    {
+        $savePath = craft()->path->getTemplatesPath();
+        craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
+        $body = craft()->templates->render('entry', array('entry' => $entry));
+        craft()->path->setTemplatesPath($savePath);
+
+        $email            = new EmailModel();
+        $emailSettings    = craft()->email->getSettings();
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        $email->toEmail   = $emailSettings['emailAddress'];
+        if (!empty($this->plugin->settings->adminEmail)) {
+            $email->cc    = array(array('name' => 'Marin Post Admin', 'email' => $this->plugin->settings->adminEmail));
+        }
+        $section          = ucfirst($entry->section->handle);
+        $email->subject   = "$section entry published on ".craft()->request->hostName;
+        $email->htmlBody  = $body;
+
+        craft()->email->sendEmail($email);
+    }
+
+    /**
      * Return true if current User is an admin assistant.
      */
     public function isAdminOrAdminAssistant()

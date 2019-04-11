@@ -102,6 +102,8 @@ class MpAdminPlugin extends BasePlugin
      *
      *  If entry is published:
      *
+     *      Notify the admin.
+     *
      *      If entry section is blog, letters, media, news or notices:
      *
      *          If content appears to contain offensive language:
@@ -115,6 +117,8 @@ class MpAdminPlugin extends BasePlugin
 
             if ($entry->enabled)
             {
+                craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
+
                 $sections = array('blog', 'letters', 'media', 'news', 'notices');
 
                 if (in_array($entry->section->handle, $sections))
@@ -212,7 +216,7 @@ JS;
 
     public function getVersion()
     {
-        return '1.3.0';
+        return '1.3.1';
     }
 
     public function getDeveloper()
