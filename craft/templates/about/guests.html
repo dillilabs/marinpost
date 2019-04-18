@@ -10,7 +10,7 @@
       <ul class="posts">
         {% for guest in craft.users.group('guest').limit(null).order('lastName, firstName') if craft.entries.authorId(guest.id).total > 0 %}
           <li class="listing">
-            <h3 class="contributor">{{ p.nameCase(guest.name) }}</h3>
+            <h3 class="contributor"><a href="/search?query={{ p.nameCase(guest.name) }}&type=exact">{{ p.nameCase(guest.name) }}</a></h3>
             <div class="profession">
               {% if guest.titleOrProfession %}
                 {{ guest.titleOrProfession }}<br>
