@@ -159,9 +159,6 @@ class MpAdminService extends BaseApplicationComponent
         $email->sender    = $emailSettings['emailAddress'];
         $email->fromName  = $emailSettings['senderName'];
         $email->toEmail   = $emailSettings['emailAddress'];
-        if (!empty($this->plugin->settings->adminEmail)) {
-            $email->cc    = array(array('name' => 'Marin Post Admin', 'email' => $this->plugin->settings->adminEmail));
-        }
         $section          = ucfirst($entry->section->handle);
         $email->subject   = "$section entry published on ".craft()->request->hostName;
         $email->htmlBody  = $body;
