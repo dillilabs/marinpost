@@ -158,10 +158,10 @@ $(function() {
     dialogClass: 'no-close',
     buttons: {
       {#OK: function() {
-	document.location.href="/";	
+	      window.history.back();
       },#}
       Close: function() {
-	document.location.href="/";	
+	      window.history.back();
         modal.dialog('close');
       },
       Delete: function() {
