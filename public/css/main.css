@@ -932,6 +932,11 @@ ul.tags > li {
     display: none;
     font-size: .9em;
 }
+
+.subscription .filter ul {
+    font-size: 0.95em;
+}
+
 .filter ul > li {
     border: 1px solid #d2def4;
     border-top: none;
@@ -947,7 +952,7 @@ ul.tags > li {
 }
 .filter input[type="checkbox"] {
 	float: left;
-	margin: 1em .5em 0 0 !important;
+	margin: 1em .5em 0 0;
 }
 .filter .date-picker {
   display: none;
@@ -1528,6 +1533,13 @@ footer {
 		padding: 0;
         width: 37%;
     }
+
+    
+}
+
+.content-choices {
+    padding: 0;
+    width: 100%;
 }
 
 @media only screen and (min-width: 39em) { /* Tablet 39–50 ems */
@@ -1961,7 +1973,7 @@ footer {
     }
 
 	.filter input[type="checkbox"] {
-		margin-top: .5em !important;
+		margin-top: .2em !important;
 	}
 
     #comments {
