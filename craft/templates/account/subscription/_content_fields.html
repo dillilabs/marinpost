@@ -13,7 +13,11 @@
 {% endfor %}
 
 <br>
+{% if not craft.mpSubscription.activeSubscription(currentUser) %}
 <h4>Choose Content</h4>
+{% else %}
+<h4>Edit Content Choices</h4>
+{% endif %}
 <main class="clearfix" style="padding-bottom: 0px;">
   <div class="sub-nav">
     {% block subNav %}
