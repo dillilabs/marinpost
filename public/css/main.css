@@ -669,6 +669,33 @@ fieldset:last-of-type h5, .submit .sub-nav h5:last-of-type, .about .sub-nav h5:l
     display: none;
 }
 
+.subscription .filter > fieldset, .subscription .sub-nav .filter > h5, .subscription .sub-nav > h5, .subscription .sub-nav h2, .subscription .archive {
+    display: block;
+}
+
+.subscription .sub-nav {
+    width: 100%; 
+    padding-top: 0;
+}
+
+.subscription .sub-nav .filter > fieldset > h5 {
+    border-bottom: none;
+}
+
+.subscription .sub-nav .filter > fieldset > ul {
+    border: none; 
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 12px;
+    padding-left: 27px;
+    padding-top: 0px;
+}
+
+.subscription .sub-nav .filter > fieldset > ul > li {
+    border: none;
+    margin-bottom: 0px;
+}
+
 /* * * * * * * * * * * * * * * * * * * * *
         CONTENT
 * * * * * * * * * * * * * * * * * * * * * */
@@ -920,7 +947,7 @@ ul.tags > li {
 }
 .filter input[type="checkbox"] {
 	float: left;
-	margin: 1em .5em 0 0;
+	margin: 1em .5em 0 0 !important;
 }
 .filter .date-picker {
   display: none;
@@ -1182,14 +1209,6 @@ h2 span.preview button.close {
     color: blue;
 }
 
-.subscription fieldset {
-    border: 1px solid #c0c0c0;
-    margin: 0 2px;
-    padding: 0.35em 0.625em 0.75em;
-}
-.subscription legend {
-    font-weight: bold;
-}
 .subscription fieldset .location-group {
     text-decoration: underline;
     margin: 12px;
@@ -1942,7 +1961,7 @@ footer {
     }
 
 	.filter input[type="checkbox"] {
-		margin-top: .5em;
+		margin-top: .5em !important;
 	}
 
     #comments {

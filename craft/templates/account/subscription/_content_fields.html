@@ -13,62 +13,74 @@
 {% endfor %}
 
 <br>
-<br>
-<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>LOCATIONS</legend>
-  <input type="hidden" name="fields[subscriptionLocations]">
+<h4>Choose Content</h4>
+<main class="clearfix">
+  <div class="sub-nav">
+    {% block subNav %}
+      {% cache unless craft.config.cacheTagDisabled %}
+      <div class="filter" id="filters">
+        <fieldset class="custom {{ m.grayedOutByDefault() }}">
+          <input type="hidden" name="fields[subscriptionLocations]">
+          <h5>Locations</h5>
+          <ul>
+            {% set group = null %}
+            {% for location in craft.categories.group('locations') %}
+              {% if location.geographicGroup != group %}
+                {% set group = location.geographicGroup %}
+                <div class="location-group" style="margin-left: 0px; margin-top: 0px; padding-top: 12px; margin-bottom: 5px; padding-bottom: 0px;">{{ group.label }}</div>
+              {% endif %}
+              <li><input name="fields[subscriptionLocations][]" type="checkbox" value="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" {{ m.checked(location.id, locationIds) }} {{ m.disabledByDefault() }}/><label for="{{ location.id }}">{{ location.title }}</label></li>
+            {% endfor %}
+          </ul>
+        </fieldset>
 
-  {% set group = null %}
-  {% for location in craft.categories.group('locations') %}
-    {% if location.geographicGroup != group %}
-      {% set group = location.geographicGroup %}
-      <div class="location-group">{{ group.label }}</div>
-    {% endif %}
+        <fieldset class="custom {{ m.grayedOutByDefault() }}">
+          <input type="hidden" name="fields[subscriptionTopics]">
+          <h5>Topics</h5>
+          <ul>
+            <li><input type="checkbox" id="all-topics" {{ m.disabledByDefault }}/><label for="topics-all">All Topics</label></li>
 
-    <label>
-      <input type="checkbox" name="fields[subscriptionLocations][]" value="{{ location.id }}" data-parent="{{ craft.mpfilter.parentLocationId(location) }}" data-children="{{ craft.mpfilter.childLocationIds(location) }}" {{ m.checked(location.id, locationIds) }} {{ m.disabledByDefault() }} />
-      {{ location.title }}
-      &nbsp;
-    </label>
-  {% endfor %}
-</fieldset>
+            {% for topic in craft.categories.group('topics') %}
+            <li><input type="checkbox" name="fields[subscriptionTopics][]" value="{{ topic.id }}" id="{{ topic.id }}" {{ m.checked(topic.id, topicIds) }} {{ m.disabledByDefault() }} /><label for="{{ topic.id }}">{{ topic.title }}</label></li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+        <fieldset class="custom {{ m.grayedOutByDefault() }}">
+          <input type="hidden" name="fields[subscriptionAuthors]">
+          <h5>Authors</h5>
+          <ul>
+            <li><input type="checkbox" class="author all" id="all-authors" {{ m.disabledByDefault }}/><label for="all-authors">All</label></li>
 
-<br>
-<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>TOPICS</legend>
-  <input type="hidden" name="fields[subscriptionTopics]">
+            {% for author in craft.users.group('contributor', 'guest').limit(null).order('lastName, firstName') if craft.entries.authorId(author.id).total > 0 %}
+            <li><input type="checkbox" name="fields[subscriptionAuthors][]" value="{{ author.id }}" id="{{ author.id }}" {{ m.checked(author.id, authorIds) }} {{ m.disabledByDefault() }} /><label for="{{ author.id }}">{{ p.nameCase(author.name) }}</label></li>
+            {% endfor %}
+          </ul>
+        </fieldset>
+        <fieldset class="custom {{ m.grayedOutByDefault() }}">
+          <input type="hidden" name="fields[subscriptionLetters]">
+          <h5 style="border-bottom: 1px solid #ccc;">Letters</h5>
+          <ul style="border-bottom: 1px solid #ccc; padding-top: 12px;">
+            <li><input type="checkbox" class="letter all" name="fields[subscriptionLetters][]" value="1" {{ currentUser.subscriptionLetters | length ? 'checked="checked"' : '' }} {{ m.disabledByDefault() }} id="letters-all"/><label for="letters-all">All</label></li>
+          </ul>
+        </fieldset>
+      </div>
+      {% endcache %}
+    {% endblock %}
+  </div>
 
-  <label><input type="checkbox" id="all-topics" {{ m.disabledByDefault }} />All Topics</label><br>
-
-  {% for topic in craft.categories.group('topics') %}
-    <label>
-      <input type="checkbox" name="fields[subscriptionTopics][]" value="{{ topic.id }}" {{ m.checked(topic.id, topicIds) }} {{ m.disabledByDefault() }} />
-      {{ topic.title }}
-      &nbsp;
-    </label>
-  {% endfor %}
-</fieldset>
-
-<br>
-<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>AUTHORS</legend>
-  <input type="hidden" name="fields[subscriptionAuthors]">
-
-  <label><input type="checkbox" id="all-authors" {{ m.disabledByDefault }} />All Authors</label><br>
-
-  {% for author in craft.users.group('contributor', 'guest').limit(null).order('lastName, firstName') if craft.entries.authorId(author.id).total > 0 %}
-    <label>
-      <input type="checkbox" name="fields[subscriptionAuthors][]" value="{{ author.id }}" {{ m.checked(author.id, authorIds) }} {{ m.disabledByDefault() }} />
-      {{ p.nameCase(author.name) }}
-      &nbsp;
-    </label>
-  {% endfor %}
-</fieldset>
-
-<br>
-<fieldset class="custom {{ m.grayedOutByDefault() }}"><legend>LETTERS</legend>
-  <input type="hidden" name="fields[subscriptionLetters]">
-
-  <label>
-    <input type="checkbox" name="fields[subscriptionLetters][]" value="1" {{ currentUser.subscriptionLetters | length ? 'checked="checked"' : '' }} {{ m.disabledByDefault() }} />
-    All Letters
-    &nbsp;
-  </label>
-</fieldset>
+  <div class="list-wrapper">
+    <ul class="posts">
+      {% block posts %}
+      {% endblock %}
+    </ul>
+  </div>
+</main>
+{% set js %}
+  $(function() {
+    $('ul.posts').filters({
+      locations: '{{ craft.request.query("locations") }}',
+      topics: '{{ craft.request.query("topics") }}'
+    });
+  });
+{% endset %}
+{% includeJs js %}
