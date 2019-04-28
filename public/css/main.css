@@ -1218,7 +1218,7 @@ h2 span.preview button.close {
     text-decoration: underline;
     margin: 12px;
 }
-.subscription fieldset.disabled legend, .subscription fieldset.disabled .location-group, .subscription fieldset.disabled label {
+.subscription fieldset.disabled legend, .subscription fieldset.disabled .location-group, .subscription fieldset.disabled label, .subscription h5.disabled, .subscription .custom-content-container-heading.disabled {
     color: #c0c0c0;
 }
 

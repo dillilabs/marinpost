@@ -24,7 +24,7 @@
             var authorCheckboxes   = filterForm.find('input[name="fields[subscriptionAuthors][]"]');
             var allAuthorsCheckbox = filterForm.find('#all-authors');
             var letterCheckbox     = filterForm.find('input[name="fields[subscriptionLetters][]"]');
-            var customContent      = filterForm.find('fieldset.custom, fieldset.custom > .location-group');
+            var customContent      = filterForm.find('fieldset.custom, fieldset.custom > .location-group, fieldset.custom > h5.custom, h4.custom-content-container-heading.custom');
             var contentRadio       = filterForm.find('input[name="fields[subscriptionContent]"]');
 
             var expirationDate = cancelForm.find('.expiration-date');

@@ -14,9 +14,9 @@
 
 <br>
 {% if not craft.mpSubscription.activeSubscription(currentUser) %}
-<h4>Choose Content</h4>
+<h4 class="custom-content-container-heading custom {{ m.grayedOutByDefault() }}">Choose Content</h4>
 {% else %}
-<h4>Edit Content Choices</h4>
+<h4 class="custom-content-container-heading custom {{ m.grayedOutByDefault() }}">Edit Content Choices</h4>
 {% endif %}
 <main class="clearfix content-choices">
   <div class="sub-nav">
@@ -25,7 +25,7 @@
       <div class="filter" id="filters">
         <fieldset class="custom {{ m.grayedOutByDefault() }}">
           <input type="hidden" name="fields[subscriptionLocations]">
-          <h5>Locations</h5>
+          <h5 class="custom {{ m.grayedOutByDefault() }}">Locations</h5>
           <ul>
             {% set group = null %}
             {% for location in craft.categories.group('locations') %}
@@ -44,7 +44,7 @@
 
         <fieldset class="custom {{ m.grayedOutByDefault() }}">
           <input type="hidden" name="fields[subscriptionTopics]">
-          <h5>Topics</h5>
+          <h5 class="custom {{ m.grayedOutByDefault() }}">Topics</h5>
           <ul>
             <label><input type="checkbox" id="all-topics" {{ m.disabledByDefault }} />All Topics</label><br/>
 
@@ -59,7 +59,7 @@
         </fieldset>
         <fieldset class="custom {{ m.grayedOutByDefault() }}">
           <input type="hidden" name="fields[subscriptionAuthors]">
-          <h5>Authors</h5>
+          <h5 class="custom {{ m.grayedOutByDefault() }}">Authors</h5>
           <ul>
               <label><input type="checkbox" id="all-authors" {{ m.disabledByDefault }} />All Authors</label><br>
 
@@ -74,7 +74,7 @@
         </fieldset>
         <fieldset class="custom {{ m.grayedOutByDefault() }}">
           <input type="hidden" name="fields[subscriptionLetters]">
-          <h5 style="border-bottom: 1px solid #ccc;">Letters</h5>
+          <h5 class="custom {{ m.grayedOutByDefault() }}" style="border-bottom: 1px solid #ccc;">Letters</h5>
           <ul style="border-bottom: 1px solid #ccc; padding-top: 12px;">
             <label>
               <input type="checkbox" name="fields[subscriptionLetters][]" value="1" {{ currentUser.subscriptionLetters | length ? 'checked="checked"' : '' }} {{ m.disabledByDefault() }} />
