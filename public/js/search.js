@@ -31,7 +31,7 @@ $(function() {
         //----------
 
         var currentContentLength = function() {
-          return $('ul.posts.search li').length;
+          return $('ul.posts.search > li').length;
         };
 
         var loadMoreContent = function() {

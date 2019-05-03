@@ -75,6 +75,15 @@
           <input type="radio" name="section" value="notices" {{ checkSection('notices')}}> Notices
           <input type="radio" name="section" value="media" {{ checkSection('media')}}> Media
           <input type="radio" name="section" value="letters" {{ checkSection('letters')}}> Letters
+          {% if entryIds | length %}
+          <span style="float:right">{{ entryIds | length }} 
+            {% if (entryIds | length) == 1 %}
+            result
+            {% else %}
+            results
+            {% endif %} found
+          </span>
+          {% endif %}
         </fieldset>
       </form>
 
