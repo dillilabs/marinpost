@@ -1024,7 +1024,6 @@ label.check {
 
 .field.document, .field.document + a {
     display: inline-block;
-    margin-top: .5em;
 }
 
 .field.account-profile {

@@ -1,0 +1,265 @@
+{# NOTE: empty fields[fieldName][] MUST be removed (via Javascript) prior to form submission.
+    # See public/js/contentform.js and public/js/userform.js
+    #}
+   
+   {% set sourceId = 2 %}
+   {% set folder = craft.s3direct.s3Folder(sourceId) %}
+   {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+   
+   {% set assets = false %}
+   {% if folder %}
+     {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
+   {% endif %}
+   
+   {% set entry = userProfile ? currentUser : entry %}
+   {% set document = false %}
+   {% set errors = false %}
+   {% if entry %}
+     {% set documents = attribute(entry, documentsAttribute) %}     
+     {% set errors = documents.first.hasErrors %}
+   {% endif %}
+   
+   {% set excerptLength = 20 %}
+   <label>Documents</label>
+   <input type="hidden" name="fields[{{ documentsAttribute }}]">
+   <div id="documentContainer">
+    {% for document in documents %}
+    <div class="field document" style="width:100%;">     
+        <span class="document-title">{{ document ? document.title : '' }}</span>
+        <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+            return false;">Remove</a></span>
+        {% if errors %}
+        {{ f.errorList(documentBlock.allErrors) }}
+        {% endif %}
+        <!-- <input type="hidden" name="fields[{{ documentsAttribute }}]"> -->
+        <div class="document-field inputs">
+        <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="{{ document.id }}">
+        </div>
+    </div>
+    {% endfor %}
+   </div>
+
+   <div id="document-modal" class="upload-modal document" title="My Documents" style="display: none;">
+     <div>
+       <div class="help">{{ n.siteMessage('my/documents') }}</div>
+     </div>
+   
+     <div>
+       <div class="upload-wrapper clearfix">
+         <span class="fileinput-button">
+           <span>Upload a Document</span>
+           <input id="document-fileupload" type="file" name="file" accept="application/pdf">
+           <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
+         </span>
+   
+         <div class="s3direct document progress-bar progress-bar-success"></div>
+       </div>
+   
+       <div class="files-wrapper clearfix">
+         <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
+           {% if folder %}
+             {% for asset in assets %}
+               <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+                 <div><img src="/img/default/list/pdf.jpg" /></div>
+                 <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
+               </li>
+             {% endfor %}
+           {% endif %}
+         </ul>
+       </div>
+     </div>
+   </div>
+   
+   <a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
+   <span class="note"> &nbsp; *PDF documents only</span>
+   
+   {% set js %}
+   $(function() {
+     var openModal = $('#open-document-modal');
+     var modal = $('#document-modal');
+     var fileInput = modal.find('#document-fileupload');
+     var srcFiles = modal.find('ul#src-files');
+     var okButton = false;
+     var targetFileTitle = $('.document-title');
+     var deleteButton = false;
+     var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
+     
+     var selectedFile = function() {
+       return srcFiles.children('li.selected:first');
+     }
+   
+     var selectFile = function(li) {
+       li.parent().children().removeClass('selected');
+       li.addClass('selected');
+     };
+   
+     var updateOkButton = function() {
+       okButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+     };
+
+     var populateDocumentFromModal = function() {
+       var selectedFile = srcFiles.children('li.selected:first');
+       var targetFileId = $('input[type=hidden][name="fields[{{ documentsAttribute }}][]"]');
+       var docId = selectedFile.attr('data-asset-id');
+       var docTitle = selectedFile.attr('data-asset-title');
+       if (selectedFile.length == 1) {
+        // first check if this document is already selected
+        // if it is, silently ignore
+        if(!targetFileId){
+            // create the HTML
+            var docHTML = `<div class="field document" style="width:100%;">     
+                    <span class="document-title">${docTitle}</span>
+                    <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                        return false;">Remove</a></span>
+                    <div class="document-field inputs">
+                    <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
+                    </div>
+                </div>`;
+            $('#documentContainer').append(docHTML);
+        } else if(targetFileId.length > 1){
+            if(targetFileId.length == 5){
+                alert("Only 5 documents can be attached at max.");
+            } else {
+                // check if already exist
+                var alreadyExists = false;
+                for(var property in targetFileId){
+                    if (targetFileId.hasOwnProperty(property)) {
+                        if(typeof targetFileId[property].val === "function"){
+                            var targetFileIdValue = targetFileId[property].val(); 
+                            if(targetFileIdValue == docId){
+                                // already exists ignore
+                                alreadyExists = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(!alreadyExists){
+                    // create HTML
+                    var docHTML = `<div class="field document" style="width:100%;">     
+                            <span class="document-title">${docTitle}</span>
+                            <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                                return false;">Remove</a></span>
+                            <div class="document-field inputs">
+                            <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
+                            </div>
+                        </div>`;
+                    $('#documentContainer').append(docHTML);
+                }
+            }            
+        } else {
+            // check if already exist
+            var targetFileIdValue = targetFileId.val(); 
+            if(targetFileIdValue == docId){
+                // already exists ignore
+            } else {
+                // create the HTML
+                var docHTML = `<div class="field document" style="width:100%;">     
+                        <span class="document-title">${docTitle}</span>
+                        <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                            return false;">Remove</a></span>
+                        <div class="document-field inputs">
+                        <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
+                        </div>
+                    </div>`;
+                $('#documentContainer').append(docHTML);
+            }
+        }
+       }
+     };
+   
+     var updateDeleteButton = function() {
+       deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
+     };
+   
+     var deleteDocument = function() {
+       var selectedFile = srcFiles.children('li.selected:first');
+       var assetId;
+   
+       if (selectedFile.length == 1) {
+         assetId = selectedFile.attr('data-asset-id');
+   
+         $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
+           if (data.error) {
+             alert(data.error);
+           } else {
+             selectedFile.remove();
+             updateDeleteButton();
+             updateOkButton();
+           }
+         });
+       }
+     };
+   
+     var populateListFromIndex = function(files) {
+       var selectedId = selectedFile().attr('data-asset-id');
+       srcFiles.children().remove();
+   
+       $.each(files, function(index, file) {
+         var selected = file.id == selectedId ? 'class="selected"' : '';
+         var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
+   
+         srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
+       });
+   
+       srcFiles.show();
+     };
+   
+     openModal.click(function(e) {
+       e.preventDefault();
+       modal.dialog('open');
+     });
+   
+     modal.dialog({
+       modal: true,
+       autoOpen: false,
+       height: window.matchMedia("(min-width: 51em)").matches ? $(window).height() * 0.75 : $(window).height(),
+       width: window.matchMedia("(min-width: 51em)").matches ? $(window).width() * 0.75 : $(window).width(),
+       dialogClass: 'no-close',
+       buttons: {
+         OK: function() {
+           populateDocumentFromModal();
+           modal.dialog('close');
+         },
+         Cancel: function() {
+           modal.dialog('close');
+         },
+         Delete: function() {
+           deleteDocument();
+         }
+       },
+       open: function(event, ui) {
+         var widget = $(this).dialog('widget');
+         okButton = widget.find('.ui-dialog-buttonpane button:contains(OK)');
+         updateOkButton();
+         deleteButton = widget.find('.ui-dialog-buttonpane button:contains(Delete)');
+         updateDeleteButton();
+       },
+       closeOnEscape: false,
+     });
+   
+     srcFiles.on('click', 'li', function(e) {
+       selectFile($(this));
+       updateOkButton();
+       updateDeleteButton();
+     });
+   
+     fileInput.s3direct({
+       bucket: "{{ s3.bucket }}",
+       subfolder: "{{ s3.subfolder }}",
+       currentUserId: "{{ currentUser.id }}",
+       policy: "{{ s3.policy }}",
+       signature: "{{ s3.signature }}",
+       accessKey: "{{ s3.keyId }}",
+       assetsSourceId: {{ sourceId }},
+       acceptFileTypes: /.+\.pdf$/i,
+       uploadProgressBarSelector: '.s3direct.document.progress-bar',
+       updateIndexIndicatorSelector: 'img.s3direct.document',
+       onUpdateAssetsIndex: populateListFromIndex,
+       requireFileTitle: true,
+       debug: true,
+     });
+   });
+   {% endset %}
+   {% includeJs js %}
+   
