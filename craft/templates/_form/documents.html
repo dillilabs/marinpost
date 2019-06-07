@@ -1,30 +1,30 @@
 {# NOTE: empty fields[fieldName][] MUST be removed (via Javascript) prior to form submission.
     # See public/js/contentform.js and public/js/userform.js
     #}
-   
+
    {% set sourceId = 2 %}
    {% set folder = craft.s3direct.s3Folder(sourceId) %}
    {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
-   
+
    {% set assets = false %}
    {% if folder %}
      {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
    {% endif %}
-   
+
    {% set entry = userProfile ? currentUser : entry %}
    {% set document = false %}
    {% set errors = false %}
    {% if entry %}
-     {% set documents = attribute(entry, documentsAttribute) %}     
+     {% set documents = attribute(entry, documentsAttribute) %}
      {% set errors = documents.first.hasErrors %}
    {% endif %}
-   
+
    {% set excerptLength = 20 %}
-   <label>Documents</label>
+   <label>Attach Documents</label>
    <input type="hidden" name="fields[{{ documentsAttribute }}]">
    <div id="documentContainer">
     {% for document in documents %}
-    <div class="field document" style="width:100%;">     
+    <div class="field document" style="width:100%;">
         <span class="document-title">{{ document ? document.title : '' }}</span>
         <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
             return false;">Remove</a></span>
@@ -43,7 +43,7 @@
      <div>
        <div class="help">{{ n.siteMessage('my/documents') }}</div>
      </div>
-   
+
      <div>
        <div class="upload-wrapper clearfix">
          <span class="fileinput-button">
@@ -51,10 +51,10 @@
            <input id="document-fileupload" type="file" name="file" accept="application/pdf">
            <img class="s3direct document" src="/img/spinner.gif" style="display: none;"/>
          </span>
-   
+
          <div class="s3direct document progress-bar progress-bar-success"></div>
        </div>
-   
+
        <div class="files-wrapper clearfix">
          <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
            {% if folder %}
@@ -69,7 +69,7 @@
        </div>
      </div>
    </div>
-   
+
    <a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
    <span class="note"> &nbsp; *PDF documents only</span>
    <br><br>
@@ -83,16 +83,16 @@
      var targetFileTitle = $('.document-title');
      var deleteButton = false;
      var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
-     
+
      var selectedFile = function() {
        return srcFiles.children('li.selected:first');
      }
-   
+
      var selectFile = function(li) {
        li.parent().children().removeClass('selected');
        li.addClass('selected');
      };
-   
+
      var updateOkButton = function() {
        okButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
      };
@@ -107,7 +107,7 @@
         // if it is, silently ignore
         if(!targetFileId){
             // create the HTML
-            var docHTML = `<div class="field document" style="width:100%;">     
+            var docHTML = `<div class="field document" style="width:100%;">
                     <span class="document-title">${docTitle}</span>
                     <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                         return false;">Remove</a></span>
@@ -125,7 +125,7 @@
                 for(var property in targetFileId){
                     if (targetFileId.hasOwnProperty(property)) {
                         if(typeof targetFileId[property].val === "function"){
-                            var targetFileIdValue = targetFileId[property].val(); 
+                            var targetFileIdValue = targetFileId[property].val();
                             if(targetFileIdValue == docId){
                                 // already exists ignore
                                 alreadyExists = true;
@@ -136,7 +136,7 @@
                 }
                 if(!alreadyExists){
                     // create HTML
-                    var docHTML = `<div class="field document" style="width:100%;">     
+                    var docHTML = `<div class="field document" style="width:100%;">
                             <span class="document-title">${docTitle}</span>
                             <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                                 return false;">Remove</a></span>
@@ -146,15 +146,15 @@
                         </div>`;
                     $('#documentContainer').append(docHTML);
                 }
-            }            
+            }
         } else {
             // check if already exist
-            var targetFileIdValue = targetFileId.val(); 
+            var targetFileIdValue = targetFileId.val();
             if(targetFileIdValue == docId){
                 // already exists ignore
             } else {
                 // create the HTML
-                var docHTML = `<div class="field document" style="width:100%;">     
+                var docHTML = `<div class="field document" style="width:100%;">
                         <span class="document-title">${docTitle}</span>
                         <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                             return false;">Remove</a></span>
@@ -167,18 +167,18 @@
         }
        }
      };
-   
+
      var updateDeleteButton = function() {
        deleteButton.button((selectedFile().length == 1) ? 'enable' : 'disable');
      };
-   
+
      var deleteDocument = function() {
        var selectedFile = srcFiles.children('li.selected:first');
        var assetId;
-   
+
        if (selectedFile.length == 1) {
          assetId = selectedFile.attr('data-asset-id');
-   
+
          $.post(deleteAssetUrl, { assetId: assetId }, function(data) {
            if (data.error) {
              alert(data.error);
@@ -190,26 +190,26 @@
          });
        }
      };
-   
+
      var populateListFromIndex = function(files) {
        var selectedId = selectedFile().attr('data-asset-id');
        srcFiles.children().remove();
-   
+
        $.each(files, function(index, file) {
          var selected = file.id == selectedId ? 'class="selected"' : '';
          var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
-   
+
          srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
        });
-   
+
        srcFiles.show();
      };
-   
+
      openModal.click(function(e) {
        e.preventDefault();
        modal.dialog('open');
      });
-   
+
      modal.dialog({
        modal: true,
        autoOpen: false,
@@ -237,13 +237,13 @@
        },
        closeOnEscape: false,
      });
-   
+
      srcFiles.on('click', 'li', function(e) {
        selectFile($(this));
        updateOkButton();
        updateDeleteButton();
      });
-   
+
      fileInput.s3direct({
        bucket: "{{ s3.bucket }}",
        subfolder: "{{ s3.subfolder }}",
@@ -262,4 +262,4 @@
    });
    {% endset %}
    {% includeJs js %}
-   
+
