@@ -2009,3 +2009,7 @@ footer {
 p {
     overflow-wrap: break-word;
 }
+
+.remove-doc-link{
+    cursor: pointer;
+}

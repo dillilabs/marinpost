@@ -26,7 +26,7 @@
     {% for document in documents %}
     <div class="field document" style="width:100%;">     
         <span class="document-title">{{ document ? document.title : '' }}</span>
-        <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+        <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
             return false;">Remove</a></span>
         {% if errors %}
         {{ f.errorList(documentBlock.allErrors) }}
@@ -72,7 +72,7 @@
    
    <a href="#" id="open-document-modal">{{ document ? 'Replace Document' : 'Add a Document' }}</a>
    <span class="note"> &nbsp; *PDF documents only</span>
-   
+   <br><br>
    {% set js %}
    $(function() {
      var openModal = $('#open-document-modal');
@@ -109,7 +109,7 @@
             // create the HTML
             var docHTML = `<div class="field document" style="width:100%;">     
                     <span class="document-title">${docTitle}</span>
-                    <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                    <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                         return false;">Remove</a></span>
                     <div class="document-field inputs">
                     <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
@@ -138,7 +138,7 @@
                     // create HTML
                     var docHTML = `<div class="field document" style="width:100%;">     
                             <span class="document-title">${docTitle}</span>
-                            <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                            <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                                 return false;">Remove</a></span>
                             <div class="document-field inputs">
                             <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
@@ -156,7 +156,7 @@
                 // create the HTML
                 var docHTML = `<div class="field document" style="width:100%;">     
                         <span class="document-title">${docTitle}</span>
-                        <span style="margin-left: 10px;"><a onclick="$(this).parent().parent().remove();
+                        <span style="margin-left: 10px;"><a class="remove-doc-link" onclick="$(this).parent().parent().remove();
                             return false;">Remove</a></span>
                         <div class="document-field inputs">
                         <input type="hidden" name="fields[{{ documentsAttribute }}][]" value="${docId}">
