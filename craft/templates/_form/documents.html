@@ -244,6 +244,12 @@
        updateDeleteButton();
      });
 
+     srcFiles.on('dblclick', 'li', function(e) {
+       selectFile($(this));
+       populateDocumentFromModal();
+       modal.dialog('close');
+     });
+
      fileInput.s3direct({
        bucket: "{{ s3.bucket }}",
        subfolder: "{{ s3.subfolder }}",
