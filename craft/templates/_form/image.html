@@ -145,6 +145,12 @@ $(function() {
           selectedImage.remove();
           updateDeleteButton();
           updateOkButton();
+
+          // If this image was attached to the entry, detach and replace with default image
+          if(targetFileId.val() == assetId){
+            targetFileId.val('').trigger('change');
+            targetImage.prop('src', defaultImagePath);
+          }
         }
       });
     }
