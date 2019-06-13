@@ -121,20 +121,7 @@
                 alert("Only 5 documents can be attached at max.");
             } else {
                 // check if already exist
-                var alreadyExists = false;
-                for(var property in targetFileId){
-                    if (targetFileId.hasOwnProperty(property)) {
-                        if(typeof targetFileId[property].val === "function"){
-                            var targetFileIdValue = targetFileId[property].val();
-                            if(targetFileIdValue == docId){
-                                // already exists ignore
-                                alreadyExists = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if(!alreadyExists){
+                if (!targetFileId.is(function(){return this.value == docId})) {
                     // create HTML
                     var docHTML = `<div class="field document" style="width:100%;">
                             <span class="document-title">${docTitle}</span>
