@@ -141,7 +141,7 @@
 
 		imageEditable: true,
 		imageLink: true,
-		imagePosition: true,
+		imagePosition: false,
 		imageFloatMargin: '10px',
 		imageResizable: true,
 
@@ -301,7 +301,7 @@
 				columns: 'Columns',
 				add_head: 'Add Head',
 				delete_head: 'Delete Head',
-				title: 'Title',
+				title: 'Description of Image',
 				image_position: 'Position',
 				none: 'None',
 				left: 'Left',
@@ -6439,9 +6439,10 @@
 						+ '<section id="redactor-modal-image-edit">'
 							+ '<label>' + this.lang.get('title') + '</label>'
 							+ '<input type="text" id="redactor-image-title" />'
+							+ '<span style="font-size: 12px; font-style: italic;">Your title will help search engines find your content on the web. This title will not show on the published page.</span>'
 							+ '<label class="redactor-image-link-option">' + this.lang.get('link') + '</label>'
 							+ '<input type="text" id="redactor-image-link" class="redactor-image-link-option" aria-label="' + this.lang.get('link') + '" />'
-							+ '<label class="redactor-image-link-option"><input type="checkbox" id="redactor-image-link-blank" aria-label="' + this.lang.get('link_new_tab') + '"> ' + this.lang.get('link_new_tab') + '</label>'
+							+ '<label class="redactor-image-link-option"><input type="checkbox" id="redactor-image-link-blank" aria-label="' + this.lang.get('link_new_tab') + '" checked=true> ' + this.lang.get('link_new_tab') + '</label>'
 							+ '<label class="redactor-image-position-option">' + this.lang.get('image_position') + '</label>'
 							+ '<select class="redactor-image-position-option" id="redactor-image-align" aria-label="' + this.lang.get('image_position') + '">'
 								+ '<option value="none">' + this.lang.get('none') + '</option>'
