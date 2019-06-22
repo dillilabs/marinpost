@@ -1,0 +1,195 @@
+{% set sourceId = 3 %}
+{% set folder = craft.s3direct.s3Folder(sourceId) %}
+{% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
+{% set assets = false %}
+{% if folder %}
+  {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
+{% endif %}
+
+{% set transform = userProfile ? 'profile' : 'list' %}
+{% set excerptLength = 20 %}
+<input type="hidden" id="selected-img-url" value=""/>
+<div id="image-modal-2" class="upload-modal image" title="My Images" style="display: none;">
+    <div>
+        <div class="help">{{ n.siteMessage('my/images') }}</div>
+    </div>
+
+    <div>
+    <div class="upload-wrapper clearfix">
+        <span class="fileinput-button">
+        <span>Upload an image</span>
+        <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
+        <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
+        </span>
+
+        <div class="s3direct image progress-bar progress-bar-success"></div>
+    </div>
+
+    <div class="files-wrapper clearfix">
+        <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
+        {% if folder %}
+            {% for asset in assets %}
+            <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url(transform) }}" title="{{ asset.title }}">
+                <div><img src="{{ asset.url(transform) }}" /></div>
+                <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
+            </li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+    </div>
+    </div>
+</div>
+
+{% set js %}
+$(function() {
+    var modal2 = $('#image-modal-2');
+    var fileInput2 = modal2.find('#image-fileupload');
+    var srcFiles2 = modal2.find('ul#src-files');
+    
+    var modal = $('#image-modal');
+    var srcFiles = modal.find('ul#src-files');
+    var okButton2 = false;
+    var deleteButton2 = false;
+    var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
+    
+    var selectedImage2 = function() {
+        return srcFiles2.children('li.selected:first');
+    }
+
+    var selectImage2 = function(li) {
+        li.parent().children().removeClass('selected');
+        li.addClass('selected');
+    };
+
+    var updateOkButton2 = function() {
+        okButton2.button((selectedImage2().length == 1) ? 'enable' : 'disable');
+    };
+
+    var populateListFromIndex2 = function(files) {
+        var selectedId = selectedImage2().attr('data-asset-id');
+        srcFiles2.children().remove();
+    
+        $.each(files, function(index, file) {
+          var selected = file.id == selectedId ? 'class="selected"' : '';
+          var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
+    
+          srcFiles2.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
+        });
+    
+        srcFiles2.show();
+
+        // Also update the other list
+        selectedId = selectedImage2().attr('data-asset-id');
+        srcFiles.children().remove();
+    
+        $.each(files, function(index, file) {
+          var selected = file.id == selectedId ? 'class="selected"' : '';
+          var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
+    
+          srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
+        });
+    
+        srcFiles.show();
+    };
+
+    var populateImageFromModal2 = function() {
+        var selectedImage2 = srcFiles2.children('li.selected:first');
+
+        if (selectedImage2.length == 1) {
+            console.log(selectedImage2.attr('data-asset-url'));
+            $('#selected-img-url').val(selectedImage2.attr('data-asset-url'));           
+        } else {
+            $('#selected-img-url').val('');
+        }
+    };
+
+    var updateDeleteButton2 = function() {
+        deleteButton2.button((selectedImage2().length == 1) ? 'enable' : 'disable');
+    };
+
+    var deleteImage2 = function() {
+        var selectedImage2 = srcFiles2.children('li.selected:first');
+        var assetId2;
+
+        if (selectedImage2.length == 1) {
+            assetId2 = selectedImage2.attr('data-asset-id');
+
+            $.post(deleteAssetUrl, { assetId: assetId2 }, function(data) {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    selectedImage2.remove();
+
+                    // delete this li from any other HTML as well
+                    var selectedId = selectedImage2.attr('data-asset-id');
+                    $('[data-asset-id="'+selectedId+'"]').remove();
+
+                    updateDeleteButton2();
+                    updateOkButton2();
+                }
+            });
+        }
+    };
+
+    modal2.dialog({
+        modal2: true,
+        autoOpen: false,
+        height: window.matchMedia("(min-width: 51em)").matches ? $(window).height() * 0.75 : $(window).height(),
+        width: window.matchMedia("(min-width: 51em)").matches ? $(window).width() * 0.75 : $(window).width(),
+        dialogClass: 'no-close',
+        buttons: {
+            OK: function() {
+                populateImageFromModal2();
+                modal2.dialog('close');
+            },
+            Cancel: function() {
+                $('#selected-img-url').val('');
+                modal2.dialog('close');
+            },
+            Delete: function() {
+                deleteImage2();
+            }
+        },
+        open: function(event, ui) {
+            // deselect any existing image
+            $('#image-modal-2 div .files-wrapper ul#src-files li').removeClass("selected");
+            var widget2 = $(this).dialog('widget');
+            okButton2 = widget2.find('.ui-dialog-buttonpane button:contains(OK)');
+            updateOkButton2();
+            deleteButton2 = widget2.find('.ui-dialog-buttonpane button:contains(Delete)');
+            updateDeleteButton2();
+        },
+        closeOnEscape: false,
+    });
+
+    srcFiles2.on('click', 'li', function(e) {
+        selectImage2($(this));
+        updateOkButton2();
+        updateDeleteButton2();
+    });
+
+    srcFiles2.on('dblclick', 'li', function(e) {
+        selectImage2($(this));
+        populateImageFromModal2();
+        modal2.dialog('close');
+    });
+
+    fileInput2.s3direct({
+        bucket: "{{ s3.bucket }}",
+        subfolder: "{{ s3.subfolder }}",
+        currentUserId: "{{ currentUser.id }}",
+        policy: "{{ s3.policy }}",
+        signature: "{{ s3.signature }}",
+        accessKey: "{{ s3.keyId }}",
+        assetsSourceId: {{ sourceId }},
+        acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
+        imageTransform: '{{ transform }}',
+        uploadProgressBarSelector: '#image-modal-2 div .upload-wrapper .s3direct.image.progress-bar',
+        updateIndexIndicatorSelector: '#image-modal-2 div .upload-wrapper .fileinput-button .s3direct.image',
+        onUpdateAssetsIndex: populateListFromIndex2,
+        requireFileCredit: true,
+        debug: true,
+    });
+});
+{% endset %}
+{% includeJs js %}

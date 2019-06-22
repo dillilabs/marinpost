@@ -88,6 +88,9 @@ $(function() {
   var deleteButton = false;
   var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
   
+  var modal2 = $('#image-modal-2');
+  var srcFiles2 = modal2.find('ul#src-files');
+
   var selectedImage = function() {
     return srcFiles.children('li.selected:first');
   }
@@ -109,6 +112,18 @@ $(function() {
     });
 
     srcFiles.show();
+
+    selectedId = selectedImage().attr('data-asset-id');
+    srcFiles2.children().remove();
+
+    $.each(files, function(index, file) {
+      var selected = file.id == selectedId ? 'class="selected"' : '';
+      var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
+
+      srcFiles2.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
+    });
+
+    srcFiles2.show();
   };
 
   var updateOkButton = function() {
@@ -143,6 +158,10 @@ $(function() {
           alert(data.error);
         } else {
           selectedImage.remove();
+          // delete this li from any other HTML as well
+          var selectedId = selectedImage.attr('data-asset-id');
+          $('[data-asset-id="'+selectedId+'"]').remove();
+
           updateDeleteButton();
           updateOkButton();
 
@@ -211,8 +230,8 @@ $(function() {
     assetsSourceId: {{ sourceId }},
     acceptFileTypes: /.+\.(gif|jpe?g|png)$/i,
     imageTransform: '{{ transform }}',
-    uploadProgressBarSelector: '.s3direct.image.progress-bar',
-    updateIndexIndicatorSelector: 'img.s3direct.image',
+    uploadProgressBarSelector: '#image-modal div .upload-wrapper .s3direct.image.progress-bar',
+    updateIndexIndicatorSelector: '#image-modal div .upload-wrapper .fileinput-button .s3direct.image',
     onUpdateAssetsIndex: populateListFromIndex,
     requireFileCredit: true,
     debug: true,
