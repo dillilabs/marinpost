@@ -136,7 +136,10 @@
         <li class="bottom-only sign-up"><a href="{{ url('account/register') }}">Sign up</a></li>
       {% endif %}
       <li>{{ n.segmentLink('Donate') }}</li>
-      <li>{{ n.segmentLink('Help', 'frequently-asked-questions') }}</li>
+      {% set helpEntry = craft.entries.section('Help').first() %}
+      {% if helpEntry.status == 'live' %}
+        <li>{{ n.segmentLink('Help', 'frequently-asked-questions') }}</li>
+      {% endif %}
       <li class="bottom-only"><a href="#" class="show-search">Search</a></li>
     </ul>
   </nav>
