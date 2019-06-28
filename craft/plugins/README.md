@@ -30,3 +30,7 @@ Note the following Craft plugins have been modified:
 6. RedactorI
    
   git show 82f83622f0d8f2f8dc230f794aaf5cfd4690ff75 public/js/redactor.js
+
+7. RedactorI
+
+  git show f13c2c1a0a75b50325d8cceea23a4ac67702c230 public/js/redactor.js
