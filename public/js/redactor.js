@@ -5834,8 +5834,6 @@
 					this.link.getData();
 					this.link.cleanUrl();
 
-					if (this.link.target == '_blank') $('#redactor-link-blank').prop('checked', true);
-
 					this.link.$inputUrl = $('#redactor-link-url');
 					this.link.$inputText = $('#redactor-link-url-text');
 
@@ -5919,10 +5917,7 @@
 					// url, not anchor
 					else if (link.search('#') !== 0)
 					{
-						if ($('#redactor-link-blank').prop('checked'))
-						{
-							target = '_blank';
-						}
+						target = '_blank';
 
 						// test url (add protocol)
 						var pattern = '((xn--)?[a-z0-9]+(-[a-z0-9]+)*\\.)+[a-z]{2,}';
@@ -6472,7 +6467,6 @@
 							+ '<input type="url" id="redactor-link-url" aria-label="URL" />'
 							+ '<label>' + this.lang.get('text') + '</label>'
 							+ '<input type="text" id="redactor-link-url-text" aria-label="' + this.lang.get('text') + '" />'
-							+ '<label><input type="checkbox" checked id="redactor-link-blank"> ' + this.lang.get('link_new_tab') + '</label>'
 						+ '</section>'
 					};
 
