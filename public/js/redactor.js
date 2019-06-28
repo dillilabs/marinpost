@@ -3659,8 +3659,7 @@
 						$redactorImageLink.attr('href', $image.attr('src'));
 						if ($link.length !== 0)
 						{
-							$redactorImageLink.val($link.attr('href'));
-							if ($link.attr('target') == '_blank') $('#redactor-image-link-blank').prop('checked', true);
+							$redactorImageLink.val($link.attr('href'));							
 						}
 					}
 
@@ -3729,7 +3728,7 @@
 							link = this.opts.linkProtocol + '://' + link;
 						}
 
-						var target = ($('#redactor-image-link-blank').prop('checked')) ? true : false;
+						var target = true;
 
 						if ($link.length === 0)
 						{
@@ -6436,8 +6435,7 @@
 							+ '<input type="text" id="redactor-image-title" />'
 							+ '<span style="font-size: 12px; font-style: italic;">Your title will help search engines find your content on the web. This title will not show on the published page.</span>'
 							+ '<label class="redactor-image-link-option">' + this.lang.get('link') + '</label>'
-							+ '<input type="text" id="redactor-image-link" class="redactor-image-link-option" aria-label="' + this.lang.get('link') + '" />'
-							+ '<label class="redactor-image-link-option"><input type="checkbox" id="redactor-image-link-blank" aria-label="' + this.lang.get('link_new_tab') + '" checked=true> ' + this.lang.get('link_new_tab') + '</label>'
+							+ '<input type="text" id="redactor-image-link" class="redactor-image-link-option" aria-label="' + this.lang.get('link') + '" />'							
 							+ '<label class="redactor-image-position-option">' + this.lang.get('image_position') + '</label>'
 							+ '<select class="redactor-image-position-option" id="redactor-image-align" aria-label="' + this.lang.get('image_position') + '">'
 								+ '<option value="none">' + this.lang.get('none') + '</option>'
