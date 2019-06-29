@@ -56,7 +56,7 @@ i#}
       <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
         {% if folder %}
           {% for asset in assets %}
-            <li data-asset-id="{{ asset.id }}" data-asset-title="{{ asset.title }}" title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
+            <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url }}" data-asset-title="{{ asset.title }}" title="{{ asset.title }}" {% if asset.id == document.id %}class="selected"{% endif %}>
               <div><img src="/img/default/list/pdf.jpg" /></div>
               <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
             </li>
@@ -140,7 +140,7 @@ $(function() {
       var selected = file.id == selectedId ? 'class="selected"' : '';
       var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
 
-      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
+      srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'" data-asset-title="'+file.title+'"' +selected+'><div><img src="/img/default/list/pdf.jpg" /></div><span class="title">'+title+'</span></li>');
     });
 
     srcFiles.show();
@@ -184,6 +184,15 @@ $(function() {
     selectFile($(this));
     {#updateOkButton();#}
     updateDeleteButton();
+  });
+
+  srcFiles.on('dblclick', 'li', function(e) {
+    selectFile($(this));
+    updateDeleteButton();
+    var selectedFile = srcFiles.children('li.selected:first');
+    var url = selectedFile.attr('data-asset-url');
+    if(url)
+      window.open(url, '_blank');
   });
 
   fileInput.s3direct({
