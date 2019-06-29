@@ -189,8 +189,7 @@ $(function() {
   srcFiles.on('dblclick', 'li', function(e) {
     selectFile($(this));
     updateDeleteButton();
-    var selectedFile = srcFiles.children('li.selected:first');
-    var url = selectedFile.attr('data-asset-url');
+    var url = this.dataset.assetUrl;
     if(url)
       window.open(url, '_blank');
   });
