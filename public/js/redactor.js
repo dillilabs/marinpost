@@ -7255,6 +7255,17 @@
 						});
 
 					}, this), 10);
+
+					// add target=_blank to pasted links
+					setTimeout($.proxy(function()
+					{
+						var links = this.$editor.find('a');
+						$.each(links, function(i,a)
+						{
+							$(a).attr('target','_blank');
+						});
+
+					}, this), 10);
 				}
 			};
 		},
