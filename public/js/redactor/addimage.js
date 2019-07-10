@@ -15,7 +15,7 @@ RedactorPlugins.addimage = function () {
                 thisObj.code.sync();
             });
 
-            var button = this.button.addAfter('underline', 'image', 'Add Image');
+            var button = this.button.addAfter('underline', 'image', 'Insert Image');
             this.button.addCallback(button, this.addimage.show);
         },
         show: function () {

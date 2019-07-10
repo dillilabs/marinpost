@@ -1,4 +1,4 @@
-{% set sourceId = 3 %}
+{% set sourceId = 4 %}
 {% set folder = craft.s3direct.s3Folder(sourceId) %}
 {% set s3 = craft.s3direct.s3UploadForm(sourceId) %}
 {% set assets = false %}
@@ -6,12 +6,12 @@
   {% set assets = craft.assets.folderId(folder.id).limit(null).find %}
 {% endif %}
 
-{% set transform = userProfile ? 'profile' : 'list' %}
+{% set transform = 'emImgThumb' %}
 {% set excerptLength = 20 %}
 <input type="hidden" id="selected-img-url" value=""/>
 <div id="image-modal-2" class="upload-modal image" title="My Images" style="display: none;">
     <div>
-        <div class="help">{{ n.siteMessage('my/images') }}</div>
+        <div class="help">{{ n.siteMessage('my/embedded/images') }}</div>
     </div>
 
     <div>
@@ -29,9 +29,8 @@
         <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
         {% if folder %}
             {% for asset in assets %}
-            <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url(transform) }}" title="{{ asset.title }}">
+            <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url() }}" title="{{ asset.title }}">
                 <div><img src="{{ asset.url(transform) }}" /></div>
-                <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
             </li>
             {% endfor %}
         {% endif %}
@@ -47,7 +46,6 @@ $(function() {
     var srcFiles2 = modal2.find('ul#src-files');
     
     var modal = $('#image-modal');
-    var srcFiles = modal.find('ul#src-files');
     var okButton2 = false;
     var deleteButton2 = false;
     var deleteAssetUrl = '{{ actionUrl("mpEntry/deleteAsset") }}';
@@ -68,28 +66,15 @@ $(function() {
     var populateListFromIndex2 = function(files) {
         var selectedId = selectedImage2().attr('data-asset-id');
         srcFiles2.children().remove();
-    
+        console.log(files);
         $.each(files, function(index, file) {
           var selected = file.id == selectedId ? 'class="selected"' : '';
           var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
     
-          srcFiles2.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
+          srcFiles2.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.originalUrl+'"' +selected+'><div><img src="'+file.url+'" /></div></li>');
         });
     
         srcFiles2.show();
-
-        // Also update the other list
-        selectedId = selectedImage2().attr('data-asset-id');
-        srcFiles.children().remove();
-    
-        $.each(files, function(index, file) {
-          var selected = file.id == selectedId ? 'class="selected"' : '';
-          var title = file.title.length > {{ excerptLength }} ? file.title.slice(0, {{ excerptLength }})+'...' : file.title;
-    
-          srcFiles.append('<li data-asset-id="'+file.id+'" data-asset-url="'+file.url+'"' +selected+'><div><img src="'+file.url+'" /></div><span class="title">'+title+'</span></li>');
-        });
-    
-        srcFiles.show();
     };
 
     var populateImageFromModal2 = function() {

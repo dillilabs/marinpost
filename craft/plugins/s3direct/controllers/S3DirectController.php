@@ -35,7 +35,7 @@ class S3DirectController extends BaseController
             foreach ($assets as $asset)
             {
                 $url = $asset->kind == 'image' ? craft()->s3Direct->getAssetUrl($asset->id, $transform) : $asset->url;
-
+                $originalUrl = $asset->url;
                 array_push($outputFiles, array(
                     'id' => $asset->id,
                     'title' => $asset->title,
@@ -43,6 +43,7 @@ class S3DirectController extends BaseController
                     'kind' => $asset->kind,
                     'size' => $asset->size,
                     'url' => $url,
+                    'originalUrl' => $originalUrl
                 ));
             }
 
