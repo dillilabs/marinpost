@@ -1310,7 +1310,7 @@ a.subscribe {
 	display: inline-block;
 	margin: 0 auto .75em auto;
 	text-align: center;
-  width: 70%;
+    width: 70%;
 }
 
 #share ul {
@@ -2012,4 +2012,18 @@ p {
 
 .remove-doc-link{
     cursor: pointer;
+}
+
+.hide-on-mobile {
+    display: block;
+}
+
+/* hide social media share icons on one column layout devices */
+@media only screen and (max-width: 815px) {
+    #share {
+        display: none;
+    }
+    .hide-on-mobile {
+        display: none;
+    }
 }
