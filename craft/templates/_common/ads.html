@@ -1,0 +1,71 @@
+<div>
+    {% set adMatrix = craft.entries.section('adMatrix').first %}
+    {% if not craft.request.isMobileBrowser(true) %}
+        {% for adEntry in adMatrix.adEntries %}
+            {% set currentDate = "now"|date('d-m-Y') %}
+            {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
+            {% set difference = date( adStartDate ).diff( now ).days %}
+            {% set showAd = false %}
+            {% switch adEntry.plan %}
+
+                {% case "month" %}
+                    {% if difference <= 31 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% case "quarter" %}
+                    {% if difference <= 93 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% case "year" %}
+                    {% if difference <= 366 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% default %}
+                    {% set showAd = false %}
+
+            {% endswitch %}
+            {% if showAd %}
+            <article>
+                <a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a>
+            </article>
+            {% endif %}
+            
+        {% endfor %}
+    {% else %}
+    <ul id="slides">
+        {% for adEntry in adMatrix.adEntries %}
+        {% set currentDate = "now"|date('d-m-Y') %}
+            {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
+            {% set difference = date( adStartDate ).diff( now ).days %}
+            {% set showAd = false %}
+            {% switch adEntry.plan %}
+
+                {% case "month" %}
+                    {% if difference <= 31 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% case "quarter" %}
+                    {% if difference <= 93 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% case "year" %}
+                    {% if difference <= 366 %}
+                        {% set showAd = true %}
+                    {% endif %}
+
+                {% default %}
+                    {% set showAd = false %}
+
+            {% endswitch %}
+            {% if showAd %}
+                <li class="slide showing"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
+            {% endif %}    
+        {% endfor %}    
+    </ul>
+    {% endif %}
+</div>

@@ -158,13 +158,14 @@
 
 {% macro post(entry) %}
   {% from _self import authorNameOrLink, excerpt, letterUrl, nameCase, postImage, postSummary, titleCase %}
-
   <div style="border-bottom: 1px solid #DAE4F4; margin-bottom: 1em;">
     <div style="display: inline-block;">
       {% if entry.section.handle != 'letters' %}
-
-        {{ postImage(entry) }}
-
+        {% if entry.section.handle == 'ad' %}
+          {{ postImage(entry, 'adImageThumb') }}
+        {% else %}
+          {{ postImage(entry, transform) }}
+        {% endif %}
       {% endif %}
 
       {{ postSummary(entry) }}
@@ -207,6 +208,11 @@
       <div style="float: left; margin-right: 15px; position: relative;">
         <a href="{{ entry.url }}" target="_blank"><img src="{{ image }}"></a>
       </div>
+    
+    {% case 'ad' %}
+    <div style="float: left; margin-right: 15px; position: relative;">
+      <a href="{{ entry.cpEditUrl }}" class="detail"><img src="{{ image }}"></a>
+    </div>
 
     {% default %}
       <div style="float: left; margin-right: 15px; position: relative;">

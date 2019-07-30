@@ -1,0 +1,10 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h2>Success</h2>
+      <p class="result-message">Your Ad has been submitted. It will be LIVE shortly.</p>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

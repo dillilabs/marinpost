@@ -161,6 +161,58 @@ class MpAdminService extends BaseApplicationComponent
         $email->toEmail   = $emailSettings['emailAddress'];
         $section          = ucfirst($entry->section->handle);
         $email->subject   = "$section entry published on ".craft()->request->hostName;
+        if($section == 'Ad'){
+            $email->subject   = "$section entry paid for on ".craft()->request->hostName;
+        }
+        $email->htmlBody  = $body;
+
+        craft()->email->sendEmail($email);
+    }
+
+    /**
+     * Notify admin of an ad submitted for review entry
+     */
+    public function notifyAdminOfSubmittedAdEntry($entry)
+    {
+        $savePath = craft()->path->getTemplatesPath();
+        craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
+        $body = craft()->templates->render('entry', array('entry' => $entry));
+        craft()->path->setTemplatesPath($savePath);
+
+        $email            = new EmailModel();
+        $emailSettings    = craft()->email->getSettings();
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        $email->toEmail   = $emailSettings['emailAddress'];
+        $section          = ucfirst($entry->section->handle);
+        $email->subject   = "$section entry submitted for review on ".craft()->request->hostName;
+        $email->htmlBody  = $body;
+
+        craft()->email->sendEmail($email);
+    }
+
+    /**
+     * Notify user of an ad approval and send request to pay.
+     */
+    public function notifyUserOfAdApproval($entry)
+    {
+        $savePath = craft()->path->getTemplatesPath();
+        craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
+        $body = craft()->templates->render('adapproval', array('entry' => $entry, 'hostname' => craft()->request->hostName));
+        craft()->path->setTemplatesPath($savePath);
+
+        $email            = new EmailModel();
+        $emailSettings    = craft()->email->getSettings();
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        
+        $email->toEmail   = $entry->getAuthor()->email;
+        $section          = ucfirst($entry->section->handle);
+        $email->subject   = "$section entry submitted for review on ".craft()->request->hostName." has been approved";
         $email->htmlBody  = $body;
 
         craft()->email->sendEmail($email);

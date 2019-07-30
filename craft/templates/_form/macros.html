@@ -2,6 +2,9 @@
   {% switch craft.request.segment(2) %}
     {% case 'blog' %}
       Create a Blog Post
+    
+    {% case 'ad' %}
+      Create and Publish an Ad
 
     {% case 'media' %}
       Link to Media
@@ -17,6 +20,9 @@
 
     {% default %}
       {% switch entry.section.handle %}
+        {% case 'ad' %}
+          Publish Ad
+
         {% case 'blog' %}
           Edit Blog Post
 
@@ -67,6 +73,11 @@
     {% endif %}
   {% endif %}
 
+  <input type="button" class="submit" data-submit="cancel" value="Cancel">
+{% endmacro %}
+
+{% macro inputSubmitAd(entry) %}
+  <input type="button" class="submit" data-submit="submitForReview" value="Submit for Review">
   <input type="button" class="submit" data-submit="cancel" value="Cancel">
 {% endmacro %}
 

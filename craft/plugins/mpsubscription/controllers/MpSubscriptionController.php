@@ -63,6 +63,64 @@ class MpSubscriptionController extends BaseController
     }
 
     /**
+     * CREATE ad charge for logged-in User.
+     * Regular HTTP request.
+     */
+    public function actionCreateAd()
+    {
+        $this->requireLogin();
+        $this->requirePostRequest();
+
+        $plan = craft()->request->getParam('plan');
+        if (!$plan)
+        {
+            craft()->urlManager->setRouteVariables(array('error' => 'Plan is required.'));
+            return;
+        }
+
+        $token = craft()->request->getParam('stripeToken');
+        if (!$token)
+        {
+            craft()->urlManager->setRouteVariables(array('error' => 'Credit card is required.'));
+            return;
+        }
+
+        $user = craft()->userSession->user;
+        
+        try
+        {
+            $paid = craft()->mpSubscription->createAd($user, $plan, $token);
+            if ($paid)
+            {
+                $this->plugin->logger("Successfully created charge for $user for $plan ad plan.");
+                $entryId = craft()->request->getPost('entryId');
+                $entry = craft()->entries->getEntryById($entryId);
+                $fields = craft()->request->getParam('fields');
+                $entry->setContentFromPost($fields);
+                $entry->getContent()->plan = $plan;
+                // set Start Date to current date
+                $today = date('Y-m-d');
+                $entry->getContent()->adStartDate = $today;
+                $success = craft()->entries->saveEntry($entry);
+                if (!$success)
+                {
+                    throw new Exception(Craft::t('There was a problem with saving the ad.'));
+                }
+            } else {
+                $this->plugin->logger("There was a problem creating charge for $user for $plan ad plan.");
+                throw new Exception(Craft::t('There was a problem creating the ad.'));
+            }
+            $this->redirectToPostedUrl();
+        }
+        catch (\Stripe\Error\Base $e)
+        {
+            $error = $e->getMessage();
+            $this->plugin->logger("Failed to create ad charge for $user: $error", LogLevel::Error);
+            craft()->urlManager->setRouteVariables(array('error' => $error));
+        }
+    }
+
+    /**
      * CANCEL subscription of logged-in User.
      * Regular HTTP request.
      */

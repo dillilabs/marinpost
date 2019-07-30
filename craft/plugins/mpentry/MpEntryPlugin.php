@@ -70,7 +70,7 @@ class MpEntryPlugin extends BasePlugin
                 }
             }
 
-            if ($this->_author()->isInGroup('guest'))
+            if ($this->_author()->isInGroup('guest') && $entry->section->handle != 'ad')
             {
                 if (craft()->mpEntry->isPublishedEntry($entry))
                 {

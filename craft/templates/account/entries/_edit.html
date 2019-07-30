@@ -40,6 +40,11 @@
     {% set section = 'letter' %}
   {% case 'notices' %}
     {% set section = 'notice' %}
+  {% case 'ad' %}
+    {% set section = 'ad' %}
 {% endswitch %}
-
-{% extends "submit/" ~ section %}
+{% if entry.section.handle != 'ad' %}
+  {% include "submit/" ~ section %}
+{% else %}
+  {% include "submit/adpay" %}
+{% endif %}

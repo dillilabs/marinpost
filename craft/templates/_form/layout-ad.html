@@ -25,14 +25,14 @@
         {{ getCsrfInput() }}
         <input type="hidden" name="action" value="entries/saveEntry">
         <input type="hidden" name="redirect" value="submit/success/{id}">
-        <input type="hidden" name="enabled" value="{{ f.inputValueEnabled(entry) }}">
+        <input type="hidden" name="enabled" value="0">
         <input type="hidden" name="sectionId" value="{{ sectionId }}">
         {{ f.inputEntryId(entry) }}
     
         {% block formFields %}
         {% endblock %}
     
-        <div class="buttons">{{ f.inputSubmit(entry) }}</div>
+        <div class="buttons">{{ f.inputSubmitAd(entry) }}</div>
       </form>
   </div>
 </main>

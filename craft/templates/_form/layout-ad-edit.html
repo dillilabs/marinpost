@@ -1,0 +1,32 @@
+<main class="single clearfix">
+    <div class="sub-nav">
+      {% if craft.request.segment(1) == 'submit' %}
+      <h4>Submit</h4>
+        {% block subNav %}
+          {{ n.arrowLink('submit/blog', 'Create a Blog') }}
+          {{ n.arrowLink('submit/notice', 'Post a Notice') }}
+          {{ n.arrowLink('submit/news', 'Link News') }}
+          {{ n.arrowLink('submit/media', 'Link Media') }}
+          {{ n.arrowLink('submit/letter', 'Write a Letter') }}
+          {{ n.arrowLink('submit/ad', 'Create an Ad') }}
+        {% endblock %}
+      {% endif %}
+    </div>
+  
+    <div class="form-wrapper">
+        <h2>
+          {{ f.h2(entry) }}
+        </h2>
+
+        <div class="help">{{ n.siteMessage('editad') }}</div>
+      
+        <form method="post" accept-charset="UTF-8" class="create-form filter-form subscription">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="mpSubscription/createAd" />
+          <input type="hidden" name="redirect" value="submit/success-ad" />
+          {{ f.inputEntryId(entry) }}
+          {% block formFields %}
+          {% endblock %}
+        </form>
+    </div>
+  </main>

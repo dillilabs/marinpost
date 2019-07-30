@@ -19,6 +19,7 @@ class MpAdminPlugin extends BasePlugin
         parent::init();
 
         $this->settings = $this->getSettings();
+        $this->_onSaveEntryEvent();
 
         if (craft()->request->isCpRequest())
         {
@@ -26,7 +27,6 @@ class MpAdminPlugin extends BasePlugin
         }
         else
         {
-            $this->_onSaveEntryEvent();
             $this->_onSaveUserEvent();
         }
     }
@@ -104,30 +104,70 @@ class MpAdminPlugin extends BasePlugin
      *
      *      Notify the admin.
      *
-     *      If entry section is blog, letters, media, news or notices:
+     *      If entry section is ad, blog, letters, media, news or notices:
      *
      *          If content appears to contain offensive language:
      *
      *                  Notify the moderator.
+     * 
+     *  If ad entry is saved:
+     *      Notify admin when submitted for review (not enabled and new)
+     *      Notify user when approved (enabled and "Start Date" not set)
+     *      Redirect Admin to Ad Matrix edit URL if "Start Date" is set
      */
     private function _onSaveEntryEvent()
     {
         craft()->on('entries.onSaveEntry', function(Event $event) {
             $entry = $event->params['entry'];
 
-            if ($entry->enabled)
-            {
-                craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
+            // is entry save triggered from Control Panel (admin)
+            if (craft()->request->isCpRequest()){
+                // if an 'ad' entry
+                if($entry->enabled && $entry->section->handle == 'ad'){
+                    // was Start Date of ad entry not set, meaning this would
+                    // be a response to an approval of ad
+                    if($entry->adStartDate == NULL){
+                        // notify user that his ad has been approved
+                        craft()->mpAdmin->notifyUserOfAdApproval($entry);
+                    } else { 
+                        // this is a Save of ad Entry after Start date is saved
+                        // redirect admin to Ad Matrix edit page so it can add
+                        // the ad entry just saved.
+                        $criteria = craft()->elements->getCriteria(ElementType::Entry);
+                        $criteria->section = 'adMatrix';
+                        $criteria->limit = 10;
 
-                $sections = array('blog', 'letters', 'media', 'news', 'notices');
+                        // Get all entries that match
+                        $entries = $criteria->find();
 
-                if (in_array($entry->section->handle, $sections))
-                {
-                    $text = craft()->mpAdmin->entryText($entry);
+                        // Get the first entry that matches
+                        $firstEntry = $criteria->first();
 
-                    if (craft()->mpAdmin->containsTriggerWords($text))
+                        craft()->request->redirect($firstEntry->getCpEditUrl());
+                    }
+                }
+            } else {
+                // save triggered programmatically not from CP
+
+                // if a new ad, notify admin of the submitted ad for review
+                if($entry->section->handle == 'ad' && $event->params['isNewEntry']){
+                    craft()->mpAdmin->notifyAdminOfSubmittedAdEntry($entry);
+                } else {
+                    if ($entry->enabled)
                     {
-                        craft()->mpAdmin->notifyModerator($entry);
+                        craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
+        
+                        $sections = array('ad', 'blog', 'letters', 'media', 'news', 'notices');
+        
+                        if (in_array($entry->section->handle, $sections))
+                        {
+                            $text = craft()->mpAdmin->entryText($entry);
+        
+                            if (craft()->mpAdmin->containsTriggerWords($text))
+                            {
+                                craft()->mpAdmin->notifyModerator($entry);
+                            }
+                        }
                     }
                 }
             }

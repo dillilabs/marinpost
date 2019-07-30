@@ -1,0 +1,45 @@
+{% requireLogin %}
+
+{% set sectionId = craft.sections.getSectionByHandle('ad').id %}
+
+{# Set Entry if Entry Id was passed #}
+{% if craft.request.getQueryString('entryId') %}
+  {% set entryId = craft.request.getQuery('entryId') %}
+  {% set entry = craft.entries.id(entryId).first() %}
+
+{% endif %}
+
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "_form/layout-ad-renew" %}
+    {% block formFields %}
+        <div class="field clearfix">
+          {% include "_form/image-ad" with { imagesAttribute: 'adImages', singularSection: 'ad' } %}
+        </div>
+        {% include "_form/title" with { placeholder: 'Title of your ad' } %}
+        <div class="field">
+            <label for="fields[adUrl]" class="required">URL <span class="note">* required</span></label>
+            <input type="text" name="fields[adUrl]" autocomplete="off" maxlength="95" {% if entry is defined %} value="{{ entry.adUrl }}"{% endif %} placeholder="address of the web page to which your ad is linked to" class="required">
+        {% if entry is defined %}
+          {{ f.errorList(entry.getErrors('adUrl')) }}
+        {% endif %}
+        </div>
+      
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script src="https://js.stripe.com/v2/"></script>
+
+  <script>
+    Stripe.setPublishableKey('{{ craft.mpSubscription.publishableKey }}');
+  </script>
+
+  <script>
+    $(function() {
+        $('body').subscription();
+    });
+  </script>
+{% endblock %}

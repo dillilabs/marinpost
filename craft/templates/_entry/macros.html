@@ -267,6 +267,17 @@
   {% endif %}
 {% endmacro %}
 
+{% macro authorLinksAd(entry, showAd) %}
+  {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
+    <p class="author-links">
+        {% if showAd == false %}
+          <a href="/submit/ad-renew?entryId={{ entry.id }}" class="renew-entry" >Renew</a> |
+        {% endif %}
+      <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
+    </p>
+  {% endif %}
+{% endmacro %}
+
 {% macro postBy(entry) %}
   {% from _self import authorNameOrLink, commentCount, formatDateTime, nameCase %}
 
@@ -366,6 +377,9 @@
       {{ postBy(entry) }}
       <p><a class="more detail" href="{{ entry.url }}">more »</a></p>
 
+    {% case 'ad' %}
+      {{ postTitle(entry) }}
+
     {% default %}
       {{ postTitle(entry) }}
       {{ postBy(entry) }}
@@ -385,7 +399,7 @@
 {% endmacro %}
 
 {% macro post(entry, unfiltered) %}
-  {% from _self import authorLinks, authorNameOrLink, excerpt, letterUrl, nameCase, postBy, postImage, postSummary, postTags, postTitle, titleCase %}
+  {% from _self import authorLinks, authorLinksAd, authorNameOrLink, excerpt, letterUrl, nameCase, postBy, postImage, postSummary, postTags, postTitle, titleCase %}
 
   {% set unfiltered = unfiltered | default(false) %}
 
@@ -415,6 +429,45 @@
           {{ authorLinks(entry) }}
         {% endif %}
       </li>
+
+    {% case 'ad' %}
+    {% if entry.plan != "" %}
+      {% set currentDate = "now"|date('d-m-Y') %}
+      {% set adStartDate = entry.adStartDate|date('d-m-Y') %}
+      {% set difference = date( adStartDate ).diff( now ).days %}
+      {% set showAd = false %}
+      {% switch entry.plan %}
+
+          {% case "month" %}
+              {% if difference <= 31 %}
+                  {% set showAd = true %}
+              {% endif %}
+
+          {% case "quarter" %}
+              {% if difference <= 93 %}
+                  {% set showAd = true %}
+              {% endif %}
+
+          {% case "year" %}
+              {% if difference <= 366 %}
+                  {% set showAd = true %}
+              {% endif %}
+
+          {% default %}
+              {% set showAd = false %}
+
+      {% endswitch %}
+      <li class="listing">
+        <div class="post">        
+          {{ postImage(entry) }}
+          {{ postSummary(entry) }}
+          {% if showAd == false %}
+            <span style="color: red;">EXPIRED</span>
+          {% endif %}
+          {{ authorLinksAd(entry, showAd) }}
+        </div>
+      </li>
+    {% endif %}
 
     {% default %}
       <li class="listing{% if entry.section.handle == 'notices' %} notices{% endif %}">

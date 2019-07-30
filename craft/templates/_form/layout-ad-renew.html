@@ -1,0 +1,46 @@
+<main class="single clearfix">
+    <div class="sub-nav">
+      {% if craft.request.segment(1) == 'submit' %}
+      <h4>Submit</h4>
+        {% block subNav %}
+          {{ n.arrowLink('submit/blog', 'Create a Blog') }}
+          {{ n.arrowLink('submit/notice', 'Post a Notice') }}
+          {{ n.arrowLink('submit/news', 'Link News') }}
+          {{ n.arrowLink('submit/media', 'Link Media') }}
+          {{ n.arrowLink('submit/letter', 'Write a Letter') }}
+          {{ n.arrowLink('submit/ad', 'Create an Ad') }}
+        {% endblock %}
+      {% endif %}
+    </div>
+  
+    <div class="form-wrapper">
+        <h2>
+          {{ f.h2(entry) }}
+        </h2>
+  
+        {% set path = craft.request.path starts with 'edit' ? 'edit' : craft.request.path %}
+        <div class="help">{{ n.siteMessage(path) }}</div>
+      
+        <form method="post" accept-charset="UTF-8" class="content-submission">
+          {{ getCsrfInput() }}
+          <input type="hidden" name="action" value="entries/saveEntry">
+          <input type="hidden" name="redirect" value="submit/success/{id}">
+          <input type="hidden" name="enabled" value="0">
+          <input type="hidden" name="sectionId" value="{{ sectionId }}">
+      
+          {% block formFields %}
+          {% endblock %}
+      
+          <div class="buttons">{{ f.inputSubmitAd(entry) }}</div>
+        </form>
+    </div>
+  </main>
+  
+  {% set formJs %}
+    $(function() {
+      $('form.content-submission').contentForm();
+    });
+  {% endset %}
+  
+  {% includeJs formJs %}
+  

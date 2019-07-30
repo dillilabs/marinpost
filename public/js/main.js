@@ -94,3 +94,17 @@ $(function() {
 $(window).on('resize', function(){
   rejigger();
 });
+
+var slides = document.querySelectorAll('#slides .slide');
+var currentSlide = 0;
+var slideInterval = setInterval(nextSlide, 5000);
+
+function nextSlide() {
+    if(slides){
+      if(slides[currentSlide]){
+        slides[currentSlide].className = 'slide';
+        currentSlide = (currentSlide+1)%slides.length;
+        slides[currentSlide].className = 'slide showing';
+      }
+    }
+}

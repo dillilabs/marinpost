@@ -1,0 +1,15 @@
+<h3>Ad Plan</h3>
+{% include 'account/subscription/_plan_fields_ad.html' %}
+
+<hr />
+<h3>Payment Method</h3>
+{% include 'account/subscription/_stripe_fields.html' %}
+
+<br>
+<input type="submit" value="Submit Payment" class="btn submit">
+<input type="button" class="submit" data-submit="cancel" onclick="document.location = '/';" value="Cancel">
+<ul class="errors">
+    {% if error is defined %}
+    <li>{{ error }}</li>
+    {% endif %}
+</ul>

@@ -313,6 +313,11 @@
                   $(this).prop('disabled', true).val('Publishing...');
                   form.submit();
                   break;
+                
+                case 'submitForReview':
+                    $(this).prop('disabled', true).val('Submitting for Review...');
+                    form.submit();
+                    break;
 
                 case 'cancel':
                   if (!confirm('Are you sure?')) {

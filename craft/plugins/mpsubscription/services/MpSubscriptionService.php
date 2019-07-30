@@ -115,6 +115,40 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
+     * Create AD SUBSCRIPTION with plan for User with credit card.
+     * Invoked by regular HTTP request.
+     */
+    public function createAd($user, $plan, $token)
+    {
+        $this->_setAPiKey();
+        $amount = 1000;
+        switch ($plan) {
+            case 'month':
+                $amount = 500;
+                break;
+            case 'quarter':
+                $amount = 1000;
+                break;
+            case 'year':
+                $amount = 3000;
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        $charge = \Stripe\Charge::create([
+            "amount" => $amount,
+            "currency" => "usd",
+            "source" => $token,
+            "description" => "Charge for {$user->name}",
+            "receipt_email" => $user->email
+          ]);
+        
+        return $charge->paid;
+    }
+
+    /**
      * Change subscription PLAN of User.
      * Invoked by AJAX request.
      */

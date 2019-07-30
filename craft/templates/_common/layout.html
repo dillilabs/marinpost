@@ -86,6 +86,7 @@
           <li>{{ n.pathLInk('News', 'submit/news') }}</li>
           <li>{{ n.pathLInk('Media', 'submit/media') }}</li>
           <li>{{ n.pathLInk('Letter', 'submit/letter') }}</li>
+          <li>{{ n.pathLInk('Ad', 'submit/ad') }}</li>
         </ul>
       </li>
       <li>
@@ -118,6 +119,7 @@
           {% if currentUser.inGroup('contributor') %}
             <li>{{ n.pathLInk('Profile', 'account/profile') }}</li>
           {% endif %}
+            <li>{{ n.pathLInk('My Ads', 'account/ad') }}</li>
             <li>{{ n.pathLInk('My Blog', 'account/blog') }}</li>
             <li>{{ n.pathLInk('My Notices', 'account/notices') }}</li>
             <li>{{ n.pathLInk('My News', 'account/news') }}</li>
