@@ -101,6 +101,10 @@ class MpSubscriptionController extends BaseController
                 // set Start Date to current date
                 $today = date('Y-m-d');
                 $entry->getContent()->adStartDate = $today;
+
+                // set Paid to 'on'
+                $entry->getContent()->paid = 1;
+
                 $success = craft()->entries->saveEntry($entry);
                 if (!$success)
                 {
