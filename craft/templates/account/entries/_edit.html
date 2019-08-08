@@ -4,10 +4,17 @@
 
 {% if craft.request.getPost('action') %}
   {# returning (with errors) from POST #}
-
+  {% set entryId = craft.request.segment(2) %}
+  {% if not entryId %}
+    {% redirect 404 %}
+  {% endif %}
+  {% set entry = craft.entries.authorId(currentUser.id).status(statuses).id(entryId).first %}
+  {% if not entry %}
+    {% redirect 404 %}
+  {% endif %}
+  
   {% if entry.authorId != currentUser.id %}
     {# should never occur...but just in case #}
-
     {% redirect 404 %}
   {% endif %}
 
