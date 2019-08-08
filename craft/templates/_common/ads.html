@@ -1,3 +1,4 @@
+<div class="message">{{ n.siteMessage('ad/top') }}</div>
 <div>
     {% set adMatrix = craft.entries.section('adMatrix').first %}
     {% if not craft.request.isMobileBrowser(true) %}
@@ -69,3 +70,4 @@
     </ul>
     {% endif %}
 </div>
+<div class="message">{{ n.siteMessage('ad/bottom') }}</div>
