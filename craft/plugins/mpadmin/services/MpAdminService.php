@@ -200,9 +200,13 @@ class MpAdminService extends BaseApplicationComponent
     {
         $savePath = craft()->path->getTemplatesPath();
         craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
-        $body = craft()->templates->render('adapproval', array('entry' => $entry, 'hostname' => craft()->request->hostName));
+        $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+        $message = $siteMessages->siteMessage->path('ad/email/approved')->first()->text;
+        $hostName = craft()->request->hostName;
+        $link = "<a class='detail' href='http://$hostName/edit/$entry->id/$entry->slug'>link</a>";
+        $message = str_replace("LINK", $link, $message);
+        $body = $message;
         craft()->path->setTemplatesPath($savePath);
-
         $email            = new EmailModel();
         $emailSettings    = craft()->email->getSettings();
         $email->fromEmail = $emailSettings['emailAddress'];

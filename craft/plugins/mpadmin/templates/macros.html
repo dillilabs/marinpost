@@ -168,9 +168,13 @@
             Posted by: {{ authorNameOrLink(entry) }}
           </div>
           {% if not entry.enabled %}
-          <p><i>Instructions: Please review the ad and to approve, <a href="{{ entry.cpEditUrl }}" class="detail">click this link</a> and then toggle 'Enabled' to ON.</i></p>
+          {% set message = siteMessages.siteMessage.path('ad/email/submitted').first %}
+          {% set entryCPLink = "<a href='#{entry.cpEditUrl}' class='detail'>link</a>" %}
+          {{ message.text|replace({'LINK': entryCPLink })|raw }}
           {% else %}
-          <p><i>Instructions: The previously approved ad has been paid for. Please review it one last time. Change Start Date if needed. Ensure that Ad Plan is set. Hit Save button and then add it to the Ad Matrix. <a href="{{ entry.cpEditUrl }}" class="detail">Click this link</a> to review the ad in Admin.</i></p>
+          {% set message = siteMessages.siteMessage.path('ad/email/paid').first %}
+          {% set entryCPLink = "<a href='#{entry.cpEditUrl}' class='detail'>link</a>" %}
+          {{ message.text|replace({'LINK': entryCPLink })|raw }}
           {% endif %}
         {% else %}
           {{ postImage(entry, transform) }}
