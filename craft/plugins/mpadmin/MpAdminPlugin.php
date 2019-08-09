@@ -24,43 +24,12 @@ class MpAdminPlugin extends BasePlugin
         if (craft()->request->isCpRequest())
         {
             $this->_ensureOneUserGroup();
+            $this->_decorateEditAdView();
         }
         else
         {
             $this->_onSaveUserEvent();
         }
-
-        // if ad add/edit view, add the image and instructions.
-        if (craft()->request->isCpRequest()) {
-            
-            if (craft()->request->getSegment(2) == 'ad' && craft()->request->getSegment(3) != null) {
-
-                // Now find the element, maybe with something like this:
-                $id = explode('-', craft()->request->getSegment(3))[0];
-                $entry = craft()->entries->getEntryById($id);                
-                $siteMessages = craft()->globals->getSetByHandle('siteMessages');
-                $instruction1 = $siteMessages->siteMessage->path('cp/ad/instruction1')->first()->text;
-                $instruction2 = $siteMessages->siteMessage->path('cp/ad/instruction2')->first()->text;
-
-                $adImageUrl = $entry->adImages->first()->url;
-                $js0 = <<<JS
-$('#title-field').prepend("<img width='320' height='232' src='{$adImageUrl}' />");
-JS;
-                $js1 = <<<JS
-$('#title-field').prepend(`{$instruction1}`);
-JS;
-                $js2 = <<<JS
-$('#title-field').prepend(`{$instruction2}`);
-JS;
-                // Inject JS into the the page
-                if($entry->paid == 0){
-                    craft()->templates->includeJs($js1);
-                } else {
-                    craft()->templates->includeJs($js2);
-                }
-                craft()->templates->includeJs($js0);
-            }
-        }   
     }
 
     public function hasCpSection()
@@ -256,6 +225,39 @@ JS;
         craft()->templates->includeJs($js);
     }
 
+    /**
+     * Inject javascript in control panel on Edit Ad page to add instruction
+     * and ad image.
+     */
+    private function _decorateEditAdView(){
+        if (craft()->request->getSegment(2) == 'ad' && craft()->request->getSegment(3) != null) {
+
+            // Now find the element, maybe with something like this:
+            $id = explode('-', craft()->request->getSegment(3))[0];
+            $entry = craft()->entries->getEntryById($id);                
+            $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+            $instruction1 = $siteMessages->siteMessage->path('cp/ad/instruction1')->first()->text;
+            $instruction2 = $siteMessages->siteMessage->path('cp/ad/instruction2')->first()->text;
+
+            $adImageUrl = $entry->adImages->first()->url;
+            $js0 = <<<JS
+$('#title-field').prepend("<img width='320' height='232' src='{$adImageUrl}' />");
+JS;
+            $js1 = <<<JS
+$('#title-field').prepend(`{$instruction1}`);
+JS;
+            $js2 = <<<JS
+$('#title-field').prepend(`{$instruction2}`);
+JS;
+            // Inject JS into the the page
+            if($entry->paid == 0){
+                craft()->templates->includeJs($js1);
+            } else {
+                craft()->templates->includeJs($js2);
+            }
+            craft()->templates->includeJs($js0);
+        }
+    }
     //---------
     // Settings
     //---------
