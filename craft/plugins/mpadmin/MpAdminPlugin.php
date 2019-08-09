@@ -256,6 +256,17 @@ JS;
                 craft()->templates->includeJs($js2);
             }
             craft()->templates->includeJs($js0);
+        } else if (craft()->request->getSegment(2) == 'adMatrix') {
+
+            // Now find the element, maybe with something like this:
+            $id = explode('-', craft()->request->getSegment(3))[0];
+            $entry = craft()->entries->getEntryById($id);                
+            $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+            $instructions = $siteMessages->siteMessage->path('cp/adMatrix/instruction')->first()->text;
+            $js = <<<JS
+$('#fields-adEntries-field').prepend(`{$instructions}`);
+JS;
+            craft()->templates->includeJs($js);
         }
     }
     //---------
