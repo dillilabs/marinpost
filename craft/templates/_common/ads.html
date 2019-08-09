@@ -38,6 +38,7 @@
         {% endfor %}
     {% else %}
     <ul id="slides">
+        {% set max = 5 %}
         {% for adEntry in adMatrix.adEntries %}
         {% set currentDate = "now"|date('d-m-Y') %}
             {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
@@ -65,8 +66,15 @@
 
             {% endswitch %}
             {% if showAd %}
+                {% if max > 0 %}
+                {% if max == 5 %}
                 <li class="slide showing"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
-            {% endif %}    
+                {% else %}
+                <li class="slide"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
+                {% endif %}
+                {% endif %}
+                {% set max = max -1 %}
+            {% endif %}
         {% endfor %}    
     </ul>
     <div class="message">{{ n.siteMessage('ad/bottom') }}</div>
