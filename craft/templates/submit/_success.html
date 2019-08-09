@@ -16,7 +16,11 @@
   {% embed "account/_layout" %}
     {% block post %}
       <h2>Success</h2>
+      {% if entry.section.handle == 'ad' %}
+      <p class="result-message">Thank you for advertising on the Marin Post. Your Ad has been submitted for review.  We will notify you as soon as it is approved.</p>
+      {% else %}
       <p class="result-message">{{ entry.status == 'disabled' ? 'Saved' : 'Published' }} <i>{{ entry.title }}</i> in <b>{{ entry.section }}</b></p>
+      {% endif %}
     {% endblock %}
   {% endembed %}
 {% endblock %}
