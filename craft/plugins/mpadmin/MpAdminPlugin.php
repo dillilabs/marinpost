@@ -33,7 +33,7 @@ class MpAdminPlugin extends BasePlugin
         // if ad add/edit view, add the image and instructions.
         if (craft()->request->isCpRequest()) {
             
-            if (craft()->request->getSegment(2) == 'ad') {
+            if (craft()->request->getSegment(2) == 'ad' && craft()->request->getSegment(3) != null) {
 
                 // Now find the element, maybe with something like this:
                 $id = explode('-', craft()->request->getSegment(3))[0];
