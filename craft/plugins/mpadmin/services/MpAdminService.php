@@ -223,6 +223,44 @@ class MpAdminService extends BaseApplicationComponent
     }
 
     /**
+     * Notify user of an ad publish 
+     */
+    public function notifyUserOfAdPublish($entry)
+    {
+        $savePath = craft()->path->getTemplatesPath();
+        craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
+        $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+        $message = $siteMessages->siteMessage->path('ad/email/published')->first()->text;       
+        $body = $message;
+        
+        craft()->path->setTemplatesPath($savePath);
+        $email            = new EmailModel();
+        $emailSettings    = craft()->email->getSettings();
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        
+        $mostRecentDate = "2000-01-01";
+        $mostRecentAdEntry = NULL;
+        for($i=0; $i < sizeof($entry->adEntries); $i++){
+            $adEntry = $entry->adEntries[$i];
+            $dateUpdated = $adEntry->dateUpdated;
+            if($dateUpdated > $mostRecentDate){
+                $mostRecentDate = $dateUpdated;
+                $mostRecentAdEntry = $adEntry;
+            }
+        }
+        
+        $email->toEmail   = $mostRecentAdEntry->getAuthor()->email;
+        $section          = ucfirst($entry->section->handle);
+        $email->subject   = "Your ad is now live on the Marin Post.";
+        $email->htmlBody  = $body;
+
+        craft()->email->sendEmail($email);
+    }
+
+    /**
      * Return true if current User is an admin assistant.
      */
     public function isAdminOrAdminAssistant()

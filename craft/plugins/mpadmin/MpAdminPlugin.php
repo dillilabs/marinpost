@@ -146,6 +146,10 @@ class MpAdminPlugin extends BasePlugin
 
                         craft()->request->redirect($firstEntry->getCpEditUrl());
                     }
+                } else if($entry->section->handle == 'adMatrix'){
+                    // notify user that his ad has been published
+                    if($entry->adEntries->last() != NULL)
+                        craft()->mpAdmin->notifyUserOfAdPublish($entry);
                 }
             } else {
                 // save triggered programmatically not from CP
