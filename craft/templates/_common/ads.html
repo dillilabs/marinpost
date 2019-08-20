@@ -38,8 +38,9 @@
             
         {% endfor %}
     {% else %}
-    <ul id="slides">
+    
         {% set max = 5 %}
+        {% set adEntries = [] %}
         {% for adEntry in adMatrix.adEntries %}
             {% set currentDate = "now"|date('d-m-Y') %}
             {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
@@ -68,16 +69,20 @@
             {% endswitch %}
             {% if showAd %}
                 {% if max > 0 %}
-                {% if max == 5 %}
-                <li class="slide showing"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
-                {% else %}
-                <li class="slide"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
-                {% endif %}
+                    {% set adEntries = adEntries|merge([adEntry]) %}
                 {% endif %}
                 {% set max = max -1 %}
             {% endif %}
-        {% endfor %}    
-    </ul>
+        {% endfor %}
+        <ul id="slides">
+            {% for adEntry in shuffle(adEntries) %}
+                {% if loop.first %}
+                    <li class="slide showing"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
+                {% else %}
+                    <li class="slide"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     <div class="message">{{ n.siteMessage('ad/bottom') }}</div>
     {% endif %}
 </div>
