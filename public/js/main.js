@@ -89,22 +89,18 @@ $(function() {
   closePreviewWindow.click(function() {
     window.close();
   });
+
+  $('.adSlider').slick({
+    adaptiveHeight: true,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    dots: true,
+    fade: true,
+    infinite: true,
+    speed: 500,
+  });
 });
 
 $(window).on('resize', function(){
   rejigger();
 });
-
-var slides = document.querySelectorAll('#slides .slide');
-var currentSlide = 0;
-var slideInterval = setInterval(nextSlide, 5000);
-
-function nextSlide() {
-    if(slides){
-      if(slides[currentSlide]){
-        slides[currentSlide].className = 'slide';
-        currentSlide = (currentSlide+1)%slides.length;
-        slides[currentSlide].className = 'slide showing';
-      }
-    }
-}

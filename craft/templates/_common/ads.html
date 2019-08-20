@@ -74,15 +74,11 @@
                 {% set max = max -1 %}
             {% endif %}
         {% endfor %}
-        <ul id="slides">
+        <div class="adSlider">
             {% for adEntry in shuffle(adEntries) %}
-                {% if loop.first %}
-                    <li class="slide showing"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
-                {% else %}
-                    <li class="slide"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></li>
-                {% endif %}
+                <div class="adSlide"><a href="{{ adEntry.adUrl }}" target="_blank"><img src='{{ adEntry.adImages[0].url('adImageThumb') }}'/></a></div>
             {% endfor %}
-        </ul>
+        </div>
     <div class="message">{{ n.siteMessage('ad/bottom') }}</div>
     {% endif %}
 </div>
