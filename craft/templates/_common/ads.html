@@ -3,7 +3,8 @@
 <div>
     {% set adMatrix = craft.entries.section('adMatrix').first %}
     {% if not craft.request.isMobileBrowser(true) %}
-        {% for adEntry in adMatrix.adEntries %}
+        {% set adEntries = shuffle(adMatrix.adEntries) %}
+        {% for adEntry in adEntries %}
             {% set currentDate = "now"|date('d-m-Y') %}
             {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
             {% set difference = date( adStartDate ).diff( now ).days %}
@@ -40,7 +41,7 @@
     <ul id="slides">
         {% set max = 5 %}
         {% for adEntry in adMatrix.adEntries %}
-        {% set currentDate = "now"|date('d-m-Y') %}
+            {% set currentDate = "now"|date('d-m-Y') %}
             {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
             {% set difference = date( adStartDate ).diff( now ).days %}
             {% set showAd = false %}
