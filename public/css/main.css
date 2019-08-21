@@ -1272,6 +1272,9 @@ form.subscription img.spinner, form.subscription img.success {
 
 #donate {
     float: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 #subscribe {
