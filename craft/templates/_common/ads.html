@@ -1,5 +1,5 @@
 {% if (craft.request.getPath() == '') or (craft.request.getPath() == 'blog') or (craft.request.getPath() == 'notices') or (craft.request.getPath() == 'news') or (craft.request.getPath() == 'letters') or (craft.request.getPath() == 'media')  %}
-<div class="message">{{ n.siteMessage('ad/top') }}</div>
+<div class="message" style="border-bottom: none;">{{ n.siteMessage('ad/top') }}</div>
 <div>
     {% set adMatrix = craft.entries.section('adMatrix').first %}
     {% if not craft.request.isMobileBrowser(true) %}
