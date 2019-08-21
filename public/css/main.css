@@ -2027,3 +2027,8 @@ p {
         display: none;
     }
 }
+
+/* center the ad slide image on table */
+.slick-slide img {
+    display: unset;
+}
