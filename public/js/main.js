@@ -89,16 +89,20 @@ $(function() {
   closePreviewWindow.click(function() {
     window.close();
   });
-
+  
+  var slidesToShow = 1;
+  if (WURFL.is_mobile === true && WURFL.form_factor === "Tablet") {
+    slidesToShow = 2;
+  } 
+    
   $('.adSlider').slick({
-    adaptiveHeight: true,
+    slidesToShow: slidesToShow,
+    slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
-    dots: true,
-    fade: true,
-    infinite: true,
-    speed: 500,
+    autoplaySpeed: 2000,
+    dots: true
   });
+  
 });
 
 $(window).on('resize', function(){
