@@ -39,7 +39,7 @@
         {% endfor %}
     {% else %}
     
-        {% set max = 5 %}
+        {% set max = adMatrix.maxads %}
         {% set adEntries = [] %}
         {% for adEntry in adMatrix.adEntries %}
             {% set currentDate = "now"|date('d-m-Y') %}
