@@ -12,8 +12,8 @@
         </div>
         {% include "_form/title" with { placeholder: 'Title of your ad' } %}
         <div class="field">
-            <label for="fields[adUrl]" class="required">URL <span class="note">* required</span></label>
-            <input type="text" name="fields[adUrl]" autocomplete="off" maxlength="95" placeholder="address of the web page to which your ad is linked to" class="required">
+            <label for="fields[adUrl]" class="required">Your Website URL <span class="note">* required</span></label>
+            <input type="text" name="fields[adUrl]" autocomplete="off" maxlength="95" placeholder="Website address you want to link to your ad" class="required">
         {% if entry is defined %}
           {{ f.errorList(entry.getErrors('adUrl')) }}
         {% endif %}
