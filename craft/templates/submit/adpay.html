@@ -10,7 +10,7 @@
         {% if entry %}
             {% set image = attribute(entry, 'adImages').first %}
             {% set title = attribute(entry, 'title').first %}
-            <img src="{{ image.url('adImageThumb') }}" class="display-image" style="height: 232px;width: 320px;background: #eded8b; float: none;"/>
+            <img src="{{ image.url('adImageThumb') }}" class="display-image" style="height:250px; width:300px; background: #eded8b; float: none;"/>
             <input type="hidden" name="fields[adImages][]" value="{{ image.id }}"/>
             <input type="hidden" name="fields[adUrl]" value="{{ entry.adUrl }}"/>
             <div>{{ entry.title }}</div>
