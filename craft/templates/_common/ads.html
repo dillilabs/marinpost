@@ -1,38 +1,7 @@
 {% if (craft.request.getPath() == '') or (craft.request.getPath() == 'blog') or (craft.request.getPath() == 'notices') or (craft.request.getPath() == 'news') or (craft.request.getPath() == 'letters') or (craft.request.getPath() == 'media')  %}
 <div>
     {% set adMatrix = craft.entries.section('adMatrix').first %}
-    {% set adEntries = adMatrix.adEntries %}
-    {% set ads = [] %}
-    {% for adEntry in adEntries %}
-        {% set currentDate = "now"|date('d-m-Y') %}
-        {% set adStartDate = adEntry.adStartDate|date('d-m-Y') %}
-        {% set difference = date( adStartDate ).diff( now ).days %}
-        {% set showAd = false %}
-        {% switch adEntry.plan %}
-
-            {% case "month" %}
-                {% if difference <= 31 %}
-                    {% set showAd = true %}
-                {% endif %}
-
-            {% case "quarter" %}
-                {% if difference <= 93 %}
-                    {% set showAd = true %}
-                {% endif %}
-
-            {% case "year" %}
-                {% if difference <= 366 %}
-                    {% set showAd = true %}
-                {% endif %}
-
-            {% default %}
-                {% set showAd = false %}
-
-        {% endswitch %}
-        {% if showAd %}
-            {% set ads = ads|merge([adEntry]) %}        
-        {% endif %}
-    {% endfor %}
+    {% set ads = adMatrix.adEntries %}
     {% if ads|length > 0 %}
         <div class="message" style="border-bottom: none;">{{ n.siteMessage('ad/top') }}</div>
     {% endif %}

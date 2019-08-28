@@ -267,10 +267,10 @@
   {% endif %}
 {% endmacro %}
 
-{% macro authorLinksAd(entry, showAd) %}
+{% macro authorLinksAd(entry) %}
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <p class="author-links">
-        {% if showAd == false %}
+        {% if entry.enabled == 0 %}
           <a href="/submit/ad-renew?entryId={{ entry.id }}" class="renew-entry" >Renew</a> |
         {% endif %}
       <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
@@ -432,39 +432,14 @@
 
     {% case 'ad' %}
     {% if entry.plan != "" %}
-      {% set currentDate = "now"|date('d-m-Y') %}
-      {% set adStartDate = entry.adStartDate|date('d-m-Y') %}
-      {% set difference = date( adStartDate ).diff( now ).days %}
-      {% set showAd = false %}
-      {% switch entry.plan %}
-
-          {% case "month" %}
-              {% if difference <= 31 %}
-                  {% set showAd = true %}
-              {% endif %}
-
-          {% case "quarter" %}
-              {% if difference <= 93 %}
-                  {% set showAd = true %}
-              {% endif %}
-
-          {% case "year" %}
-              {% if difference <= 366 %}
-                  {% set showAd = true %}
-              {% endif %}
-
-          {% default %}
-              {% set showAd = false %}
-
-      {% endswitch %}
       <li class="listing">
         <div class="post">        
           {{ postImage(entry) }}
           {{ postSummary(entry) }}
-          {% if showAd == false %}
+          {% if entry.enabled == 0 %}
             <span style="color: red;">EXPIRED</span>
           {% endif %}
-          {{ authorLinksAd(entry, showAd) }}
+          {{ authorLinksAd(entry) }}
         </div>
       </li>
     {% endif %}
