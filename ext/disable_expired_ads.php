@@ -75,10 +75,8 @@ while ($row = $res->fetch_assoc()) {
                     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                     $headers[] = 'From: MarinPost <support@marinpost.org>';
 
-                    mail($to, $subject, $message, $headers);
-
                     // Send
-                    mail($email, 'Your Ad Has Expired', $message);
+                    mail($email, 'Your Ad Has Expired', $message, $headers);
                 }
             }
         }
