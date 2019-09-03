@@ -69,6 +69,14 @@ while ($row = $res->fetch_assoc()) {
                     // In case any of our lines are larger than 70 characters, we should use wordwrap()
                     $message = wordwrap($message, 70, "\r\n");
 
+                    
+
+                    $headers[] = 'MIME-Version: 1.0';
+                    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                    $headers[] = 'From: MarinPost <support@marinpost.org>';
+
+                    mail($to, $subject, $message, $headers);
+
                     // Send
                     mail($email, 'Your Ad Has Expired', $message);
                 }
