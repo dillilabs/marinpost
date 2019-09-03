@@ -44,8 +44,17 @@ while ($row = $res->fetch_assoc()) {
             break;
     }
     if($shouldDisable){
-        echo "Ad has expired. Disabling it.\n";
-        $mysqli->query("update craft_elements set enabled=0 where id='${elementId}'") ;
+        // if its already disabled ignore
+        $res1 = $mysqli->query("select enabled from craft_elements where id='${elementId}'");
+        while ($row1 = $res1->fetch_assoc()) {
+            $enabled = $row1['enabled'];
+
+            if($enabled == 1){
+                echo "Ad has expired. Disabling it.\n";
+                $mysqli->query("update craft_elements set enabled=0 where id='${elementId}'") ;
+                // send an email to author with ad expiration.
+            }
+        }
     } else {
         // ensure its enabled
         $mysqli->query("update craft_elements set enabled=1 where id='${elementId}'") ;
