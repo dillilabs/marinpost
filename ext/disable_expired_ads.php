@@ -71,9 +71,9 @@ while ($row = $res->fetch_assoc()) {
 
                     
 
-                    $headers[] = 'MIME-Version: 1.0';
-                    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                    $headers[] = 'From: MarinPost <support@marinpost.org>';
+                    $headers = "MarinPost <support@marinpost.org>\r\n". 
+                    "MIME-Version: 1.0" . "\r\n" . 
+                    "Content-type: text/html; charset=UTF-8" . "\r\n"; 
 
                     // Send
                     mail($email, 'Your Ad Has Expired', $message, $headers);
