@@ -1,6 +1,6 @@
 {% for adPlan in adPlans.adPlan %}
   <label>
-    {% if adPlan.duration == 90 %} 
+    {% if adPlan.duration == 30 %} 
       <input type="radio" name="plan" value="{{ adPlan.price }}|{{ adPlan.duration }}|{{ adPlan.adPlanName }}" checked="checked" >
     {% else %}
       <input type="radio" name="plan" value="{{ adPlan.price }}|{{ adPlan.duration }}|{{ adPlan.adPlanName }}">
