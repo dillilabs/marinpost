@@ -89,15 +89,22 @@ class MpSubscriptionController extends BaseController
         
         try
         {
-            $paid = craft()->mpSubscription->createAd($user, $plan, $token);
+            $planParts = explode("|",$plan);
+            $amount = $planParts[0];
+            $duration = $planParts[1];
+            $planName = $planParts[2];
+
+            $paid = craft()->mpSubscription->createAd($user, $amount, $planName, $token);
             if ($paid)
             {
-                $this->plugin->logger("Successfully created charge for $user for $plan ad plan.");
+                $this->plugin->logger("Successfully created charge for $user in the amount of $amount for $planName ad plan.");
                 $entryId = craft()->request->getPost('entryId');
                 $entry = craft()->entries->getEntryById($entryId);
                 $fields = craft()->request->getParam('fields');
                 $entry->setContentFromPost($fields);
-                $entry->getContent()->plan = $plan;
+                $entry->getContent()->plan = $planName;
+                $entry->getContent()->planDurationDays = $duration;
+
                 // set Start Date to current date
                 $today = date('Y-m-d');
                 $entry->getContent()->adStartDate = $today;

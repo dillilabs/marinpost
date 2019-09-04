@@ -1,13 +1,10 @@
-<label>
-  <input type="radio" name="plan" value="month">
-  $5 for 1 month
-</label>
-<label>
-  <input type="radio" name="plan" value="quarter" checked="checked">
-  $10 for 3 months
-</label>
-<label>
-  <input type="radio" name="plan" value="year">
-  $30 for 1 year
-</label>
-
+{% for adPlan in adPlans.adPlan %}
+  <label>
+    {% if adPlan.duration == 90 %} 
+      <input type="radio" name="plan" value="{{ adPlan.price }}|{{ adPlan.duration }}|{{ adPlan.adPlanName }}" checked="checked" >
+    {% else %}
+      <input type="radio" name="plan" value="{{ adPlan.price }}|{{ adPlan.duration }}|{{ adPlan.adPlanName }}">
+    {% endif %}
+    {{ adPlan.adPlanName }}
+  </label>
+{% endfor %}
