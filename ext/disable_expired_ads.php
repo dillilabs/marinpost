@@ -11,12 +11,13 @@ if ($mysqli->connect_errno) {
 }
 echo $mysqli->host_info . "\n";
 
-$res = $mysqli->query("select title, field_adStartDate, field_plan, elementId from craft_content where field_adStartDate IS NOT NULL and field_plan IS NOT NULL");
+$res = $mysqli->query("select title, field_adStartDate, field_plan, field_planDurationDays, elementId from craft_content where field_adStartDate IS NOT NULL and field_plan IS NOT NULL");
 while ($row = $res->fetch_assoc()) {
     $adStartDate = $row['field_adStartDate'];
     $plan = $row['field_plan'];
     $elementId = $row['elementId'];
     $title = $row['title'];
+    $planDurationDays = $row['field_planDurationDays'];
 
     echo "Ad Start Date: ${adStartDate} | Plan: ${plan} | Element ID: ${elementId} |";
     $now = time();
@@ -25,26 +26,7 @@ while ($row = $res->fetch_assoc()) {
     $datediff = $now - $adStartDate;
     $days = round($datediff / (60 * 60 * 24));
     echo " Days since start: {$days}\n";
-
-    $shouldDisable = false;
-    
-    switch ($plan) {
-        case 'week':
-            $shouldDisable = ($days > 7)? true : false;
-            break;
-        case 'month':
-            $shouldDisable = ($days > 31)? true : false;
-            break;
-        case 'quarter':
-            $shouldDisable = ($days > 93)? true : false;
-            break;
-        case 'year':
-            $shouldDisable = ($days > 366)? true : false;
-            break;
-        default:
-            # code...
-            break;
-    }
+    $shouldDisable = ($days > $planDurationDays)? true : false;
     if($shouldDisable){
         // if its already disabled ignore
         $res1 = $mysqli->query("select enabled from craft_elements where id='${elementId}'");
