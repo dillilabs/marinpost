@@ -121,7 +121,7 @@ class MpSubscriptionService extends BaseApplicationComponent
     public function createAd($user, $price, $planName, $token)
     {
         $this->_setAPiKey();
-        $amount = 1000 * $price;
+        $amount = 100 * $price;
         
         $charge = \Stripe\Charge::create([
             "amount" => $amount,
