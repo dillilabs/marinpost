@@ -108,6 +108,11 @@ class MpSubscriptionController extends BaseController
                 // set Start Date to current date
                 $today = DateTimeHelper::currentTimeForDb();
                 $this->plugin->logger("Setting the adStartDate to $today");
+                $adStartDate = $entry->getContent()->adStartDate;
+                if(!empty($adStartDate)){
+                    //this is a renewal, enable the entry
+                    $entry->enabled = true;
+                }
                 $entry->getContent()->adStartDate = $today;
 
                 // set Paid to 'on'
@@ -117,6 +122,11 @@ class MpSubscriptionController extends BaseController
                 if (!$success)
                 {
                     throw new Exception(Craft::t('There was a problem with saving the ad.'));
+                }
+                if(!empty($adStartDate)){
+                    // ad renewal case
+                    // notify the ad author that his ad has been renewed
+                    craft()->mpSubscription->notifyUserOfAdRenewal($user, $entry);
                 }
             } else {
                 $this->plugin->logger("There was a problem creating charge for $user for $plan ad plan.");

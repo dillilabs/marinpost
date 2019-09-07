@@ -819,6 +819,42 @@ class MpSubscriptionService extends BaseApplicationComponent
     }
 
     /**
+     * Send email to User regarding successful ad renewal.
+     */
+    public function notifyUserOfAdRenewal($user, $entry)
+    {
+        $savePath = craft()->path->getTemplatesPath();
+
+        craft()->path->setTemplatesPath(
+            craft()->path->getPluginsPath().'mpsubscription/templates'
+        );
+
+        $email = new EmailModel();
+        $email->toEmail = $user->email;
+        $email->subject = 'Your Ad has been renewed!';
+
+        $email->htmlBody = craft()->templates->render('ad_renewal', array(
+            'entry' => $entry
+        ));
+        $title = $entry->title;
+        $body  = "Your Ad $title has been renewed and published.\n\n";
+        $body .= 'Please go to '.craft()->getSiteUrl()."\n";
+        $body .= 'and verify it.';
+        $email->body = $body;
+
+        craft()->path->setTemplatesPath($savePath);
+
+        if (craft()->email->sendEmail($email))
+        {
+            $this->plugin->logger("Successfully sent ad renewal confirmation email to $user.");
+        }
+        else
+        {
+            $this->plugin->logger("Failed to send ad renewal confirmation email to $user.", LogLevel::Error);
+        }
+    }
+
+    /**
      * Send email to admin(s) regarding Stripe error.
      */
     private function _notifyAdminOfError($subject, $body)

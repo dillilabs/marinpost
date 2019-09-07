@@ -51,9 +51,6 @@ while ($row = $res->fetch_assoc()) {
 
                     // In case any of our lines are larger than 70 characters, we should use wordwrap()
                     $message = wordwrap($message, 70, "\r\n");
-
-                    
-
                     $headers = "From: MarinPost <support@marinpost.org>\r\n". 
                     "MIME-Version: 1.0" . "\r\n" . 
                     "Content-type: text/html; charset=UTF-8" . "\r\n"; 
@@ -72,28 +69,6 @@ while ($row = $res->fetch_assoc()) {
             if($enabled == 0){
                 echo "Ad has been renewed. Enable it.\n";
                 $mysqli->query("update craft_elements set enabled=1 where id='${elementId}'") ;
-                // send an email to author with ad expiration
-
-                // get author email
-                $res2 = $mysqli->query("select email from craft_entries inner join craft_users where craft_entries.id='${elementId}' and craft_entries.authorId=craft_users.id");
-                while ($row2 = $res2->fetch_assoc()) {
-                    $email = $row2['email'];
-
-                    echo $email;
-                    // get author email
-                    // The message
-                    $message = "Your ad {$title} has been renewed. \r\nYou may verify it at <a href='{$websiteurl}'>MarinPost.org</a>.";
-
-                    // In case any of our lines are larger than 70 characters, we should use wordwrap()
-                    $message = wordwrap($message, 70, "\r\n");
-                    
-                    $headers = "From: MarinPost <support@marinpost.org>\r\n". 
-                    "MIME-Version: 1.0" . "\r\n" . 
-                    "Content-type: text/html; charset=UTF-8" . "\r\n"; 
-
-                    // Send
-                    mail($email, 'Your Ad Has been renewed', $message, $headers);
-                }
             }
         }
     }
