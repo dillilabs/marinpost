@@ -271,7 +271,7 @@
   {% if craft.request.path starts with 'account' and currentUser and currentUser.id == entry.authorId %}
     <p class="author-links">
         {% if entry.enabled == 0 %}
-          <a href="/submit/ad-renew?entryId={{ entry.id }}" class="renew-entry" >Renew</a> |
+          <a href="/edit/{{ entry.id }}/{{ entry.slug }}" class="renew-entry" >Renew</a> |
         {% endif %}
       <a href="#" class="delete-entry" data-url="{{ actionUrl('mpEntry/deleteEntry', { entryId: entry.id }) }}">Delete</a>
     </p>

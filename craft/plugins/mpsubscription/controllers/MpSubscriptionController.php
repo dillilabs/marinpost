@@ -106,7 +106,8 @@ class MpSubscriptionController extends BaseController
                 $entry->getContent()->planDurationDays = $duration;
 
                 // set Start Date to current date
-                $today = date('Y-m-d');
+                $today = DateTimeHelper::currentTimeForDb();
+                $this->plugin->logger("Setting the adStartDate to $today");
                 $entry->getContent()->adStartDate = $today;
 
                 // set Paid to 'on'

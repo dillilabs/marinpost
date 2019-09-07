@@ -14,6 +14,7 @@
             <input type="hidden" name="fields[adImages][]" value="{{ image.id }}"/>
             <input type="hidden" name="fields[adUrl]" value="{{ entry.adUrl }}"/>
             <div>{{ entry.title }}</div>
+            <div>{{ entry.adUrl }}</div>
         {% endif %}
         {% include 'account/subscription/_create_form_ad.html' %}
     {% endblock %}
