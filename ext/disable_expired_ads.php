@@ -82,7 +82,7 @@ while ($row = $res->fetch_assoc()) {
                     echo $email;
                     // get author email
                     // The message
-                    $message = "Your ad {$title} has been renewed. \r\nYou may verify it at <a href='{$websiteurl}'>MarinPost.org.</a>.";
+                    $message = "Your ad {$title} has been renewed. \r\nYou may verify it at <a href='{$websiteurl}'>MarinPost.org</a>.";
 
                     // In case any of our lines are larger than 70 characters, we should use wordwrap()
                     $message = wordwrap($message, 70, "\r\n");
