@@ -42,28 +42,31 @@
 
 <div id="image-modal" class="upload-modal image" title="My Ad Images" style="display: none;">
     <div>
-    <div class="upload-wrapper clearfix">
-        <span class="fileinput-button">
-        <span>Upload an image</span>
-        <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
-        <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
-        </span>
-
-        <div class="s3direct image progress-bar progress-bar-success"></div>
+        <div class="help">{{ n.siteMessage('my/ad/images') }}</div>
     </div>
+    <div>
+        <div class="upload-wrapper clearfix">
+            <span class="fileinput-button">
+            <span>Upload an image</span>
+            <input id="image-fileupload" type="file" name="file" accept="image/gif,image/jpg,image/jpeg,image/png">
+            <img class="s3direct image" src="/img/spinner.gif" style="display: none;"/>
+            </span>
 
-    <div class="files-wrapper clearfix">
-        <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
-        {% if folder %}
-            {% for asset in assets %}
-            <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url(transform) }}" title="{{ asset.title }}" {% if asset.id == image.id %}class="selected"{% endif %}>
-                <div><img src="{{ asset.url(transform) }}" /></div>
-                <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
-            </li>
-            {% endfor %}
-        {% endif %}
-        </ul>
-    </div>
+            <div class="s3direct image progress-bar progress-bar-success"></div>
+        </div>
+
+        <div class="files-wrapper clearfix">
+            <ul id="src-files" {% if not assets %}style="display: none;"{% endif %}>
+            {% if folder %}
+                {% for asset in assets %}
+                <li data-asset-id="{{ asset.id }}" data-asset-url="{{ asset.url(transform) }}" title="{{ asset.title }}" {% if asset.id == image.id %}class="selected"{% endif %}>
+                    <div><img src="{{ asset.url(transform) }}" /></div>
+                    <span class="title">{{ p.excerpt(asset.title, excerptLength) }}</span>
+                </li>
+                {% endfor %}
+            {% endif %}
+            </ul>
+        </div>
     </div>
 </div>
 
