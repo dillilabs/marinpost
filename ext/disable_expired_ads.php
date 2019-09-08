@@ -40,14 +40,15 @@ while ($row = $res->fetch_assoc()) {
                 // send an email to author with ad expiration
 
                 // get author email
-                $res2 = $mysqli->query("select email from craft_entries inner join craft_users where craft_entries.id='${elementId}' and craft_entries.authorId=craft_users.id");
+                $res2 = $mysqli->query("select email, firstName, lastName from craft_entries inner join craft_users where craft_entries.id='${elementId}' and craft_entries.authorId=craft_users.id");
                 while ($row2 = $res2->fetch_assoc()) {
                     $email = $row2['email'];
+                    $name = $row2['firstName'] . ' ' . $row2['lastName'];
 
                     echo $email;
                     // get author email
                     // The message
-                    $message = "Your ad {$title} has expired. \r\nYou may renew it <a href='{$websiteurl}/edit/${elementId}/${slug}'>here.</a>.";
+                    $message = "Dear {$name},\r\nYour ad {$title} has expired. \r\nClick <a href='{$websiteurl}/edit/${elementId}/${slug}'>here.</a> to renew.";
 
                     // In case any of our lines are larger than 70 characters, we should use wordwrap()
                     $message = wordwrap($message, 70, "\r\n");
@@ -56,7 +57,7 @@ while ($row = $res->fetch_assoc()) {
                     "Content-type: text/html; charset=UTF-8" . "\r\n"; 
 
                     // Send
-                    mail($email, 'Your Ad Has Expired', $message, $headers);
+                    mail($email, "Your Ad ${title} Has Expired", $message, $headers);
                 }
             }
         }
