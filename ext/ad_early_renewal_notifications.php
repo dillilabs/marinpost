@@ -22,9 +22,12 @@ while ($row = $res->fetch_assoc()) {
     echo "Ad Start Date: ${adStartDate} | Plan: ${plan} | Element ID: ${elementId} |";
     $now = time();
     // has it already been 1 week since the ad start date?
-    $adStartDate = strtotime($adStartDate);
+    $tz = date_default_timezone_get();
+    date_default_timezone_set('UTC'); // adStartDate is in UTC
+    $adStartDate = strtotime($adStartDate); 
+    date_default_timezone_set($tz);
     $datediff = $now - $adStartDate;
-    $days = round($datediff / (60 * 60 * 24));
+    $days = floor($datediff / (60 * 60 * 24));
     echo " Days since start: {$days}\n";
 
     if ($days == ($planDurationDays - 3)) {

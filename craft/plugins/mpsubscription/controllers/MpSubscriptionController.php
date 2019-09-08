@@ -103,17 +103,29 @@ class MpSubscriptionController extends BaseController
                 $fields = craft()->request->getParam('fields');
                 $entry->setContentFromPost($fields);
                 $entry->getContent()->plan = $planName;
-                $entry->getContent()->planDurationDays = $duration;
+                
 
                 // set Start Date to current date
-                $today = DateTimeHelper::currentTimeForDb();
-                $this->plugin->logger("Setting the adStartDate to $today");
+                $today = DateTimeHelper::currentUTCDateTime();
+                $this->plugin->logger("Today is $today");
                 $adStartDate = $entry->getContent()->adStartDate;
+                $this->plugin->logger("adStartDate is $adStartDate");
+                $newAdStartDate = $today;
                 if(!empty($adStartDate)){
                     //this is a renewal, enable the entry
                     $entry->enabled = true;
+                    if($today->diff($adStartDate)->toSeconds() < ($entry->getContent()->planDurationDays)*24*60*60){
+                        $planDurationDays = $entry->getContent()->planDurationDays;
+                        $this->plugin->logger("plan duration days $planDurationDays");
+                        $this->plugin->logger("Ad Start Date is $adStartDate");
+                        $newAdStartDate = date_add($adStartDate, date_interval_create_from_date_string("$planDurationDays days"));
+                    }
                 }
-                $entry->getContent()->adStartDate = $today;
+
+                $entry->getContent()->planDurationDays = $duration;
+
+                $this->plugin->logger("adStartDate being set to ${newAdStartDate}");
+                $entry->getContent()->adStartDate = $newAdStartDate;
 
                 // set Paid to 'on'
                 $entry->getContent()->paid = 1;
