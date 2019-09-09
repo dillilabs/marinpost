@@ -11,7 +11,7 @@ if ($mysqli->connect_errno) {
 }
 echo $mysqli->host_info . "\n";
 
-$res = $mysqli->query("select title, field_adStartDate, field_plan, field_planDurationDays, elementId from craft_content where field_adStartDate IS NOT NULL and field_plan IS NOT NULL");
+$res = $mysqli->query("select title, field_adStartDate, field_plan, field_planDurationDays, elementId from craft_content where field_adStartDate IS NOT NULL and field_plan IS NOT NULL and field_notifiedOfNearExpiration=0");
 while ($row = $res->fetch_assoc()) {
     $adStartDate = $row['field_adStartDate'];
     $plan = $row['field_plan'];
@@ -57,6 +57,9 @@ while ($row = $res->fetch_assoc()) {
 
                 // Send
                 mail($email, "Your Ad {$title} will expire in 3 days", $message, $headers);
+
+                // mark field_notifiedOfNearExpiration as 1
+                $mysqli->query("update craft_content set field_notifiedOfNearExpiration=1 where elementId='${elementId}'");
             }
         }
     }
