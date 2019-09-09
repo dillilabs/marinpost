@@ -52,18 +52,28 @@ while ($row = $res->fetch_assoc()) {
                         $name = $row2['firstName'] . ' ' . $row2['lastName'];
     
                         echo $email;
-                        // get author email
-                        // The message
-                        $message = "Dear {$name},<p>Your ad {$title} has expired.</p><p>Click <a href='{$websiteurl}/edit/${elementId}/${slug}'>here</a> to renew</p>.";
-    
-                        // In case any of our lines are larger than 70 characters, we should use wordwrap()
-                        $message = wordwrap($message, 70, "\r\n");
-                        $headers = "From: MarinPost <support@marinpost.org>\r\n". 
-                        "MIME-Version: 1.0" . "\r\n" . 
-                        "Content-type: text/html; charset=UTF-8" . "\r\n"; 
-    
-                        // Send
-                        mail($email, "Your Ad ${title} Has Expired", $message, $headers);
+
+                        // retrieve email content from ad/email/abouttoexpire global
+                        $res3 = $mysqli->query("select field_message_text from craft_matrixcontent_sitemessage where field_message_path='ad/email/expired'");
+                        while ($row3 = $res3->fetch_assoc()) {
+                            $message = $row3['field_message_text'];
+                            // search/replace NAME, AD_TITLE, LINK with correct values
+                            $link = "<a href='{$websiteurl}/edit/${elementId}/${slug}'>here</a>";
+                            $message = str_replace("LINK", $link, $message);
+                            $message = str_replace("NAME", $name, $message);
+                            $message = str_replace("AD_TITLE", $title, $message);
+
+                            // In case any of our lines are larger than 70 characters, we should use wordwrap()
+                            $message = wordwrap($message, 70, "\r\n");
+                            $headers = "From: MarinPost <support@marinpost.org>\r\n" .
+                                "MIME-Version: 1.0" . "\r\n" .
+                                "Content-type: text/html; charset=UTF-8" . "\r\n";
+
+                            echo $message;
+
+                            // Send
+                            mail($email, "Your Ad {$title} has expired", $message, $headers);                            
+                        }
                     }
                 }
             }

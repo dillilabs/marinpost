@@ -205,6 +205,8 @@ class MpAdminService extends BaseApplicationComponent
         $hostName = craft()->request->hostName;
         $link = "<a class='detail' href='http://$hostName/edit/$entry->id/$entry->slug'>link</a>";
         $message = str_replace("LINK", $link, $message);
+        $message = str_replace("AD_TITLE", $entry->title, $message);
+        $message = str_replace("NAME", $entry->author->name, $message);
         $body = $message;
         craft()->path->setTemplatesPath($savePath);
         $email            = new EmailModel();
@@ -230,7 +232,10 @@ class MpAdminService extends BaseApplicationComponent
         $savePath = craft()->path->getTemplatesPath();
         craft()->path->setTemplatesPath(craft()->path->getPluginsPath().'mpadmin/templates');
         $siteMessages = craft()->globals->getSetByHandle('siteMessages');
-        $message = $siteMessages->siteMessage->path('ad/email/published')->first()->text;       
+        $message = $siteMessages->siteMessage->path('ad/email/published')->first()->text;
+        $message = str_replace("AD_TITLE", $entry->title, $message);
+        $message = str_replace("NAME", $entry->author->name, $message);
+
         $body = $message;
         
         craft()->path->setTemplatesPath($savePath);

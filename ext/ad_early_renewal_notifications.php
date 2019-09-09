@@ -24,7 +24,7 @@ while ($row = $res->fetch_assoc()) {
     // has it already been 1 week since the ad start date?
     $tz = date_default_timezone_get();
     date_default_timezone_set('UTC'); // adStartDate is in UTC
-    $adStartDate = strtotime($adStartDate); 
+    $adStartDate = strtotime($adStartDate);
     date_default_timezone_set($tz);
     $datediff = $now - $adStartDate;
     $days = floor($datediff / (60 * 60 * 24));
@@ -43,23 +43,32 @@ while ($row = $res->fetch_assoc()) {
             while ($row2 = $res2->fetch_assoc()) {
                 $email = $row2['email'];
                 $name = $row2['firstName'] . ' ' . $row2['lastName'];
+                $message = '';
 
-                // The message
-                $message = "Dear {$name},<p>Your ad {$title} will expire in 3 days.</p><p>Click <a href='{$websiteurl}/edit/${elementId}/${slug}'>here</a> to renew now.</p>";
+                // retrieve email content from ad/email/abouttoexpire global
+                $res3 = $mysqli->query("select field_message_text from craft_matrixcontent_sitemessage where field_message_path='ad/email/abouttoexpire'");
+                while ($row3 = $res3->fetch_assoc()) {
+                    $message = $row3['field_message_text'];
+                    // search/replace NAME, AD_TITLE, LINK with correct values
+                    $link = "<a href='{$websiteurl}/edit/${elementId}/${slug}'>here</a>";
+                    $message = str_replace("LINK", $link, $message);
+                    $message = str_replace("NAME", $name, $message);
+                    $message = str_replace("AD_TITLE", $title, $message);
 
-                // In case any of our lines are larger than 70 characters, we should use wordwrap()
-                $message = wordwrap($message, 70, "\r\n");
-                $headers = "From: MarinPost <support@marinpost.org>\r\n" .
-                    "MIME-Version: 1.0" . "\r\n" .
-                    "Content-type: text/html; charset=UTF-8" . "\r\n";
+                    // In case any of our lines are larger than 70 characters, we should use wordwrap()
+                    $message = wordwrap($message, 70, "\r\n");
+                    $headers = "From: MarinPost <support@marinpost.org>\r\n" .
+                        "MIME-Version: 1.0" . "\r\n" .
+                        "Content-type: text/html; charset=UTF-8" . "\r\n";
 
-                echo $message;
+                    echo $message;
 
-                // Send
-                mail($email, "Your Ad {$title} will expire in 3 days", $message, $headers);
+                    // Send
+                    mail($email, "Your Ad {$title} will expire in 3 days", $message, $headers);
 
-                // mark field_notifiedOfNearExpiration as 1
-                $mysqli->query("update craft_content set field_notifiedOfNearExpiration=1 where elementId='${elementId}'");
+                    // mark field_notifiedOfNearExpiration as 1
+                    $mysqli->query("update craft_content set field_notifiedOfNearExpiration=1 where elementId='${elementId}'");
+                }
             }
         }
     }
