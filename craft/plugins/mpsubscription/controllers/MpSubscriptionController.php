@@ -103,7 +103,7 @@ class MpSubscriptionController extends BaseController
                 $fields = craft()->request->getParam('fields');
                 $entry->setContentFromPost($fields);
                 $entry->getContent()->plan = $planName;
-                
+                $entry->getContent()->notifiedOfNearExpiration = false;
 
                 // set Start Date to current date
                 $today = DateTimeHelper::currentUTCDateTime();
