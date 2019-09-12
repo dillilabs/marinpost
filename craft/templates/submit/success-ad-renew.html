@@ -1,0 +1,10 @@
+{% extends "_common/layout" %}
+
+{% block main %}
+  {% embed "account/_layout" %}
+    {% block post %}
+      <h2>Success</h2>
+      <p class="result-message">Thank you for advertising on the Marin Post. Your ad has been successfully renewed and published.</p>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

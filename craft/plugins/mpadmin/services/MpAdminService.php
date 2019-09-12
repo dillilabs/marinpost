@@ -170,6 +170,30 @@ class MpAdminService extends BaseApplicationComponent
     }
 
     /**
+     * Notify admin of renewed Ad entry -- for spam purposes.
+     */
+    public function notifyAdminOfRenewedAdEntry($entry)
+    {
+        $email            = new EmailModel();
+        $emailSettings    = craft()->email->getSettings();
+        $email->fromEmail = $emailSettings['emailAddress'];
+        $email->replyTo   = $emailSettings['emailAddress'];
+        $email->sender    = $emailSettings['emailAddress'];
+        $email->fromName  = $emailSettings['senderName'];
+        $email->toEmail   = $emailSettings['emailAddress'];
+        $section          = ucfirst($entry->section->handle);
+        $email->subject   = "$section Ad entry renewed on ".craft()->request->hostName;
+        $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+        $message = $siteMessages->siteMessage->path('ad/email/renewed/admin')->first()->text;       
+        $message = str_replace("SITE_URL", craft()->getSiteUrl(), $message);
+        $message = str_replace("LINK", "<a href='".$entry->getCpEditUrl()."'>link</a>" , $message);
+        $message = str_replace("AD_TITLE", $entry->title, $message);
+        $message = str_replace("NAME", $entry->author->name, $message);
+        $email->htmlBody = $message;
+        craft()->email->sendEmail($email);
+    }
+
+    /**
      * Notify admin of an ad submitted for review entry
      */
     public function notifyAdminOfSubmittedAdEntry($entry)

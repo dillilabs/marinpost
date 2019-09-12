@@ -160,7 +160,13 @@ class MpAdminPlugin extends BasePlugin
                 } else {
                     if ($entry->enabled)
                     {
-                        craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
+                        
+                        if($entry->section->handle == 'ad' && $entry->renewed == true){
+                            // renewal case
+                            craft()->mpAdmin->notifyAdminOfRenewedAdEntry($entry);
+                        } else {
+                            craft()->mpAdmin->notifyAdminOfPublishedEntry($entry);
+                        }
         
                         $sections = array('ad', 'blog', 'letters', 'media', 'news', 'notices');
         

@@ -114,6 +114,7 @@ class MpSubscriptionController extends BaseController
                 if(!empty($adStartDate)){
                     //this is a renewal, enable the entry
                     $entry->enabled = true;
+                    $entry->getContent()->renewed = true;
                     if($today->diff($adStartDate)->toSeconds() < ($entry->getContent()->planDurationDays)*24*60*60){
                         $planDurationDays = $entry->getContent()->planDurationDays;
                         $this->plugin->logger("plan duration days $planDurationDays");

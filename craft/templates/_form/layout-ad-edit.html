@@ -9,7 +9,11 @@
         <form method="post" accept-charset="UTF-8" class="create-form filter-form subscription">
           {{ getCsrfInput() }}
           <input type="hidden" name="action" value="mpSubscription/createAd" />
-          <input type="hidden" name="redirect" value="submit/success-ad" />
+          {% if entry.adStartDate is empty %}
+            <input type="hidden" name="redirect" value="submit/success-ad" />
+          {% else %}
+            <input type="hidden" name="redirect" value="submit/success-ad-renew" />
+          {% endif %}
           {{ f.inputEntryId(entry) }}
           {% block formFields %}
           {% endblock %}

@@ -823,26 +823,17 @@ class MpSubscriptionService extends BaseApplicationComponent
      */
     public function notifyUserOfAdRenewal($user, $entry)
     {
-        $savePath = craft()->path->getTemplatesPath();
-
-        craft()->path->setTemplatesPath(
-            craft()->path->getPluginsPath().'mpsubscription/templates'
-        );
-
         $email = new EmailModel();
         $email->toEmail = $user->email;
         $email->subject = 'Your Ad has been renewed!';
 
-        $email->htmlBody = craft()->templates->render('ad_renewal', array(
-            'entry' => $entry
-        ));
         $title = $entry->title;
-        $body  = "Your Ad $title has been renewed and published.\n\n";
-        $body .= 'Please go to '.craft()->getSiteUrl()."\n";
-        $body .= 'and verify it.';
-        $email->body = $body;
-
-        craft()->path->setTemplatesPath($savePath);
+        $siteMessages = craft()->globals->getSetByHandle('siteMessages');
+        $message = $siteMessages->siteMessage->path('ad/email/renewed')->first()->text;       
+        $message = str_replace("SITE_URL", craft()->getSiteUrl(), $message);
+        $message = str_replace("AD_TITLE", $entry->title, $message);
+        $message = str_replace("NAME", $entry->author->name, $message);
+        $email->htmlBody = $message;
 
         if (craft()->email->sendEmail($email))
         {
